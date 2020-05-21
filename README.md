@@ -28,7 +28,9 @@ Why we developed this utility:
 
 When your execute `figma-export colors` command `figma-export` exports colors from Figma directly to your Xcode project to the Assets.xcassets folder.
 
-<img src="images/xcode.png" width="700"/>
+Figma light | Figma dark | Xcode
+------------ | ------------- | -------------
+<img src="images/figma_colors.png" width="229"/> | <img src="images/figma_colors_dark.png" width="229"/> | <img src="images/xcode.png" width="500"/>
 
 Additionally the `Color.swift` file will be created to use colors from the code.
 
