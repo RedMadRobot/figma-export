@@ -69,6 +69,14 @@ Images will be exported to `drawable` and `drawable-night` directory as vector x
 
 ## Installation
 
+ Before installation you must provide Figma personal access token via environment variables.
+
+ ```export FIGMA_PERSONAL_TOKEN=value```
+
+ This token gives you access to the Figma API. Generate a personal Access Token through your user profile page or on [Figma API documentation website](https://www.figma.com/developers/api#access-tokens). If you use Fastlane just add the following line to `fastlane/.env` file
+
+ ```FIGMA_PERSONAL_TOKEN=value```
+
 ### Manual
 [Download](https://github.com/RedMadRobot/figma-export/releases) latest release and read [Usage](#usage)
 
@@ -180,11 +188,6 @@ android:
 
 ```
 ### Figma properties 
-
-You must provide Figma personal access token via environment variables.
-```export FIGMA_PERSONAL_TOKEN=value```
-This token gives you access to the Figma API. Generate a personal Access Token through your user profile page or on [Figma API documentation website](https://www.figma.com/developers/api#access-tokens). If you use Fastlane just add the following line to `fastlane/.env` file
-```FIGMA_PERSONAL_TOKEN=value```
 
 * `figma.teamId` — Id of the team. To obtain a team id, navigate to a team page of a team you are a part of. The team id will be present in the URL after the word team and before your team name.
 * `figma.projectId` — Id of the project. To obtain a project id, navigate to a project page. The project id will be present in the URL after the word project and before the project name.
