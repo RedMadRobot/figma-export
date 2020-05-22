@@ -91,7 +91,7 @@ end
 
 Don't forget to place figma-export.yaml file at the root of the project directory.
 
-Run `fastlane run sync_colors` to run FigmaExport.
+Run `fastlane sync_colors` to run FigmaExport.
 
 ## Usage
 1. Open `Terminal.app`
