@@ -18,8 +18,17 @@ extension BaseEndpoint where Root == Content {
 extension BaseEndpoint {
 
     public func content(from response: URLResponse?, with body: Data) throws -> Content {
-        let resource = try JSONDecoder.default.decode(Root.self, from: body)
-        return content(from: resource)
+        do {
+            let resource = try JSONDecoder.default.decode(Root.self, from: body)
+            return content(from: resource)
+        } catch let mainError {
+            
+            if let error = try? JSONDecoder.default.decode(FigmaClientError.self, from: body) {
+                throw error
+            }
+            
+            throw mainError
+        }
     }
 }
 

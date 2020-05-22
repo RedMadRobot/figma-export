@@ -24,7 +24,10 @@ extension FigmaExportCommand {
             let reader = ParamsReader(inputPath: input)
             let params = try reader.read()
 
-            let client = FigmaClient(accessToken: params.figma.personalAccessToken)
+            guard let accessToken = ProcessInfo.processInfo.environment["FIGMA_PERSONAL_TOKEN"] else {
+                throw FigmaExportError.accessTokenNotFound
+            }
+            let client = FigmaClient(accessToken: accessToken)
 
             if params.ios != nil {
                 logger.info("Using FigmaExport to export images to Xcode project.")

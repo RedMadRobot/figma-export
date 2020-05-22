@@ -1,6 +1,5 @@
 ---
 figma:
-  personalAccessToken: 39496-e2109046-4bd5-46a9-9bc5-12345
   teamId: '717334107655712345'
   projectId: '31412345'
   lightFileId: shPilWnVdJfo10YF12345
@@ -22,14 +21,14 @@ common:
 # [optional] iOS export parameters
 ios:
   # Absolute path to the Assets.xcassets directory
-  xcassetsPath: "/Users/d.subbotin/Projecs/AppName/Resources/Assets.xcassets"
+  xcassetsPath: "./Resources/Assets.xcassets"
   
   # Parameters for exporting colors
   colors:
     # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
     # Absolute path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
-    colorSwift: "/Users/d.subbotin/Projecs/AppName/Sources/Color.swift"
+    colorSwift: "./Sources/Color.swift"
     # Color name style: camelCase or snake_case
     nameStyle: camelCase
 
@@ -54,4 +53,4 @@ ios:
 
 # [optional] Android export parameters
 android:
-  mainRes: "/Users/d.subbotin/Projects/AppName/main/res"
+  mainRes: "./main/res"
