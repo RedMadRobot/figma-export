@@ -74,7 +74,7 @@ Images will be exported to `drawable` and `drawable-night` directory as vector x
 ### CocoaPods + Fastlane
 Add the following line to your Podfile:
 ```ruby
-pod 'FigmaExport', :git => 'https://github.com/RedMadRobot/figma-export'
+pod 'FigmaExport'
 ```
 
 This will download the FigmaExport binaries and dependencies in `Pods/` during your next
