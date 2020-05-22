@@ -68,7 +68,30 @@ Images will be exported to `drawable` and `drawable-night` directory as vector x
 
 ## Installation
 
+### Manual
 [Download](https://github.com/RedMadRobot/figma-export/releases) latest release and read [Usage](#usage)
+
+### CocoaPods + Fastlane
+Add the following line to your Podfile:
+```ruby
+pod 'FigmaExport', :git => 'https://github.com/RedMadRobot/figma-export'
+```
+
+This will download the FigmaExport binaries and dependencies in `Pods/` during your next
+`pod install` execution and will allow you to invoke it via `Pods/FigmaExport/Release/figma-export` in your Fastfile.
+
+Add the following line to your Fastfile:
+```ruby
+lane :sync_colors do
+  Dir.chdir("../") do
+    sh "Pods/FigmaExport/Release/figma-export colors ."
+  end
+end
+```
+
+Don't forget to place figma-export.yaml file at the root of the project directory.
+
+Run `fastlane run sync_colors` to run FigmaExport.
 
 ## Usage
 1. Open `Terminal.app`
