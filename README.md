@@ -143,15 +143,15 @@ common:
 
 # [optional] iOS export parameters
 ios:
-  # Absolute path to the Assets.xcassets directory
-  xcassetsPath: "/Users/d.subbotin/MyApp/Resources/Assets.xcassets"
+  # Path to the Assets.xcassets directory
+  xcassetsPath: "./Resources/Assets.xcassets"
   
   # Parameters for exporting colors
   colors:
     # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
-    # Absolute path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
-    colorSwift: "/Users/d.subbotin/MyApp/Sources/Presentation/Common/Color.swift"
+    # Path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
+    colorSwift: "./Sources/Presentation/Common/Color.swift"
     # Color name style: camelCase or snake_case
     nameStyle: camelCase
 
@@ -176,7 +176,7 @@ ios:
 
 # [optional] Android export parameters
 android:
-  mainRes: "/Users/d.subbotin/MyAndroidApp/main/res"
+  mainRes: "./main/res"
 
 ```
 ### Figma properties 
@@ -187,18 +187,18 @@ android:
 * `figma.darkFileId` — (Optional) Id of the file containing dark color palette and dark images.
 
 ### iOS properties
-* `ios.xcassetsPath` — Folder `Assets.xcassets` where to export colors, icons and images.
-* `ios.colors.assetsFolder` — Colors will be exported to this folder inside `Assets.xcassets`.
-* `ios.colors.colorSwift` — Path to `Color.swift` file.
+* `ios.xcassetsPath` — Relative or absolute path to directory `Assets.xcassets` where to export colors, icons and images.
+* `ios.colors.assetsFolder` — Name of the folder inside `Assets.xcassets` where colors will be exported.
+* `ios.colors.colorSwift` — Relative or absolute path to `Color.swift` file.
 * `ios.colors.nameStyle` — Color name style: camelCase or snake_case
-* `ios.icons.assetsFolder` — Icons will be exported to this folder inside `Assets.xcassets`.
+* `ios.icons.assetsFolder` — Name of the folder inside `Assets.xcassets` where icons will be exported.
 * `ios.icons.nameStyle` — Icon name style: camelCase or snake_case
 * `ios.icons.preservesVectorRepresentation` — An array of icon names that will supports Preseve Vecotor Data.
-* `ios.images.assetsFolder` — Images will be exported to this folder inside `Assets.xcassets`.
+* `ios.images.assetsFolder` — Name of the folder inside `Assets.xcassets` where images will be exported.
 * `ios.images.nameStyle` — Images name style: camelCase or snake_case
  
 ### Android properties
-* `android.path` — Path to the `main/res` folder including it. The colors will be exported to `./values/colors.xml` and `./values-night/colors.xml`
+* `android.path` — Relative or absolute path to the `main/res` folder including it. The colors will be exported to `./values/colors.xml` and `./values-night/colors.xml`.
 
 ## Design requirements
 
