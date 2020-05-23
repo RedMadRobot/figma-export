@@ -21,6 +21,8 @@ Why we developed this utility:
 * Export icons to Xcode / Android Studio project 
 * Export images to Xcode / Android Studio project
 
+> Exporting icons and images works only for Professional/Organisation Figma plan because FigmaExport use *Shareable team libraries*.
+
 ## Result
 
 ### iOS
@@ -132,8 +134,6 @@ Example of `figma-export.yaml` file:
 ```yaml
 ---
 figma:
-  teamId: '717334107655123456'
-  projectId: '3143123'
   lightFileId: shPilWnVdJfo10YFo12345
   darkFileId: KfF6DnJTWHGZzC9Nm12345
 
@@ -189,8 +189,6 @@ android:
 ```
 ### Figma properties 
 
-* `figma.teamId` — Id of the team. To obtain a team id, navigate to a team page of a team you are a part of. The team id will be present in the URL after the word team and before your team name.
-* `figma.projectId` — Id of the project. To obtain a project id, navigate to a project page. The project id will be present in the URL after the word project and before the project name.
 * `figma.lightFileId` — Id of the file containing light color palette and dark images. To obtain a file id, open the file. The file id will be present in the URL after the word file and before the file name.
 * `figma.darkFileId` — (Optional) Id of the file containing dark color palette and dark images.
 
@@ -212,6 +210,8 @@ android:
 
 ### Common
 If a color, icon or image is unique for iOS or Android platform, it should contains "ios" or "android" word in the description field in the properties. If a color, icon or image is used only by the designer and it should not be exported, the word "none" should be specified in the description field.
+
+Styles and Components must be published to a Team Library.
 
 ### For `figma-export colors`
 If you support dark mode your figma project must contains two files. One should contains a dark color palette, and the another light color palette. Names and number of the colors must matches.

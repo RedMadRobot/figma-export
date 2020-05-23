@@ -3,8 +3,6 @@ import Foundation
 struct Params: Decodable {
 
     struct Figma: Decodable {
-        let teamId: String
-        let projectId: String
         let lightFileId: String
         let darkFileId: String?
     }
