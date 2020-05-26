@@ -72,7 +72,7 @@ extension FigmaExportCommand {
                 if let folder = iosParams.colors.assetsFolder {
                     colorsURL = iosParams.xcassetsPath.appendingPathComponent(folder)
                 } else {
-                    
+                    throw FigmaExportError.colorsAssetsFolderNotSpecified
                 }
             }
             
