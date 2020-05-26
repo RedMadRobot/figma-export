@@ -53,6 +53,10 @@ let package = Package(
         .testTarget(
             name: "figma-exportTests",
             dependencies: ["FigmaExport"]
+        ),
+        .testTarget(
+            name: "XcodeExportTests",
+            dependencies: ["XcodeExport"]
         )
     ]
 )

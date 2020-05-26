@@ -13,7 +13,7 @@ final public class XcodeColorExporter {
         var files: [FileContents] = []
         
         // Sources/.../Color.swift
-        let contents = prepareColorDotSwiftContents(colorPairs)
+        let contents = prepareColorDotSwiftContents(colorPairs, formAsset: output.assetsColorsURL != nil)
         let contentsData = contents.data(using: .utf8)!
         
         let fileURL = URL(string: output.colorSwiftURL.lastPathComponent)!
@@ -26,23 +26,25 @@ final public class XcodeColorExporter {
             )
         )
         
+        guard let assetsColorsURL = output.assetsColorsURL else { return files }
+        
         // Assets.xcassets/Colors/Contents.json
         let contentsJson = XcodeEmptyContents()
         files.append(FileContents(
-            destination: Destination(directory: output.assetsColorsURL, file: contentsJson.fileURL),
+            destination: Destination(directory: assetsColorsURL, file: contentsJson.fileURL),
             data: contentsJson.data
         ))
         
         // Assets.xcassets/Colors/***.colorset/Contents.json
         colorPairs.forEach { colorPair in
             let name = colorPair.light.name
-            let dirURL = output.assetsColorsURL.appendingPathComponent("\(name).colorset")
+            let dirURL = assetsColorsURL.appendingPathComponent("\(name).colorset")
             
             var colors: [XcodeAssetContents.ColorData] = [
                 XcodeAssetContents.ColorData(
                     appearances: nil,
                     color: XcodeAssetContents.ColorInfo(
-                        components: colorPair.light.toComponents())
+                        components: colorPair.light.toHexComponents())
                 )
             ]
             if let darkColor = colorPair.dark {
@@ -50,7 +52,7 @@ final public class XcodeColorExporter {
                     XcodeAssetContents.ColorData(
                         appearances: [XcodeAssetContents.DarkAppeareance()],
                         color: XcodeAssetContents.ColorInfo(
-                            components: darkColor.toComponents())
+                            components: darkColor.toHexComponents())
                     )
                 )
             }
@@ -69,7 +71,7 @@ final public class XcodeColorExporter {
         return files
     }
     
-    private func prepareColorDotSwiftContents(_ colorPairs: [AssetPair<Color>]) -> String {
+    private func prepareColorDotSwiftContents(_ colorPairs: [AssetPair<Color>], formAsset: Bool) -> String {
         var contents = """
         import UIKit
         
@@ -78,7 +80,30 @@ final public class XcodeColorExporter {
         """
         
         colorPairs.forEach { colorPair in
-            contents.append("    static var \(colorPair.light.name): UIColor { return UIColor(named: #function)! }\n")
+            if formAsset {
+                contents.append("    static var \(colorPair.light.name): UIColor { return UIColor(named: #function)! }\n")
+            } else {
+                let lightComponents = colorPair.light.toRgbComponents()
+                if let darkComponents = colorPair.dark?.toRgbComponents() {
+                    contents.append("""
+                        static var \(colorPair.light.name): UIColor {
+                            UIColor { traitCollection -> UIColor in
+                                if traitCollection.userInterfaceStyle == .dark {
+                                    return UIColor(red: \(darkComponents.red), green: \(darkComponents.green), blue: \(darkComponents.blue), alpha: \(darkComponents.alpha))
+                                } else {
+                                    return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
+                                }
+                            }
+                        }\n
+                    """)
+                } else {
+                    contents.append("""
+                        static var \(colorPair.light.name): UIColor {
+                            return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
+                        }\n
+                    """)
+                }
+            }
         }
         contents.append("\n}\n")
         
@@ -87,7 +112,7 @@ final public class XcodeColorExporter {
 }
 
 private extension Color {
-    func toComponents() -> XcodeAssetContents.Components {
+    func toHexComponents() -> XcodeAssetContents.Components {
         let red = "0x\(doubleToHex(self.red))"
         let green = "0x\(doubleToHex(self.green))"
         let blue = "0x\(doubleToHex(self.blue))"
@@ -97,5 +122,13 @@ private extension Color {
 
     func doubleToHex(_ double: Double) -> String {
         String(format: "%02X", arguments: [Int((double * 255).rounded())])
+    }
+    
+    func toRgbComponents() -> XcodeAssetContents.Components {
+        let red = String(format: "%.3F", arguments: [self.red])
+        let green = String(format: "%.3F", arguments: [self.green])
+        let blue = String(format: "%.3F", arguments: [self.blue])
+        let alpha = String(format: "%.3F", arguments: [self.alpha])
+        return XcodeAssetContents.Components(red: red, alpha: alpha, green: green, blue: blue)
     }
 }

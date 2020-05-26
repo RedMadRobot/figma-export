@@ -125,6 +125,8 @@ ios:
   
   # Parameters for exporting colors
   colors:
+    # Should be generate color assets instead of pure swift code 
+    useColorAssets: True
     # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
     # Absolute path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
@@ -165,7 +167,8 @@ android:
 
 ### iOS properties
 * `ios.xcassetsPath` — Folder `Assets.xcassets` where to export colors, icons and images.
-* `ios.colors.assetsFolder` — Colors will be exported to this folder inside `Assets.xcassets`.
+* `ios.colors.useColorAssets` — Colors will be exported as assets or as swift UIColor initializers only.
+* `ios.colors.assetsFolder` — Colors will be exported to this folder inside `Assets.xcassets`. Used only if `useColorAssets == true`.
 * `ios.colors.colorSwift` — Path to `Color.swift` file.
 * `ios.colors.nameStyle` — Color name style: camelCase or snake_case
 * `ios.icons.assetsFolder` — Icons will be exported to this folder inside `Assets.xcassets`.
