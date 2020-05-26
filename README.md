@@ -4,6 +4,7 @@
 
 [![SPM compatible](https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat)](https://swift.org/package-manager)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/RedMadRobot/Catbird/blob/master/LICENSE)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/FigmaExport.svg)](https://cocoapods.org/pods/FigmaExport)
 
 Command line utility to export colors, icons and images from Figma to Xcode / Android Studio project.
 * color - Figma's color style
@@ -68,7 +69,38 @@ Images will be exported to `drawable` and `drawable-night` directory as vector x
 
 ## Installation
 
+ Before installation you must provide Figma personal access token via environment variables.
+
+ ```export FIGMA_PERSONAL_TOKEN=value```
+
+ This token gives you access to the Figma API. Generate a personal Access Token through your user profile page or on [Figma API documentation website](https://www.figma.com/developers/api#access-tokens). If you use Fastlane just add the following line to `fastlane/.env` file
+
+ ```FIGMA_PERSONAL_TOKEN=value```
+
+### Manual
 [Download](https://github.com/RedMadRobot/figma-export/releases) latest release and read [Usage](#usage)
+
+### CocoaPods + Fastlane
+Add the following line to your Podfile:
+```ruby
+pod 'FigmaExport'
+```
+
+This will download the FigmaExport binaries and dependencies in `Pods/` during your next
+`pod install` execution and will allow you to invoke it via `Pods/FigmaExport/Release/figma-export` in your Fastfile.
+
+Add the following line to your Fastfile:
+```ruby
+lane :sync_colors do
+  Dir.chdir("../") do
+    sh "Pods/FigmaExport/Release/figma-export colors ."
+  end
+end
+```
+
+Don't forget to place figma-export.yaml file at the root of the project directory.
+
+Run `fastlane sync_colors` to run FigmaExport.
 
 ## Usage
 1. Open `Terminal.app`
@@ -100,7 +132,6 @@ Example of `figma-export.yaml` file:
 ```yaml
 ---
 figma:
-  personalAccessToken: 39496-e2109046-4bd5-46a9-9bc5-d090c3123456
   teamId: '717334107655123456'
   projectId: '3143123'
   lightFileId: shPilWnVdJfo10YFo12345
@@ -120,8 +151,8 @@ common:
 
 # [optional] iOS export parameters
 ios:
-  # Absolute path to the Assets.xcassets directory
-  xcassetsPath: "/Users/d.subbotin/MyApp/Resources/Assets.xcassets"
+  # Path to the Assets.xcassets directory
+  xcassetsPath: "./Resources/Assets.xcassets"
   
   # Parameters for exporting colors
   colors:
@@ -129,8 +160,8 @@ ios:
     useColorAssets: True
     # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
-    # Absolute path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
-    colorSwift: "/Users/d.subbotin/MyApp/Sources/Presentation/Common/Color.swift"
+    # Path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
+    colorSwift: "./Sources/Presentation/Common/Color.swift"
     # Color name style: camelCase or snake_case
     nameStyle: camelCase
 
@@ -155,30 +186,30 @@ ios:
 
 # [optional] Android export parameters
 android:
-  mainRes: "/Users/d.subbotin/MyAndroidApp/main/res"
+  mainRes: "./main/res"
 
 ```
 ### Figma properties 
-* `figma.personalAccessToken` — This token gives you access to the Figma API. Generate a personal Access Token through your user profile page or on [Figma API documentation website](https://www.figma.com/developers/api#access-tokens).
+
 * `figma.teamId` — Id of the team. To obtain a team id, navigate to a team page of a team you are a part of. The team id will be present in the URL after the word team and before your team name.
 * `figma.projectId` — Id of the project. To obtain a project id, navigate to a project page. The project id will be present in the URL after the word project and before the project name.
 * `figma.lightFileId` — Id of the file containing light color palette and dark images. To obtain a file id, open the file. The file id will be present in the URL after the word file and before the file name.
 * `figma.darkFileId` — (Optional) Id of the file containing dark color palette and dark images.
 
 ### iOS properties
-* `ios.xcassetsPath` — Folder `Assets.xcassets` where to export colors, icons and images.
-* `ios.colors.useColorAssets` — Colors will be exported as assets or as swift UIColor initializers only.
-* `ios.colors.assetsFolder` — Colors will be exported to this folder inside `Assets.xcassets`. Used only if `useColorAssets == true`.
-* `ios.colors.colorSwift` — Path to `Color.swift` file.
+* `ios.xcassetsPath` — Relative or absolute path to directory `Assets.xcassets` where to export colors, icons and images.
+* `ios.colors.useColorAssets` — How to export colors - as assets or as swift UIColor initializers only.
+* `ios.colors.assetsFolder` — Name of the folder inside `Assets.xcassets` where colors will be exported. Used only if `useColorAssets == true`.
+* `ios.colors.colorSwift` — Relative or absolute path to `Color.swift` file.
 * `ios.colors.nameStyle` — Color name style: camelCase or snake_case
-* `ios.icons.assetsFolder` — Icons will be exported to this folder inside `Assets.xcassets`.
+* `ios.icons.assetsFolder` — Name of the folder inside `Assets.xcassets` where icons will be exported.
 * `ios.icons.nameStyle` — Icon name style: camelCase or snake_case
 * `ios.icons.preservesVectorRepresentation` — An array of icon names that will supports Preseve Vecotor Data.
-* `ios.images.assetsFolder` — Images will be exported to this folder inside `Assets.xcassets`.
+* `ios.images.assetsFolder` — Name of the folder inside `Assets.xcassets` where images will be exported.
 * `ios.images.nameStyle` — Images name style: camelCase or snake_case
  
 ### Android properties
-* `android.path` — Path to the `main/res` folder including it. The colors will be exported to `./values/colors.xml` and `./values-night/colors.xml`
+* `android.path` — Relative or absolute path to the `main/res` folder including it. The colors will be exported to `./values/colors.xml` and `./values-night/colors.xml`.
 
 ## Design requirements
 

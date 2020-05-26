@@ -63,18 +63,18 @@ extension AssetsProcessable {
     func process(light: [AssetType], dark: [AssetType]?) -> ProcessingPairResult {
         if let dark = dark {
             return validateAndMakePairs(
-                light: replaceSlashWithDash(assets: light),
-                dark: replaceSlashWithDash(assets: dark)
+                light: normalizeAssetName(assets: light),
+                dark: normalizeAssetName(assets: dark)
             )
         } else {
             return validateAndMakePairs(
-                light: replaceSlashWithDash(assets: light)
+                light: normalizeAssetName(assets: light)
             )
         }
     }
     
     func process(assets: [AssetType]) -> ProcessingResult {
-        let assets = replaceSlashWithDash(assets: assets)
+        let assets = normalizeAssetName(assets: assets)
         return validateAndProcess(assets: assets)
     }
     
@@ -255,10 +255,18 @@ extension AssetsProcessable {
             }
     }
     
-    private func replaceSlashWithDash(assets: [AssetType]) -> [AssetType] {
+    /// Normalizes asset name by replacing "/" with "_" and by removing duplication (e.g. "color/color" becomes "color"
+    private func normalizeAssetName(assets: [AssetType]) -> [AssetType] {
         assets.map { asset -> AssetType in
+            
             var renamedAsset = asset
-            renamedAsset.name = renamedAsset.name.replacingOccurrences(of: "/", with: "_")
+            
+            let split = asset.name.split(separator: "/")
+            if split.count == 2, split[0] == split[1] {
+                renamedAsset.name = String(split[0])
+            } else {
+                renamedAsset.name = renamedAsset.name.replacingOccurrences(of: "/", with: "_")
+            }
             return renamedAsset
         }
     }

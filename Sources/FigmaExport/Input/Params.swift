@@ -3,7 +3,6 @@ import Foundation
 struct Params: Decodable {
 
     struct Figma: Decodable {
-        let personalAccessToken: String
         let teamId: String
         let projectId: String
         let lightFileId: String
