@@ -5,6 +5,6 @@ Pod::Spec.new do |spec|
     spec.homepage       = "https://github.com/RedMadRobot/figma-export"  
     spec.license        = { type: "MIT", file: "LICENSE" }
     spec.author         = { "Daniil Subbotin" => "mail@subdan.ru" }
-    spec.source         = { git: 'https://github.com/RedMadRobot/figma-export.git', tag: spec.version.to_s }
-    spec.preserve_paths = 'Release/figma-export'
+    spec.source         = { http: "#{spec.homepage}/releases/download/#{spec.version}/figma-export.zip" }
+    spec.preserve_paths = '*'
 end
