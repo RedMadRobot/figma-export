@@ -33,7 +33,8 @@ struct Params: Decodable {
     struct iOS: Decodable {
         
         struct Colors: Decodable {
-            let assetsFolder: String
+            let useColorAssets: Bool
+            let assetsFolder: String?
             let colorSwift: URL
             let nameStyle: NameStyle
         }

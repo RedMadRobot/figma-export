@@ -23,6 +23,8 @@ ios:
   
   # Parameters for exporting colors
   colors:
+    # Should be generate color assets instead of pure swift code
+    useColorAssets: True
     # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
     # Absolute path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)

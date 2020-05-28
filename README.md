@@ -49,6 +49,26 @@ Additionally the `Color.swift` file will be created to use colors from the code.
 
 ```
 
+If you set option `useColorAssets: False` in the configuration file, then will be generated code like this:
+```swift
+import UIKit
+
+extension UIColor {
+    static var primaryText: UIColor {
+        UIColor { traitCollection -> UIColor in
+            if traitCollection.userInterfaceStyle == .dark {
+                return UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+            } else {
+                return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+            }
+        }
+    }
+    static var backgroundVideo: UIColor {
+        return UIColor(red: 0.467, green: 0.012, blue: 1.000, alpha: 0.500)
+    }
+}
+```
+
 #### Icons
 
 Icons will be exported as PDF files with `Template Image` render mode.
@@ -156,6 +176,8 @@ ios:
   
   # Parameters for exporting colors
   colors:
+    # Should be generate color assets instead of pure swift code 
+    useColorAssets: True
     # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
     # Path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
@@ -194,7 +216,8 @@ android:
 
 ### iOS properties
 * `ios.xcassetsPath` — Relative or absolute path to directory `Assets.xcassets` where to export colors, icons and images.
-* `ios.colors.assetsFolder` — Name of the folder inside `Assets.xcassets` where colors will be exported.
+* `ios.colors.useColorAssets` — How to export colors - as assets or as swift UIColor initializers only.
+* `ios.colors.assetsFolder` — Name of the folder inside `Assets.xcassets` where colors will be exported. Used only if `useColorAssets == true`.
 * `ios.colors.colorSwift` — Relative or absolute path to `Color.swift` file.
 * `ios.colors.nameStyle` — Color name style: camelCase or snake_case
 * `ios.icons.assetsFolder` — Name of the folder inside `Assets.xcassets` where icons will be exported.

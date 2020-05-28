@@ -4,11 +4,14 @@ import Foundation
 enum FigmaExportError: LocalizedError {
     
     case accessTokenNotFound
+    case colorsAssetsFolderNotSpecified
     
     var errorDescription: String? {
         switch self {
         case .accessTokenNotFound:
             return "Environment varibale FIGMA_PERSONAL_TOKEN not specified."
+        case .colorsAssetsFolderNotSpecified:
+            return "Option ios.colors.assetsFolder not specified in configuration file."
         }
     }
 }
