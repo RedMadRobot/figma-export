@@ -47,6 +47,26 @@ Additionally the `Color.swift` file will be created to use colors from the code.
 
 ```
 
+If you set option `useColorAssets: False` in the configuration file, then will be generated code like this:
+```swift
+import UIKit
+
+extension UIColor {
+    static var primaryText: UIColor {
+        UIColor { traitCollection -> UIColor in
+            if traitCollection.userInterfaceStyle == .dark {
+                return UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+            } else {
+                return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+            }
+        }
+    }
+    static var backgroundVideo: UIColor {
+        return UIColor(red: 0.467, green: 0.012, blue: 1.000, alpha: 0.500)
+    }
+}
+```
+
 #### Icons
 
 Icons will be exported as PDF files with `Template Image` render mode.
