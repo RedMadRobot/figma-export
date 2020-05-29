@@ -1,0 +1,24 @@
+name: Test
+on: 
+  # Trigger the workflow on push or pull request,
+  # for all branches, but never trigger on new tags
+  push:
+    branches:
+      - '**' 
+    tags-ignore:
+      - '**' 
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Copy config
+        run: cp Release/figma-export.yaml ./
+      - name: Build and test
+        run: swift test --enable-code-coverage --disable-automatic-resolution
