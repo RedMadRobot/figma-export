@@ -5,13 +5,14 @@ final class FileConverter {
     
     func convert(inputDirectoryPath: String) throws {
         let task = Process()
-        #if DEBUG
-        task.executableURL = URL(fileURLWithPath: "/Users/d.subbotin/Documents/projects/figma-export/Release/vd-tool/bin/vd-tool")
-        #else
-        task.executableURL = URL(fileURLWithPath: "./vd-tool/bin/vd-tool")
-        #endif
+        task.executableURL = URL(fileURLWithPath: "/usr/local/bin/vd-tool")
         task.arguments = ["-c", "-in", inputDirectoryPath]
-        try task.run()
+        do {
+            try task.run()
+        } catch {
+            task.executableURL = URL(fileURLWithPath: "./vd-tool/bin/vd-tool")
+            try task.run()
+        }
         task.waitUntilExit()
     }
 }

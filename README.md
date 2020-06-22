@@ -102,6 +102,11 @@ Images will be exported to `drawable` and `drawable-night` directory as vector x
 ### Manual
 [Download](https://github.com/RedMadRobot/figma-export/releases) latest release and read [Usage](#usage)
 
+### Homebrew
+```
+brew install subdan/tools/figma-export
+```
+
 ### CocoaPods + Fastlane
 Add the following line to your Podfile:
 ```ruby
