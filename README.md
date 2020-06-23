@@ -104,7 +104,7 @@ Images will be exported to `drawable` and `drawable-night` directory as vector x
 
 ### Homebrew
 ```
-brew install subdan/tools/figma-export
+brew install RedMadRobot/formulae/figma-export
 ```
 
 ### CocoaPods + Fastlane
