@@ -1,0 +1,46 @@
+---
+figma:
+  lightFileId: BEjfU0kCVnPqXdRLfoLvkf
+  darkFileId: QwF30YrucxVwQyBNT0C09i
+
+# [optional] Common export parameters
+common:
+  colors:
+    # RegExp pattern for color name validation before exporting 
+    nameValidateRegexp: '^[a-zA-Z_]+$' # RegExp pattern for: background, background_primary, widget_primary_background
+  icons:
+    # RegExp pattern for icon name validation before exporting 
+    nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
+  images:
+    # RegExp pattern for image name validation before exporting
+    nameValidateRegexp: '^(img)_([a-z0-9_]+)$' # RegExp pattern for: img_image_name
+
+# [optional] iOS export parameters
+ios:
+  # Path to the Assets.xcassets directory
+  xcassetsPath: "./Example/Resource/Assets.xcassets"
+  
+  # Parameters for exporting colors
+  colors:
+    # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
+    assetsFolder: Colors
+    # Should be generate color assets instead of pure swift code
+    useColorAssets: True
+    # Absolute path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
+    colorSwift: "./Example/Source/Color.swift"
+    # Color name style: camelCase or snake_case
+    nameStyle: camelCase
+
+  # Parameters for exporting icons
+  icons:
+    # Name of the folder inside Assets.xcassets where to place icons (.imageset directories)
+    assetsFolder: Icons
+    # Icon name style: camelCase or snake_case
+    nameStyle: camelCase
+    
+  # Parameters for exporting images
+  images:
+      # Name of the folder inside Assets.xcassets where to place images (.imageset directories)
+      assetsFolder: Illustrations
+      # Image name style: camelCase or snake_case
+      nameStyle: camelCase
