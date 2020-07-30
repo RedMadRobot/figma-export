@@ -147,7 +147,21 @@ Run `fastlane sync_colors` to run FigmaExport.
    `./figma-export images -i figma-export.yaml`
    
 
-## Parameters
+## Arguments
+
+**Export specific icons/images**
+
+If you want to export specific icons/images you can list their names in the last argument like this:
+
+`./figma-export icons "ic/24/edit"` — Exports only one icon.
+
+`./figma-export icons "ic/24/edit, ic/16/notification"` — Exports two icons
+
+`./figma-export icons "ic/24/videoplayer/*"` — Exports all icons which names starts with `ic/24/videoplayer/`
+
+`./figma-export icons` — Exports all the icons.
+
+**Configuration file**
 
 Argument `-i` or `-input` specifies path to `figma-export.yaml` file where all the properties stores: figma, ios, android.
 

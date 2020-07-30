@@ -14,25 +14,54 @@ final class ImagesLoader {
         self.platform = platform
     }
 
-    func loadIcons() throws -> [ImagePack] {
+    func loadIcons(filter: String? = nil) throws -> [ImagePack] {
         if platform == .android {
-            return try _loadImages(fileId: params.lightFileId, frameName: .icons, params: SVGParams()).map { ImagePack.singleScale($0) }
+            return try _loadImages(
+                fileId: params.lightFileId,
+                frameName: .icons,
+                params: SVGParams(),
+                filter: filter
+            ).map { ImagePack.singleScale($0) }
         } else {
-            return try _loadImages(fileId: params.lightFileId, frameName: .icons, params: PDFParams()).map { ImagePack.singleScale($0) }
+            return try _loadImages(
+                fileId: params.lightFileId,
+                frameName: .icons,
+                params: PDFParams(),
+                filter: filter
+            ).map { ImagePack.singleScale($0) }
         }
     }
 
-    func loadImages() throws -> (light: [ImagePack], dark: [ImagePack]?) {
+    func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
         if platform == .android {
-            let light = try _loadImages(fileId: params.lightFileId, frameName: .illustrations, params: SVGParams())
-            let dark = try params.darkFileId.map { try _loadImages(fileId: $0, frameName: .illustrations, params: SVGParams()) }
+            let light = try _loadImages(
+                fileId: params.lightFileId,
+                frameName: .illustrations,
+                params: SVGParams(),
+                filter: filter)
+            
+            let dark = try params.darkFileId.map {
+                try _loadImages(
+                    fileId: $0,
+                    frameName: .illustrations,
+                    params: SVGParams(),
+                    filter: filter)
+            }
             return (
                 light.map { ImagePack.singleScale($0) },
                 dark?.map { ImagePack.singleScale($0) }
             )
         } else {
-            let lightImages = try _loadPNGImages(fileId: params.lightFileId, frameName: .illustrations)
-            let darkImages = try params.darkFileId.map { try _loadPNGImages(fileId: $0, frameName: .illustrations) }
+            let lightImages = try _loadPNGImages(
+                fileId: params.lightFileId,
+                frameName: .illustrations,
+                filter: filter)
+            let darkImages = try params.darkFileId.map {
+                try _loadPNGImages(
+                    fileId: $0,
+                    frameName: .illustrations,
+                    filter: filter)
+            }
             return (
                 lightImages,
                 darkImages
@@ -42,33 +71,41 @@ final class ImagesLoader {
 
     // MARK: - Helpers
 
-    private func fetchImageComponents(fileId: String, frameName: FrameName) throws -> [NodeId: Component] {
-        let components = try loadComponents(fileId: fileId)
+    private func fetchImageComponents(fileId: String, frameName: FrameName, filter: String? = nil) throws -> [NodeId: Component] {
+        var components = try loadComponents(fileId: fileId)
             .filter {
                 $0.containingFrame.name == frameName.rawValue &&
                     ($0.description == platform.rawValue ||
                         $0.description == nil || $0.description == "")
             }
+        
+        if let filter = filter {
+            let assetsFilter = AssetsFilter(filter: filter)
+            components = components.filter { component -> Bool in
+                assetsFilter.match(name: component.name)
+            }
+        }
+        
         return Dictionary(uniqueKeysWithValues: components.map { ($0.nodeId, $0) })
     }
 
-    private func _loadImages(fileId: String, frameName: FrameName, params: FormatParams) throws -> [Image] {
-        let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName)
+    private func _loadImages(fileId: String, frameName: FrameName, params: FormatParams, filter: String? = nil) throws -> [Image] {
+        let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
-
         let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
-
+        
         return imageIdToImagePath.map { (imageId, imagePath) -> Image in
-            Image(
-                name: imagesDict[imageId]!.name,
+            let name = imagesDict[imageId]!.name
+            return Image(
+                name: name,
                 url: URL(string: imagePath)!,
                 format: params.format
             )
         }
     }
 
-    private func _loadPNGImages(fileId: String, frameName: FrameName) throws -> [ImagePack] {
-        let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName)
+    private func _loadPNGImages(fileId: String, frameName: FrameName, filter: String? = nil) throws -> [ImagePack] {
+        let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
 
         let imageIdToImagePath1 = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 1))

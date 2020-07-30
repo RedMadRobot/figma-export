@@ -18,6 +18,9 @@ extension FigmaExportCommand {
         @Option(name: .shortAndLong, default: "figma-export.yaml", help: "An input YAML file with figma and platform properties.")
         var input: String
         
+        @Argument(help: "[Optional] Name of the icons to export. For example \"ic/24/edit\" to export single icon, \"ic/24/edit, ic/16/notification\" to export several icons and \"ic/16/*\" to export all icons of size 16 pt")
+        var filter: String?
+        
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
 
@@ -45,7 +48,7 @@ extension FigmaExportCommand {
 
             logger.info("Fetching icons info from Figma. Please wait...")
             let loader = ImagesLoader(figmaClient: client, params: params.figma, platform: .ios)
-            let images = try loader.loadIcons()
+            let images = try loader.loadIcons(filter: filter)
 
             logger.info("Processing icons...")
             let processor = ImagesProcessor(
@@ -62,7 +65,9 @@ extension FigmaExportCommand {
             
             let exporter = XcodeIconsExporter(output: output)
             let localAndRemoteFiles = exporter.export(assets: icons.map { $0.single })
-            try? FileManager.default.removeItem(atPath: assetsURL.path)
+            if filter == nil {
+                try? FileManager.default.removeItem(atPath: assetsURL.path)
+            }
 
             logger.info("Downloading remote files...")
             let localFiles = try fileDownloader.fetch(files: localAndRemoteFiles)
@@ -79,7 +84,7 @@ extension FigmaExportCommand {
             // 1. Get Icons info
             logger.info("Fetching icons info from Figma. Please wait...")
             let loader = ImagesLoader(figmaClient: client, params: params.figma, platform: .android)
-            let images = try loader.loadIcons()
+            let images = try loader.loadIcons(filter: filter)
 
             // 2. Proccess images
             logger.info("Processing icons...")
