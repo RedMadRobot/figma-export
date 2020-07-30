@@ -17,7 +17,10 @@ extension FigmaExportCommand {
 
         @Option(name: .shortAndLong, default: "figma-export.yaml", help: "An input YAML file with figma and platform properties.")
         var input: String
-
+        
+        @Argument(help: "[Optional] Name of the images to export. For example \"img/login\" to export single image, \"img/onboarding/1, img/onboarding/2\" to export several images and \"img/onboarding/*\" to export all images from onboarding group")
+        var filter: String?
+        
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
 
@@ -45,7 +48,7 @@ extension FigmaExportCommand {
 
             logger.info("Fetching images info from Figma. Please wait...")
             let loader = ImagesLoader(figmaClient: client, params: params.figma, platform: .ios)
-            let imagesTuple = try loader.loadImages()
+            let imagesTuple = try loader.loadImages(filter: filter)
 
             logger.info("Processing images...")
             let processor = ImagesProcessor(
@@ -59,8 +62,9 @@ extension FigmaExportCommand {
             let output = XcodeImagesOutput(assetsFolderURL: assetsURL)
             let exporter = XcodeImagesExporter(output: output)
             let localAndRemoteFiles = exporter.export(assets: images)
-            try? FileManager.default.removeItem(atPath: assetsURL.path)
-
+            if filter == nil {
+                try? FileManager.default.removeItem(atPath: assetsURL.path)
+            }
             logger.info("Downloading remote files...")
             let localFiles = try fileDownloader.fetch(files: localAndRemoteFiles)
 
@@ -76,7 +80,7 @@ extension FigmaExportCommand {
             // 1. Get Images info
             logger.info("Fetching images info from Figma. Please wait...")
             let loader = ImagesLoader(figmaClient: client, params: params.figma, platform: .android)
-            let imagesTuple = try loader.loadImages()
+            let imagesTuple = try loader.loadImages(filter: filter)
 
             // 2. Proccess images
             logger.info("Processing images...")
