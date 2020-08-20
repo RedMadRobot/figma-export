@@ -87,12 +87,16 @@ final public class XcodeColorExporter {
                 if let darkComponents = colorPair.dark?.toRgbComponents() {
                     contents.append("""
                         static var \(colorPair.light.name): UIColor {
-                            UIColor { traitCollection -> UIColor in
-                                if traitCollection.userInterfaceStyle == .dark {
-                                    return UIColor(red: \(darkComponents.red), green: \(darkComponents.green), blue: \(darkComponents.blue), alpha: \(darkComponents.alpha))
-                                } else {
-                                    return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
+                            if #available(iOS 13.0, *) {
+                                UIColor { traitCollection -> UIColor in
+                                    if traitCollection.userInterfaceStyle == .dark {
+                                        return UIColor(red: \(darkComponents.red), green: \(darkComponents.green), blue: \(darkComponents.blue), alpha: \(darkComponents.alpha))
+                                    } else {
+                                        return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
+                                    }
                                 }
+                            } else {
+                                return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
                             }
                         }\n
                     """)
