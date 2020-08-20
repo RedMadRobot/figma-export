@@ -82,6 +82,11 @@ extension FigmaExportCommand {
 
             let exporter = XcodeColorExporter(output: output)
             let files = exporter.export(colorPairs: colorPairs)
+            
+            if iosParams.colors.useColorAssets, let url = colorsURL {
+                try? FileManager.default.removeItem(atPath: url.path)
+            }
+            
             try fileWritter.write(files: files)
         }
 
