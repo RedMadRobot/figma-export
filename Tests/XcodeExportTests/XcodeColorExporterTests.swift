@@ -45,7 +45,7 @@ final class XcodeColorExporterTests: XCTestCase {
         extension UIColor {
             static var colorPair1: UIColor {
                 if #available(iOS 13.0, *) {
-                    UIColor { traitCollection -> UIColor in
+                    return UIColor { traitCollection -> UIColor in
                         if traitCollection.userInterfaceStyle == .dark {
                             return UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
                         } else {
