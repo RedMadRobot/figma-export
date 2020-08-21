@@ -55,12 +55,16 @@ import UIKit
 
 extension UIColor {
     static var primaryText: UIColor {
-        UIColor { traitCollection -> UIColor in
-            if traitCollection.userInterfaceStyle == .dark {
-                return UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-            } else {
-                return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+        if #available(iOS 13.0, *) {
+            return UIColor { traitCollection -> UIColor in
+                if traitCollection.userInterfaceStyle == .dark {
+                    return UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+                } else {
+                    return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+                }
             }
+        } else {
+            return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
         }
     }
     static var backgroundVideo: UIColor {
