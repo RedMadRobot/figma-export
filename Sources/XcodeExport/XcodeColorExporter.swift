@@ -88,7 +88,7 @@ final public class XcodeColorExporter {
                     contents.append("""
                         static var \(colorPair.light.name): UIColor {
                             if #available(iOS 13.0, *) {
-                                UIColor { traitCollection -> UIColor in
+                                return UIColor { traitCollection -> UIColor in
                                     if traitCollection.userInterfaceStyle == .dark {
                                         return UIColor(red: \(darkComponents.red), green: \(darkComponents.green), blue: \(darkComponents.blue), alpha: \(darkComponents.alpha))
                                     } else {
