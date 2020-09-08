@@ -91,6 +91,11 @@ final class ImagesLoader {
 
     private func _loadImages(fileId: String, frameName: FrameName, params: FormatParams, filter: String? = nil) throws -> [Image] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
+        
+        guard !imagesDict.isEmpty else {
+            throw FigmaExportError.componentsNotFound
+        }
+        
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
         let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
         
@@ -106,6 +111,11 @@ final class ImagesLoader {
 
     private func _loadPNGImages(fileId: String, frameName: FrameName, filter: String? = nil) throws -> [ImagePack] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
+        
+        guard !imagesDict.isEmpty else {
+            throw FigmaExportError.componentsNotFound
+        }
+        
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
 
         let imageIdToImagePath1 = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 1))

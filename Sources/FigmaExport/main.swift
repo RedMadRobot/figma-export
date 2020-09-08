@@ -3,11 +3,17 @@ import Foundation
 
 enum FigmaExportError: LocalizedError {
     
+    case stylesNotFound
+    case componentsNotFound
     case accessTokenNotFound
     case colorsAssetsFolderNotSpecified
     
     var errorDescription: String? {
         switch self {
+        case .stylesNotFound:
+            return "Color styles not found in the Figma file. Have you published Styles to the Library?"
+        case .componentsNotFound:
+            return "Components not found in the Figma file. Have you published Components to the Library?"
         case .accessTokenNotFound:
             return "Environment varibale FIGMA_PERSONAL_TOKEN not specified."
         case .colorsAssetsFolderNotSpecified:

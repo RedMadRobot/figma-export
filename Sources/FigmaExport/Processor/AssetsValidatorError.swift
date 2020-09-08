@@ -11,17 +11,17 @@ enum AssetsValidatorError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .badName(let name):
-            return "Неправильное название «\(name)»"
+            return "Bad asset name «\(name)»"
         case .countMismatch(let light, let dark):
-            return "Количество ассетов не совпадает. В светлой теме их \(light), а в темной теме \(dark)."
+            return "The number of assets doesn’t match. Light theme contains \(light), and dark \(dark)."
         case .lightAssetsNotFoundInDarkPalette(let lights):
-            return "В темной теме не найдены ассеты: \(lights.joined(separator: ", ")), которые есть в светлой теме."
+            return "Dark theme doesn’t contains following assets: \(lights.joined(separator: ", ")), which exists in light theme. Add these assets to dark theme and publish to the Team Library."
         case .darkAssetsNotFoundInLightPalette(let darks):
-            return "В светлой теме не найдены ассеты: \(darks.joined(separator: ", ")), которые есть в темной теме."
+            return "Light theme doesn’t contains following assets: \(darks.joined(separator: ", ")), which exists in dark theme. Add these assets to light theme and publish to the Team Library."
         case .foundDuplicate(let assetName):
-            return "Ассет \(assetName) встречается несколько раз."
+            return "Found duplicates of asset with name \(assetName). Remove duplicates."
         case .descriptionMismatch(let assetName, let light, let dark):
-            return "Ассет \(assetName) имеет разный description. В тёмной теме «\(dark)», а в светлой «\(light)»"
+            return "Asset with name \(assetName) have different description. In dark theme «\(dark)», in light theme «\(light)»"
         }
     }
 }
