@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Destination {
+public struct Destination: Equatable {
     
     public let directory: URL
     public let file: URL
@@ -15,7 +15,7 @@ public struct Destination {
     }
 }
 
-public struct FileContents {
+public struct FileContents: Equatable {
     
     /// Where to save file?
     public let destination: Destination

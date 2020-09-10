@@ -7,28 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F20186924D1B4AF002068B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F20186824D1B4AF002068B4 /* AppDelegate.swift */; };
-		0F20186B24D1B4AF002068B4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F20186A24D1B4AF002068B4 /* SceneDelegate.swift */; };
-		0F20186D24D1B4AF002068B4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F20186C24D1B4AF002068B4 /* ViewController.swift */; };
 		0F20187024D1B4AF002068B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F20186E24D1B4AF002068B4 /* Main.storyboard */; };
 		0F20187224D1B4B1002068B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F20187124D1B4B1002068B4 /* Assets.xcassets */; };
 		0F20187524D1B4B1002068B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F20187324D1B4B1002068B4 /* LaunchScreen.storyboard */; };
-		0F20187E24D1B618002068B4 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F20187D24D1B618002068B4 /* Color.swift */; };
 		0F2C8D6B2AFD881D171A472C /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE92E0072EBEBC415D106D58 /* Pods_Example.framework */; };
-		0F39108F24D1DA8A00BC796B /* SolidButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F39108E24D1DA8A00BC796B /* SolidButton.swift */; };
+		0F8F6C672507C26900879906 /* PTSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F6C652507C26600879906 /* PTSans-Bold.ttf */; };
+		0F8F6C682507C26900879906 /* PTSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F6C662507C26600879906 /* PTSans-Regular.ttf */; };
+		0F8F6C7225090F4900879906 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C6A25090F4900879906 /* AppDelegate.swift */; };
+		0F8F6C7425090F4900879906 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C6C25090F4900879906 /* SceneDelegate.swift */; };
+		0F8F6C7525090F4900879906 /* SolidButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C6D25090F4900879906 /* SolidButton.swift */; };
+		0F8F6C7825090F4900879906 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C7025090F4900879906 /* Color.swift */; };
+		0F8F6C7C2509282100879906 /* LabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C792509282100879906 /* LabelStyle.swift */; };
+		0F8F6C7D2509282100879906 /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C7A2509282100879906 /* UIFont+extension.swift */; };
+		0F8F6C7E2509282100879906 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C7B2509282100879906 /* Label.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0F20186524D1B4AF002068B4 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0F20186824D1B4AF002068B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../AppDelegate.swift; sourceTree = "<group>"; };
-		0F20186A24D1B4AF002068B4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../SceneDelegate.swift; sourceTree = "<group>"; };
-		0F20186C24D1B4AF002068B4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
 		0F20186F24D1B4AF002068B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0F20187124D1B4B1002068B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0F20187424D1B4B1002068B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0F20187624D1B4B1002068B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0F20187D24D1B618002068B4 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		0F39108E24D1DA8A00BC796B /* SolidButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolidButton.swift; sourceTree = "<group>"; };
+		0F8F6C652507C26600879906 /* PTSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PTSans-Bold.ttf"; sourceTree = "<group>"; };
+		0F8F6C662507C26600879906 /* PTSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PTSans-Regular.ttf"; sourceTree = "<group>"; };
+		0F8F6C6A25090F4900879906 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		0F8F6C6C25090F4900879906 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		0F8F6C6D25090F4900879906 /* SolidButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SolidButton.swift; sourceTree = "<group>"; };
+		0F8F6C7025090F4900879906 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		0F8F6C792509282100879906 /* LabelStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelStyle.swift; sourceTree = "<group>"; };
+		0F8F6C7A2509282100879906 /* UIFont+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
+		0F8F6C7B2509282100879906 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		11966572636132EBFF5F81BB /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C2FF91A431F7153FD4C7A3C3 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		EE92E0072EBEBC415D106D58 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,11 +87,13 @@
 		0F20187C24D1B60A002068B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				0F20186824D1B4AF002068B4 /* AppDelegate.swift */,
-				0F20186A24D1B4AF002068B4 /* SceneDelegate.swift */,
-				0F20186C24D1B4AF002068B4 /* ViewController.swift */,
-				0F20187D24D1B618002068B4 /* Color.swift */,
-				0F39108E24D1DA8A00BC796B /* SolidButton.swift */,
+				0F8F6C6A25090F4900879906 /* AppDelegate.swift */,
+				0F8F6C7025090F4900879906 /* Color.swift */,
+				0F8F6C6C25090F4900879906 /* SceneDelegate.swift */,
+				0F8F6C6D25090F4900879906 /* SolidButton.swift */,
+				0F8F6C7B2509282100879906 /* Label.swift */,
+				0F8F6C792509282100879906 /* LabelStyle.swift */,
+				0F8F6C7A2509282100879906 /* UIFont+extension.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -92,6 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				0F20187124D1B4B1002068B4 /* Assets.xcassets */,
+				0F8F6C652507C26600879906 /* PTSans-Bold.ttf */,
+				0F8F6C662507C26600879906 /* PTSans-Regular.ttf */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -146,6 +158,7 @@
 				TargetAttributes = {
 					0F20186424D1B4AF002068B4 = {
 						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1170;
 					};
 				};
 			};
@@ -173,7 +186,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F20187524D1B4B1002068B4 /* LaunchScreen.storyboard in Resources */,
+				0F8F6C682507C26900879906 /* PTSans-Regular.ttf in Resources */,
 				0F20187224D1B4B1002068B4 /* Assets.xcassets in Resources */,
+				0F8F6C672507C26900879906 /* PTSans-Bold.ttf in Resources */,
 				0F20187024D1B4AF002068B4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -210,11 +225,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F39108F24D1DA8A00BC796B /* SolidButton.swift in Sources */,
-				0F20186D24D1B4AF002068B4 /* ViewController.swift in Sources */,
-				0F20187E24D1B618002068B4 /* Color.swift in Sources */,
-				0F20186924D1B4AF002068B4 /* AppDelegate.swift in Sources */,
-				0F20186B24D1B4AF002068B4 /* SceneDelegate.swift in Sources */,
+				0F8F6C7225090F4900879906 /* AppDelegate.swift in Sources */,
+				0F8F6C7525090F4900879906 /* SolidButton.swift in Sources */,
+				0F8F6C7C2509282100879906 /* LabelStyle.swift in Sources */,
+				0F8F6C7825090F4900879906 /* Color.swift in Sources */,
+				0F8F6C7D2509282100879906 /* UIFont+extension.swift in Sources */,
+				0F8F6C7E2509282100879906 /* Label.swift in Sources */,
+				0F8F6C7425090F4900879906 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +376,7 @@
 			baseConfigurationReference = 11966572636132EBFF5F81BB /* Pods-Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2P2M2XMCMX;
 				INFOPLIST_FILE = Example/Info.plist;
@@ -369,6 +387,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.redmadrobot.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -379,6 +398,7 @@
 			baseConfigurationReference = C2FF91A431F7153FD4C7A3C3 /* Pods-Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2P2M2XMCMX;
 				INFOPLIST_FILE = Example/Info.plist;

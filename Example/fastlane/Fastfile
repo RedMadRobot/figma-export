@@ -14,9 +14,16 @@ lane :export_icons do
   end
 end
 
-desc "Export images с Figma"
+desc "Export images from Figma"
 lane :export_images do
   Dir.chdir("../") do
     sh "Pods/FigmaExport/Release/figma-export images"
+  end
+end
+
+desc "Export typography from Figma"
+lane :export_typography do
+  Dir.chdir("../") do
+    sh "Pods/FigmaExport/Release/figma-export typography"
   end
 end

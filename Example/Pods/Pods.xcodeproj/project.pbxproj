@@ -25,7 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7066A356498C7CE9393339299F83CA9E /* PBXContainerItemProxy */ = {
+		5FE79209A30B90F1CE7218953A4CEE76 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -39,14 +39,17 @@
 		1F667CC0E19EAF34E5A4119E2121F585 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Example.framework; path = "Pods-Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		37E86C8334F06C336630A870A0B2E62F /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
-		48231A2BCA8EB88D3FBDCB82421A98C1 /* FigmaExport.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FigmaExport.debug.xcconfig; sourceTree = "<group>"; };
+		3DDD09A2AF1A2AEBED8DB64A7CD7F6AD /* FigmaExport.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FigmaExport.debug.xcconfig; sourceTree = "<group>"; };
 		6A5BCFDC8A0BFCCF78D79352ECBE4D05 /* Pods-Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		6BFA5D315D974A34E99C77E18115BF8D /* FigmaExport.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FigmaExport.release.xcconfig; sourceTree = "<group>"; };
+		7732583749AA892A233BBB045190AFFF /* FigmaExport.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = FigmaExport.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A26EC3A56CC4AB6876A51526A56D550E /* Pods-Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Example-umbrella.h"; sourceTree = "<group>"; };
 		A38A5498DFA72D80A29954DFC52440DA /* Pods-Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Example-Info.plist"; sourceTree = "<group>"; };
+		E06BF3FA17ED935D7F6EEB113C72F551 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		ED748EA759ECFEA9D38334454D8E1546 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		F136FFE8A9F77E570AF1D4CFBD7CF333 /* Pods-Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Example-dummy.m"; sourceTree = "<group>"; };
 		F6DFA99DC01ECBD1B15702F1B1072C87 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		F764013C114128F718694E7480CEEB6E /* FigmaExport.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FigmaExport.release.xcconfig; sourceTree = "<group>"; };
 		FBD7B424DDE770E7C3C54A67A1E95C3C /* Pods-Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Example.modulemap"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,22 +65,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		145AB7CB8FF951AF592C72D91BBF604F /* Pods */ = {
+		09B60E43E8F21F3465507EEE85E03F4D /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				BDB03DE7647B02ACFD45C4A159E693C4 /* FigmaExport */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		3C25F3C60B912EF129963450D0840B12 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				48231A2BCA8EB88D3FBDCB82421A98C1 /* FigmaExport.debug.xcconfig */,
-				F764013C114128F718694E7480CEEB6E /* FigmaExport.release.xcconfig */,
+				3DDD09A2AF1A2AEBED8DB64A7CD7F6AD /* FigmaExport.debug.xcconfig */,
+				6BFA5D315D974A34E99C77E18115BF8D /* FigmaExport.release.xcconfig */,
 			);
 			name = "Support Files";
-			path = "../Target Support Files/FigmaExport";
+			path = "Example/Pods/Target Support Files/FigmaExport";
+			sourceTree = "<group>";
+		};
+		0F8CEAA228E8AB7FDFAE9F6859C30A21 /* FigmaExport */ = {
+			isa = PBXGroup;
+			children = (
+				56FE84E2CB78A8CDCDFFAF67C6F73616 /* Pod */,
+				09B60E43E8F21F3465507EEE85E03F4D /* Support Files */,
+			);
+			name = FigmaExport;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		49D89C83FB6D80909E7AB878478AEF24 /* Pods-Example */ = {
@@ -96,6 +101,16 @@
 			path = "Target Support Files/Pods-Example";
 			sourceTree = "<group>";
 		};
+		56FE84E2CB78A8CDCDFFAF67C6F73616 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				7732583749AA892A233BBB045190AFFF /* FigmaExport.podspec */,
+				ED748EA759ECFEA9D38334454D8E1546 /* LICENSE */,
+				E06BF3FA17ED935D7F6EEB113C72F551 /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
 		6175F76A709D89A745234C5440684C67 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,13 +119,12 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		BDB03DE7647B02ACFD45C4A159E693C4 /* FigmaExport */ = {
+		637F5BA3DFB060427993068B84220F2F /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3C25F3C60B912EF129963450D0840B12 /* Support Files */,
+				0F8CEAA228E8AB7FDFAE9F6859C30A21 /* FigmaExport */,
 			);
-			name = FigmaExport;
-			path = FigmaExport;
+			name = "Development Pods";
 			sourceTree = "<group>";
 		};
 		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
@@ -125,8 +139,8 @@
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				637F5BA3DFB060427993068B84220F2F /* Development Pods */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				145AB7CB8FF951AF592C72D91BBF604F /* Pods */,
 				F3FF89D6E7299BC19CC5D532AB71AAAA /* Products */,
 				6175F76A709D89A745234C5440684C67 /* Targets Support Files */,
 			);
@@ -174,7 +188,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				B8B0F8B7FF709EEA32DBC0E773A0CA58 /* PBXTargetDependency */,
+				8A045C989BB5B250D3256E2EF9EDE759 /* PBXTargetDependency */,
 			);
 			name = "Pods-Example";
 			productName = "Pods-Example";
@@ -231,11 +245,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		B8B0F8B7FF709EEA32DBC0E773A0CA58 /* PBXTargetDependency */ = {
+		8A045C989BB5B250D3256E2EF9EDE759 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FigmaExport;
 			target = 3BA943DE56B26F51C68DF4AD3D03ECB0 /* FigmaExport */;
-			targetProxy = 7066A356498C7CE9393339299F83CA9E /* PBXContainerItemProxy */;
+			targetProxy = 5FE79209A30B90F1CE7218953A4CEE76 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -302,7 +316,7 @@
 		};
 		3FEBB9C6AD55C400CEBB58FDC31D7E18 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 48231A2BCA8EB88D3FBDCB82421A98C1 /* FigmaExport.debug.xcconfig */;
+			baseConfigurationReference = 3DDD09A2AF1A2AEBED8DB64A7CD7F6AD /* FigmaExport.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -356,7 +370,7 @@
 		};
 		9D4C18C176E214ADFB8972A04ED34B01 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F764013C114128F718694E7480CEEB6E /* FigmaExport.release.xcconfig */;
+			baseConfigurationReference = 6BFA5D315D974A34E99C77E18115BF8D /* FigmaExport.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

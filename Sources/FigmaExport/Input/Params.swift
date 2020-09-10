@@ -50,10 +50,17 @@ struct Params: Decodable {
             let nameStyle: NameStyle
         }
         
+        struct Typography: Decodable {
+            let fontExtensionDirectory: String
+            let generateLabels: Bool
+            let labelsDirectory: String
+        }
+        
         let xcassetsPath: URL
         let colors: Colors
         let icons: Icons
         let images: Images
+        let typography: Typography
     }
 
     struct Android: Decodable {

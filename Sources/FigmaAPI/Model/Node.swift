@@ -16,10 +16,26 @@ public struct Node: Decodable {
     public let document: Document
 }
 
+public enum LineHeightUnit: String, Decodable {
+    case pixels = "PIXELS"
+    case fontSize = "FONT_SIZE_%"
+    case intrinsic = "INTRINSIC_%"
+}
+
+public struct TypeStyle: Decodable {
+    public var fontPostScriptName: String
+    public var fontWeight: Double
+    public var fontSize: Double
+    public var lineHeightPx: Double
+    public var letterSpacing: Double
+    public var lineHeightUnit: LineHeightUnit
+}
+
 public struct Document: Decodable {
     public let id: String
     public let name: String
     public let fills: [Paint]
+    public let style: TypeStyle?
 }
 
 public struct Paint: Decodable {

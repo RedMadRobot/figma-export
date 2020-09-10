@@ -51,6 +51,15 @@ ios:
       # Image name style: camelCase or snake_case
       nameStyle: camelCase
 
+  # Parameters for exporting typography
+  typography:
+    # Path to directory where to place UIFont+extension.swift file
+    fontExtensionDirectory: "./Source/UIComponents/"
+    # Will FigmaExport generate UILabel for each text style (font) e.g. HeaderLabel, BodyLabel, CaptionLabel.
+    generateLabels: true
+    # Path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
+    labelsDirectory: "./Source/UIComponents/"
+
 # [optional] Android export parameters
 android:
   mainRes: "./main/res"

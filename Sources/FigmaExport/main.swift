@@ -11,7 +11,7 @@ enum FigmaExportError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .stylesNotFound:
-            return "Color styles not found in the Figma file. Have you published Styles to the Library?"
+            return "Color/Text styles not found in the Figma file. Have you published Styles to the Library?"
         case .componentsNotFound:
             return "Components not found in the Figma file. Have you published Components to the Library?"
         case .accessTokenNotFound:
@@ -35,7 +35,8 @@ struct FigmaExportCommand: ParsableCommand {
         subcommands: [
             ExportColors.self,
             ExportIcons.self,
-            ExportImages.self
+            ExportImages.self,
+            ExportTypography.self
         ],
         defaultSubcommand: ExportColors.self
     )

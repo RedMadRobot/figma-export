@@ -6,8 +6,9 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/RedMadRobot/Catbird/blob/master/LICENSE)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/FigmaExport.svg)](https://cocoapods.org/pods/FigmaExport)
 
-Command line utility to export colors, icons and images from Figma to Xcode / Android Studio project.
+Command line utility to export colors, typography, icons and images from Figma to Xcode / Android Studio project.
 * color - Figma's color style
+* typography - Figma's text style
 * icon — Figma's component with small black vector image
 * image — Figma's components with colorized image (Light/Dark)
 
@@ -15,11 +16,37 @@ Why we developed this utility:
 * Figma doesn't support exporting colors and images to Xcode / Android Studio. Manual export takes a long time.
 * For easy sync of the component library with the code
 
+Articles:
+* [[habr.com] FigmaExport: как автоматизировать экспорт UI-Kit из Figma в Xcode и Android Studio проекты](http://habr.com/ru/company/redmadrobot/blog/514118/)
+
+Table of Contents:
+- [Features](#features)
+- [Result](#result)
+  - [iOS](#ios)
+  - [Android](#android)
+- [Installation](#installation)
+  - [Manual](#manual)
+  - [Homebrew](#homebrew)
+  - [CocoaPods + Fastlane](#cocoapods--fastlane)
+- [Usage](#usage)
+  - [Arguments](#arguments)
+  - [Figma properties](#figma-properties)
+  - [iOS properties](#ios-properties)
+  - [Android properties](#android-properties)
+  - [Exporting Typography](#exporting-typography)
+- [Design requirements](#design-requirements)
+- [Example iOS project](#example-ios-project)
+- [Contributing](#contributing)
+- [License](#license)
+- [Feedback](#feedback)
+- [Authors](#authors)
+
 ## Features
 
 * Export light & dark color palette directly to Xcode / Android studio project
 * Export icons to Xcode / Android Studio project 
 * Export images to Xcode / Android Studio project
+* Export text styles to Xcode project
 
 > Exporting icons and images works only for Professional/Organisation Figma plan because FigmaExport use *Shareable team libraries*.
 
@@ -85,6 +112,18 @@ Images will be exported as PNG files the same way.
 
 <img src="images/images.png" width="500"/>
 
+#### Typography
+
+When your execute `figma-export typography` command `figma-export` generates 3 files:
+1. `UIFont+extension.swift` extension for UIFont that declares your custom fonts. Use these fonts like this `UIFont.header()`, `UIFont.caption1()`.
+2. `LabelStyle.swift` struct for generating attributes for NSAttributesString with custom lineHeight and tracking (letter spacing).
+3. `Label.swift` file that contains base Label class and class for each text style. E.g. HeaderLabel, BodyLabel, Caption1Label. Specify these classes in xib files on in code.
+
+Example of these files:
+- [./Example/Example/Source/Label.swift](./Example/Example/Source/Label.swift)
+- [./Example/Example/Source/LabelStyle.swift](./Example/Example/Source/LabelStyle.swift)
+- [./Example/Example/Source/UIFont+extension.swift](./Example/Example/Source/UIFont+extension.swift)
+
 ### Android
 
 Colors will be exported to `values/colors.xml` and `values-night/colors.xml` files.
@@ -149,9 +188,12 @@ Run `fastlane sync_colors` to run FigmaExport.
    To export images use `images` argument:
 
    `./figma-export images -i figma-export.yaml`
-   
 
-## Arguments
+   To export typography use `typography` argument:
+
+   `./figma-export typography -i figma-export.yaml`
+
+### Arguments
 
 **Export specific icons/images**
 
@@ -227,6 +269,15 @@ ios:
       # Image name style: camelCase or snake_case
       nameStyle: camelCase
 
+  # Parameters for exporting typography
+  typography:
+    # Path to directory where to place UIFont+extension.swift file
+    fontExtensionDirectory: "./Source/UIComponents/"
+    # Will FigmaExport generate UILabel for each text style (font) e.g. HeaderLabel, BodyLabel, CaptionLabel.
+    generateLabels: true
+    # Path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
+    labelsDirectory: "./Source/UIComponents/"
+
 # [optional] Android export parameters
 android:
   mainRes: "./main/res"
@@ -248,40 +299,64 @@ android:
 * `ios.icons.preservesVectorRepresentation` — An array of icon names that will supports Preseve Vecotor Data.
 * `ios.images.assetsFolder` — Name of the folder inside `Assets.xcassets` where images will be exported.
 * `ios.images.nameStyle` — Images name style: camelCase or snake_case
- 
+* `ios.typography.fontExtensionDirectory` - Relative or absolute path to directory where UIFont+extension.swift file will be generated. This file containes static methods for accessing custom fonts e.g. UIFont.header(), UIFont.caption1()
+* `ios.typography.generateLabels` -  Should FigmaExport generate UILabel for each text style (font)? E.g. HeaderLabel, BodyLabel, CaptionLabel
+* `ios.typography.labelsDirectory` - Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
+
 ### Android properties
 * `android.path` — Relative or absolute path to the `main/res` folder including it. The colors will be exported to `./values/colors.xml` and `./values-night/colors.xml`.
 
+### Exporting Typography
+
+1. Add a custom font to the Xcode project. Drag & drop font file to the Xcode project, set target membership, and add font file name in the Info.plist file. [See developer documentation for more info.](https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app)<br><img src="images/fonts.png" width="400" />
+2. Run `figma-export typography` to export text styles
+3. Add generated Swift files to your Xcode project. FigmaExport doesn’t add swift files to `.xcodeproj` file.
+4. Use generated fonts and labels in your code. E.g. `button.titleLabel?.font = UIFont.body()`, `let label = HeaderLabel()`.
+
 ## Design requirements
 
-### Common
 If a color, icon or image is unique for iOS or Android platform, it should contains "ios" or "android" word in the description field in the properties. If a color, icon or image is used only by the designer and it should not be exported, the word "none" should be specified in the description field.
 
-Styles and Components must be published to a Team Library.
+**Styles and Components must be published to a Team Library.**
 
-### For `figma-export colors`
+For `figma-export colors`
+
 If you support dark mode your figma project must contains two files. One should contains a dark color palette, and the another light color palette. Names and number of the colors must matches.
 
-#### Example
+Example
 
 File | Styles
 ------------ | -------------
 <img src="images/dark.png" width="352" /> | <img src="images/dark_c.png" width="200" />
 <img src="images/light.png" width="352" /> | <img src="images/light_c.png" width="200" />
 
-### For `figma-export icons`
-Your figma project must contains a file with `Icons` frame.
-If you support dark mode you must have two Figma files. Each must have `Icons` frame.
+For `figma-export icons`
 
-### For `figma-export images`
-Your figma project must contains a file with `Illustrations` frame.
-If you support dark mode you must have two Figma files. Each must have `Illustrations` frame.
+Your Figma file must contains a frame with `Icons` name which contains components for each icon.
+
+For `figma-export images`
+
+Your Figma file must contains a frame with `Illustrations` name which contains components for each illustration.
+If you support dark mode you must have two Figma files.
+
+For `figma-export typography`.
+
+Your Figma file must contains Text Styles.
+
+#### Dynamic Type
+It is recommended to support [Dynamic Type](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/#dynamic-type-sizes). Dynamic Type provides additional flexibility by letting readers choose their preferred text size.
+
+If you want to support Dynamic Type you should specify iOS native text style for your custom text styles in the description field of Text Style. Available iOS native text styles you can find on Human Interface Guidlines page in [Typography/Dynamic Type Sizes](https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/#dynamic-type-sizes).
+
+For example: You have `header` text style with 20 pt font size. Native iOS text style that matches is "Title 3". In the description field of your `header` text style you should specify "Title 3".
+
+Advice: Font in Tab Bar and standard Navigation Bar must not support Dynamic Type.
 
 ## Example iOS project
 
 There is an example iOS project in `Example` directory which demostrates how to use figma-export.
 
-<img src="images/figma.png" width="600" />
+<img src="images/figma.png" width="800" />
 
 The UI-Kit of this project in Figma:
 
@@ -304,6 +379,7 @@ The UI-Kit of this project in Figma:
 * To export colors run: `bundle exec fastlane export_colors`
 * To export icons run: `bundle exec fastlane export_icons`
 * To export images run: `bundle exec fastlane export_images`
+* To export typography run: `bundle exec fastlane export_typography`
 
 ## Contributing
 

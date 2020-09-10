@@ -40,7 +40,17 @@ ios:
     
   # Parameters for exporting images
   images:
-      # Name of the folder inside Assets.xcassets where to place images (.imageset directories)
-      assetsFolder: Illustrations
-      # Image name style: camelCase or snake_case
-      nameStyle: camelCase
+    # Name of the folder inside Assets.xcassets where to place images (.imageset directories)
+    assetsFolder: Illustrations
+    # Image name style: camelCase or snake_case
+    nameStyle: camelCase
+  
+  # Parameters for exporting typography
+  typography:
+    # Path to directory where to place UIFont+extension.swift file
+    fontExtensionDirectory: "./Example/Source/"
+    # Will FigmaExport generate UILabel for each text style (font) e.g. HeaderLabel, BodyLabel, CaptionLabel.
+    generateLabels: true
+    # Path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
+    labelsDirectory: "./Example/Source/"
+    

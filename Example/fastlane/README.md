@@ -29,7 +29,12 @@ Export icons from Figma
 ```
 fastlane export_images
 ```
-Export images с Figma
+Export images from Figma
+### export_typography
+```
+fastlane export_typography
+```
+Export typography from Figma
 
 ----
 
