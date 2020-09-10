@@ -1,5 +1,5 @@
 PODS:
-  - FigmaExport (0.10.5)
+  - FigmaExport (0.11.0)
 
 DEPENDENCIES:
   - FigmaExport
@@ -9,7 +9,7 @@ SPEC REPOS:
     - FigmaExport
 
 SPEC CHECKSUMS:
-  FigmaExport: 8b3c40b57cac6383e6537d296366c47d92446da9
+  FigmaExport: 6e59632794da33bf1dfe98851ac1e976b75f085a
 
 PODFILE CHECKSUM: 5f4def1cc7339d6f13a38b29b1a86d1548750fad
 
