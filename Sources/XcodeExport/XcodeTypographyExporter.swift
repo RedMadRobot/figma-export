@@ -96,7 +96,7 @@ class Label: UILabel {
     var style: LabelStyle? { nil }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDtitleLabel?.fontidChange(previousTraitCollection)
+        super.traitCollectionDidChange(previousTraitCollection)
 
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
             updateText()

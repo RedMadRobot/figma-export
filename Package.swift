@@ -15,8 +15,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "3.0.0"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
-        .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.14.0"),
-        .package(url: "https://github.com/soffes/Diff", from: "0.2.5")
+        .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.14.0")
     ],
     targets: [
         
@@ -58,7 +57,7 @@ let package = Package(
         ),
         .testTarget(
             name: "XcodeExportTests",
-            dependencies: ["XcodeExport", "Diff"]
+            dependencies: ["XcodeExport"]
         )
     ]
 )

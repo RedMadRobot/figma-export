@@ -1,7 +1,6 @@
 import XCTest
 import XcodeExport
 import FigmaExportCore
-import Diff
 
 final class XcodeTypographyExporterTests: XCTestCase {
     
@@ -221,7 +220,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 self.tracking = tracking
             }
             
-            funcs attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
+            func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
                 
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = alignment
@@ -250,29 +249,6 @@ final class XcodeTypographyExporterTests: XCTestCase {
         }
         """
         
-        let differ: () -> String = {
-            var result = ""
-            
-            let diff1 = diff(contentsLabel, String(data: files[0].data!, encoding: .utf8)!)
-            let diff2 = diff(contentsLabelStyle, String(data: files[1].data!, encoding: .utf8)!)
-            
-            if let d = diff1 {
-                let a = String.Index(utf16Offset: d.0.lowerBound - 10, in: contentsLabel)
-                let b = String.Index(utf16Offset: d.0.upperBound + 10, in: contentsLabel)
-                print(contentsLabel[a..<b])
-                result += "range=\(d.0) symbols=\(d.1)"
-            }
-            
-            if let d = diff2 {
-                let a = String.Index(utf16Offset: d.0.lowerBound - 10, in: contentsLabel)
-                let b = String.Index(utf16Offset: d.0.upperBound + 10, in: contentsLabel)
-                print(contentsLabel[a..<b])
-                result += "\nrange=\(d.0) symbols=\(d.1)"
-            }
-            
-            return result
-        }
-        
         XCTAssertEqual(files.count, 2, "Must be generated 2 files but generated \(files.count)")
         XCTAssertEqual(
             files,
@@ -291,8 +267,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                     ),
                     data: contentsLabelStyle.data(using: .utf8)!
                 )
-            ],
-            differ()
+            ]
         )
     }
     
