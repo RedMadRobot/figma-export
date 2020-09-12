@@ -16,10 +16,10 @@
 		0F8F6C7225090F4900879906 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C6A25090F4900879906 /* AppDelegate.swift */; };
 		0F8F6C7425090F4900879906 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C6C25090F4900879906 /* SceneDelegate.swift */; };
 		0F8F6C7525090F4900879906 /* SolidButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C6D25090F4900879906 /* SolidButton.swift */; };
-		0F8F6C7825090F4900879906 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C7025090F4900879906 /* Color.swift */; };
-		0F8F6C7C2509282100879906 /* LabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C792509282100879906 /* LabelStyle.swift */; };
-		0F8F6C7D2509282100879906 /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C7A2509282100879906 /* UIFont+extension.swift */; };
-		0F8F6C7E2509282100879906 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C7B2509282100879906 /* Label.swift */; };
+		0FEA0949250CB7AE0065EB81 /* UIColor+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA0948250CB7AE0065EB81 /* UIColor+extension.swift */; };
+		0FEA094D250CB7DF0065EB81 /* LabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA094A250CB7DF0065EB81 /* LabelStyle.swift */; };
+		0FEA094E250CB7DF0065EB81 /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA094B250CB7DF0065EB81 /* UIFont+extension.swift */; };
+		0FEA094F250CB7DF0065EB81 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA094C250CB7DF0065EB81 /* Label.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,10 +33,10 @@
 		0F8F6C6A25090F4900879906 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0F8F6C6C25090F4900879906 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		0F8F6C6D25090F4900879906 /* SolidButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SolidButton.swift; sourceTree = "<group>"; };
-		0F8F6C7025090F4900879906 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		0F8F6C792509282100879906 /* LabelStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelStyle.swift; sourceTree = "<group>"; };
-		0F8F6C7A2509282100879906 /* UIFont+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
-		0F8F6C7B2509282100879906 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		0FEA0948250CB7AE0065EB81 /* UIColor+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+extension.swift"; sourceTree = "<group>"; };
+		0FEA094A250CB7DF0065EB81 /* LabelStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelStyle.swift; sourceTree = "<group>"; };
+		0FEA094B250CB7DF0065EB81 /* UIFont+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
+		0FEA094C250CB7DF0065EB81 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		11966572636132EBFF5F81BB /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C2FF91A431F7153FD4C7A3C3 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		EE92E0072EBEBC415D106D58 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,13 +87,13 @@
 		0F20187C24D1B60A002068B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				0FEA0948250CB7AE0065EB81 /* UIColor+extension.swift */,
 				0F8F6C6A25090F4900879906 /* AppDelegate.swift */,
-				0F8F6C7025090F4900879906 /* Color.swift */,
 				0F8F6C6C25090F4900879906 /* SceneDelegate.swift */,
 				0F8F6C6D25090F4900879906 /* SolidButton.swift */,
-				0F8F6C7B2509282100879906 /* Label.swift */,
-				0F8F6C792509282100879906 /* LabelStyle.swift */,
-				0F8F6C7A2509282100879906 /* UIFont+extension.swift */,
+				0FEA094C250CB7DF0065EB81 /* Label.swift */,
+				0FEA094A250CB7DF0065EB81 /* LabelStyle.swift */,
+				0FEA094B250CB7DF0065EB81 /* UIFont+extension.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -227,10 +227,10 @@
 			files = (
 				0F8F6C7225090F4900879906 /* AppDelegate.swift in Sources */,
 				0F8F6C7525090F4900879906 /* SolidButton.swift in Sources */,
-				0F8F6C7C2509282100879906 /* LabelStyle.swift in Sources */,
-				0F8F6C7825090F4900879906 /* Color.swift in Sources */,
-				0F8F6C7D2509282100879906 /* UIFont+extension.swift in Sources */,
-				0F8F6C7E2509282100879906 /* Label.swift in Sources */,
+				0FEA094D250CB7DF0065EB81 /* LabelStyle.swift in Sources */,
+				0FEA0949250CB7AE0065EB81 /* UIColor+extension.swift in Sources */,
+				0FEA094E250CB7DF0065EB81 /* UIFont+extension.swift in Sources */,
+				0FEA094F250CB7DF0065EB81 /* Label.swift in Sources */,
 				0F8F6C7425090F4900879906 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

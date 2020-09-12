@@ -22,15 +22,15 @@ ios:
   
   # Parameters for exporting colors
   colors:
-    # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
-    assetsFolder: Colors
     # Should be generate color assets instead of pure swift code
     useColorAssets: True
-    # Absolute path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
-    colorSwift: "./Example/Source/Color.swift"
+    # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
+    assetsFolder: Colors
     # Color name style: camelCase or snake_case
     nameStyle: camelCase
-
+    # [optional] Absolute or relative path to swift file where to export UIKit colors (UIColor) for accessing from the code (e.g. UIColor.backgroundPrimary)
+    colorSwift: "./Example/Source/UIColor+extension.swift"
+    
   # Parameters for exporting icons
   icons:
     # Name of the folder inside Assets.xcassets where to place icons (.imageset directories)

@@ -59,7 +59,7 @@ extension FigmaExportCommand {
             let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
 
             let assetsURL = ios.xcassetsPath.appendingPathComponent(ios.images.assetsFolder)
-            let output = XcodeImagesOutput(assetsFolderURL: assetsURL)
+            let output = XcodeImagesOutput(assetsFolderURL: assetsURL, imageExtensionSwiftURL: ios.images.swiftUIImageSwift)
             let exporter = XcodeImagesExporter(output: output)
             let localAndRemoteFiles = exporter.export(assets: images)
             if filter == nil {

@@ -284,11 +284,11 @@
             </objects>
             <point key="canvasLocation" x="1019" y="-400"/>
         </scene>
-        <!--Images-->
+        <!--Illustrations-->
         <scene sceneID="BY0-yr-QEZ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kD0-Ka-frU" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Images" image="cube.box.fill" catalog="system" id="HIF-ej-3bM"/>
+                    <tabBarItem key="tabBarItem" title="Illustrations" image="cube.box.fill" catalog="system" id="HIF-ej-3bM"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="LGW-3E-j7G">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>

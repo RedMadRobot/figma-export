@@ -18,34 +18,35 @@ final class XcodeTypographyExporterTests: XCTestCase {
         let files = try exporter.exportFonts(textStyles: styles, fontExtensionDirectory: "~/")
         
         let contents = """
+        //
+        //  The code generated using FigmaExport — Command line utility to export
+        //  colors, typography, icons and images from Figma to Xcode project.
+        //
+        //  https://github.com/RedMadRobot/figma-export
+        //
+        //  Don’t edit this code manually to avoid runtime crashes
+        //
+
         import UIKit
 
         extension UIFont {
-            
+        
             static func largeTitle() -> UIFont {
-            
                 customFont("PTSans-Bold", size: 34.0, textStyle: .largeTitle, scaled: true)
-            
             }
-            
+        
             static func header() -> UIFont {
-            
                 customFont("PTSans-Bold", size: 20.0)
-            
             }
-            
+        
             static func body() -> UIFont {
-            
                 customFont("PTSans-Regular", size: 16.0, textStyle: .body, scaled: true)
-            
             }
-            
+        
             static func caption() -> UIFont {
-            
                 customFont("PTSans-Regular", size: 14.0, textStyle: .footnote, scaled: true)
-            
             }
-            
+
             private static func customFont(
                 _ name: String,
                 size: CGFloat,
@@ -66,6 +67,10 @@ final class XcodeTypographyExporterTests: XCTestCase {
             }
         }
         """
+        
+        files.forEach {
+            print(String(data: $0.data!, encoding: .utf8)!)
+        }
         
         XCTAssertEqual(
             files,
@@ -93,6 +98,15 @@ final class XcodeTypographyExporterTests: XCTestCase {
         let files = try exporter.exportLabels(textStyles: styles, labelsDirectory: "~/")
         
         let contentsLabel = """
+        //
+        //  The code generated using FigmaExport — Command line utility to export
+        //  colors, typography, icons and images from Figma to Xcode project.
+        //
+        //  https://github.com/RedMadRobot/figma-export
+        //
+        //  Don’t edit this code manually to avoid runtime crashes
+        //
+
         import UIKit
 
         class Label: UILabel {
@@ -204,6 +218,15 @@ final class XcodeTypographyExporterTests: XCTestCase {
         """
         
         let contentsLabelStyle = """
+        //
+        //  The code generated using FigmaExport — Command line utility to export
+        //  colors, typography, icons and images from Figma to Xcode project.
+        //
+        //  https://github.com/RedMadRobot/figma-export
+        //
+        //  Don’t edit this code manually to avoid runtime crashes
+        //
+
         import UIKit
         
         struct LabelStyle {

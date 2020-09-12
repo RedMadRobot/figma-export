@@ -35,19 +35,22 @@ struct Params: Decodable {
         struct Colors: Decodable {
             let useColorAssets: Bool
             let assetsFolder: String?
-            let colorSwift: URL
             let nameStyle: NameStyle
+            let colorSwift: URL?
+            let swiftuiColorSwift: URL?
         }
         
         struct Icons: Decodable {
             let assetsFolder: String
             let preservesVectorRepresentation: [String]?
             let nameStyle: NameStyle
+            let swiftUIImageSwift: URL?
         }
 
         struct Images: Decodable {
             let assetsFolder: String
             let nameStyle: NameStyle
+            let swiftUIImageSwift: URL?
         }
         
         struct Typography: Decodable {

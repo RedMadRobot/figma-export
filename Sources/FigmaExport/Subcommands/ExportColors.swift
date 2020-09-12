@@ -78,7 +78,8 @@ extension FigmaExportCommand {
             
             let output = XcodeColorsOutput(
                 assetsColorsURL: colorsURL,
-                colorSwiftURL: iosParams.colors.colorSwift)
+                colorSwiftURL: iosParams.colors.colorSwift,
+                swiftuiColorSwiftURL: iosParams.colors.swiftuiColorSwift)
 
             let exporter = XcodeColorExporter(output: output)
             let files = exporter.export(colorPairs: colorPairs)

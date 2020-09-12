@@ -12,7 +12,9 @@ Command line utility to export colors, typography, icons and images from Figma t
 * icon — Figma's component with small black vector image
 * image — Figma's components with colorized image (Light/Dark)
 
-Why we developed this utility:
+The utility supports Dark Mode and Swift UI.
+
+Why we've developed this utility:
 * Figma doesn't support exporting colors and images to Xcode / Android Studio. Manual export takes a long time.
 * For easy sync of the component library with the code
 
@@ -47,6 +49,8 @@ Table of Contents:
 * Export icons to Xcode / Android Studio project 
 * Export images to Xcode / Android Studio project
 * Export text styles to Xcode project
+* Supports Dark Mode
+* Supports SwiftUI and UIKit
 
 > Exporting icons and images works only for Professional/Organisation Figma plan because FigmaExport use *Shareable team libraries*.
 
@@ -62,7 +66,7 @@ Figma light | Figma dark | Xcode
 ------------ | ------------- | -------------
 <img src="images/figma_colors.png" width="229"/> | <img src="images/figma_colors_dark.png" width="229"/> | <img src="images/xcode.png" width="500"/>
 
-Additionally the `Color.swift` file will be created to use colors from the code.
+Additionally the following Swift file will be created to use colors from the code.
 
 ```swift
  import UIKit
@@ -71,6 +75,20 @@ Additionally the `Color.swift` file will be created to use colors from the code.
     static var backgroundSecondaryError: UIColor { return UIColor(named: #function)! }
     static var backgroundSecondarySuccess: UIColor { return UIColor(named: #function)! }
     static var backgroundVideo: UIColor { return UIColor(named: #function)! }
+    ...
+ }
+
+```
+
+For SwiftUI the following Swift file will be created to use colors from the code.
+
+```swift
+ import SwiftUI
+ 
+ extension Color {
+    static var backgroundSecondaryError: Color { return Color(#function) }
+    static var backgroundSecondarySuccess: Color { return Color(#function) }
+    static var backgroundVideo: Color { return Color(#function) }
     ...
  }
 
@@ -106,11 +124,33 @@ Icons will be exported as PDF files with `Template Image` render mode.
 
 <img src="images/icons.png" width="500"/>
 
+For SwiftUI the following Swift file will be created to use images from the code.
+
+```swift
+import SwiftUI
+
+extension Image {
+    static var ic16Notification: Image { return Image(#function) }
+    static var ic24Close: Image { return Image(#function) }
+    static var ic24DropdownDown: Image { return Image(#function) }
+    static var ic24DropdownUp: Image { return Image(#function) }
+    ...
+}
+...
+VStack {
+  Image.ic24Close
+  Image.ic24DropdownDown
+}
+...
+```
+
 #### Images
 
 Images will be exported as PNG files the same way.
 
 <img src="images/images.png" width="500"/>
+
+For SwiftUI a Swift file will be created to use images from the code.
 
 #### Typography
 
@@ -219,8 +259,10 @@ Example of `figma-export.yaml` file:
 ```yaml
 ---
 figma:
-  lightFileId: shPilWnVdJfo10YFo12345
-  darkFileId: KfF6DnJTWHGZzC9Nm12345
+  # Identifier of Figma file
+  lightFileId: shPilWnVdJfo10YF12345
+  # [optional] Identifier of Figma file for dark mode
+  darkFileId: KfF6DnJTWHGZzC912345
 
 # [optional] Common export parameters
 common:
@@ -236,19 +278,21 @@ common:
 
 # [optional] iOS export parameters
 ios:
-  # Path to the Assets.xcassets directory
+  # Absolute or relative path to the Assets.xcassets directory
   xcassetsPath: "./Resources/Assets.xcassets"
   
   # Parameters for exporting colors
   colors:
-    # Should be generate color assets instead of pure swift code 
+    # Should be generate color assets instead of pure swift code
     useColorAssets: True
-    # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
+    # [required if useColorAssets: True] Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
-    # Path to Color.swift file where to export colors for accessing colors from the code (e.g. UIColor.backgroundPrimary)
-    colorSwift: "./Sources/Presentation/Common/Color.swift"
     # Color name style: camelCase or snake_case
     nameStyle: camelCase
+    # [optional] Absolute or relative path to swift file where to export UIKit colors (UIColor) for accessing from the code (e.g. UIColor.backgroundPrimary)
+    colorSwift: "./Sources/UIColor+extension.swift"
+    # [optional] Absolute or relative path to swift file where to export SwiftUI colors (Color) for accessing from the code (e.g. Color.backgroundPrimary)
+    swiftuiColorSwift: "./Source/Color+extension.swift"
 
   # Parameters for exporting icons
   icons:
@@ -258,16 +302,20 @@ ios:
     nameStyle: camelCase
     # [optional] Enable Preserve Vector Data for specified icons
     preservesVectorRepresentation:
-    - ic24TabMain
-    - ic24TabHistory
-    - ic24TabProfile
+    - ic24TabBarMain
+    - ic24TabBarEvents
+    - ic24TabBarProfile
+    # [optional] Absolute or relative path to swift file where to export icons (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
+    swiftUIImageSwift: "./Source/Image+extension_icons.swift"
 
   # Parameters for exporting images
   images:
-      # Name of the folder inside Assets.xcassets where to place images (.imageset directories)
-      assetsFolder: Illustrations
-      # Image name style: camelCase or snake_case
-      nameStyle: camelCase
+    # Name of the folder inside Assets.xcassets where to place images (.imageset directories)
+    assetsFolder: Illustrations
+    # Image name style: camelCase or snake_case
+    nameStyle: camelCase
+    # [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
+    swiftUIImageSwift: "./Source/Image+extension_illustrations.swift"
 
   # Parameters for exporting typography
   typography:
@@ -290,15 +338,18 @@ android:
 
 ### iOS properties
 * `ios.xcassetsPath` — Relative or absolute path to directory `Assets.xcassets` where to export colors, icons and images.
-* `ios.colors.useColorAssets` — How to export colors - as assets or as swift UIColor initializers only.
+* `ios.colors.useColorAssets` — How to export colors? Use .xcassets and UIColor (useColorAssets = true) extension or extension only (useColorAssets = false)
 * `ios.colors.assetsFolder` — Name of the folder inside `Assets.xcassets` where colors will be exported. Used only if `useColorAssets == true`.
-* `ios.colors.colorSwift` — Relative or absolute path to `Color.swift` file.
 * `ios.colors.nameStyle` — Color name style: camelCase or snake_case
+* `ios.colors.colorSwift` — [optional] Absolute or relative path to swift file where to export UIKit colors (UIColor) for accessing from the code (e.g. UIColor.backgroundPrimary)
+* `ios.colors.swiftuiColorSwift` — [optional] Absolute or relative path to swift file where to export SwiftUI colors (Color) for accessing from the code (e.g. Color.backgroundPrimary)
 * `ios.icons.assetsFolder` — Name of the folder inside `Assets.xcassets` where icons will be exported.
 * `ios.icons.nameStyle` — Icon name style: camelCase or snake_case
 * `ios.icons.preservesVectorRepresentation` — An array of icon names that will supports Preseve Vecotor Data.
+* `ios.icons.swiftUIImageSwift` — [optional] Absolute or relative path to swift file where to export icons (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
 * `ios.images.assetsFolder` — Name of the folder inside `Assets.xcassets` where images will be exported.
 * `ios.images.nameStyle` — Images name style: camelCase or snake_case
+* `ios.images.swiftUIImageSwift` — [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
 * `ios.typography.fontExtensionDirectory` - Relative or absolute path to directory where UIFont+extension.swift file will be generated. This file containes static methods for accessing custom fonts e.g. UIFont.header(), UIFont.caption1()
 * `ios.typography.generateLabels` -  Should FigmaExport generate UILabel for each text style (font)? E.g. HeaderLabel, BodyLabel, CaptionLabel
 * `ios.typography.labelsDirectory` - Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
@@ -354,7 +405,7 @@ Advice: Font in Tab Bar and standard Navigation Bar must not support Dynamic Typ
 
 ## Example iOS project
 
-There is an example iOS project in `Example` directory which demostrates how to use figma-export.
+There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories which demostrates how to use figma-export with UIKit and SwiftUI.
 
 <img src="images/figma.png" width="800" />
 

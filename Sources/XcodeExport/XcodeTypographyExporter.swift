@@ -7,14 +7,43 @@ final public class XcodeTypographyExporter {
     public init() {}
     
     public func exportFonts(textStyles: [TextStyle], fontExtensionDirectory: String) throws -> [FileContents] {
-        let dict = textStyles.map {[
-            "size": $0.fontSize,
-            "scaled": $0.fontStyle != nil,
-            "fontName": $0.fontName,
-            "styleName": $0.name,
-            "style": $0.fontStyle?.textStyleName ?? ""
-        ]}
-        let contents = try TEMPLATE_UIFont_Extension_Swift.render(["fonts": dict])
+        let strings: [String] = textStyles.map {
+            let dynamicType: String = $0.fontStyle != nil ? ", textStyle: .\($0.fontStyle!.textStyleName), scaled: true" : ""
+            return """
+                static func \($0.name)() -> UIFont {
+                    customFont("\($0.fontName)", size: \($0.fontSize)\(dynamicType))
+                }
+            """
+        }
+        let contents = """
+        \(header)
+        
+        import UIKit
+
+        extension UIFont {
+        
+        \(strings.joined(separator: "\n\n"))
+        
+            private static func customFont(
+                _ name: String,
+                size: CGFloat,
+                textStyle: UIFont.TextStyle? = nil,
+                scaled: Bool = false) -> UIFont {
+
+                guard let font = UIFont(name: name, size: size) else {
+                    print("Warning: Font \\(name) not found.")
+                    return UIFont.systemFont(ofSize: size, weight: .regular)
+                }
+                
+                if scaled, let textStyle = textStyle {
+                    let metrics = UIFontMetrics(forTextStyle: textStyle)
+                    return metrics.scaledFont(for: font)
+                } else {
+                    return font
+                }
+            }
+        }
+        """
         
         let data = contents.data(using: .utf8)!
         let fileURL = URL(string: "UIFont+extension.swift")!
@@ -54,41 +83,9 @@ final public class XcodeTypographyExporter {
     }
 }
 
-private let TEMPLATE_UIFont_Extension_Swift = Template(templateString: """
-import UIKit
-
-extension UIFont {
-    {% for font in fonts %}
-    static func {{ font.styleName }}() -> UIFont {
-    {% if font.scaled %}
-        customFont("{{ font.fontName }}", size: {{ font.size }}, textStyle: .{{ font.style }}, scaled: true)
-    {% else %}
-        customFont("{{ font.fontName }}", size: {{ font.size }})
-    {% endif %}
-    }
-    {% endfor %}
-    private static func customFont(
-        _ name: String,
-        size: CGFloat,
-        textStyle: UIFont.TextStyle? = nil,
-        scaled: Bool = false) -> UIFont {
-
-        guard let font = UIFont(name: name, size: size) else {
-            print("Warning: Font \\(name) not found.")
-            return UIFont.systemFont(ofSize: size, weight: .regular)
-        }
-        
-        if scaled, let textStyle = textStyle {
-            let metrics = UIFontMetrics(forTextStyle: textStyle)
-            return metrics.scaledFont(for: font)
-        } else {
-            return font
-        }
-    }
-}
-""")
-
 private let TEMPLATE_Label_swift = Template(templateString: """
+\(header)
+
 import UIKit
 
 class Label: UILabel {
@@ -171,6 +168,8 @@ final class {{ style.className }}Label: Label {
 """)
 
 private let labelStyleSwiftContents = """
+\(header)
+
 import UIKit
 
 struct LabelStyle {

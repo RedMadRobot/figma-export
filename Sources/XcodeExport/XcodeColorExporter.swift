@@ -2,7 +2,7 @@ import Foundation
 import FigmaExportCore
 
 final public class XcodeColorExporter {
-
+    
     private let output: XcodeColorsOutput
 
     public init(output: XcodeColorsOutput) {
@@ -12,19 +12,39 @@ final public class XcodeColorExporter {
     public func export(colorPairs: [AssetPair<Color>]) -> [FileContents] {
         var files: [FileContents] = []
         
-        // Sources/.../Color.swift
-        let contents = prepareColorDotSwiftContents(colorPairs, formAsset: output.assetsColorsURL != nil)
-        let contentsData = contents.data(using: .utf8)!
-        
-        let fileURL = URL(string: output.colorSwiftURL.lastPathComponent)!
-        let directoryURL = output.colorSwiftURL.deletingLastPathComponent()
-        
-        files.append(
-            FileContents(
-                destination: Destination(directory: directoryURL, file: fileURL),
-                data: contentsData
+        // UIKit UIColor extension
+        if let colorSwiftURL = output.colorSwiftURL {
+            
+            let contents = prepareColorDotSwiftContents(colorPairs, formAsset: output.assetsColorsURL != nil)
+            let contentsData = contents.data(using: .utf8)!
+            
+            let fileURL = URL(string: colorSwiftURL.lastPathComponent)!
+            let directoryURL = colorSwiftURL.deletingLastPathComponent()
+            
+            files.append(
+                FileContents(
+                    destination: Destination(directory: directoryURL, file: fileURL),
+                    data: contentsData
+                )
             )
-        )
+        }
+        
+        // SwiftUI Color extension
+        if let colorSwiftURL = output.swiftuiColorSwiftURL {
+            
+            let contents = prepareSwiftUIColorDotSwiftContents(colorPairs)
+            let contentsData = contents.data(using: .utf8)!
+            
+            let fileURL = URL(string: colorSwiftURL.lastPathComponent)!
+            let directoryURL = colorSwiftURL.deletingLastPathComponent()
+            
+            files.append(
+                FileContents(
+                    destination: Destination(directory: directoryURL, file: fileURL),
+                    data: contentsData
+                )
+            )
+        }
         
         guard let assetsColorsURL = output.assetsColorsURL else { return files }
         
@@ -71,17 +91,30 @@ final public class XcodeColorExporter {
         return files
     }
     
-    private func prepareColorDotSwiftContents(_ colorPairs: [AssetPair<Color>], formAsset: Bool) -> String {
-        var contents = """
-        import UIKit
+    private func prepareSwiftUIColorDotSwiftContents(_ colorPairs: [AssetPair<Color>]) -> String {
         
-        extension UIColor {
+        let strings = colorPairs.map {
+            "    static var \($0.light.name): Color { return Color(#function) }"
+        }
+        
+        return """
+        \(header)
+        
+        import SwiftUI
+        
+        extension Color {
+        \(strings.joined(separator: "\n"))
+        }
         
         """
+    }
+    
+    private func prepareColorDotSwiftContents(_ colorPairs: [AssetPair<Color>], formAsset: Bool) -> String {
+        var contents = [String]()
         
         colorPairs.forEach { colorPair in
             if formAsset {
-                contents.append("    static var \(colorPair.light.name): UIColor { return UIColor(named: #function)! }\n")
+                contents.append("    static var \(colorPair.light.name): UIColor { return UIColor(named: #function)! }")
             } else {
                 let lightComponents = colorPair.light.toRgbComponents()
                 if let darkComponents = colorPair.dark?.toRgbComponents() {
@@ -98,20 +131,28 @@ final public class XcodeColorExporter {
                             } else {
                                 return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
                             }
-                        }\n
+                        }
                     """)
                 } else {
                     contents.append("""
                         static var \(colorPair.light.name): UIColor {
                             return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
-                        }\n
+                        }
                     """)
                 }
             }
         }
-        contents.append("\n}\n")
         
-        return contents
+        return """
+        \(header)
+
+        import UIKit
+        
+        extension UIColor {
+        \(contents.joined(separator: "\n"))
+        }
+        
+        """
     }
 }
 

@@ -10,6 +10,12 @@ import UIKit
 
 final class SolidButton: UIButton {
     
+    override var isHighlighted: Bool {
+        didSet {
+            backgroundColor = isHighlighted ? .buttonPressed : .button
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -19,10 +25,9 @@ final class SolidButton: UIButton {
         super.init(coder: coder)
     }
     
-    override var isHighlighted: Bool {
-        didSet {
-            backgroundColor = isHighlighted ? .buttonPressed : .button
-        }
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        commonInit()
     }
     
     private func commonInit() {

@@ -47,6 +47,39 @@ final public class XcodeIconsExporter {
                 data: data
             ))
         }
+        
+        
+        // SwiftUI extension Image {
+        if let url = output.imageExtensionSwiftURL {
+            let data = makeSwiftUIExtension(assets: assets).data(using: .utf8)!
+            
+            let fileURL = URL(string: url.lastPathComponent)!
+            let directoryURL = url.deletingLastPathComponent()
+            
+            files.append(FileContents(
+                destination: Destination(directory: directoryURL, file: fileURL),
+                data: data
+            ))
+        }
+        
         return files
     }
+    
+    private func makeSwiftUIExtension(assets: [Image]) -> String {
+        let images = assets.map { asset -> String in
+            return "    static var \(asset.name): Image { return Image(#function) }"
+        }
+        
+        return """
+        \(header)
+
+        import SwiftUI
+
+        extension Image {
+        \(images.joined(separator: "\n"))
+        }
+
+        """
+    }
+
 }
