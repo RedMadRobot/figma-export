@@ -1,15 +1,9 @@
 import Foundation
 import FigmaExportCore
 
-final public class XcodeIconsExporter {
+final public class XcodeIconsExporter: XcodeImagesExporterBase {
 
-    private let output: XcodeImagesOutput
-    
-    public init(output: XcodeImagesOutput) {
-        self.output = output
-    }
-    
-    public func export(assets: [Image]) -> [FileContents] {
+    public func export(assets: [Image], append: Bool) throws -> [FileContents] {
         var files: [FileContents] = []
         
         // Assets.xcassets/Icons/Contents.json
@@ -48,38 +42,11 @@ final public class XcodeIconsExporter {
             ))
         }
         
+        let imageNames = assets.map { $0.name }
         
-        // SwiftUI extension Image {
-        if let url = output.imageExtensionSwiftURL {
-            let data = makeSwiftUIExtension(assets: assets).data(using: .utf8)!
-            
-            let fileURL = URL(string: url.lastPathComponent)!
-            let directoryURL = url.deletingLastPathComponent()
-            
-            files.append(FileContents(
-                destination: Destination(directory: directoryURL, file: fileURL),
-                data: data
-            ))
-        }
+        let extensionFiles = try generateExtensions(names: imageNames, append: append)
+        files.append(contentsOf: extensionFiles)
         
         return files
     }
-    
-    private func makeSwiftUIExtension(assets: [Image]) -> String {
-        let images = assets.map { asset -> String in
-            return "    static var \(asset.name): Image { return Image(#function) }"
-        }
-        
-        return """
-        \(header)
-
-        import SwiftUI
-
-        extension Image {
-        \(images.joined(separator: "\n"))
-        }
-
-        """
-    }
-
 }

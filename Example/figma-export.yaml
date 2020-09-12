@@ -37,14 +37,18 @@ ios:
     assetsFolder: Icons
     # Icon name style: camelCase or snake_case
     nameStyle: camelCase
-    
+    # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)
+    imageSwift: "./Example/Source/UIImage+extension_icons.swift"
+
   # Parameters for exporting images
   images:
     # Name of the folder inside Assets.xcassets where to place images (.imageset directories)
     assetsFolder: Illustrations
     # Image name style: camelCase or snake_case
     nameStyle: camelCase
-  
+    # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
+    imageSwift: "./Example/Source/UIImage+extension_illustrations.swift"
+
   # Parameters for exporting typography
   typography:
     # Path to directory where to place UIFont+extension.swift file

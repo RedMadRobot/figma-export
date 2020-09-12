@@ -36,6 +36,7 @@ struct Params: Decodable {
             let useColorAssets: Bool
             let assetsFolder: String?
             let nameStyle: NameStyle
+            
             let colorSwift: URL?
             let swiftuiColorSwift: URL?
         }
@@ -44,12 +45,16 @@ struct Params: Decodable {
             let assetsFolder: String
             let preservesVectorRepresentation: [String]?
             let nameStyle: NameStyle
+            
+            let imageSwift: URL?
             let swiftUIImageSwift: URL?
         }
 
         struct Images: Decodable {
             let assetsFolder: String
             let nameStyle: NameStyle
+            
+            let imageSwift: URL?
             let swiftUIImageSwift: URL?
         }
         

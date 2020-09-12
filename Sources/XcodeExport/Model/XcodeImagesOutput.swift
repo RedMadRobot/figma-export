@@ -5,18 +5,26 @@ public struct XcodeImagesOutput {
     
     let assetsFolderURL: URL
     let preservesVectorRepresentation: [String]?
-    let imageExtensionSwiftURL: URL?
+    
+    let uiKitImageExtensionURL: URL?
+    let swiftUIImageExtensionURL: URL?
 
+    /// - Parameters:
     ///   - assetsFolderURL: An URL of a folder where to place icons/images
-    ///   - preservesVectorRepresentation: Preserve vector data?
-    ///   - imageExtensionSwiftURL: URL of the swift file where to generate swift code for accessing images from the code
+    ///   - preservesVectorRepresentation: A list of image names which should preserve vector data
+    ///   - uiKitImageExtensionURL: URL of the swift file where to generate extension for UIImage class
+    ///   - swiftUIImageExtensionURL: URL of the swift file where to generate extension for Image struct
     public init(
         assetsFolderURL: URL,
         preservesVectorRepresentation: [String]? = nil,
-        imageExtensionSwiftURL: URL? = nil) {
+        
+        uiKitImageExtensionURL: URL? = nil,
+        swiftUIImageExtensionURL: URL? = nil) {
         
         self.assetsFolderURL = assetsFolderURL
         self.preservesVectorRepresentation = preservesVectorRepresentation
-        self.imageExtensionSwiftURL = imageExtensionSwiftURL
+        
+        self.uiKitImageExtensionURL = uiKitImageExtensionURL
+        self.swiftUIImageExtensionURL = swiftUIImageExtensionURL
     }
 }

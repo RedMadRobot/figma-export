@@ -124,6 +124,20 @@ Icons will be exported as PDF files with `Template Image` render mode.
 
 <img src="images/icons.png" width="500"/>
 
+Additionally the following Swift file will be created to use icons from the code.
+
+```swift
+import UIKit
+
+extension UIImage {
+    static var ic16Notification: UIImage { return UIImage(named: #function)! }
+    static var ic24ArrowRight: UIImage { return UIImage(named: #function)! }
+    static var ic24Close: UIImage { return UIImage(named: #function)! }
+    static var ic24Dots: UIImage { return UIImage(named: #function)! }
+    ...
+}
+```
+
 For SwiftUI the following Swift file will be created to use images from the code.
 
 ```swift
@@ -149,6 +163,19 @@ VStack {
 Images will be exported as PNG files the same way.
 
 <img src="images/images.png" width="500"/>
+
+Additionally the following Swift file will be created to use images from the code.
+
+```swift
+import UIKit
+
+extension UIImage {
+    static var illZeroEmpty: UIImage { return UIImage(named: #function)! }
+    static var illZeroNetworkError: UIImage { return UIImage(named: #function)! }
+    static var illZeroServerError: UIImage { return UIImage(named: #function)! }
+    ...
+}
+```
 
 For SwiftUI a Swift file will be created to use images from the code.
 
@@ -232,6 +259,7 @@ Run `fastlane sync_colors` to run FigmaExport.
    To export typography use `typography` argument:
 
    `./figma-export typography -i figma-export.yaml`
+4. Add generated *.swift files to your Xcode project if your Xcode project doesn’t have these files.
 
 ### Arguments
 
@@ -307,6 +335,8 @@ ios:
     - ic24TabBarProfile
     # [optional] Absolute or relative path to swift file where to export icons (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
     swiftUIImageSwift: "./Source/Image+extension_icons.swift"
+    # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)
+    imageSwift: "./Example/Source/UIImage+extension_icons.swift"
 
   # Parameters for exporting images
   images:
@@ -316,6 +346,8 @@ ios:
     nameStyle: camelCase
     # [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
     swiftUIImageSwift: "./Source/Image+extension_illustrations.swift"
+    # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
+    imageSwift: "./Example/Source/UIImage+extension_illustrations.swift"
 
   # Parameters for exporting typography
   typography:
@@ -347,9 +379,11 @@ android:
 * `ios.icons.nameStyle` — Icon name style: camelCase or snake_case
 * `ios.icons.preservesVectorRepresentation` — An array of icon names that will supports Preseve Vecotor Data.
 * `ios.icons.swiftUIImageSwift` — [optional] Absolute or relative path to swift file where to export icons (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
+* `ios.icons.imageSwift` — [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)
 * `ios.images.assetsFolder` — Name of the folder inside `Assets.xcassets` where images will be exported.
 * `ios.images.nameStyle` — Images name style: camelCase or snake_case
 * `ios.images.swiftUIImageSwift` — [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
+* `ios.images.imageSwift` — [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
 * `ios.typography.fontExtensionDirectory` - Relative or absolute path to directory where UIFont+extension.swift file will be generated. This file containes static methods for accessing custom fonts e.g. UIFont.header(), UIFont.caption1()
 * `ios.typography.generateLabels` -  Should FigmaExport generate UILabel for each text style (font)? E.g. HeaderLabel, BodyLabel, CaptionLabel
 * `ios.typography.labelsDirectory` - Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)

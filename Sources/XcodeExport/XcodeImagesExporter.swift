@@ -1,15 +1,9 @@
 import Foundation
 import FigmaExportCore
 
-final public class XcodeImagesExporter {
+final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
-    private let output: XcodeImagesOutput
-
-    public init(output: XcodeImagesOutput) {
-        self.output = output
-    }
-
-    public func export(assets: [AssetPair<ImagePack>]) -> [FileContents] {
+    public func export(assets: [AssetPair<ImagePack>], append: Bool) throws -> [FileContents] {
         var files: [FileContents] = []
 
         // Assets.xcassets/Illustrations/Contents.json
@@ -39,37 +33,12 @@ final public class XcodeImagesExporter {
             ))
         }
         
-        // SwiftUI extension Image {
-        if let url = output.imageExtensionSwiftURL {
-            let data = makeSwiftUIExtension(assets: assets).data(using: .utf8)!
-            
-            let fileURL = URL(string: url.lastPathComponent)!
-            let directoryURL = url.deletingLastPathComponent()
-            
-            files.append(FileContents(
-                destination: Destination(directory: directoryURL, file: fileURL),
-                data: data
-            ))
-        }
+        let imageNames = assets.map { $0.light.name }
+        
+        let extensionFiles = try generateExtensions(names: imageNames, append: append)
+        files.append(contentsOf: extensionFiles)
         
         return files
-    }
-    
-    private func makeSwiftUIExtension(assets: [AssetPair<ImagePack>]) -> String {
-        let images = assets.map { pair -> String in
-            return "    static var \(pair.light.name): Image { return Image(#function) }"
-        }
-        
-        return """
-        \(header)
-
-        import SwiftUI
-
-        extension Image {
-        \(images.joined(separator: "\n"))
-        }
-
-        """
     }
 
     private func makeEmptyContentsJson() -> FileContents {

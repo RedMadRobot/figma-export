@@ -20,6 +20,10 @@
 		0FEA094D250CB7DF0065EB81 /* LabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA094A250CB7DF0065EB81 /* LabelStyle.swift */; };
 		0FEA094E250CB7DF0065EB81 /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA094B250CB7DF0065EB81 /* UIFont+extension.swift */; };
 		0FEA094F250CB7DF0065EB81 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA094C250CB7DF0065EB81 /* Label.swift */; };
+		0FEA0953250CB9300065EB81 /* IconsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA0952250CB9300065EB81 /* IconsViewController.swift */; };
+		0FEA0955250CC0D30065EB81 /* UIImage+extension_icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA0954250CC0D30065EB81 /* UIImage+extension_icons.swift */; };
+		0FEA0957250CC1EA0065EB81 /* UIImage+extension_illustrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA0956250CC1EA0065EB81 /* UIImage+extension_illustrations.swift */; };
+		0FEA0959250CC1F30065EB81 /* IllustrationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEA0958250CC1F30065EB81 /* IllustrationsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +41,10 @@
 		0FEA094A250CB7DF0065EB81 /* LabelStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelStyle.swift; sourceTree = "<group>"; };
 		0FEA094B250CB7DF0065EB81 /* UIFont+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
 		0FEA094C250CB7DF0065EB81 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		0FEA0952250CB9300065EB81 /* IconsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsViewController.swift; sourceTree = "<group>"; };
+		0FEA0954250CC0D30065EB81 /* UIImage+extension_icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+extension_icons.swift"; sourceTree = "<group>"; };
+		0FEA0956250CC1EA0065EB81 /* UIImage+extension_illustrations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+extension_illustrations.swift"; sourceTree = "<group>"; };
+		0FEA0958250CC1F30065EB81 /* IllustrationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IllustrationsViewController.swift; sourceTree = "<group>"; };
 		11966572636132EBFF5F81BB /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C2FF91A431F7153FD4C7A3C3 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		EE92E0072EBEBC415D106D58 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +102,10 @@
 				0FEA094C250CB7DF0065EB81 /* Label.swift */,
 				0FEA094A250CB7DF0065EB81 /* LabelStyle.swift */,
 				0FEA094B250CB7DF0065EB81 /* UIFont+extension.swift */,
+				0FEA0952250CB9300065EB81 /* IconsViewController.swift */,
+				0FEA0958250CC1F30065EB81 /* IllustrationsViewController.swift */,
+				0FEA0954250CC0D30065EB81 /* UIImage+extension_icons.swift */,
+				0FEA0956250CC1EA0065EB81 /* UIImage+extension_illustrations.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -225,11 +237,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FEA0955250CC0D30065EB81 /* UIImage+extension_icons.swift in Sources */,
 				0F8F6C7225090F4900879906 /* AppDelegate.swift in Sources */,
 				0F8F6C7525090F4900879906 /* SolidButton.swift in Sources */,
 				0FEA094D250CB7DF0065EB81 /* LabelStyle.swift in Sources */,
+				0FEA0959250CC1F30065EB81 /* IllustrationsViewController.swift in Sources */,
+				0FEA0953250CB9300065EB81 /* IconsViewController.swift in Sources */,
 				0FEA0949250CB7AE0065EB81 /* UIColor+extension.swift in Sources */,
 				0FEA094E250CB7DF0065EB81 /* UIFont+extension.swift in Sources */,
+				0FEA0957250CC1EA0065EB81 /* UIImage+extension_illustrations.swift in Sources */,
 				0FEA094F250CB7DF0065EB81 /* Label.swift in Sources */,
 				0F8F6C7425090F4900879906 /* SceneDelegate.swift in Sources */,
 			);
