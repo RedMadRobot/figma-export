@@ -53,10 +53,10 @@ ios:
 
   # Parameters for exporting typography
   typography:
-    # Path to directory where to place UIFont+extension.swift file
-    fontExtensionDirectory: "./ExampleSwiftUI/View/Common"
+    # [optional] Absolute or relative path to swift file where to export UIKit fonts (UIFont extension).
+    fontSwift: "./ExampleSwiftUI/View/Common/UIFont+extension.swift"
+    # [optional] Absolute or relative path to swift file where to export SwiftUI fonts (Font extension).
+    swiftUIFontSwift: "./ExampleSwiftUI/View/Common/Font+extension.swift"
+
     # Will FigmaExport generate UILabel for each text style (font) e.g. HeaderLabel, BodyLabel, CaptionLabel.
-    generateLabels: true
-    # Path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
-    labelsDirectory: "./ExampleSwiftUI/View/Common"
-    
+    generateLabels: false

@@ -95,17 +95,9 @@
 		0F20187C24D1B60A002068B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				0FEA0948250CB7AE0065EB81 /* UIColor+extension.swift */,
+				0FF26037250F4C7100D890E1 /* UI */,
 				0F8F6C6A25090F4900879906 /* AppDelegate.swift */,
 				0F8F6C6C25090F4900879906 /* SceneDelegate.swift */,
-				0F8F6C6D25090F4900879906 /* SolidButton.swift */,
-				0FEA094C250CB7DF0065EB81 /* Label.swift */,
-				0FEA094A250CB7DF0065EB81 /* LabelStyle.swift */,
-				0FEA094B250CB7DF0065EB81 /* UIFont+extension.swift */,
-				0FEA0952250CB9300065EB81 /* IconsViewController.swift */,
-				0FEA0958250CC1F30065EB81 /* IllustrationsViewController.swift */,
-				0FEA0954250CC0D30065EB81 /* UIImage+extension_icons.swift */,
-				0FEA0956250CC1EA0065EB81 /* UIImage+extension_illustrations.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -118,6 +110,38 @@
 				0F8F6C662507C26600879906 /* PTSans-Regular.ttf */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		0FF26037250F4C7100D890E1 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				0FF2603A250F4CA000D890E1 /* ViewControllers */,
+				0FF26038250F4C8200D890E1 /* Common */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		0FF26038250F4C8200D890E1 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				0FEA094C250CB7DF0065EB81 /* Label.swift */,
+				0FEA094A250CB7DF0065EB81 /* LabelStyle.swift */,
+				0F8F6C6D25090F4900879906 /* SolidButton.swift */,
+				0FEA0948250CB7AE0065EB81 /* UIColor+extension.swift */,
+				0FEA094B250CB7DF0065EB81 /* UIFont+extension.swift */,
+				0FEA0954250CC0D30065EB81 /* UIImage+extension_icons.swift */,
+				0FEA0956250CC1EA0065EB81 /* UIImage+extension_illustrations.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		0FF2603A250F4CA000D890E1 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				0FEA0952250CB9300065EB81 /* IconsViewController.swift */,
+				0FEA0958250CC1F30065EB81 /* IllustrationsViewController.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		17C17A7C8D1AF845B2C30B13 /* Pods */ = {

@@ -9,9 +9,26 @@
 import SwiftUI
 
 struct IconsView: View {
+    
+    var images = [
+        Image.ic16KeyEmergency,
+        Image.ic16KeySandglass,
+        Image.ic16Notification,
+        Image.ic24ArrowRight,
+        Image.ic24Close,
+        Image.ic24Dots,
+        Image.ic24DropdownDown,
+        Image.ic24DropdownUp,
+        Image.ic24FullscreenDisable,
+        Image.ic24FullscreenEnable,
+        Image.ic24ShareIos
+    ]
+    
     var body: some View {
         TabStackedView(tabTitle: "Icons") {
-            Image.ic16KeyEmergency
+            ForEach(0..<self.images.count) { index in
+                self.images[index]
+            }
             Spacer()
         }
         .foregroundColor(.tint)

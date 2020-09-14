@@ -351,8 +351,10 @@ ios:
 
   # Parameters for exporting typography
   typography:
-    # Path to directory where to place UIFont+extension.swift file
-    fontExtensionDirectory: "./Source/UIComponents/"
+    # [optional] Absolute or relative path to swift file where to export UIKit fonts (UIFont extension).
+    fontSwift: "./Source/UIComponents/UIFont+extension.swift"
+    # [optional] Absolute or relative path to swift file where to export SwiftUI fonts (Font extension).
+    swiftUIFontSwift: "./Source/View/Common/Font+extension.swift"
     # Will FigmaExport generate UILabel for each text style (font) e.g. HeaderLabel, BodyLabel, CaptionLabel.
     generateLabels: true
     # Path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
@@ -384,7 +386,8 @@ android:
 * `ios.images.nameStyle` — Images name style: camelCase or snake_case
 * `ios.images.swiftUIImageSwift` — [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
 * `ios.images.imageSwift` — [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
-* `ios.typography.fontExtensionDirectory` - Relative or absolute path to directory where UIFont+extension.swift file will be generated. This file containes static methods for accessing custom fonts e.g. UIFont.header(), UIFont.caption1()
+* `ios.typography.fontSwift` - [optional] Absolute or relative path to swift file where to export UIKit fonts (UIFont extension).
+* `ios.typography.swiftUIFontSwift` - [optional] Absolute or relative path to swift file where to export SwiftUI fonts (Font extension).
 * `ios.typography.generateLabels` -  Should FigmaExport generate UILabel for each text style (font)? E.g. HeaderLabel, BodyLabel, CaptionLabel
 * `ios.typography.labelsDirectory` - Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
 

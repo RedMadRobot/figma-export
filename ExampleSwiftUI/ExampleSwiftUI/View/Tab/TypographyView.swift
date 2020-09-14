@@ -16,10 +16,10 @@ struct TypographyView: View {
                 .font(.header())
                 .foregroundColor(.textPrimary)
             Text("Body")
-                .font(.body)
+                .font(.body())
                 .foregroundColor(.textPrimary)
             Text("Caption")
-                .font(.caption)
+                .font(.caption())
                 .foregroundColor(.textPrimary)
             Spacer()
         }

@@ -6,7 +6,7 @@ final public class XcodeTypographyExporter {
 
     public init() {}
     
-    public func exportFonts(textStyles: [TextStyle], fontExtensionDirectory: String) throws -> [FileContents] {
+    public func exportFonts(textStyles: [TextStyle], fontExtensionURL: URL) throws -> [FileContents] {
         let strings: [String] = textStyles.map {
             let dynamicType: String = $0.fontStyle != nil ? ", textStyle: .\($0.fontStyle!.textStyleName), scaled: true" : ""
             return """
@@ -46,15 +46,44 @@ final public class XcodeTypographyExporter {
         """
         
         let data = contents.data(using: .utf8)!
-        let fileURL = URL(string: "UIFont+extension.swift")!
-
-        let directoryURL = URL(string: fontExtensionDirectory)!
+        
+        let fileURL = URL(string: fontExtensionURL.lastPathComponent)!
+        let directoryURL = fontExtensionURL.deletingLastPathComponent()
         
         let destination = Destination(directory: directoryURL, file: fileURL)
         return [FileContents(destination: destination, data: data)]
     }
     
-    public func exportLabels(textStyles: [TextStyle], labelsDirectory: String) throws -> [FileContents] {
+    public func exportFonts(textStyles: [TextStyle], swiftUIFontExtensionURL: URL) throws -> [FileContents] {
+        let strings: [String] = textStyles.map {
+            return """
+                static func \($0.name)() -> Font {
+                    Font.custom("\($0.fontName)", size: \($0.fontSize))
+                }
+            """
+        }
+        
+        let contents = """
+        \(header)
+        
+        import SwiftUI
+
+        extension Font {
+            
+        \(strings.joined(separator: "\n"))
+        }
+        """
+
+        let data = contents.data(using: .utf8)!
+        
+        let fileURL = URL(string: swiftUIFontExtensionURL.lastPathComponent)!
+        let directoryURL = swiftUIFontExtensionURL.deletingLastPathComponent()
+        
+        let destination = Destination(directory: directoryURL, file: fileURL)
+        return [FileContents(destination: destination, data: data)]
+    }
+    
+    public func exportLabels(textStyles: [TextStyle], labelsDirectory: URL) throws -> [FileContents] {
         let dict = textStyles.map { style -> [String: Any] in
             let type: String = style.fontStyle?.textStyleName ?? ""
             return [
@@ -68,16 +97,15 @@ final public class XcodeTypographyExporter {
             ]}
         let contents = try TEMPLATE_Label_swift.render(["styles": dict])
         
-        let labelSwift = try makeFileContents(data: contents, directory: labelsDirectory, fileName: "Label.swift")
-        let labelStyleSwift = try makeFileContents(data: labelStyleSwiftContents, directory: labelsDirectory, fileName: "LabelStyle.swift")
+        let labelSwift = try makeFileContents(data: contents, directoryURL: labelsDirectory, fileName: "Label.swift")
+        let labelStyleSwift = try makeFileContents(data: labelStyleSwiftContents, directoryURL: labelsDirectory, fileName: "LabelStyle.swift")
         
         return [labelSwift, labelStyleSwift]
     }
     
-    private func makeFileContents(data: String, directory: String, fileName: String) throws -> FileContents {
+    private func makeFileContents(data: String, directoryURL: URL, fileName: String) throws -> FileContents {
         let data = data.data(using: .utf8)!
         let fileURL = URL(string: fileName)!
-        let directoryURL = URL(string: directory)!
         let destination = Destination(directory: directoryURL, file: fileURL)
         return FileContents(destination: destination, data: data)
     }

@@ -59,9 +59,10 @@ struct Params: Decodable {
         }
         
         struct Typography: Decodable {
-            let fontExtensionDirectory: String
+            let fontSwift: URL?
+            let swiftUIFontSwift: URL?
             let generateLabels: Bool
-            let labelsDirectory: String
+            let labelsDirectory: URL?
         }
         
         let xcassetsPath: URL

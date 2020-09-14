@@ -6,7 +6,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
     
     private var emptyTextStyles: [TextStyle] = []
     
-    func testExportFonts() throws {
+    func testExportUIKitFonts() throws {
         let exporter = XcodeTypographyExporter()
         
         let styles = [
@@ -15,7 +15,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
             makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16),
             makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
         ]
-        let files = try exporter.exportFonts(textStyles: styles, fontExtensionDirectory: "~/")
+        let files = try exporter.exportFonts(textStyles: styles, fontExtensionURL: URL(string: "~/UIFont+extension.swift")!)
         
         let contents = """
         //
@@ -86,6 +86,65 @@ final class XcodeTypographyExporterTests: XCTestCase {
         )
     }
     
+    func testExportSwiftUIFonts() throws {
+        let exporter = XcodeTypographyExporter()
+        
+        let styles = [
+            makeTextStyle(name: "largeTitle", fontName: "PTSans-Bold", fontStyle: .largeTitle, fontSize: 34),
+            makeTextStyle(name: "header", fontName: "PTSans-Bold", fontSize: 20),
+            makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16),
+            makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
+        ]
+
+        let files = try exporter.exportFonts(textStyles: styles, swiftUIFontExtensionURL: URL(string: "~/Font+extension.swift")!)
+        
+        let contents = """
+        //
+        //  The code generated using FigmaExport — Command line utility to export
+        //  colors, typography, icons and images from Figma to Xcode project.
+        //
+        //  https://github.com/RedMadRobot/figma-export
+        //
+        //  Don’t edit this code manually to avoid runtime crashes
+        //
+
+        import SwiftUI
+
+        extension Font {
+            
+            static func largeTitle() -> Font {
+                Font.custom("PTSans-Bold", size: 34.0)
+            }
+            static func header() -> Font {
+                Font.custom("PTSans-Bold", size: 20.0)
+            }
+            static func body() -> Font {
+                Font.custom("PTSans-Regular", size: 16.0)
+            }
+            static func caption() -> Font {
+                Font.custom("PTSans-Regular", size: 14.0)
+            }
+        }
+        """
+        
+        files.forEach {
+            print(String(data: $0.data!, encoding: .utf8)!)
+        }
+        
+        XCTAssertEqual(
+            files,
+            [
+                FileContents(
+                    destination: Destination(
+                        directory: URL(string: "~/")!,
+                        file: URL(string: "Font+extension.swift")!
+                    ),
+                    data: contents.data(using: .utf8)!
+                )
+            ]
+        )
+    }
+    
     func testExportLabel() throws {
         let exporter = XcodeTypographyExporter()
         
@@ -95,7 +154,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
             makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16, lineHeight: nil, letterSpacing: 1.2),
             makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
         ]
-        let files = try exporter.exportLabels(textStyles: styles, labelsDirectory: "~/")
+        let files = try exporter.exportLabels(textStyles: styles, labelsDirectory: URL(string: "~/")!)
         
         let contentsLabel = """
         //
