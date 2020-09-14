@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UIComponents
 
 final class IconsViewController: UIViewController {
     @IBOutlet private var stackView: UIStackView!

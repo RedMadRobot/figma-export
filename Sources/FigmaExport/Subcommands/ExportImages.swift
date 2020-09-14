@@ -62,6 +62,7 @@ extension FigmaExportCommand {
             
             let output = XcodeImagesOutput(
                 assetsFolderURL: assetsURL,
+                assetsInMainBundle: ios.xcassetsInMainBundle,
                 uiKitImageExtensionURL: ios.images.imageSwift,
                 swiftUIImageExtensionURL: ios.images.swiftUIImageSwift)
             

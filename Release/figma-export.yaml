@@ -21,7 +21,9 @@ common:
 ios:
   # Absolute or relative path to the Assets.xcassets directory
   xcassetsPath: "./Resources/Assets.xcassets"
-  
+  # Is Assets.xcassets located in the main bundle?
+  xcassetsInMainBundle: true
+
   # Parameters for exporting colors
   colors:
     # Should be generate color assets instead of pure swift code

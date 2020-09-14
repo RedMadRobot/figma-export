@@ -19,6 +19,8 @@ common:
 ios:
   # Path to the Assets.xcassets directory
   xcassetsPath: "./ExampleSwiftUI/Resources/Assets.xcassets"
+  # Is Assets.xcassets located in the main bundle?
+  xcassetsInMainBundle: true
   
   # Parameters for exporting colors
   colors:

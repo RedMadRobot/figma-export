@@ -20,7 +20,7 @@ final public class XcodeTypographyExporter {
         
         import UIKit
 
-        extension UIFont {
+        public extension UIFont {
         
         \(strings.joined(separator: "\n\n"))
         
@@ -68,7 +68,7 @@ final public class XcodeTypographyExporter {
         
         import SwiftUI
 
-        extension Font {
+        public extension Font {
             
         \(strings.joined(separator: "\n"))
         }
@@ -116,11 +116,11 @@ private let TEMPLATE_Label_swift = Template(templateString: """
 
 import UIKit
 
-class Label: UILabel {
+public class Label: UILabel {
 
     var style: LabelStyle? { nil }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
@@ -154,7 +154,7 @@ class Label: UILabel {
         text = super.text
     }
 
-    override var text: String? {
+    public override var text: String? {
         get {
             guard style?.attributes != nil else {
                 return super.text
@@ -181,7 +181,7 @@ class Label: UILabel {
 
 }
 {% for style in styles %}
-final class {{ style.className }}Label: Label {
+public final class {{ style.className }}Label: Label {
 
     override var style: LabelStyle? {
         LabelStyle(

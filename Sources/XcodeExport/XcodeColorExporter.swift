@@ -93,16 +93,20 @@ final public class XcodeColorExporter {
     
     private func prepareSwiftUIColorDotSwiftContents(_ colorPairs: [AssetPair<Color>]) -> String {
         
-        let strings = colorPairs.map {
-            "    static var \($0.light.name): Color { return Color(#function) }"
+        let strings = colorPairs.map { colorPair -> String in
+            if output.assetsInMainBundle {
+                return "    static var \(colorPair.light.name): Color { Color(#function) }"
+            } else {
+                return "    static var \(colorPair.light.name): Color { Color(#function, bundle: BundleProvider.bundle) }"
+            }
         }
         
         return """
         \(header)
         
         import SwiftUI
-        
-        extension Color {
+        \(output.assetsInMainBundle ? "" : bundleProvider)
+        public extension Color {
         \(strings.joined(separator: "\n"))
         }
         
@@ -113,12 +117,17 @@ final public class XcodeColorExporter {
         var contents = [String]()
         
         colorPairs.forEach { colorPair in
+            let content: String
             if formAsset {
-                contents.append("    static var \(colorPair.light.name): UIColor { return UIColor(named: #function)! }")
+                if output.assetsInMainBundle {
+                    content = "    static var \(colorPair.light.name): UIColor { UIColor(named: #function)! }"
+                } else {
+                    content = "    static var \(colorPair.light.name): UIColor { UIColor(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+                }
             } else {
                 let lightComponents = colorPair.light.toRgbComponents()
                 if let darkComponents = colorPair.dark?.toRgbComponents() {
-                    contents.append("""
+                    content = """
                         static var \(colorPair.light.name): UIColor {
                             if #available(iOS 13.0, *) {
                                 return UIColor { traitCollection -> UIColor in
@@ -132,23 +141,24 @@ final public class XcodeColorExporter {
                                 return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
                             }
                         }
-                    """)
+                    """
                 } else {
-                    contents.append("""
+                    content = """
                         static var \(colorPair.light.name): UIColor {
                             return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
                         }
-                    """)
+                    """
                 }
             }
+            contents.append(content)
         }
         
         return """
         \(header)
 
         import UIKit
-        
-        extension UIColor {
+        \((!output.assetsInMainBundle && formAsset) ? bundleProvider : "")
+        public extension UIColor {
         \(contents.joined(separator: "\n"))
         }
         

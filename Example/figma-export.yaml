@@ -18,7 +18,9 @@ common:
 # [optional] iOS export parameters
 ios:
   # Path to the Assets.xcassets directory
-  xcassetsPath: "./Example/Resource/Assets.xcassets"
+  xcassetsPath: "./UIComponents/Resource/Assets.xcassets"
+  # Is Assets.xcassets located in the main bundle?
+  xcassetsInMainBundle: false
   
   # Parameters for exporting colors
   colors:
@@ -29,7 +31,7 @@ ios:
     # Color name style: camelCase or snake_case
     nameStyle: camelCase
     # [optional] Absolute or relative path to swift file where to export UIKit colors (UIColor) for accessing from the code (e.g. UIColor.backgroundPrimary)
-    colorSwift: "./Example/Source/UI/Common/UIColor+extension.swift"
+    colorSwift: "./UIComponents/Source/UIColor+extension.swift"
     
   # Parameters for exporting icons
   icons:
@@ -38,7 +40,7 @@ ios:
     # Icon name style: camelCase or snake_case
     nameStyle: camelCase
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)
-    imageSwift: "./Example/Source/UI/Common/UIImage+extension_icons.swift"
+    imageSwift: "./UIComponents/Source/UIImage+extension_icons.swift"
 
   # Parameters for exporting images
   images:
@@ -47,14 +49,14 @@ ios:
     # Image name style: camelCase or snake_case
     nameStyle: camelCase
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
-    imageSwift: "./Example/Source/UI/Common/UIImage+extension_illustrations.swift"
+    imageSwift: "./UIComponents/Source/UIImage+extension_illustrations.swift"
 
   # Parameters for exporting typography
   typography:
     # Path to directory where to place UIFont+extension.swift file
-    fontSwift: "./Example/Source/UI/Common/UIFont+extension.swift"
+    fontSwift: "./UIComponents/Source/UIFont+extension.swift"
     # Will FigmaExport generate UILabel for each text style (font) e.g. HeaderLabel, BodyLabel, CaptionLabel.
     generateLabels: true
     # Path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
-    labelsDirectory: "./Example/Source/UI/Common/"
+    labelsDirectory: "./UIComponents/Source/"
     

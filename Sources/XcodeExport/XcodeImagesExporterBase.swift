@@ -17,7 +17,13 @@ public class XcodeImagesExporterBase {
             let contents: String
             
             if append {
-                let strings = names.map { "    static var \($0): Image { return Image(#function) }" }
+                let strings = names.map { name -> String in
+                    if output.assetsInMainBundle {
+                        return "    static var \(name): Image { Image(#function) }"
+                    } else {
+                        return "    static var \(name): Image { Image(#function, bundle: BundleProvider.bundle) }"
+                    }
+                }
                 let string = strings.joined(separator: "\n") + "\n}"
                 contents = try appendContent(string: string, to: url)
             }
@@ -33,7 +39,13 @@ public class XcodeImagesExporterBase {
             let contents: String
             
             if append {
-                let strings = names.map { "    static var \($0): UIImage { return UIImage(named: #function)! }" }
+                let strings = names.map { name -> String in
+                    if output.assetsInMainBundle {
+                        return "    static var \(name): UIImage { UIImage(named: #function)! }"
+                    } else {
+                        return "    static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+                    }
+                }
                 let string = strings.joined(separator: "\n") + "\n}"
                 contents = try appendContent(string: string, to: url)
             } else {
@@ -69,15 +81,19 @@ public class XcodeImagesExporterBase {
     
     private func makeSwiftUIExtension(assetNames: [String]) -> String {
         let images = assetNames.map { name -> String in
-            return "    static var \(name): Image { return Image(#function) }"
+            if output.assetsInMainBundle {
+                return "    static var \(name): Image { Image(#function) }"
+            } else {
+                return "    static var \(name): Image { Image(#function, bundle: BundleProvider.bundle) }"
+            }
         }
         
         return """
         \(header)
 
         import SwiftUI
-
-        extension Image {
+        \(output.assetsInMainBundle ? "" : bundleProvider)
+        public extension Image {
         \(images.joined(separator: "\n"))
         }
 
@@ -86,15 +102,19 @@ public class XcodeImagesExporterBase {
     
     private func makeUIKitExtension(assetNames: [String]) -> String {
         let images = assetNames.map { name -> String in
-            return "    static var \(name): UIImage { return UIImage(named: #function)! }"
+            if output.assetsInMainBundle {
+                return "    static var \(name): UIImage { UIImage(named: #function)! }"
+            } else {
+                return "    static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+            }
         }
         
         return """
         \(header)
 
         import UIKit
-
-        extension UIImage {
+        \(output.assetsInMainBundle ? "" : bundleProvider)
+        public extension UIImage {
         \(images.joined(separator: "\n"))
         }
 

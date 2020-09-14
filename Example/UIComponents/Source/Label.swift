@@ -9,11 +9,11 @@
 
 import UIKit
 
-class Label: UILabel {
+public class Label: UILabel {
 
     var style: LabelStyle? { nil }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
@@ -47,7 +47,7 @@ class Label: UILabel {
         text = super.text
     }
 
-    override var text: String? {
+    public override var text: String? {
         get {
             guard style?.attributes != nil else {
                 return super.text
@@ -74,7 +74,7 @@ class Label: UILabel {
 
 }
 
-final class LargeTitleLabel: Label {
+public final class LargeTitleLabel: Label {
 
     override var style: LabelStyle? {
         LabelStyle(
@@ -84,7 +84,7 @@ final class LargeTitleLabel: Label {
     }
 }
 
-final class HeaderLabel: Label {
+public final class HeaderLabel: Label {
 
     override var style: LabelStyle? {
         LabelStyle(
@@ -93,7 +93,7 @@ final class HeaderLabel: Label {
     }
 }
 
-final class BodyLabel: Label {
+public final class BodyLabel: Label {
 
     override var style: LabelStyle? {
         LabelStyle(
@@ -104,7 +104,7 @@ final class BodyLabel: Label {
     }
 }
 
-final class CaptionLabel: Label {
+public final class CaptionLabel: Label {
 
     override var style: LabelStyle? {
         LabelStyle(
