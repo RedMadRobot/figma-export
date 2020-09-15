@@ -19,6 +19,8 @@ common:
 
 # [optional] iOS export parameters
 ios:
+  # Path to xcodeproj
+  xcodeprojPath: "./Example.xcodeproj"
   # Absolute or relative path to the Assets.xcassets directory
   xcassetsPath: "./Resources/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?

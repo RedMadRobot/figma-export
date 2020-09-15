@@ -17,6 +17,10 @@ common:
 
 # [optional] iOS export parameters
 ios:
+  # Path to xcodeproj
+  xcodeprojPath: "./Example.xcodeproj"
+  # Xcode Target containing resources and corresponding swift code
+  target: "UIComponents"
   # Path to the Assets.xcassets directory
   xcassetsPath: "./UIComponents/Resource/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?

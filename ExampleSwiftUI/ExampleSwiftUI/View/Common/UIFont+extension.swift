@@ -9,7 +9,7 @@
 
 import UIKit
 
-extension UIFont {
+public extension UIFont {
 
     static func largeTitle() -> UIFont {
         customFont("PTSans-Bold", size: 34.0, textStyle: .largeTitle, scaled: true)

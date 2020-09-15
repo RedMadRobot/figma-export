@@ -45,7 +45,7 @@ extension FigmaExportCommand {
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
 
                 logger.info("Exporting colors to Xcode project...")
-                try exportXcodeColors(colorPairs: colorPairs, iosParams: ios)
+                try exportXcodeColors(colorPairs: colorPairs, iosParams: ios, logger: logger)
 
                 logger.info("Done!")
             }
@@ -66,7 +66,7 @@ extension FigmaExportCommand {
             }
         }
         
-        private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS) throws {
+        private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS, logger: Logger) throws {
             var colorsURL: URL? = nil
             if iosParams.colors.useColorAssets {
                 if let folder = iosParams.colors.assetsFolder {
@@ -90,6 +90,18 @@ extension FigmaExportCommand {
             }
             
             try fileWritter.write(files: files)
+            
+            do {
+                let xcodeProject = try XcodeProjectWritter(xcodeProjPath: iosParams.xcodeprojPath, target: iosParams.target)
+                try files.forEach { file in
+                    if file.destination.file.pathExtension == "swift" {
+                        try xcodeProject.addFileReferenceToXcodeProj(file.destination.url)
+                    }
+                }
+                try xcodeProject.save()
+            } catch {
+                logger.error("Unable to add some file references to Xcode project")
+            }
         }
 
         private func exportAndroidColors(colorPairs: [AssetPair<Color>], androidParams: Params.Android) throws {

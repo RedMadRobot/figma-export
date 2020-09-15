@@ -259,7 +259,6 @@ Run `fastlane sync_colors` to run FigmaExport.
    To export typography use `typography` argument:
 
    `./figma-export typography -i figma-export.yaml`
-4. Add generated *.swift files to your Xcode project if your Xcode project doesn’t have these files.
 
 ### Arguments
 
@@ -306,6 +305,10 @@ common:
 
 # [optional] iOS export parameters
 ios:
+  # Path to xcodeproj
+  xcodeprojPath: "./Example.xcodeproj"
+  # Xcode Target containing resources and corresponding swift code
+  target: "UIComponents"
   # Absolute or relative path to the Assets.xcassets directory
   xcassetsPath: "./Resources/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?
@@ -373,6 +376,8 @@ android:
 * `figma.darkFileId` — (Optional) Id of the file containing dark color palette and dark images.
 
 ### iOS properties
+* `ios.xcodeprojPath` — Relative or absolute path to .xcodeproj file
+* `ios.target` — Xcode Target containing resources and corresponding swift code
 * `ios.xcassetsPath` — Relative or absolute path to directory `Assets.xcassets` where to export colors, icons and images.
 * `ios.xcassetsInMainBundle` — Is Assets.xcassets located in the main bundle?
 * `ios.colors.useColorAssets` — How to export colors? Use .xcassets and UIColor (useColorAssets = true) extension or extension only (useColorAssets = false)

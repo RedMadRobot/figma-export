@@ -9,16 +9,16 @@
 
 import SwiftUI
 
-extension Image {
-    static var ic16KeyEmergency: Image { return Image(#function) }
-    static var ic16KeySandglass: Image { return Image(#function) }
-    static var ic16Notification: Image { return Image(#function) }
-    static var ic24ArrowRight: Image { return Image(#function) }
-    static var ic24Close: Image { return Image(#function) }
-    static var ic24Dots: Image { return Image(#function) }
-    static var ic24DropdownDown: Image { return Image(#function) }
-    static var ic24DropdownUp: Image { return Image(#function) }
-    static var ic24FullscreenDisable: Image { return Image(#function) }
-    static var ic24FullscreenEnable: Image { return Image(#function) }
-    static var ic24ShareIos: Image { return Image(#function) }
+public extension Image {
+    static var ic16KeyEmergency: Image { Image(#function) }
+    static var ic16KeySandglass: Image { Image(#function) }
+    static var ic16Notification: Image { Image(#function) }
+    static var ic24ArrowRight: Image { Image(#function) }
+    static var ic24Close: Image { Image(#function) }
+    static var ic24Dots: Image { Image(#function) }
+    static var ic24DropdownDown: Image { Image(#function) }
+    static var ic24DropdownUp: Image { Image(#function) }
+    static var ic24FullscreenDisable: Image { Image(#function) }
+    static var ic24FullscreenEnable: Image { Image(#function) }
+    static var ic24ShareIos: Image { Image(#function) }
 }

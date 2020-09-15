@@ -9,12 +9,12 @@
 
 import SwiftUI
 
-extension Color {
-    static var backgroundPrimary: Color { return Color(#function) }
-    static var backgroundSecondary: Color { return Color(#function) }
-    static var button: Color { return Color(#function) }
-    static var buttonPressed: Color { return Color(#function) }
-    static var textPrimary: Color { return Color(#function) }
-    static var textSecondary: Color { return Color(#function) }
-    static var tint: Color { return Color(#function) }
+public extension Color {
+    static var backgroundPrimary: Color { Color(#function) }
+    static var backgroundSecondary: Color { Color(#function) }
+    static var button: Color { Color(#function) }
+    static var buttonPressed: Color { Color(#function) }
+    static var textPrimary: Color { Color(#function) }
+    static var textSecondary: Color { Color(#function) }
+    static var tint: Color { Color(#function) }
 }

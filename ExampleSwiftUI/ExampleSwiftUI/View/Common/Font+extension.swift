@@ -9,7 +9,7 @@
 
 import SwiftUI
 
-extension Font {
+public extension Font {
     
     static func largeTitle() -> Font {
         Font.custom("PTSans-Bold", size: 34.0)

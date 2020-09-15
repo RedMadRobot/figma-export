@@ -17,6 +17,10 @@ common:
 
 # [optional] iOS export parameters
 ios:
+  # Path to xcodeproj
+  xcodeprojPath: "./ExampleSwiftUI.xcodeproj"
+  # Xcode Target containing resources and corresponding swift code
+  target: "ExampleSwiftUI"
   # Path to the Assets.xcassets directory
   xcassetsPath: "./ExampleSwiftUI/Resources/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?

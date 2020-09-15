@@ -9,8 +9,8 @@
 
 import SwiftUI
 
-extension Image {
-    static var imgZeroEmpty: Image { return Image(#function) }
-    static var imgZeroError: Image { return Image(#function) }
-    static var imgZeroInternet: Image { return Image(#function) }
+public extension Image {
+    static var imgZeroEmpty: Image { Image(#function) }
+    static var imgZeroError: Image { Image(#function) }
+    static var imgZeroInternet: Image { Image(#function) }
 }

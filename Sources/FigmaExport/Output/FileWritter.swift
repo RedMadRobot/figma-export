@@ -8,10 +8,9 @@ final class FileWritter {
     init(fileManager: FileManager = .default) {
         self.fileManager = fileManager
     }
-
+    
     func write(files: [FileContents]) throws {
         try files.forEach { file in
-            
             let directoryURL = URL(fileURLWithPath: file.destination.directory.path)
             try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
             

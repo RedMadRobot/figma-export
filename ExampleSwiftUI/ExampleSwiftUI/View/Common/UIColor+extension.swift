@@ -9,12 +9,12 @@
 
 import UIKit
 
-extension UIColor {
-    static var backgroundPrimary: UIColor { return UIColor(named: #function)! }
-    static var backgroundSecondary: UIColor { return UIColor(named: #function)! }
-    static var button: UIColor { return UIColor(named: #function)! }
-    static var buttonPressed: UIColor { return UIColor(named: #function)! }
-    static var textPrimary: UIColor { return UIColor(named: #function)! }
-    static var textSecondary: UIColor { return UIColor(named: #function)! }
-    static var tint: UIColor { return UIColor(named: #function)! }
+public extension UIColor {
+    static var backgroundPrimary: UIColor { UIColor(named: #function)! }
+    static var backgroundSecondary: UIColor { UIColor(named: #function)! }
+    static var button: UIColor { UIColor(named: #function)! }
+    static var buttonPressed: UIColor { UIColor(named: #function)! }
+    static var textPrimary: UIColor { UIColor(named: #function)! }
+    static var textSecondary: UIColor { UIColor(named: #function)! }
+    static var tint: UIColor { UIColor(named: #function)! }
 }

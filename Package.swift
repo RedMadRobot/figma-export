@@ -15,7 +15,8 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "3.0.0"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
-        .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.14.0")
+        .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.14.0"),
+        .package(url: "https://github.com/tuist/XcodeProj.git", from: "7.14.0")
     ],
     targets: [
         
@@ -27,6 +28,7 @@ let package = Package(
                 "FigmaExportCore",
                 "XcodeExport",
                 "AndroidExport",
+                "XcodeProj",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Yams", package: "Yams"),
                 .product(name: "Logging", package: "swift-log")
@@ -44,7 +46,7 @@ let package = Package(
             name: "XcodeExport",
             dependencies: ["FigmaExportCore", "Stencil"]
         ),
-        
+
         // Exports resources to Android project
         .target(
             name: "AndroidExport",

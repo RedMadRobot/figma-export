@@ -65,6 +65,8 @@ struct Params: Decodable {
             let labelsDirectory: URL?
         }
         
+        let xcodeprojPath: String
+        let target: String
         let xcassetsPath: URL
         let xcassetsInMainBundle: Bool
         let colors: Colors
