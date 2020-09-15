@@ -1,6 +1,6 @@
 # FigmaExport
 
-<img src="images/ic.png" width="100"/>
+<img src="images/logo.png"/><br/>
 
 [![SPM compatible](https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat)](https://swift.org/package-manager)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/RedMadRobot/Catbird/blob/master/LICENSE)
