@@ -187,9 +187,9 @@ When your execute `figma-export typography` command `figma-export` generates 3 f
 3. `Label.swift` file that contains base Label class and class for each text style. E.g. HeaderLabel, BodyLabel, Caption1Label. Specify these classes in xib files on in code.
 
 Example of these files:
-- [./Example/Example/Source/UI/Common/Label.swift](./Example/Example/Source/UI/Common/Label.swift)
-- [./Example/Example/Source/UI/Common/LabelStyle.swift](./Example/Example/Source/UI/Common/LabelStyle.swift)
-- [./Example/Example/Source/UI/Common/UIFont+extension.swift](./Example/Example/Source/UI/Common/UIFont+extension.swift)
+- [./Example/Example/UIComponents/Source/Label.swift](./Example/Example/UIComponents/Source/Label.swift)
+- [./Example/Example/UIComponents/Source/LabelStyle.swift](./Example/Example/UIComponents/Source/LabelStyle.swift)
+- [./Example/Example/UIComponents/Source/UIFont+extension.swift](./Example/Example/UIComponents/Source/UIFont+extension.swift)
 
 ### Android
 
