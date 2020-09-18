@@ -41,6 +41,8 @@ ios:
 
   # Parameters for exporting icons
   icons:
+    # Image file format: pdf or svg
+    format: svg
     # Name of the folder inside Assets.xcassets where to place icons (.imageset directories)
     assetsFolder: Icons
     # Icon name style: camelCase or snake_case

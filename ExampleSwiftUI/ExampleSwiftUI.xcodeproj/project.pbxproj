@@ -47,13 +47,13 @@
 		0FD3867E250A837A00877D7D /* PTSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PTSans-Bold.ttf"; sourceTree = "<group>"; };
 		5EF2480241C69680DE1DB6C9 /* Color+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Color+extension.swift"; path = "Color+extension.swift"; sourceTree = "<group>"; };
 		6D7F7A1CCA8185878CE03381 /* UIColor+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+extension.swift"; path = "UIColor+extension.swift"; sourceTree = "<group>"; };
-		74A76F1224A08E5793977374 /* Image+extension_illustrations.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; path = "Image+extension_illustrations.swift"; sourceTree = "<group>"; };
-		9699B6B4BC5AE70448B60F91 /* Image+extension_icons.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; path = "Image+extension_icons.swift"; sourceTree = "<group>"; };
-		A89C77EDA6310E1225EA3505 /* UIFont+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
+		74A76F1224A08E5793977374 /* Image+extension_illustrations.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Image+extension_illustrations.swift"; path = "Image+extension_illustrations.swift"; sourceTree = "<group>"; };
+		9699B6B4BC5AE70448B60F91 /* Image+extension_icons.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Image+extension_icons.swift"; path = "Image+extension_icons.swift"; sourceTree = "<group>"; };
+		A89C77EDA6310E1225EA3505 /* UIFont+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIFont+extension.swift"; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
 		AC8C22E8BA371578896E49F3 /* Pods-ExampleSwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleSwiftUI.release.xcconfig"; path = "Target Support Files/Pods-ExampleSwiftUI/Pods-ExampleSwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		D0E8661B3837E2164E3CDF6F /* Pods-ExampleSwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleSwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-ExampleSwiftUI/Pods-ExampleSwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
 		DA37F45E22AC1BFA63734CC5 /* Pods_ExampleSwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleSwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F46D3C0811B8FEE79BAE1E23 /* Font+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; path = "Font+extension.swift"; sourceTree = "<group>"; };
+		F46D3C0811B8FEE79BAE1E23 /* Font+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Font+extension.swift"; path = "Font+extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,10 +145,10 @@
 			children = (
 				A89C77EDA6310E1225EA3505 /* UIFont+extension.swift */,
 				F46D3C0811B8FEE79BAE1E23 /* Font+extension.swift */,
-				9699B6B4BC5AE70448B60F91 /* Image+extension_icons.swift */,
-				74A76F1224A08E5793977374 /* Image+extension_illustrations.swift */,
 				6D7F7A1CCA8185878CE03381 /* UIColor+extension.swift */,
 				5EF2480241C69680DE1DB6C9 /* Color+extension.swift */,
+				9699B6B4BC5AE70448B60F91 /* Image+extension_icons.swift */,
+				74A76F1224A08E5793977374 /* Image+extension_illustrations.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -279,10 +279,10 @@
 				0F8F6CA8250A58D900879906 /* TypographyView.swift in Sources */,
 				24F06108CD0560C1B6FAD358 /* UIFont+extension.swift in Sources */,
 				1BA6134043D6FD7EDB959061 /* Font+extension.swift in Sources */,
-				342F3977C58BAF392D6B502A /* Image+extension_icons.swift in Sources */,
-				97E840BB2F4996C49195DBF7 /* Image+extension_illustrations.swift in Sources */,
 				741C67006CF7E203FB756591 /* UIColor+extension.swift in Sources */,
 				46B8556D7CB9F7CA5DD7E907 /* Color+extension.swift in Sources */,
+				342F3977C58BAF392D6B502A /* Image+extension_icons.swift in Sources */,
+				97E840BB2F4996C49195DBF7 /* Image+extension_illustrations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

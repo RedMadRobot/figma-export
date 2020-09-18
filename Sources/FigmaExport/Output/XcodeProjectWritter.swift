@@ -68,6 +68,7 @@ final class XcodeProjectWritter {
             override: false,
             validatePresence: true)
         newFile?.fileEncoding = 4 // UTF-8
+        newFile?.name = url.lastPathComponent
         
         if let file = newFile, let buildPhase = myTarget.buildPhases.first(where: { $0.buildPhase == .sources }) {
             _ = try buildPhase.add(file: file)

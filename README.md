@@ -120,7 +120,7 @@ extension UIColor {
 
 #### Icons
 
-Icons will be exported as PDF files with `Template Image` render mode.
+Icons will be exported as PDF or SVG files with `Template Image` render mode.
 
 <img src="images/icons.png" width="500"/>
 
@@ -329,6 +329,8 @@ ios:
 
   # Parameters for exporting icons
   icons:
+    # Image file format: pdf or svg
+    format: pdf
     # Name of the folder inside Assets.xcassets where to place icons (.imageset directories)
     assetsFolder: Icons
     # Icon name style: camelCase or snake_case
@@ -385,6 +387,7 @@ android:
 * `ios.colors.nameStyle` — Color name style: camelCase or snake_case
 * `ios.colors.colorSwift` — [optional] Absolute or relative path to swift file where to export UIKit colors (UIColor) for accessing from the code (e.g. UIColor.backgroundPrimary)
 * `ios.colors.swiftuiColorSwift` — [optional] Absolute or relative path to swift file where to export SwiftUI colors (Color) for accessing from the code (e.g. Color.backgroundPrimary)
+* `ios.icons.format` — Image file format. `svg` or `pdf`.
 * `ios.icons.assetsFolder` — Name of the folder inside `Assets.xcassets` where icons will be exported.
 * `ios.icons.nameStyle` — Icon name style: camelCase or snake_case
 * `ios.icons.preservesVectorRepresentation` — An array of icon names that will supports Preseve Vecotor Data.

@@ -30,6 +30,11 @@ struct Params: Decodable {
         case snakeCase = "snake_case"
     }
     
+    enum VectorFormat: String, Decodable {
+        case pdf
+        case svg
+    }
+    
     struct iOS: Decodable {
         
         struct Colors: Decodable {
@@ -42,6 +47,7 @@ struct Params: Decodable {
         }
         
         struct Icons: Decodable {
+            let format: VectorFormat
             let assetsFolder: String
             let preservesVectorRepresentation: [String]?
             let nameStyle: NameStyle

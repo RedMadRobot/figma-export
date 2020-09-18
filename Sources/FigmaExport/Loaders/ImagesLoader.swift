@@ -5,26 +5,28 @@ import FigmaExportCore
 final class ImagesLoader {
 
     let figmaClient: FigmaClient
-    let params: Params.Figma
+    let params: Params
     let platform: Platform
     
-    init(figmaClient: FigmaClient, params: Params.Figma, platform: Platform) {
+    init(figmaClient: FigmaClient, params: Params, platform: Platform) {
         self.figmaClient = figmaClient
         self.params = params
         self.platform = platform
     }
 
     func loadIcons(filter: String? = nil) throws -> [ImagePack] {
-        if platform == .android {
+        switch (platform, params.ios?.icons.format) {
+        case (.android, _),
+             (.ios, .svg):
             return try _loadImages(
-                fileId: params.lightFileId,
+                fileId: params.figma.lightFileId,
                 frameName: .icons,
                 params: SVGParams(),
                 filter: filter
             ).map { ImagePack.singleScale($0) }
-        } else {
+        case (.ios, _):
             return try _loadImages(
-                fileId: params.lightFileId,
+                fileId: params.figma.lightFileId,
                 frameName: .icons,
                 params: PDFParams(),
                 filter: filter
@@ -35,12 +37,12 @@ final class ImagesLoader {
     func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
         if platform == .android {
             let light = try _loadImages(
-                fileId: params.lightFileId,
+                fileId: params.figma.lightFileId,
                 frameName: .illustrations,
                 params: SVGParams(),
                 filter: filter)
             
-            let dark = try params.darkFileId.map {
+            let dark = try params.figma.darkFileId.map {
                 try _loadImages(
                     fileId: $0,
                     frameName: .illustrations,
@@ -53,10 +55,10 @@ final class ImagesLoader {
             )
         } else {
             let lightImages = try _loadPNGImages(
-                fileId: params.lightFileId,
+                fileId: params.figma.lightFileId,
                 frameName: .illustrations,
                 filter: filter)
-            let darkImages = try params.darkFileId.map {
+            let darkImages = try params.figma.darkFileId.map {
                 try _loadPNGImages(
                     fileId: $0,
                     frameName: .illustrations,
