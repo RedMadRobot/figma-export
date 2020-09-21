@@ -1,0 +1,35 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/tint</item>
+        <item name="colorPrimaryDark">@color/tint</item>
+        <item name="colorAccent">@color/tint</item>
+        <item name="android:windowBackground">@color/background_primary</item>
+        <item name="toolbarStyle">@style/Widget.AppTheme.Toolbar</item>
+        <item name="bottomNavigationStyle">@style/Widget.AppTheme.BottomNavigationView</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+    </style>
+
+    <style name="Widget.AppTheme.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <item name="android:background">@color/background_primary</item>
+        <item name="liftOnScroll">true</item>
+    </style>
+
+    <style name="Widget.AppTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/background_primary</item>
+        <item name="titleTextColor">@color/text_secondary</item>
+        <item name="subtitleTextColor">@color/text_secondary</item>
+        <item name="android:paddingRight">4dp</item>
+    </style>
+
+    <style name="Widget.AppTheme.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="backgroundTint">@color/background_secondary</item>
+    </style>
+
+    <style name="Widget.AppTheme.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="rippleColor">@color/button_ripple</item>
+    </style>
+
+</resources>

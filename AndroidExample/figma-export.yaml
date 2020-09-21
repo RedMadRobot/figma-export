@@ -1,0 +1,9 @@
+---
+figma:
+  lightFileId: BEjfU0kCVnPqXdRLfoLvkf
+  darkFileId: QwF30YrucxVwQyBNT0C09i
+
+android:
+  mainRes: ./app/src/main/res
+  images:
+    format: png

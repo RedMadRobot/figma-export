@@ -37,7 +37,9 @@ Table of Contents:
   - [Android properties](#android-properties)
   - [Exporting Typography](#exporting-typography)
 - [Design requirements](#design-requirements)
-- [Example iOS project](#example-ios-project)
+- [Example project](#example-project)
+  - [Example iOS project](#example-ios-project)
+  - [Example Android project](#example-android-project)
 - [Contributing](#contributing)
 - [License](#license)
 - [Feedback](#feedback)
@@ -457,13 +459,9 @@ For example: You have `header` text style with 20 pt font size. Native iOS text 
 
 Advice: Font in Tab Bar and standard Navigation Bar must not support Dynamic Type.
 
-## Example iOS project
+## Example project
 
-There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories which demostrates how to use figma-export with UIKit and SwiftUI.
-
-<img src="images/figma.png" width="800" />
-
-The UI-Kit of this project in Figma:
+The UI-Kit of the example project in Figma:
 
 [FigmaExport Example File [Light]](https://www.figma.com/file/BEjfU0kCVnPqXdRLfoLvkf/FigmaExport-Example-File-Dark)
 
@@ -472,6 +470,11 @@ The UI-Kit of this project in Figma:
 [FigmaExport Example File [Dark]](https://www.figma.com/file/QwF30YrucxVwQyBNT0C09i/FigmaExport-Example-File-Dark)
 
 <a href="https://www.figma.com/file/QwF30YrucxVwQyBNT0C09i/FigmaExport-Example-File-Dark"><img src="images/figma_d.png" width="600" /></a>
+### Example iOS project
+
+There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories which demostrates how to use figma-export with UIKit and SwiftUI.
+
+<img src="images/figma.png" />
 
 **How to setup iOS project**
 1. Open `Example/fastlane/.env` file.
@@ -485,6 +488,17 @@ The UI-Kit of this project in Figma:
 * To export icons run: `bundle exec fastlane export_icons`
 * To export images run: `bundle exec fastlane export_images`
 * To export typography run: `bundle exec fastlane export_typography`
+
+### Example Android project
+
+There is an example Android Studio project in `AndroidExample` directory which demostrates how to use `figma-export`.
+
+<img src="images/android_example.png"/>
+
+**How to export resources from figma to the project**
+* To export colors run: `figma-export colors`
+* To export icons run: `figma-export icons`
+* To export images run: `figma-export images`
 
 ## Contributing
 
