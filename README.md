@@ -197,7 +197,8 @@ Colors will be exported to `values/colors.xml` and `values-night/colors.xml` fil
 
 Icons will be exported to `drawable` directory as vector xml files.
 
-Images will be exported to `drawable` and `drawable-night` directory as vector xml files.
+Vector images will be exported to `drawable` and `drawable-night` directories as vector `xml` files.
+Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` directories as `png` files.
 
 ## Installation
 
@@ -241,14 +242,14 @@ Run `fastlane sync_colors` to run FigmaExport.
 
 ## Usage
 1. Open `Terminal.app`
-2. Go (cd) to folder with `figma-export` file
+2. Go (cd) to the folder with `figma-export` binary file
 3. Run `figma-export`
   
    To export colors use `colors` argument:
 
    `./figma-export colors -i figma-export.yaml`
 
-   To export icon use `icons` argument:
+   To export icons use `icons` argument:
 
    `./figma-export icons -i figma-export.yaml`
    
@@ -369,7 +370,12 @@ ios:
 
 # [optional] Android export parameters
 android:
+  # Export path
   mainRes: "./main/res"
+  # Parameters for exporting images
+  images:
+    # Image file format: svg or png
+    format: png
 
 ```
 ### Figma properties 

@@ -35,7 +35,24 @@ final class ImagesLoader {
     }
 
     func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
-        if platform == .android {
+        if (platform == .android && params.android?.images.format == .png) || platform == .ios {
+            let lightImages = try loadPNGImages(
+                fileId: params.figma.lightFileId,
+                frameName: .illustrations,
+                filter: filter,
+                platform: platform)
+            let darkImages = try params.figma.darkFileId.map {
+                try loadPNGImages(
+                    fileId: $0,
+                    frameName: .illustrations,
+                    filter: filter,
+                    platform: platform)
+            }
+            return (
+                lightImages,
+                darkImages
+            )
+        } else {
             let light = try _loadImages(
                 fileId: params.figma.lightFileId,
                 frameName: .illustrations,
@@ -52,21 +69,6 @@ final class ImagesLoader {
             return (
                 light.map { ImagePack.singleScale($0) },
                 dark?.map { ImagePack.singleScale($0) }
-            )
-        } else {
-            let lightImages = try _loadPNGImages(
-                fileId: params.figma.lightFileId,
-                frameName: .illustrations,
-                filter: filter)
-            let darkImages = try params.figma.darkFileId.map {
-                try _loadPNGImages(
-                    fileId: $0,
-                    frameName: .illustrations,
-                    filter: filter)
-            }
-            return (
-                lightImages,
-                darkImages
             )
         }
     }
@@ -111,7 +113,7 @@ final class ImagesLoader {
         }
     }
 
-    private func _loadPNGImages(fileId: String, frameName: FrameName, filter: String? = nil) throws -> [ImagePack] {
+    private func loadPNGImages(fileId: String, frameName: FrameName, filter: String? = nil, platform: Platform) throws -> [ImagePack] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
         
         guard !imagesDict.isEmpty else {
@@ -120,23 +122,25 @@ final class ImagesLoader {
         
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
 
-        let imageIdToImagePath1 = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 1))
-        let imageIdToImagePath2 = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 2))
-        let imageIdToImagePath3 = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 3))
-
+        var images: [Double: [NodeId: ImagePath]] = [:]
+        images[1.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 1.0))
+        images[2.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 2.0))
+        images[3.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 3.0))
+        if platform == .android {
+            images[1.5] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 1.5))
+            images[4.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 4.0))
+        }
         return imagesIds.map { imageId -> ImagePack in
-
             let name = imagesDict[imageId]!.name
 
-            let path1 = URL(string: imageIdToImagePath1[imageId]!)!
-            let path2 = URL(string: imageIdToImagePath2[imageId]!)!
-            let path3 = URL(string: imageIdToImagePath3[imageId]!)!
-
-            let x1 = Image(name: name, url: path1, format: "png")
-            let x2 = Image(name: name, url: path2, format: "png")
-            let x3 = Image(name: name, url: path3, format: "png")
-
-            return ImagePack.individualScales(x1: x1, x2: x2, x3: x3)
+            var scaledImages: [Double: Image] = [:]
+                
+            images.forEach { scale, idToPath in
+                let url = URL(string: idToPath[imageId]!)!
+                let image = Image(name: name, url: url, format: "png")
+                scaledImages[scale] = image
+            }
+            return ImagePack.individualScales(scaledImages)
         }
     }
 

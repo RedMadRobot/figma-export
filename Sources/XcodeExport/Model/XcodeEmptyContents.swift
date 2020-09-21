@@ -7,9 +7,10 @@ struct XcodeEmptyContents {
     let data = """
     {
       "info" : {
-        "version" : 1,
-        "author" : "xcode"
+        "author" : "xcode",
+        "version" : 1
       }
     }
+
     """.data(using: .utf8)!
 }

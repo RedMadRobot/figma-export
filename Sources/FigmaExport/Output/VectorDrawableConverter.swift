@@ -1,8 +1,11 @@
 import Foundation
 import FigmaExportCore
 
-final class FileConverter {
+/// SVG to XML converter
+final class VectorDrawableConverter {
     
+    /// Converts SVG files to XML
+    /// - Parameter inputDirectoryPath: Path to directory with SVG files
     func convert(inputDirectoryPath: String) throws {
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/usr/local/bin/vd-tool")

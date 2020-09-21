@@ -1,33 +1,21 @@
 {
   "images" : [
     {
+      "filename" : "imgZeroInternetL@3x.png",
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "imgZeroInternetL@1x.png"
+      "scale" : "3x"
     },
     {
+      "filename" : "imgZeroInternetL@1x.png",
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "imgZeroInternetL@2x.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "imgZeroInternetL@3x.png"
-    },
-    {
-      "idiom" : "universal",
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "imgZeroInternetD@1x.png",
       "scale" : "1x"
     },
     {
+      "filename" : "imgZeroInternetL@2x.png",
       "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -35,10 +23,21 @@
         }
       ],
       "filename" : "imgZeroInternetD@2x.png",
+      "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "imgZeroInternetD@1x.png",
       "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -46,11 +45,12 @@
         }
       ],
       "filename" : "imgZeroInternetD@3x.png",
+      "idiom" : "universal",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }

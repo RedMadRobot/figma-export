@@ -23,19 +23,20 @@ public struct Image: Asset {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
-    
 }
 
 public enum ImagePack: Asset {
 
+    public typealias Scale = Double
+    
     case singleScale(Image)
-    case individualScales(x1: Image, x2: Image, x3: Image)
+    case individualScales([Scale: Image])
 
     public var single: Image {
         switch self {
         case .singleScale(let image):
             return image
-        case .individualScales(_, _, _):
+        case .individualScales:
             fatalError("Unable to extract image from image pack")
         }
     }
@@ -45,8 +46,8 @@ public enum ImagePack: Asset {
             switch self {
             case .singleScale(let image):
                 return image.name
-            case .individualScales(let image, _, _):
-                return image.name
+            case .individualScales(let images):
+                return images.first!.value.name
             }
         }
         set {
@@ -54,11 +55,11 @@ public enum ImagePack: Asset {
             case .singleScale(var image):
                 image.name = newValue
                 self = .singleScale(image)
-            case var .individualScales(x1, x2, x3):
-                x1.name = newValue
-                x2.name = newValue
-                x3.name = newValue
-                self = .individualScales(x1: x1, x2: x2, x3: x3)
+            case .individualScales(var images):
+                for key in images.keys {
+                    images[key]?.name = newValue
+                }
+                self = .individualScales(images)
             }
         }
     }
@@ -67,8 +68,8 @@ public enum ImagePack: Asset {
         switch self {
         case .singleScale(let image):
             return image.platform
-        case .individualScales(let image, _, _):
-            return image.platform
+        case .individualScales(let images):
+            return images.first?.value.platform
         }
     }
 }

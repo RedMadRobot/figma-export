@@ -30,6 +30,7 @@ public struct FileContents: Equatable {
     public let sourceURL: URL?
     
     public var dark: Bool = false
+    public var scale: Double = 1.0
     
     /// In-memory file
     public init(destination: Destination, data: Data) {

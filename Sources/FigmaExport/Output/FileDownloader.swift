@@ -36,6 +36,7 @@ final class FileDownloader {
                 }
                 var newFile = FileContents(destination: file.destination, dataFile: fileURL)
                 newFile.dark = file.dark
+                newFile.scale = file.scale
                 newFiles.append(newFile)
                 downloaded += 1
                 self.logger.info("Downloaded \(downloaded)/\(remoteFileCount)")

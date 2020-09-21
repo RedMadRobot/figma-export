@@ -24,7 +24,7 @@ enum FigmaExportError: LocalizedError {
 
 struct FigmaExportCommand: ParsableCommand {
     
-    static let fileConverter = FileConverter()
+    static let fileConverter = VectorDrawableConverter()
     static let fileWritter = FileWritter()
     static let fileDownloader = FileDownloader()
     

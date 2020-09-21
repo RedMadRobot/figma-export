@@ -82,7 +82,15 @@ struct Params: Decodable {
     }
 
     struct Android: Decodable {
+        struct Images: Decodable {
+            enum Format: String, Decodable {
+                case svg
+                case png
+            }
+            let format: Format
+        }
         let mainRes: URL
+        let images: Images
     }
 
     let figma: Figma
