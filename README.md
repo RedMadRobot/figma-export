@@ -216,7 +216,9 @@ Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` 
 brew install RedMadRobot/formulae/figma-export
 ```
 If you want to export raster images in WebP format install [cwebp](https://developers.google.com/speed/webp/docs/using) command line utility.
+```
 brew install webp
+```
 
 ### CocoaPods + Fastlane
 Add the following line to your Podfile:
