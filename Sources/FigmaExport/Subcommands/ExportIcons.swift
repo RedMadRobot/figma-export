@@ -128,7 +128,7 @@ extension FigmaExportCommand {
             
             // 5. Convert all SVG to XML files
             logger.info("Converting SVGs to XMLs...")
-            try fileConverter.convert(inputDirectoryPath: tempDirectoryURL.path)
+            try svgFileConverter.convert(inputDirectoryPath: tempDirectoryURL.path)
             
             // Create output directory main/res/drawable/
             let outputDirectory = URL(fileURLWithPath: android.mainRes.path)

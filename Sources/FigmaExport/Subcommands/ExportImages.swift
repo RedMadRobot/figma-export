@@ -107,10 +107,11 @@ extension FigmaExportCommand {
             )
             let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
             
-            if android.images.format == .svg {
+            switch android.images.format {
+            case .svg:
                 try exportAndroidSVGImages(images: images, params: params, logger: logger)
-            } else if android.images.format == .png {
-                try exportAndroidPNGImages(images: images, params: params, logger: logger)
+            case .png, .webp:
+                try exportAndroidRasterImages(images: images, params: params, logger: logger)
             }
             
             logger.info("Done!")
@@ -147,10 +148,10 @@ extension FigmaExportCommand {
             
             // Convert all SVG to XML files
             logger.info("Converting SVGs to XMLs...")
-            try fileConverter.convert(inputDirectoryPath: tempDirectoryLightURL.path)
+            try svgFileConverter.convert(inputDirectoryPath: tempDirectoryLightURL.path)
             if images.first?.dark != nil {
                 logger.info("Converting dark SVGs to XMLs...")
-                try fileConverter.convert(inputDirectoryPath: tempDirectoryDarkURL.path)
+                try svgFileConverter.convert(inputDirectoryPath: tempDirectoryDarkURL.path)
             }
 
             logger.info("Writting files to Android Studio project...")
@@ -185,7 +186,7 @@ extension FigmaExportCommand {
             try FileManager.default.removeItem(at: tempDirectoryDarkURL)
         }
         
-        private func exportAndroidPNGImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params, logger: Logger) throws {
+        private func exportAndroidRasterImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params, logger: Logger) throws {
             guard let android = params.android else { return }
 
             // Create empty temp directory
@@ -207,10 +208,28 @@ extension FigmaExportCommand {
 
             // Move downloaded files to new empty temp directory
             try fileWritter.write(files: localFiles)
+            
+            // Convert to WebP
+            if android.images.format == .webp, let options = android.images.webpOptions {
+                logger.info("Converting PNG files to WebP...")
+                let converter: WebpConverter
+                switch (options.encoding, options.quality) {
+                case (.lossless, _):
+                    converter = WebpConverter(encoding: .lossless)
+                case (.lossy, let quality?):
+                    converter = WebpConverter(encoding: .lossy(quality: quality))
+                case (.lossy, .none):
+                    fatalError("Encoding quality not specified. Set android.images.webpOptions.quality in YAML file.")
+                }
+                localFiles = try localFiles.map { file in
+                    try converter.convert(file: file.destination.url)
+                    return file.changingExtension(newExtension: "webp")
+                }
+            }
 
             logger.info("Writting files to Android Studio project...")
             
-            // Move PNG files to main/res/drawable-XXXdpi/
+            // Move PNG/WebP files to main/res/drawable-XXXdpi/
             localFiles = localFiles.map { fileContents -> FileContents in
                 let directoryName = Drawable.scaleToDrawableName(fileContents.scale, dark: fileContents.dark)
                 let directory = URL(fileURLWithPath: android.mainRes.path).appendingPathComponent(directoryName, isDirectory: true)

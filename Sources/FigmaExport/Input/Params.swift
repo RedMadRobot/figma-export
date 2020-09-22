@@ -86,8 +86,18 @@ struct Params: Decodable {
             enum Format: String, Decodable {
                 case svg
                 case png
+                case webp
+            }
+            struct FormatOptions: Decodable {
+                enum Encoding: String, Decodable {
+                    case lossy
+                    case lossless
+                }
+                let encoding: Encoding
+                let quality: Int?
             }
             let format: Format
+            let webpOptions: FormatOptions?
         }
         let mainRes: URL
         let images: Images

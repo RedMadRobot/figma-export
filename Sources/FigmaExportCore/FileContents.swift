@@ -55,4 +55,28 @@ public struct FileContents: Equatable {
         self.dataFile = dataFile
         self.sourceURL = nil
     }
+    
+    /// Make a copy of the FileContents with different file extension
+    /// - Parameter newExtension: New file extension
+    public func changingExtension(newExtension: String) -> FileContents {
+        var newFile: FileContents
+        
+        let newFileURL = self.destination.file.deletingPathExtension().appendingPathExtension(newExtension)
+        let newDestination = Destination(directory: self.destination.directory, file: newFileURL)
+        
+        if let sourceURL = sourceURL { // Remote file
+            newFile = FileContents(destination: newDestination, sourceURL: sourceURL)
+        } else if let dataFile = dataFile { // On-disk file
+            newFile = FileContents(destination: newDestination, dataFile: dataFile)
+        } else if let data = data { // In-memory file
+            newFile = FileContents(destination: newDestination, data: data)
+        } else {
+            fatalError("Unable to change file extension.")
+        }
+        
+        newFile.scale = self.scale
+        newFile.dark = self.dark
+        
+        return newFile
+    }
 }

@@ -99,6 +99,11 @@ android:
   # Parameters for exporting images
   images:
     # Image file format: svg or png
-    format: png
-
+    format: webp
+    # Format options for webp format only
+    webpOptions:
+      # Encoding type: lossy or lossless
+      encoding: lossy
+      # Encoding quality in percents. Only for lossy encoding.
+      quality: 90
 ```

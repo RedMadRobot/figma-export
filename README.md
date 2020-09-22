@@ -196,7 +196,7 @@ Colors will be exported to `values/colors.xml` and `values-night/colors.xml` fil
 Icons will be exported to `drawable` directory as vector xml files.
 
 Vector images will be exported to `drawable` and `drawable-night` directories as vector `xml` files.
-Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` directories as `png` files.
+Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` directories as `png` or `webp` files.
 
 ## Installation
 
@@ -215,6 +215,8 @@ Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` 
 ```
 brew install RedMadRobot/formulae/figma-export
 ```
+If you want to export raster images in WebP format install [cwebp](https://developers.google.com/speed/webp/docs/using) command line utility.
+brew install webp
 
 ### CocoaPods + Fastlane
 Add the following line to your Podfile:
@@ -255,7 +257,7 @@ Run `fastlane sync_colors` to run FigmaExport.
 
    `./figma-export images -i figma-export.yaml`
 
-   To export typography use `typography` argument:
+   To export typography (iOS only) use `typography` argument:
 
    `./figma-export typography -i figma-export.yaml`
 

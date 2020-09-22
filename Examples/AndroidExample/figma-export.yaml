@@ -6,4 +6,11 @@ figma:
 android:
   mainRes: ./app/src/main/res
   images:
-    format: png
+    # Image file format: svg, png or webp
+    format: webp
+    # Format options for webp format only
+    webpOptions:
+      # Encoding type: lossy or lossless
+      encoding: lossy
+      # Encoding quality in percents. Only for lossy encoding.
+      quality: 85
