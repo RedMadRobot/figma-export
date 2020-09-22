@@ -7,7 +7,7 @@ figma:
 common:
   icons:
     # Name of the Figma's frame where icons components are located
-    figmaFrameName: Colors
+    figmaFrameName: Icons
   images:
     # Name of the Figma's frame where image components are located
     figmaFrameName: Illustrations
