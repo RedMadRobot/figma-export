@@ -6,14 +6,14 @@ If `figma-export.yaml` file is next to the `figma-export` executable file you ca
 
  `./figma-export colors`
 
-Specification of `figma-export.yaml` file with all available options:
+Specification of `figma-export.yaml` file with all the available options:
 
 ```yaml
 ---
 figma:
-  # Identifier of Figma file
+  # Identifier of the file containing light color palette, icons and light images. To obtain a file id, open the file in the browser. The file id will be present in the URL after the word file and before the file name.
   lightFileId: shPilWnVdJfo10YF12345
-  # [optional] Identifier of Figma file for dark mode
+  # [optional] Identifier of the file containing dark color palette and dark images.
   darkFileId: KfF6DnJTWHGZzC912345
 
 # [optional] Common export parameters
@@ -41,7 +41,7 @@ ios:
 
   # Parameters for exporting colors
   colors:
-    # Should be generate color assets instead of pure swift code
+    # How to export colors? Use .xcassets and UIColor extension (useColorAssets = true) or extension only (useColorAssets = false)
     useColorAssets: True
     # [required if useColorAssets: True] Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
@@ -60,7 +60,7 @@ ios:
     assetsFolder: Icons
     # Icon name style: camelCase or snake_case
     nameStyle: camelCase
-    # [optional] Enable Preserve Vector Data for specified icons
+    # [optional] An array of icon names that will supports Preseve Vecotor Data
     preservesVectorRepresentation:
     - ic24TabBarMain
     - ic24TabBarEvents
@@ -87,14 +87,14 @@ ios:
     fontSwift: "./Source/UIComponents/UIFont+extension.swift"
     # [optional] Absolute or relative path to swift file where to export SwiftUI fonts (Font extension).
     swiftUIFontSwift: "./Source/View/Common/Font+extension.swift"
-    # Will FigmaExport generate UILabel for each text style (font) e.g. HeaderLabel, BodyLabel, CaptionLabel.
+    # Should FigmaExport generate UILabel for each text style (font)? E.g. HeaderLabel, BodyLabel, CaptionLabel
     generateLabels: true
-    # Path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
+    # Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
     labelsDirectory: "./Source/UIComponents/"
 
 # [optional] Android export parameters
 android:
-  # Export path
+  # Relative or absolute path to the `main/res` folder including it. The colors/icons/imags will be exported to this folder
   mainRes: "./main/res"
   # Parameters for exporting images
   images:
@@ -102,35 +102,3 @@ android:
     format: png
 
 ```
-### Figma properties 
-
-* `figma.lightFileId` — Id of the file containing light color palette and dark images. To obtain a file id, open the file. The file id will be present in the URL after the word file and before the file name.
-* `figma.darkFileId` — (Optional) Id of the file containing dark color palette and dark images.
-
-### iOS properties
-* `ios.xcodeprojPath` — Relative or absolute path to .xcodeproj file
-* `ios.target` — Xcode Target containing resources and corresponding swift code
-* `ios.xcassetsPath` — Relative or absolute path to directory `Assets.xcassets` where to export colors, icons and images.
-* `ios.xcassetsInMainBundle` — Is Assets.xcassets located in the main bundle?
-* `ios.colors.useColorAssets` — How to export colors? Use .xcassets and UIColor (useColorAssets = true) extension or extension only (useColorAssets = false)
-* `ios.colors.assetsFolder` — Name of the folder inside `Assets.xcassets` where colors will be exported. Used only if `useColorAssets == true`.
-* `ios.colors.nameStyle` — Color name style: camelCase or snake_case
-* `ios.colors.colorSwift` — [optional] Absolute or relative path to swift file where to export UIKit colors (UIColor) for accessing from the code (e.g. UIColor.backgroundPrimary)
-* `ios.colors.swiftuiColorSwift` — [optional] Absolute or relative path to swift file where to export SwiftUI colors (Color) for accessing from the code (e.g. Color.backgroundPrimary)
-* `ios.icons.format` — Image file format. `svg` or `pdf`.
-* `ios.icons.assetsFolder` — Name of the folder inside `Assets.xcassets` where icons will be exported.
-* `ios.icons.nameStyle` — Icon name style: camelCase or snake_case
-* `ios.icons.preservesVectorRepresentation` — An array of icon names that will supports Preseve Vecotor Data.
-* `ios.icons.swiftUIImageSwift` — [optional] Absolute or relative path to swift file where to export icons (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
-* `ios.icons.imageSwift` — [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)
-* `ios.images.assetsFolder` — Name of the folder inside `Assets.xcassets` where images will be exported.
-* `ios.images.nameStyle` — Images name style: camelCase or snake_case
-* `ios.images.swiftUIImageSwift` — [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
-* `ios.images.imageSwift` — [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
-* `ios.typography.fontSwift` - [optional] Absolute or relative path to swift file where to export UIKit fonts (UIFont extension).
-* `ios.typography.swiftUIFontSwift` - [optional] Absolute or relative path to swift file where to export SwiftUI fonts (Font extension).
-* `ios.typography.generateLabels` -  Should FigmaExport generate UILabel for each text style (font)? E.g. HeaderLabel, BodyLabel, CaptionLabel
-* `ios.typography.labelsDirectory` - Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
-
-### Android properties
-* `android.path` — Relative or absolute path to the `main/res` folder including it. The colors will be exported to `./values/colors.xml` and `./values-night/colors.xml`.
