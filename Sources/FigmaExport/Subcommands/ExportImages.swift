@@ -53,7 +53,7 @@ extension FigmaExportCommand {
             logger.info("Processing images...")
             let processor = ImagesProcessor(
                 platform: .ios,
-                nameValidateRegexp: params.common?.images.nameValidateRegexp,
+                nameValidateRegexp: params.common?.images?.nameValidateRegexp,
                 nameStyle: params.ios?.images.nameStyle
             )
             let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
@@ -102,7 +102,7 @@ extension FigmaExportCommand {
             logger.info("Processing images...")
             let processor = ImagesProcessor(
                 platform: .android,
-                nameValidateRegexp: params.common?.images.nameValidateRegexp,
+                nameValidateRegexp: params.common?.images?.nameValidateRegexp,
                 nameStyle: .snakeCase
             )
             let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()

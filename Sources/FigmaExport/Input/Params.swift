@@ -9,20 +9,22 @@ struct Params: Decodable {
     
     struct Common: Decodable {
         struct Colors: Decodable {
-            let nameValidateRegexp: String
+            let nameValidateRegexp: String?
         }
         
         struct Icons: Decodable {
-            let nameValidateRegexp: String
+            let nameValidateRegexp: String?
+            let figmaFrameName: String?
         }
         
         struct Images: Decodable {
-            let nameValidateRegexp: String
+            let nameValidateRegexp: String?
+            let figmaFrameName: String?
         }
         
-        let colors: Colors
-        let icons: Icons
-        let images: Images
+        let colors: Colors?
+        let icons: Icons?
+        let images: Images?
     }
     
     enum NameStyle: String, Decodable {

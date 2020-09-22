@@ -3,6 +3,15 @@ figma:
   lightFileId: BEjfU0kCVnPqXdRLfoLvkf
   darkFileId: QwF30YrucxVwQyBNT0C09i
 
+# [optional] Common export parameters
+common:
+  icons:
+    # Name of the Figma's frame where icons components are located
+    figmaFrameName: Colors
+  images:
+    # Name of the Figma's frame where image components are located
+    figmaFrameName: Illustrations
+
 android:
   mainRes: ./app/src/main/res
   images:

@@ -311,11 +311,12 @@ File | Styles
 
 For `figma-export icons`
 
-Your Figma file must contains a frame with `Icons` name which contains components for each icon.
+By default your Figma file should contains a frame with `Icons` name which contains components for each icon. You may change a frame name in a [config](Config.md) file by setting `common.icons.figmaFrameName` property.
 
 For `figma-export images`
 
-Your Figma file must contains a frame with `Illustrations` name which contains components for each illustration.
+Your Figma file should contains a frame with `Illustrations` name which contains components for each illustration. You may change a frame name in a [config](Config.md) file by setting `common.images.figmaFrameName` property.
+
 If you support dark mode you must have two Figma files.
 
 For `figma-export typography`.

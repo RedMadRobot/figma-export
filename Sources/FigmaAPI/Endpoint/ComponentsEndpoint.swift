@@ -47,9 +47,3 @@ public struct ContainingFrame: Codable {
     public let name: String?
     public let pageName: String
 }
-
-public enum FrameName: String, Codable {
-    case components = "Components"
-    case icons = "Icons"
-    case illustrations = "Illustrations"
-}

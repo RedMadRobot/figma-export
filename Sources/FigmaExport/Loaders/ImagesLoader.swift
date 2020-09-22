@@ -8,6 +8,14 @@ final class ImagesLoader {
     let params: Params
     let platform: Platform
     
+    private var iconsFrameName: String {
+        params.common?.icons?.figmaFrameName ?? "Icons"
+    }
+    
+    private var imagesFrameName: String {
+        params.common?.images?.figmaFrameName ?? "Illustrations"
+    }
+    
     init(figmaClient: FigmaClient, params: Params, platform: Platform) {
         self.figmaClient = figmaClient
         self.params = params
@@ -20,14 +28,14 @@ final class ImagesLoader {
              (.ios, .svg):
             return try _loadImages(
                 fileId: params.figma.lightFileId,
-                frameName: .icons,
+                frameName: iconsFrameName,
                 params: SVGParams(),
                 filter: filter
             ).map { ImagePack.singleScale($0) }
         case (.ios, _):
             return try _loadImages(
                 fileId: params.figma.lightFileId,
-                frameName: .icons,
+                frameName: iconsFrameName,
                 params: PDFParams(),
                 filter: filter
             ).map { ImagePack.singleScale($0) }
@@ -39,13 +47,13 @@ final class ImagesLoader {
         case (.android, .png), (.android, .webp), (.ios, .none):
             let lightImages = try loadPNGImages(
                 fileId: params.figma.lightFileId,
-                frameName: .illustrations,
+                frameName: imagesFrameName,
                 filter: filter,
                 platform: platform)
             let darkImages = try params.figma.darkFileId.map {
                 try loadPNGImages(
                     fileId: $0,
-                    frameName: .illustrations,
+                    frameName: imagesFrameName,
                     filter: filter,
                     platform: platform)
             }
@@ -56,14 +64,14 @@ final class ImagesLoader {
         default:
             let light = try _loadImages(
                 fileId: params.figma.lightFileId,
-                frameName: .illustrations,
+                frameName: imagesFrameName,
                 params: SVGParams(),
                 filter: filter)
             
             let dark = try params.figma.darkFileId.map {
                 try _loadImages(
                     fileId: $0,
-                    frameName: .illustrations,
+                    frameName: imagesFrameName,
                     params: SVGParams(),
                     filter: filter)
             }
@@ -76,10 +84,10 @@ final class ImagesLoader {
 
     // MARK: - Helpers
 
-    private func fetchImageComponents(fileId: String, frameName: FrameName, filter: String? = nil) throws -> [NodeId: Component] {
+    private func fetchImageComponents(fileId: String, frameName: String, filter: String? = nil) throws -> [NodeId: Component] {
         var components = try loadComponents(fileId: fileId)
             .filter {
-                $0.containingFrame.name == frameName.rawValue &&
+                $0.containingFrame.name == frameName &&
                     ($0.description == platform.rawValue || $0.description == nil || $0.description == "") &&
                     $0.description?.contains("none") == false
             }
@@ -94,7 +102,7 @@ final class ImagesLoader {
         return Dictionary(uniqueKeysWithValues: components.map { ($0.nodeId, $0) })
     }
 
-    private func _loadImages(fileId: String, frameName: FrameName, params: FormatParams, filter: String? = nil) throws -> [Image] {
+    private func _loadImages(fileId: String, frameName: String, params: FormatParams, filter: String? = nil) throws -> [Image] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
         
         guard !imagesDict.isEmpty else {
@@ -114,7 +122,7 @@ final class ImagesLoader {
         }
     }
 
-    private func loadPNGImages(fileId: String, frameName: FrameName, filter: String? = nil, platform: Platform) throws -> [ImagePack] {
+    private func loadPNGImages(fileId: String, frameName: String, filter: String? = nil, platform: Platform) throws -> [ImagePack] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
         
         guard !imagesDict.isEmpty else {
