@@ -1,9 +1,9 @@
 {
   "images" : [
     {
-      "filename" : "imgZeroInternetL@3x.png",
+      "filename" : "imgZeroInternetL@2x.png",
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "2x"
     },
     {
       "filename" : "imgZeroInternetL@1x.png",
@@ -11,9 +11,9 @@
       "scale" : "1x"
     },
     {
-      "filename" : "imgZeroInternetL@2x.png",
+      "filename" : "imgZeroInternetL@3x.png",
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "3x"
     },
     {
       "appearances" : [

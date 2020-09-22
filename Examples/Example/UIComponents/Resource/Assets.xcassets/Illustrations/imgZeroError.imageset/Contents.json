@@ -22,17 +22,6 @@
           "value" : "dark"
         }
       ],
-      "filename" : "imgZeroErrorD@1x.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
       "filename" : "imgZeroErrorD@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
@@ -47,6 +36,17 @@
       "filename" : "imgZeroErrorD@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "imgZeroErrorD@1x.png",
+      "idiom" : "universal",
+      "scale" : "1x"
     }
   ],
   "info" : {

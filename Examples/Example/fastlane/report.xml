@@ -5,12 +5,12 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000318">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000442">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: Pods/FigmaExport/Release/figma-export typography" time="2.349036">
+      <testcase classname="fastlane.lanes" name="1: Pods/FigmaExport/Release/figma-export icons" time="7.259908">
         
       </testcase>
     

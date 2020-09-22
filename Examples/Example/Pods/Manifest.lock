@@ -1,16 +1,16 @@
 PODS:
-  - FigmaExport (0.12.0)
+  - FigmaExport (0.14.0)
 
 DEPENDENCIES:
-  - FigmaExport (from `../`)
+  - FigmaExport
 
-EXTERNAL SOURCES:
-  FigmaExport:
-    :path: "../"
+SPEC REPOS:
+  trunk:
+    - FigmaExport
 
 SPEC CHECKSUMS:
-  FigmaExport: 4ec620ebf1be3d4991df472c841a978d7f2c2a3b
+  FigmaExport: be3cb270c121c131baa8577a3c57cd2bd6fe80fb
 
-PODFILE CHECKSUM: 78f2963caab7b28e3a6918925da2d1822763c200
+PODFILE CHECKSUM: 5f4def1cc7339d6f13a38b29b1a86d1548750fad
 
 COCOAPODS: 1.9.3
