@@ -32,6 +32,7 @@ Table of Contents:
   - [CocoaPods + Fastlane](#cocoapods--fastlane)
 - [Usage](#usage)
   - [Arguments](#arguments)
+  - [Configuration](#configuration)
   - [Exporting Typography](#exporting-typography)
 - [Design requirements](#design-requirements)
 - [Example project](#example-project)
@@ -260,8 +261,6 @@ Run `fastlane sync_colors` to run FigmaExport.
 
 ### Arguments
 
-**Export specific icons/images**
-
 If you want to export specific icons/images you can list their names in the last argument like this:
 
 `./figma-export icons "ic/24/edit"` — Exports only one icon.
@@ -272,9 +271,9 @@ If you want to export specific icons/images you can list their names in the last
 
 `./figma-export icons` — Exports all the icons.
 
-**Configuration file**
-
 Argument `-i` or `-input` specifies path to FigmaExport configuration file `figma-export.yaml`.
+
+### Configuration
 
 All available configuration options see in the [CONFIG.md](CONFIG.md) file.
 
