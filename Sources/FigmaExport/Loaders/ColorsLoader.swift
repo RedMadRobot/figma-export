@@ -54,10 +54,7 @@ final class ColorsLoader {
         guard !style.description.isEmpty else {
             return true // Цвет общий
         }
-        if style.description == "none" {
-            return false
-        }
-        return true
+        return !style.description.contains("none")
     }
     
     private func loadNodes(fileId: String, nodeIds: [String]) throws -> [NodeId: Node] {
