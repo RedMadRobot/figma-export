@@ -184,9 +184,9 @@ When your execute `figma-export typography` command `figma-export` generates 3 f
 3. `Label.swift` file that contains base Label class and class for each text style. E.g. HeaderLabel, BodyLabel, Caption1Label. Specify these classes in xib files on in code.
 
 Example of these files:
-- [./Example/UIComponents/Source/Label.swift](./Example/UIComponents/Source/Label.swift)
-- [./Example/UIComponents/Source/LabelStyle.swift](./Example/UIComponents/Source/LabelStyle.swift)
-- [./Example/UIComponents/Source/UIFont+extension.swift](./Example/UIComponents/Source/UIFont+extension.swift)
+- [./Examples/Example/UIComponents/Source/Label.swift](./Example/UIComponents/Source/Label.swift)
+- [./Examples/Example/UIComponents/Source/LabelStyle.swift](./Example/UIComponents/Source/LabelStyle.swift)
+- [./Examples/Example/UIComponents/Source/UIFont+extension.swift](./Example/UIComponents/Source/UIFont+extension.swift)
 
 ### Android
 
@@ -276,54 +276,11 @@ If you want to export specific icons/images you can list their names in the last
 
 Argument `-i` or `-input` specifies path to FigmaExport configuration file `figma-export.yaml`.
 
-All available configuration options read in the [CONFIG.md](CONFIG.md) file.
+All available configuration options see in the [CONFIG.md](CONFIG.md) file.
 
-Example of `figma-export.yaml` file for iOS project:
-```yaml
----
-figma:
-  lightFileId: shPilWnVdJfo10YF12345
-  darkFileId: KfF6DnJTWHGZzC912345
+Example of `figma-export.yaml` file for iOS project — [Examples/Example/figma-export.yaml](./Examples/Example/figma-export.yaml)
 
-ios:
-  xcodeprojPath: "./Example.xcodeproj"
-  target: "UIComponents"
-  xcassetsPath: "./Resources/Assets.xcassets"
-  xcassetsInMainBundle: true
-
-  colors:
-    useColorAssets: True
-    assetsFolder: Colors
-    nameStyle: camelCase
-    colorSwift: "./Sources/UIColor+extension.swift"
-
-  icons:
-    format: pdf
-    assetsFolder: Icons
-    nameStyle: camelCase
-    imageSwift: "./Example/Source/UIImage+extension_icons.swift"
-
-  images:
-    assetsFolder: Illustrations
-    nameStyle: camelCase
-    imageSwift: "./Example/Source/UIImage+extension_illustrations.swift"
-
-  typography:
-    fontSwift: "./Source/UIComponents/UIFont+extension.swift"
-    generateLabels: true
-    labelsDirectory: "./Source/UIComponents/"
-```
-
-Example of `figma-export.yaml` file for Android project:
-```yaml
-figma:
-  lightFileId: shPilWnVdJfo10YF12345
-  darkFileId: KfF6DnJTWHGZzC912345
-android:
-  mainRes: "./main/res"
-  images:
-    format: svg
-```
+Example of `figma-export.yaml` file for Android project — [Examples/AndroidExample/figma-export.yaml](Examples/AndroidExample/figma-export.yaml)
 
 ### Exporting Typography
 
