@@ -44,7 +44,10 @@ extension FigmaExportCommand {
         }
 
         private func exportiOSImages(client: FigmaClient, params: Params, logger: Logger) throws {
-            guard let ios = params.ios else { return }
+            guard let ios = params.ios else {
+                logger.info("Nothing to do. You haven’t specified ios parameter in the config file.")
+                return
+            }
 
             logger.info("Fetching images info from Figma. Please wait...")
             let loader = ImagesLoader(figmaClient: client, params: params, platform: .ios)
@@ -93,7 +96,10 @@ extension FigmaExportCommand {
         }
         
         private func exportAndroidImages(client: FigmaClient, params: Params, logger: Logger) throws {
-            guard let android = params.android else { return }
+            guard let androidImages = params.android?.images else {
+                logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
+                return
+            }
 
             logger.info("Fetching images info from Figma. Please wait...")
             let loader = ImagesLoader(figmaClient: client, params: params, platform: .android)
@@ -107,7 +113,7 @@ extension FigmaExportCommand {
             )
             let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
             
-            switch android.images.format {
+            switch androidImages.format {
             case .svg:
                 try exportAndroidSVGImages(images: images, params: params, logger: logger)
             case .png, .webp:
@@ -118,7 +124,10 @@ extension FigmaExportCommand {
         }
         
         private func exportAndroidSVGImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params, logger: Logger) throws {
-            guard let android = params.android else { return }
+            guard let android = params.android, let androidImages = android.images else {
+                logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
+                return
+            }
 
             // Create empty temp directory
             let tempDirectoryLightURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
@@ -155,12 +164,22 @@ extension FigmaExportCommand {
             }
 
             logger.info("Writting files to Android Studio project...")
-            // Create output directory main/res/drawable/
-            let lightDirectory = URL(fileURLWithPath: android.mainRes.path)
-                .appendingPathComponent("drawable", isDirectory: true)
             
-            let darkDirectory = URL(fileURLWithPath: android.mainRes.path)
-                .appendingPathComponent("drawable-night", isDirectory: true)
+            // Create output directory main/res/drawable/
+            
+            let lightDirectory = URL(fileURLWithPath: android.mainRes
+                .appendingPathComponent(androidImages.output)
+                .appendingPathComponent("drawable", isDirectory: true).path)
+            
+            let darkDirectory = URL(fileURLWithPath: android.mainRes
+                .appendingPathComponent(androidImages.output)
+                .appendingPathComponent("drawable-night", isDirectory: true).path)
+            
+            if filter == nil {
+                // Clear output directory
+                try? FileManager.default.removeItem(atPath: lightDirectory.path)
+                try? FileManager.default.removeItem(atPath: darkDirectory.path)
+            }
             
             // Move XML files to main/res/drawable/
             localFiles = localFiles.map { fileContents -> FileContents in
@@ -187,7 +206,10 @@ extension FigmaExportCommand {
         }
         
         private func exportAndroidRasterImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params, logger: Logger) throws {
-            guard let android = params.android else { return }
+            guard let android = params.android, let androidImages = android.images else {
+                logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
+                return
+            }
 
             // Create empty temp directory
             let tempDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
@@ -210,7 +232,7 @@ extension FigmaExportCommand {
             try fileWritter.write(files: localFiles)
             
             // Convert to WebP
-            if android.images.format == .webp, let options = android.images.webpOptions {
+            if androidImages.format == .webp, let options = androidImages.webpOptions {
                 logger.info("Converting PNG files to WebP...")
                 let converter: WebpConverter
                 switch (options.encoding, options.quality) {
@@ -226,13 +248,20 @@ extension FigmaExportCommand {
                     return file.changingExtension(newExtension: "webp")
                 }
             }
+            
+            if filter == nil {
+                // Clear output directory
+                let outputDirectory = URL(fileURLWithPath: android.mainRes.appendingPathComponent(androidImages.output).path)
+                try? FileManager.default.removeItem(atPath: outputDirectory.path)
+            }
 
             logger.info("Writting files to Android Studio project...")
             
-            // Move PNG/WebP files to main/res/drawable-XXXdpi/
+            // Move PNG/WebP files to main/res/figma-export-images/drawable-XXXdpi/
             localFiles = localFiles.map { fileContents -> FileContents in
                 let directoryName = Drawable.scaleToDrawableName(fileContents.scale, dark: fileContents.dark)
-                let directory = URL(fileURLWithPath: android.mainRes.path).appendingPathComponent(directoryName, isDirectory: true)
+                let directory = URL(fileURLWithPath: android.mainRes.appendingPathComponent(androidImages.output).path)
+                    .appendingPathComponent(directoryName, isDirectory: true)
                 return FileContents(
                     destination: Destination(directory: directory, file: fileContents.destination.file),
                     dataFile: fileContents.destination.url

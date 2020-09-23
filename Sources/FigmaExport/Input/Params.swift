@@ -84,6 +84,9 @@ struct Params: Decodable {
     }
 
     struct Android: Decodable {
+        struct Icons: Decodable {
+            let output: String
+        }
         struct Images: Decodable {
             enum Format: String, Decodable {
                 case svg
@@ -98,11 +101,13 @@ struct Params: Decodable {
                 let encoding: Encoding
                 let quality: Int?
             }
+            let output: String
             let format: Format
             let webpOptions: FormatOptions?
         }
         let mainRes: URL
-        let images: Images
+        let icons: Icons?
+        let images: Images?
     }
 
     let figma: Figma

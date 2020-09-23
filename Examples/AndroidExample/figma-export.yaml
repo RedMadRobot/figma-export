@@ -12,9 +12,18 @@ common:
     # Name of the Figma's frame where image components are located
     figmaFrameName: Illustrations
 
+# [optional] Android export parameters
 android:
+  # Relative or absolute path to the `main/res` folder including it. The colors/icons/imags will be exported to this folder
   mainRes: ./app/src/main/res
+  # Parameters for exporting icons
+  icons:
+    # Where to place icons relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export icons` command
+    output: "figma-export-icons"
+  # Parameters for exporting images
   images:
+    # Where to place images relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export images` command
+    output: "figma-export-images"
     # Image file format: svg, png or webp
     format: webp
     # Format options for webp format only

@@ -44,7 +44,10 @@ extension FigmaExportCommand {
         }
         
         private func exportiOSIcons(client: FigmaClient, params: Params, logger: Logger) throws {
-            guard let ios = params.ios else { return }
+            guard let ios = params.ios else {
+                logger.info("Nothing to do. You haven’t specified ios parameter in the config file.")
+                return
+            }
 
             logger.info("Fetching icons info from Figma. Please wait...")
             let loader = ImagesLoader(figmaClient: client, params: params, platform: .ios)
@@ -94,7 +97,10 @@ extension FigmaExportCommand {
         }
         
         private func exportAndroidIcons(client: FigmaClient, params: Params, logger: Logger) throws {
-            guard let android = params.android else { return }
+            guard let android = params.android, let androidIcons = android.icons else {
+                logger.info("Nothing to do. You haven’t specified android.icons parameter in the config file.")
+                return
+            }
             
             // 1. Get Icons info
             logger.info("Fetching icons info from Figma. Please wait...")
@@ -130,9 +136,15 @@ extension FigmaExportCommand {
             logger.info("Converting SVGs to XMLs...")
             try svgFileConverter.convert(inputDirectoryPath: tempDirectoryURL.path)
             
-            // Create output directory main/res/drawable/
-            let outputDirectory = URL(fileURLWithPath: android.mainRes.path)
-                .appendingPathComponent("drawable", isDirectory: true)
+            // Create output directory main/res/custom-directory/drawable/
+            let outputDirectory = URL(fileURLWithPath: android.mainRes
+                                        .appendingPathComponent(androidIcons.output)
+                                        .appendingPathComponent("drawable", isDirectory: true).path)
+            
+            if filter == nil {
+                // Clear output directory
+                try? FileManager.default.removeItem(atPath: outputDirectory.path)
+            }
             
             // 6. Move XML files to main/res/drawable/
             localFiles = localFiles.map { fileContents -> FileContents in

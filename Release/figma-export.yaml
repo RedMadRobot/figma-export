@@ -89,8 +89,14 @@ ios:
 android:
   # Relative or absolute path to the `main/res` folder including it. The colors/icons/imags will be exported to this folder
   mainRes: "./main/res"
+  # Parameters for exporting icons
+  icons:
+    # Where to place icons relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export icons` command
+    output: "figma-export-icons"
   # Parameters for exporting images
   images:
+    # Where to place images relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export images` command
+    output: "figma-export-images"
     # Image file format: svg or png
     format: webp
     # Format options for webp format only

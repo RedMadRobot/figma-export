@@ -31,6 +31,7 @@ Table of Contents:
   - [Homebrew](#homebrew)
   - [CocoaPods + Fastlane](#cocoapods--fastlane)
 - [Usage](#usage)
+  - [Android](#android-1)
   - [Arguments](#arguments)
   - [Configuration](#configuration)
   - [Exporting Typography](#exporting-typography)
@@ -262,6 +263,44 @@ Run `fastlane sync_colors` to run FigmaExport.
    To export typography (iOS only) use `typography` argument:
 
    `./figma-export typography -i figma-export.yaml`
+
+### Android
+
+In the `figma-export.yaml` file you must specify the following properties:
+- `android.mainRes`
+- `android.icons.output` if you want export icons
+- `android.images.output` if you want export images
+
+When you execute `figma-export icons` command, FigmaExport clears the `{android.mainRes}/{android.icons.output}` directory before exporting all the icons.
+
+When you execute `figma-export images` command, FigmaExport clears the `{android.mainRes}/{android.images.output}` directory before exporting all the images.
+
+Example folder structure:
+```
+main/
+  res/
+    figma-export-icons/
+      drawable/
+      drawable-night/
+    figma-export-images/
+      drawable/
+      drawable-night/
+```
+
+Before first running `figma-export` you must add path to these directories in the the app‘s `build.gradle` file.
+
+```
+...
+android {
+  ...
+  sourceSets {
+    main {
+      res.srcDirs += "src/main/res/figma-export-icons"
+      res.srcDirs += "src/main/res/figma-export-images"
+    }
+  }
+}
+```
 
 ### Arguments
 

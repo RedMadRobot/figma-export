@@ -29,6 +29,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    sourceSets {
+        main {
+            res.srcDirs += "src/main/res/figma-export-icons"
+            res.srcDirs += "src/main/res/figma-export-images"
+        }
+    }
 }
 
 dependencies {

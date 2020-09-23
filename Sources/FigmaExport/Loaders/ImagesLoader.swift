@@ -43,7 +43,7 @@ final class ImagesLoader {
     }
 
     func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
-        switch (platform, params.android?.images.format) {
+        switch (platform, params.android?.images?.format) {
         case (.android, .png), (.android, .webp), (.ios, .none):
             let lightImages = try loadPNGImages(
                 fileId: params.figma.lightFileId,

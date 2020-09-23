@@ -80,7 +80,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_24_dots"
+            app:srcCompat="@drawable/ic_24_close"
             app:tint="@color/tint" />
 
         <Space
