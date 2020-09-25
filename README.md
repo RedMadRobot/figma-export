@@ -318,11 +318,18 @@ Argument `-i` or `-input` specifies path to FigmaExport configuration file `figm
 
 ### Configuration
 
-All available configuration options see in the [CONFIG.md](CONFIG.md) file.
+All available configuration options described in the [CONFIG.md](CONFIG.md) file.
 
 Example of `figma-export.yaml` file for iOS project — [Examples/Example/figma-export.yaml](./Examples/Example/figma-export.yaml)
 
 Example of `figma-export.yaml` file for Android project — [Examples/AndroidExample/figma-export.yaml](./Examples/AndroidExample/figma-export.yaml)
+
+Generate `figma-export.yaml` config file using one of the following command:
+```
+figma-export init --platform android
+figma-export init --platform ios
+```
+It will generate config file in the current directory.
 
 ### Exporting Typography
 
