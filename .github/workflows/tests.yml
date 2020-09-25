@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Copy config
-        run: cp Release/figma-export.yaml ./
+      - name: Select Xcode version
+        run: sudo xcode-select --switch /Applications/Xcode_12.app
       - name: Build and test
         run: swift test --enable-code-coverage --disable-automatic-resolution

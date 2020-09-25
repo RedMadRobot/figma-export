@@ -13,6 +13,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Select Xcode version
+        run: sudo xcode-select --switch /Applications/Xcode_12.app
+
       - name: Build
         run: |
           swift build -c release
