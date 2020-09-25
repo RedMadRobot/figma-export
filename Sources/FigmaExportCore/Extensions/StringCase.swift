@@ -1,6 +1,6 @@
 import Foundation
 
-public extension String {
+extension String {
     /// A Boolean value indicating whether this string is considered snake case.
     ///
     /// For example, the following strings are all snake case:
@@ -71,7 +71,8 @@ public extension String {
         for character in Array<Character>(self) {
             if results.isEmpty && (character.isLetter || character.isNumber) {
                 results.append(String(character))
-            } else if (lastCharacter.isLetter || lastCharacter.isNumber) && character.isLowercase {
+            } else if ((lastCharacter.isLetter || lastCharacter.isNumber) && character.isLowercase) ||
+                        (lastCharacter.isNumber && character.isNumber) {
                 results[results.count - 1] = results[results.count - 1] + String(character)
             } else if (character.isLetter || character.isNumber) {
                 results.append(String(character))

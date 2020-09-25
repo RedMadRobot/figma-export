@@ -18,19 +18,28 @@ figma:
 
 # [optional] Common export parameters
 common:
+  # [optional]
   colors:
-    # RegExp pattern for color name validation before exporting 
+    # [optional] RegExp pattern for color name validation before exporting 
     nameValidateRegexp: '^[a-zA-Z_]+$' # RegExp pattern for: background, background_primary, widget_primary_background
+    # [optional] RegExp pattern for replacing. Supports only $n
+    nameReplaceRegexp: 'color_$1'
+  # [optional]
   icons:
-    # Name of the Figma's frame where icons components are located
+    # [optional] Name of the Figma's frame where icons components are located
     figmaFrameName: Colors
-    # RegExp pattern for icon name validation before exporting 
+    # [optional] RegExp pattern for icon name validation before exporting 
     nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
+    # [optional] RegExp pattern for replacing. Supports only $n
+    nameReplaceRegexp: 'icon_$2_$1'
+  # [optional]
   images:
-    # Name of the Figma's frame where image components are located
+    # [optional]Name of the Figma's frame where image components are located
     figmaFrameName: Illustrations
-    # RegExp pattern for image name validation before exporting
+    # [optional] RegExp pattern for image name validation before exporting
     nameValidateRegexp: '^(img)_([a-z0-9_]+)$' # RegExp pattern for: img_image_name
+    # [optional] RegExp pattern for replacing. Supports only $n
+    nameReplaceRegexp: 'image_$2'
 
 # [optional] iOS export parameters
 ios:

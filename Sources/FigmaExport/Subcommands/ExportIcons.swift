@@ -57,6 +57,7 @@ extension FigmaExportCommand {
             let processor = ImagesProcessor(
                 platform: .ios,
                 nameValidateRegexp: params.common?.icons?.nameValidateRegexp,
+                nameReplaceRegexp: params.common?.icons?.nameReplaceRegexp,
                 nameStyle: params.ios?.icons.nameStyle
             )
             let icons = try processor.process(assets: images).get()
@@ -112,6 +113,7 @@ extension FigmaExportCommand {
             let processor = ImagesProcessor(
                 platform: .android,
                 nameValidateRegexp: params.common?.icons?.nameValidateRegexp,
+                nameReplaceRegexp: params.common?.icons?.nameReplaceRegexp,
                 nameStyle: .snakeCase
             )
             let icons = try processor.process(light: images, dark: nil).get()

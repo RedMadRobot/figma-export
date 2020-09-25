@@ -1,4 +1,7 @@
 import Foundation
+import FigmaExportCore
+
+extension NameStyle: Decodable {}
 
 struct Params: Decodable {
 
@@ -10,26 +13,24 @@ struct Params: Decodable {
     struct Common: Decodable {
         struct Colors: Decodable {
             let nameValidateRegexp: String?
+            let nameReplaceRegexp: String?
         }
         
         struct Icons: Decodable {
             let nameValidateRegexp: String?
             let figmaFrameName: String?
+            let nameReplaceRegexp: String?
         }
         
         struct Images: Decodable {
             let nameValidateRegexp: String?
             let figmaFrameName: String?
+            let nameReplaceRegexp: String?
         }
         
         let colors: Colors?
         let icons: Icons?
         let images: Images?
-    }
-    
-    enum NameStyle: String, Decodable {
-        case camelCase = "camelCase"
-        case snakeCase = "snake_case"
     }
     
     enum VectorFormat: String, Decodable {

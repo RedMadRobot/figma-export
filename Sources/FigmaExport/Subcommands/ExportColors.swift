@@ -40,6 +40,7 @@ extension FigmaExportCommand {
                 let processor = ColorsProcessor(
                     platform: .ios,
                     nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
+                    nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
                     nameStyle: params.ios?.colors.nameStyle
                 )
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
@@ -55,6 +56,7 @@ extension FigmaExportCommand {
                 let processor = ColorsProcessor(
                     platform: .android,
                     nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
+                    nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
                     nameStyle: .snakeCase
                 )
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()

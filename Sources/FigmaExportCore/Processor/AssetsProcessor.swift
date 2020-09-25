@@ -1,17 +1,15 @@
-import Foundation
-import FigmaExportCore
-
 /// Process asset name
-protocol AssetNameProcessable {
+public protocol AssetNameProcessable {
     
+    var nameReplaceRegexp: String? { get }
     var nameValidateRegexp: String? { get }
-    var nameStyle: Params.NameStyle? { get }
+    var nameStyle: NameStyle? { get }
     
     func isNameValid(_ name: String) -> Bool
-    func normalizeName(_ name: String, style: Params.NameStyle) -> String
+    func normalizeName(_ name: String, style: NameStyle) -> String
 }
 
-extension AssetNameProcessable {
+public extension AssetNameProcessable {
     
     func isNameValid(_ name: String) -> Bool {
         if let regexp = nameValidateRegexp {
@@ -21,7 +19,7 @@ extension AssetNameProcessable {
         }
     }
     
-    func normalizeName(_ name: String, style: Params.NameStyle) -> String {
+    func normalizeName(_ name: String, style: NameStyle) -> String {
         switch style {
         case .camelCase:
             return name.lowerCamelCased()
@@ -31,7 +29,7 @@ extension AssetNameProcessable {
     }
 }
 
-protocol AssetsProcessable: AssetNameProcessable {
+public protocol AssetsProcessable: AssetNameProcessable {
     associatedtype AssetType: Asset
     typealias ProcessingPairResult = Result<[AssetPair<AssetType>], ErrorGroup>
     typealias ProcessingResult = Result<[AssetType], ErrorGroup>
@@ -42,23 +40,39 @@ protocol AssetsProcessable: AssetNameProcessable {
     func process(assets: [AssetType]) -> ProcessingResult
 }
 
-struct ColorsProcessor: AssetsProcessable {
-    typealias AssetType = Color
+public struct ColorsProcessor: AssetsProcessable {
+    public typealias AssetType = Color
     
-    let platform: Platform
-    let nameValidateRegexp: String?
-    let nameStyle: Params.NameStyle?
+    public let platform: Platform
+    public let nameValidateRegexp: String?
+    public let nameReplaceRegexp: String?
+    public let nameStyle: NameStyle?
+    
+    public init(platform: Platform, nameValidateRegexp: String?, nameReplaceRegexp: String?, nameStyle: NameStyle?) {
+        self.platform = platform
+        self.nameValidateRegexp = nameValidateRegexp
+        self.nameReplaceRegexp = nameReplaceRegexp
+        self.nameStyle = nameStyle
+    }
 }
 
-struct ImagesProcessor: AssetsProcessable {
-    typealias AssetType = ImagePack
+public struct ImagesProcessor: AssetsProcessable {
+    public typealias AssetType = ImagePack
 
-    let platform: Platform
-    let nameValidateRegexp: String?
-    let nameStyle: Params.NameStyle?
+    public let platform: Platform
+    public let nameValidateRegexp: String?
+    public let nameReplaceRegexp: String?
+    public let nameStyle: NameStyle?
+    
+    public init(platform: Platform, nameValidateRegexp: String? = nil, nameReplaceRegexp: String? = nil, nameStyle: NameStyle?) {
+        self.platform = platform
+        self.nameValidateRegexp = nameValidateRegexp
+        self.nameReplaceRegexp = nameReplaceRegexp
+        self.nameStyle = nameStyle
+    }
 }
 
-extension AssetsProcessable {
+public extension AssetsProcessable {
 
     func process(light: [AssetType], dark: [AssetType]?) -> ProcessingPairResult {
         if let dark = dark {
@@ -107,6 +121,9 @@ extension AssetsProcessable {
             .filter { $0.platform == nil || $0.platform == platform }
             .map { asset -> AssetType in
                 var newAsset = asset
+                if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
+                    newAsset.name = self.replace(newAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
+                }
                 if let style = nameStyle {
                     newAsset.name = self.normalizeName(newAsset.name, style: style)
                 }
@@ -114,6 +131,17 @@ extension AssetsProcessable {
             }
         
         return .success(assets)
+    }
+    
+    private func replace(_ name: String, matchRegExp: String, replaceRegExp: String) -> String {
+        let result = name.replace(matchRegExp) { array in
+            replaceRegExp.replace(#"\$(\d)"#) {
+                let index = Int($0[1])!
+                return array[index]
+            }
+        }
+        
+        return result
     }
 
     private func validateAndMakePairs(light: [AssetType]) -> ProcessingPairResult {
@@ -218,8 +246,12 @@ extension AssetsProcessable {
 
                 var newLightAsset = lightAsset
 
+                if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
+                    newLightAsset.name = self.replace(newLightAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
+                }
+                
                 if let style = nameStyle {
-                    newLightAsset.name = self.normalizeName(lightAsset.name, style: style)
+                    newLightAsset.name = self.normalizeName(newLightAsset.name, style: style)
                 }
 
                 return AssetPair(light: newLightAsset, dark: nil)
@@ -246,9 +278,14 @@ extension AssetsProcessable {
                 var newLightAsset = lightAsset
                 var newDarkAsset = darkAsset
 
+                if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
+                    newLightAsset.name = self.replace(newLightAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
+                    newDarkAsset.name = self.replace(newDarkAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
+                }
+                
                 if let style = nameStyle {
-                    newLightAsset.name = self.normalizeName(lightAsset.name, style: style)
-                    newDarkAsset.name = self.normalizeName(darkAsset.name, style: style)
+                    newLightAsset.name = self.normalizeName(newLightAsset.name, style: style)
+                    newDarkAsset.name = self.normalizeName(newDarkAsset.name, style: style)
                 }
 
                 return AssetPair(light: newLightAsset, dark: newDarkAsset)

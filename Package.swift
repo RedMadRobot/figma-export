@@ -57,6 +57,12 @@ let package = Package(
             dependencies: ["FigmaExportCore"]
         ),
         
+        // MARK: - Tests
+        
+        .testTarget(
+            name: "FigmaExportTests",
+            dependencies: ["FigmaExport"]
+        ),
         .testTarget(
             name: "FigmaExportCoreTests",
             dependencies: ["FigmaExportCore"]

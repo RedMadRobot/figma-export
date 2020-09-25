@@ -5,15 +5,18 @@ figma:
 
 # [optional] Common export parameters
 common:
+  # [optional]
   colors:
-    # RegExp pattern for color name validation before exporting 
+    # [optional] RegExp pattern for color name validation before exporting. Use to validate color name in Figma file
     nameValidateRegexp: '^[a-zA-Z_]+$' # RegExp pattern for: background, background_primary, widget_primary_background
+  # [optional]
   icons:
-    # RegExp pattern for icon name validation before exporting 
+    # [optional] RegExp pattern for icon name validation before exporting. Use to validate icon name in Figma file
     nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
+  # [optional]
   images:
-    # RegExp pattern for image name validation before exporting
-    nameValidateRegexp: '^(img)_([a-z0-9_]+)$' # RegExp pattern for: img_image_name
+    # [optional] RegExp pattern for image name validation before exporting. Use to validate image name in Figma file
+    nameValidateRegexp: '^(img)_([a-z0-9_]+)$' # RegExp pattern for: img_zero_empty, img_widget_large
 
 # [optional] iOS export parameters
 ios:
@@ -64,4 +67,3 @@ ios:
     generateLabels: true
     # Path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
     labelsDirectory: "./UIComponents/Source/"
-    
