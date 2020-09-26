@@ -40,7 +40,7 @@ final class XcodeProjectWritter {
             .dropLast() as Array
         
         var currentGroup: PBXGroup? = project.mainGroup
-        var prevGroup: PBXGroup? = nil
+        var prevGroup: PBXGroup?    
         
         while currentGroup != nil {
             if groups.isEmpty { break }

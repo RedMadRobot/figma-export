@@ -11,13 +11,13 @@ public struct Color: Asset {
     /// Color components, Double value from 0 to 1
     public let red, green, blue, alpha: Double
     
-    public init(name: String, platform: Platform? = nil, r: Double, g: Double, b: Double, a: Double) {
+    public init(name: String, platform: Platform? = nil, red: Double, green: Double, blue: Double, alpha: Double) {
         self.name = name
         self.platform = platform
-        self.red = r
-        self.green = g
-        self.blue = b
-        self.alpha = a
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
     }
     
     // MARK: Hashable

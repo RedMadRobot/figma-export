@@ -15,10 +15,15 @@ extension FigmaExportCommand {
             abstract: "Exports images from Figma",
             discussion: "Exports images from Figma to Xcode / Android Studio project")
 
-        @Option(name: .shortAndLong, default: "figma-export.yaml", help: "An input YAML file with figma and platform properties.")
+        @Option(name: .shortAndLong, default: "figma-export.yaml",
+                help: "An input YAML file with figma and platform properties.")
         var input: String
         
-        @Argument(help: "[Optional] Name of the images to export. For example \"img/login\" to export single image, \"img/onboarding/1, img/onboarding/2\" to export several images and \"img/onboarding/*\" to export all images from onboarding group")
+        @Argument(help: """
+        [Optional] Name of the images to export. For example \"img/login\" to export \
+        single image, \"img/onboarding/1, img/onboarding/2\" to export several images \
+        and \"img/onboarding/*\" to export all images from onboarding group
+        """)
         var filter: String?
         
         func run() throws {

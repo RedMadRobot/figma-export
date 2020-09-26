@@ -11,11 +11,11 @@ final class XcodeColorExporterTests: XCTestCase {
     private var colorsAsssetCatalog: URL!
     
     private let colorPair1 = AssetPair<Color>(
-        light: Color(name: "colorPair1", r: 1, g: 1, b: 1, a: 1),
-        dark: Color(name: "colorPair1", r: 0, g: 0, b: 0, a: 1))
+        light: Color(name: "colorPair1", red: 1, green: 1, blue: 1, alpha: 1),
+        dark: Color(name: "colorPair1", red: 0, green: 0, blue: 0, alpha: 1))
     
     private let colorPair2 = AssetPair<Color>(
-        light: Color(name: "colorPair2", r: 119.0/255.0, g: 3.0/255.0, b: 1.0, a: 0.5),
+        light: Color(name: "colorPair2", red: 119.0/255.0, green: 3.0/255.0, blue: 1.0, alpha: 0.5),
         dark: nil)
     
     // MARK: - Setup

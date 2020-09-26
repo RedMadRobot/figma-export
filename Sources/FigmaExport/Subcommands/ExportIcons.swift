@@ -15,10 +15,15 @@ extension FigmaExportCommand {
             abstract: "Exports icons from Figma",
             discussion: "Exports icons from Figma to Xcode / Android Studio project")
         
-        @Option(name: .shortAndLong, default: "figma-export.yaml", help: "An input YAML file with figma and platform properties.")
+        @Option(name: .shortAndLong, default: "figma-export.yaml",
+                help: "An input YAML file with figma and platform properties.")
         var input: String
         
-        @Argument(help: "[Optional] Name of the icons to export. For example \"ic/24/edit\" to export single icon, \"ic/24/edit, ic/16/notification\" to export several icons and \"ic/16/*\" to export all icons of size 16 pt")
+        @Argument(help: """
+        [Optional] Name of the icons to export. For example \"ic/24/edit\" \
+        to export single icon, \"ic/24/edit, ic/16/notification\" to export several icons and \
+        \"ic/16/*\" to export all icons of size 16 pt
+        """)
         var filter: String?
         
         func run() throws {

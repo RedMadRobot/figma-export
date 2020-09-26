@@ -69,7 +69,7 @@ extension FigmaExportCommand {
         }
         
         private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS, logger: Logger) throws {
-            var colorsURL: URL? = nil
+            var colorsURL: URL?
             if iosParams.colors.useColorAssets {
                 if let folder = iosParams.colors.assetsFolder {
                     colorsURL = iosParams.xcassetsPath.appendingPathComponent(folder)

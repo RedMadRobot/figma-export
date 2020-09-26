@@ -10,7 +10,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         files.append(makeEmptyContentsJson())
 
         // For each pair...
-        assets.forEach { pair in
+        try assets.forEach { pair in
             let name = pair.light.name
 
             // Create imageset directory
@@ -25,7 +25,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-            let data = try! encoder.encode(contents)
+            let data = try encoder.encode(contents)
             let fileURL = URL(string: "Contents.json")!
             files.append(FileContents(
                 destination: Destination(directory: imageDirURL, file: fileURL),
@@ -124,7 +124,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
     private func imageDataForImage(_ image: Image, scale: Double? = nil, dark: Bool) -> XcodeAssetContents.ImageData {
 
-        var appearance: [XcodeAssetContents.DarkAppeareance]? = nil
+        var appearance: [XcodeAssetContents.DarkAppeareance]?
         if dark {
             appearance = [XcodeAssetContents.DarkAppeareance()]
         }

@@ -27,7 +27,7 @@ final class FileDownloader {
             }
 
             group.enter()
-            let task = session.downloadTask(with: remoteURL) { localURL, urlResponse, error in
+            let task = session.downloadTask(with: remoteURL) { localURL, _, error in
                 defer { group.leave() }
                 
                 guard let fileURL = localURL, error == nil else {

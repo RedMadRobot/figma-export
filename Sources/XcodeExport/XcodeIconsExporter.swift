@@ -13,7 +13,7 @@ final public class XcodeIconsExporter: XcodeImagesExporterBase {
             data: contentsJson.data
         ))
         
-        assets.forEach { image in
+        try assets.forEach { image in
             // Create directory for imageset
             let dirURL = output.assetsFolderURL.appendingPathComponent("\(image.name).imageset")
 
@@ -34,7 +34,7 @@ final public class XcodeIconsExporter: XcodeImagesExporterBase {
             )
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
-            let data = try! encoder.encode(contents)
+            let data = try encoder.encode(contents)
             let fileURL = URL(string: "Contents.json")!
             files.append(FileContents(
                 destination: Destination(directory: dirURL, file: fileURL),

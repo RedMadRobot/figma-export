@@ -36,9 +36,11 @@ final class ColorsLoader {
         return styles.compactMap { style -> Color? in
             guard let node = nodes[style.nodeId] else { return nil}
             guard let fill = node.document.fills.first else { return nil }
-            let a: Double = fill.opacity ?? fill.color.a
+            let alpha: Double = fill.opacity ?? fill.color.a
             let platform = Platform(rawValue: style.description)
-            return Color(name: style.name, platform: platform, r: fill.color.r, g: fill.color.g, b: fill.color.b, a: a)
+            
+            return Color(name: style.name, platform: platform,
+                         red: fill.color.r, green: fill.color.g, blue: fill.color.b, alpha: alpha)
         }
     }
     
