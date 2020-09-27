@@ -1,3 +1,4 @@
+let androidConfigFileContents = #"""
 ---
 figma:
   # Identifier of the file containing light color palette, icons and light images. To obtain a file id, open the file in the browser. The file id will be present in the URL after the word file and before the file name.
@@ -25,3 +26,5 @@ android:
       encoding: lossy
       # Encoding quality in percents. Only for lossy encoding.
       quality: 90
+
+"""#

@@ -20,23 +20,23 @@ extension FigmaExportCommand {
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
             
-            let fileName: String
+            let fileContents: String
             switch platform {
             case .android:
-                fileName = "android"
+                fileContents = androidConfigFileContents
             case .ios:
-                fileName = "ios"
+                fileContents = iosConfigFileContents
             }
-            guard let url = Bundle.module.url(forResource: fileName, withExtension: "yaml") else {
-                logger.info("Unable to generate config file.")
-                return
-            }
+            let fileData = fileContents.data(using: .utf8)
             
             let destination = FileManager.default.currentDirectoryPath + "/" + "figma-export.yaml"
             try? FileManager.default.removeItem(atPath: destination)
-            try FileManager.default.copyItem(atPath: url.path, toPath: destination)
-            
-            logger.info("Config file generated at:\n\(destination)")
+            let success = FileManager.default.createFile(atPath: destination, contents: fileData, attributes: nil)
+            if success {
+                logger.info("Config file generated at:\n\(destination)")
+            } else {
+                logger.error("Unable to generate config file at:\n\(destination)")
+            }
         }
     }
 }

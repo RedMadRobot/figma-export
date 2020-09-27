@@ -32,10 +32,6 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Yams", package: "Yams"),
                 .product(name: "Logging", package: "swift-log")
-            ],
-            resources: [
-                .copy("Resources/android.yaml"),
-                .copy("Resources/ios.yaml")
             ]
         ),
         

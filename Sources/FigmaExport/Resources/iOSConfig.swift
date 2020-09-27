@@ -1,3 +1,4 @@
+let iosConfigFileContents = #"""
 ---
 figma:
   # Identifier of the file containing light color palette, icons and light images. To obtain a file id, open the file in the browser. The file id will be present in the URL after the word file and before the file name.
@@ -8,12 +9,12 @@ figma:
 # [optional] Common export parameters
 common:
   colors:
-    # RegExp pattern for color name validation before exporting 
+    # RegExp pattern for color name validation before exporting
     nameValidateRegexp: '^[a-zA-Z_]+$' # RegExp pattern for: background, background_primary, widget_primary_background
   icons:
     # Name of the Figma's frame where icons components are located
     figmaFrameName: Colors
-    # RegExp pattern for icon name validation before exporting 
+    # RegExp pattern for icon name validation before exporting
     nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
   images:
     # Name of the Figma's frame where image components are located
@@ -84,3 +85,5 @@ ios:
     generateLabels: true
     # Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
     labelsDirectory: "./Source/UIComponents/"
+
+"""#
