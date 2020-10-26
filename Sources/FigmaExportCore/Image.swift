@@ -1,21 +1,26 @@
 import Foundation
 
 public struct Image: Asset {
-    
+
     public var name: String
+    public let scale: Double
     public let format: String
     public let url: URL
+    public let idiom: String?
+
     public var platform: Platform?
-    
-    public init(name: String, platform: Platform? = nil, url: URL, format: String) {
+
+    public init(name: String, scale: Double = 1, platform: Platform? = nil, idiom: String? = nil, url: URL, format: String) {
         self.name = name
+        self.scale = scale
         self.platform = platform
         self.url = url
+        self.idiom = idiom
         self.format = format
     }
-    
+
     // MARK: Hashable
-    
+
     public static func == (lhs: Image, rhs: Image) -> Bool {
         return lhs.name == rhs.name
     }
