@@ -36,12 +36,15 @@ public enum ImagePack: Asset {
     
     case singleScale(Image)
     case individualScales([Scale: Image])
+    case images([Image])
 
     public var single: Image {
         switch self {
         case .singleScale(let image):
             return image
         case .individualScales:
+            fatalError("Unable to extract image from image pack")
+        case .images:
             fatalError("Unable to extract image from image pack")
         }
     }
@@ -53,6 +56,8 @@ public enum ImagePack: Asset {
                 return image.name
             case .individualScales(let images):
                 return images.first!.value.name
+            case .images(let images):
+                return images.first!.name
             }
         }
         set {
@@ -65,6 +70,13 @@ public enum ImagePack: Asset {
                     images[key]?.name = newValue
                 }
                 self = .individualScales(images)
+            case .images(let images):
+                let newImages = images.map({ i -> Image in
+                    var newImage = i
+                    newImage.name = newValue
+                    return newImage
+                })
+                self = .images(newImages)
             }
         }
     }
@@ -75,6 +87,8 @@ public enum ImagePack: Asset {
             return image.platform
         case .individualScales(let images):
             return images.first?.value.platform
+        case .images(let images):
+            return images.first?.platform
         }
     }
 }

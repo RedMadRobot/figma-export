@@ -53,7 +53,12 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
 
     private func makeFileURL(for image: Image, scale: Double?, dark: Bool = false) -> URL {
-        var urlString = image.name
+        var urlString = "\(image.name)"
+
+        if let idiom = image.idiom, !idiom.isEmpty {
+            urlString.append("~\(idiom)")
+        }
+
         if dark {
             urlString.append("D")
         } else {
@@ -85,6 +90,8 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
             return images.map { scale, image -> FileContents in
                 saveImage(image, to: directory, scale: scale, dark: dark)
             }
+        case .images(let images):
+            return images.map({ saveImage($0, to: directory, scale: $0.scale, dark: dark)})
         }
     }
 
@@ -119,6 +126,8 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
             return images.map { scale, image -> XcodeAssetContents.ImageData in
                 imageDataForImage(image, scale: scale, dark: dark)
             }
+        case .images(let images):
+            return images.map({ imageDataForImage($0, scale: $0.scale, dark: dark)})
         }
     }
 
@@ -135,8 +144,11 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         if let scale = scale, let normalizedScale = normalizeScale(scale) {
             scaleString = normalizedScale
         }
-        
+
+        let idiom = image.idiom.flatMap({ XcodeAssetIdiom(rawValue: $0) }) ?? .universal
+
         return XcodeAssetContents.ImageData(
+            idiom: idiom,
             scale: scaleString == nil ? nil : "\(scaleString!)x",
             appearances: appearance,
             filename: imageURL.absoluteString
