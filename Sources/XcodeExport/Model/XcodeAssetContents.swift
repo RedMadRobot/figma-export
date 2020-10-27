@@ -3,6 +3,10 @@ enum XcodeAssetIdiom: String, Encodable {
     case universal
     case iphone
     case ipad
+    case mac
+    case tv
+    case watch
+    case car
 }
 
 struct XcodeAssetContents: Encodable {
