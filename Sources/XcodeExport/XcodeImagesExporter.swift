@@ -56,7 +56,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
 
     private func makeFileURL(for image: Image, scale: Double?, dark: Bool = false) -> URL {
-        var urlString = "\(image.name)"
+        var urlString = image.name
 
         if let idiom = image.idiom, !idiom.isEmpty {
             urlString.append("~\(idiom)")
@@ -94,7 +94,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
                 saveImage(image, to: directory, scale: scale, dark: dark)
             }
         case .images(let images):
-            return images.map({ saveImage($0, to: directory, scale: $0.scale, dark: dark)})
+            return images.map { saveImage($0, to: directory, scale: $0.scale, dark: dark) }
         }
     }
 
@@ -130,7 +130,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
                 imageDataForImage(image, scale: scale, dark: dark)
             }
         case .images(let images):
-            return images.map({ imageDataForImage($0, scale: $0.scale, dark: dark)})
+            return images.map { imageDataForImage($0, scale: $0.scale, dark: dark) }
         }
     }
 
@@ -148,7 +148,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
             scaleString = normalizedScale
         }
 
-        let idiom = image.idiom.flatMap({ XcodeAssetIdiom(rawValue: $0) }) ?? .universal
+        let idiom = image.idiom.flatMap { XcodeAssetIdiom(rawValue: $0) } ?? .universal
 
         return XcodeAssetContents.ImageData(
             idiom: idiom,
@@ -198,7 +198,7 @@ private extension ImagePack {
             }
             return .individualScales(validImages)
         case .images(let images):
-            return .images(images.filter({ $0.isValidForXcode(scale: $0.scale) }))
+            return .images(images.filter { $0.isValidForXcode(scale: $0.scale) })
         }
     }
 

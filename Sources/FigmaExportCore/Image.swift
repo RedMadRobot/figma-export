@@ -71,12 +71,12 @@ public enum ImagePack: Asset {
                 }
                 self = .individualScales(images)
             case .images(let images):
-                let newImages = images.map({ i -> Image in
-                    var newImage = i
+                let image = images.map { image -> Image in
+                    var newImage = image
                     newImage.name = newValue
                     return newImage
-                })
-                self = .images(newImages)
+                }
+                self = .images(image)
             }
         }
     }
