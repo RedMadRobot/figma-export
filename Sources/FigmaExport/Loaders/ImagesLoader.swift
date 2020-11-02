@@ -128,7 +128,7 @@ final class ImagesLoader {
         guard !imagesDict.isEmpty else {
             throw FigmaExportError.componentsNotFound
         }
-        
+
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
         let scales = platform == .android ? [1, 2, 3, 1.5, 4.0] : [1, 2, 3]
 
@@ -137,41 +137,19 @@ final class ImagesLoader {
             images[scale] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: scale))
         }
 
-        /*
-         # imagesDict
-         {
-            "610:188": "img/onboarding_bg"
-            "610:212": "img/onboarding_bg~ipad"
-         }
+        // Group images by name
+        let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom().name }
 
-         # namedComponentsDict
-         {
-            "img/onboarding_bg": {
-                "": "610:188's component",
-                "ipad": "610:212's component"
-            }
-         }
-        */
-        let namedComponentsDict = imagesDict.values
-            .reduce(into: [String: [String: Component]]()) { result, component in
+        // Create image packs for groups
+        let imagePacks = groups.compactMap { _, components -> ImagePack? in
+            let packImages = components.flatMap { nodeId, component -> [Image] in
                 let (name, idiom) = component.name.parseNameAndIdiom()
-                result[name] = { () -> [String: Component] in
-                    var components = result[name, default: [:]]
-                    components[idiom] = component
-                    return components
-                }()
-            }
-
-        let imagePacks = namedComponentsDict.map { name, components -> ImagePack in
-            let packImages = scales.flatMap { scale -> [Image] in
-                let images = components.compactMap { idiom, component -> Image? in
-                    guard let urlString = images[scale]?[component.nodeId],
-                          let url = URL(string: urlString) else {
+                return scales.compactMap { scale -> Image? in
+                    guard let urlString = images[scale]?[nodeId], let url = URL(string: urlString) else {
                         return nil
                     }
                     return Image(name: name, scale: scale, idiom: idiom, url: url, format: "png")
                 }
-                return images
             }
             return ImagePack.images(packImages)
         }
