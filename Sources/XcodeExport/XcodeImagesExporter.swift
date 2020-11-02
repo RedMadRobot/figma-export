@@ -218,8 +218,10 @@ private extension Image {
         switch device {
         case .iphone:
             return [1, 2, 3].contains(scale)
-        case .ipad, .tv, .watch, .mac:
+        case .ipad, .tv, .mac:
             return [1, 2].contains(scale)
+        case .watch:
+            return [2].contains(scale)
         case .car:
             return [2, 3].contains(scale)
         default:
