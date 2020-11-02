@@ -179,6 +179,15 @@ extension UIImage {
 
 For SwiftUI a Swift file will be created to use images from the code.
 
+#### Images with multiplue Idiom
+when you want to specify image for different platform usage (iPhone, iPad, Mac...etc), you should add extra `~` mark (add the platform type) to the component your figma file, for example add `~ipad` to the image:
+
+<img src="images/ios_image_idiom_figma.png" width="500"/>
+
+the result would be like the following screenshot in your xcode project:
+
+<img src="images/ios_image_idiom_xcode.png" width="500"/>
+
 #### Typography
 
 When your execute `figma-export typography` command `figma-export` generates 3 files:
