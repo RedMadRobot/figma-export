@@ -179,6 +179,11 @@ extension UIImage {
 
 For SwiftUI a Swift file will be created to use images from the code.
 
+#### Images with multiple idiom
+If name of an image contains idiom at the end (e.g. ~ipad), it will be exported like this:
+
+<img src="images/ios_image_idiom_xcode.png" />
+
 #### Typography
 
 When your execute `figma-export typography` command `figma-export` generates 3 files:
@@ -365,6 +370,10 @@ For `figma-export images`
 Your Figma file should contains a frame with `Illustrations` name which contains components for each illustration. You may change a frame name in a [config](Config.md) file by setting `common.images.figmaFrameName` property.
 
 If you support dark mode you must have two Figma files.
+
+If you want to specify image variants for different devices (iPhone, iPad, Mac etc.), add an extra `~` mark with idiom name. For example add `~ipad` postfix:
+
+<img src="images/ios_image_idiom_figma.png"/>
 
 For `figma-export typography`.
 

@@ -128,29 +128,32 @@ final class ImagesLoader {
         guard !imagesDict.isEmpty else {
             throw FigmaExportError.componentsNotFound
         }
-        
+
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
+        let scales = platform == .android ? [1, 2, 3, 1.5, 4.0] : [1, 2, 3]
 
         var images: [Double: [NodeId: ImagePath]] = [:]
-        images[1.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 1.0))
-        images[2.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 2.0))
-        images[3.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 3.0))
-        if platform == .android {
-            images[1.5] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 1.5))
-            images[4.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 4.0))
+        for scale in scales {
+            images[scale] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: scale))
         }
-        return imagesIds.map { imageId -> ImagePack in
-            let name = imagesDict[imageId]!.name
 
-            var scaledImages: [Double: Image] = [:]
-                
-            images.forEach { scale, idToPath in
-                let url = URL(string: idToPath[imageId]!)!
-                let image = Image(name: name, url: url, format: "png")
-                scaledImages[scale] = image
+        // Group images by name
+        let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom().name }
+
+        // Create image packs for groups
+        let imagePacks = groups.compactMap { _, components -> ImagePack? in
+            let packImages = components.flatMap { nodeId, component -> [Image] in
+                let (name, idiom) = component.name.parseNameAndIdiom()
+                return scales.compactMap { scale -> Image? in
+                    guard let urlString = images[scale]?[nodeId], let url = URL(string: urlString) else {
+                        return nil
+                    }
+                    return Image(name: name, scale: scale, idiom: idiom, url: url, format: "png")
+                }
             }
-            return ImagePack.individualScales(scaledImages)
+            return ImagePack.images(packImages)
         }
+        return imagePacks
     }
 
     // MARK: - Figma
@@ -164,4 +167,22 @@ final class ImagesLoader {
         let endpoint = ImageEndpoint(fileId: fileId, nodeIds: nodeIds, params: params)
         return try figmaClient.request(endpoint)
     }
+}
+
+// MARK: - String Utils
+
+private extension String {
+
+    func parseNameAndIdiom() -> (name: String, idiom: String) {
+        guard let regex = try? NSRegularExpression(pattern: "(.*)~(.*)$") else {
+            return (self, "")
+        }
+        guard let match = regex.firstMatch(in: self, range: NSRange(startIndex..., in: self)),
+              let name = Range(match.range(at: 1), in: self),
+              let idiom = Range(match.range(at: 2), in: self) else {
+            return (self, "")
+        }
+        return (String(self[name]), String(self[idiom]))
+    }
+
 }

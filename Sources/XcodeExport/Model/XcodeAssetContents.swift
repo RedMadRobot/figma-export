@@ -1,3 +1,14 @@
+
+enum XcodeAssetIdiom: String, Encodable {
+    case universal
+    case iphone
+    case ipad
+    case mac
+    case tv
+    case watch
+    case car
+}
+
 struct XcodeAssetContents: Encodable {
     struct Info: Encodable {
         let version = 1
@@ -27,7 +38,7 @@ struct XcodeAssetContents: Encodable {
         var color: ColorInfo
     }
     struct ImageData: Encodable {
-        let idiom = "universal"
+        let idiom: XcodeAssetIdiom
         var scale: String?
         var appearances: [DarkAppeareance]?
         let filename: String

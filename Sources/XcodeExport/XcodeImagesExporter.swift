@@ -11,13 +11,16 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
         // For each pair...
         try assets.forEach { pair in
+            guard let pair = pair.pairForXcode() else {
+                return
+            }
             let name = pair.light.name
 
             // Create imageset directory
             let imageDirURL = output.assetsFolderURL.appendingPathComponent("\(name).imageset")
 
             // Add image files to the directory
-            files.append(contentsOf: self.saveImagePair(pair, to: imageDirURL))
+            files.append(contentsOf: saveImagePair(pair, to: imageDirURL))
 
             // Add link to image files to
             // Assets.xcassets/Illustrations/***.imageset/Contents.json
@@ -54,6 +57,11 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
     private func makeFileURL(for image: Image, scale: Double?, dark: Bool = false) -> URL {
         var urlString = image.name
+
+        if let idiom = image.idiom, !idiom.isEmpty {
+            urlString.append("~\(idiom)")
+        }
+
         if dark {
             urlString.append("D")
         } else {
@@ -85,6 +93,8 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
             return images.map { scale, image -> FileContents in
                 saveImage(image, to: directory, scale: scale, dark: dark)
             }
+        case .images(let images):
+            return images.map { saveImage($0, to: directory, scale: $0.scale, dark: dark) }
         }
     }
 
@@ -119,6 +129,8 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
             return images.map { scale, image -> XcodeAssetContents.ImageData in
                 imageDataForImage(image, scale: scale, dark: dark)
             }
+        case .images(let images):
+            return images.map { imageDataForImage($0, scale: $0.scale, dark: dark) }
         }
     }
 
@@ -135,8 +147,11 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         if let scale = scale, let normalizedScale = normalizeScale(scale) {
             scaleString = normalizedScale
         }
-        
+
+        let idiom = image.idiom.flatMap { XcodeAssetIdiom(rawValue: $0) } ?? .universal
+
         return XcodeAssetContents.ImageData(
+            idiom: idiom,
             scale: scaleString == nil ? nil : "\(scaleString!)x",
             appearances: appearance,
             filename: imageURL.absoluteString
@@ -150,4 +165,68 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         formatter.numberStyle = .decimal
         return formatter.string(from: NSNumber(value: scale))
     }
+
+}
+
+private extension AssetPair where AssetType == ImagePack {
+
+    func pairForXcode() -> AssetPair<AssetType>? {
+        guard let light = light.packForXcode() else {
+            return nil
+        }
+        return AssetPair(light: light, dark: dark?.packForXcode())
+    }
+
+}
+
+private extension ImagePack {
+
+    func packForXcode() -> ImagePack? {
+        switch self {
+        case .singleScale(let image):
+            guard image.isValidForXcode(scale: image.scale) else {
+                return nil
+            }
+            return self
+        case .individualScales(let images):
+            let validImages = images.reduce(into: [Scale: Image]()) { result, info in
+                let (scale, image) = info
+                guard image.isValidForXcode(scale: scale) else {
+                    return
+                }
+                result[scale] = image
+            }
+            return .individualScales(validImages)
+        case .images(let images):
+            return .images(images.filter { $0.isValidForXcode(scale: $0.scale) })
+        }
+    }
+
+}
+
+private extension Image {
+
+    func isValidForXcode(scale: Double) -> Bool {
+        guard let idiom = idiom, !idiom.isEmpty else {
+            return true
+        }
+
+        guard let device = XcodeAssetIdiom(rawValue: idiom) else {
+            return false
+        }
+
+        switch device {
+        case .iphone:
+            return [1, 2, 3].contains(scale)
+        case .ipad, .tv, .mac:
+            return [1, 2].contains(scale)
+        case .watch:
+            return [2].contains(scale)
+        case .car:
+            return [2, 3].contains(scale)
+        default:
+            return true
+        }
+    }
+
 }

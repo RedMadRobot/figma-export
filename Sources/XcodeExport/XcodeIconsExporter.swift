@@ -26,10 +26,12 @@ final public class XcodeIconsExporter: XcodeImagesExporterBase {
             ))
             
             let preservesVector = output.preservesVectorRepresentation?.first(where: { $0 == image.name }) != nil
+
+            let idiom = image.idiom.flatMap({ XcodeAssetIdiom(rawValue: $0) }) ?? .universal
             
             // Assets.xcassets/Icons/***.imageset/Contents.json
             let contents = XcodeAssetContents(
-                icons: [XcodeAssetContents.ImageData(filename: "\(image.name).\(image.format)")],
+                icons: [XcodeAssetContents.ImageData(idiom: idiom, filename: "\(image.name).\(image.format)")],
                 preservesVectorRepresentation: preservesVector
             )
             let encoder = JSONEncoder()
