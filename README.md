@@ -179,10 +179,10 @@ extension UIImage {
 
 For SwiftUI a Swift file will be created to use images from the code.
 
-#### Images with multiplue Idiom
+#### Images with multiple idiom
 If name of an image contains idiom at the end (e.g. ~ipad), it will be exported like this:
 
-<img src="images/ios_image_idiom_figma.png" />
+<img src="images/ios_image_idiom_xcode.png" />
 
 #### Typography
 
