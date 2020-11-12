@@ -31,14 +31,14 @@ final class ImagesLoader {
                 frameName: iconsFrameName,
                 params: SVGParams(),
                 filter: filter
-            ).map { ImagePack.singleScale($0) }
+            )
         case (.ios, _):
             return try _loadImages(
                 fileId: params.figma.lightFileId,
                 frameName: iconsFrameName,
                 params: PDFParams(),
                 filter: filter
-            ).map { ImagePack.singleScale($0) }
+            )
         }
     }
 
@@ -62,23 +62,20 @@ final class ImagesLoader {
                 darkImages
             )
         default:
-            let light = try _loadImages(
+            let lightPacks = try _loadImages(
                 fileId: params.figma.lightFileId,
                 frameName: imagesFrameName,
                 params: SVGParams(),
                 filter: filter)
             
-            let dark = try params.figma.darkFileId.map {
+            let darkPacks = try params.figma.darkFileId.map {
                 try _loadImages(
                     fileId: $0,
                     frameName: imagesFrameName,
                     params: SVGParams(),
                     filter: filter)
             }
-            return (
-                light.map { ImagePack.singleScale($0) },
-                dark?.map { ImagePack.singleScale($0) }
-            )
+            return (lightPacks, darkPacks)
         }
     }
 
@@ -102,7 +99,12 @@ final class ImagesLoader {
         return Dictionary(uniqueKeysWithValues: components.map { ($0.nodeId, $0) })
     }
 
-    private func _loadImages(fileId: String, frameName: String, params: FormatParams, filter: String? = nil) throws -> [Image] {
+    private func _loadImages(
+        fileId: String,
+        frameName: String,
+        params: FormatParams,
+        filter: String? = nil
+    ) throws -> [ImagePack] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
         
         guard !imagesDict.isEmpty else {
@@ -111,15 +113,22 @@ final class ImagesLoader {
         
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
         let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
-        
-        return imageIdToImagePath.map { (imageId, imagePath) -> Image in
-            let name = imagesDict[imageId]!.name
-            return Image(
-                name: name,
-                url: URL(string: imagePath)!,
-                format: params.format
-            )
+
+        // Group images by name
+        let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom().name }
+
+        // Create image packs for groups
+        let imagePacks = groups.compactMap { _, components -> ImagePack? in
+            let packImages = components.compactMap { nodeId, component -> Image? in
+                guard let urlString = imageIdToImagePath[nodeId], let url = URL(string: urlString) else {
+                    return nil
+                }
+                let (name, idiom) = component.name.parseNameAndIdiom()
+                return Image(name: name, scale: 1, idiom: idiom, url: url, format: params.format)
+            }
+            return ImagePack.images(packImages)
         }
+        return imagePacks
     }
 
     private func loadPNGImages(fileId: String, frameName: String, filter: String? = nil, platform: Platform) throws -> [ImagePack] {
