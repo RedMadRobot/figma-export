@@ -89,10 +89,6 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         switch pack {
         case .singleScale(let image):
             return [saveImage(image, to: directory, dark: dark)]
-        case .individualScales(let images):
-            return images.map { scale, image -> FileContents in
-                saveImage(image, to: directory, scale: scale, dark: dark)
-            }
         case .images(let images):
             return images.map { saveImage($0, to: directory, scale: $0.scale, dark: dark) }
         }
@@ -125,10 +121,6 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         switch pack {
         case .singleScale(let image):
             return [imageDataForImage(image, dark: dark)]
-        case .individualScales(let images):
-            return images.map { scale, image -> XcodeAssetContents.ImageData in
-                imageDataForImage(image, scale: scale, dark: dark)
-            }
         case .images(let images):
             return images.map { imageDataForImage($0, scale: $0.scale, dark: dark) }
         }
@@ -188,15 +180,6 @@ private extension ImagePack {
                 return nil
             }
             return self
-        case .individualScales(let images):
-            let validImages = images.reduce(into: [Scale: Image]()) { result, info in
-                let (scale, image) = info
-                guard image.isValidForXcode(scale: scale) else {
-                    return
-                }
-                result[scale] = image
-            }
-            return .individualScales(validImages)
         case .images(let images):
             return .images(images.filter { $0.isValidForXcode(scale: $0.scale) })
         }
