@@ -80,4 +80,10 @@ struct XcodeAssetContents: Encodable {
         self.images = images
         self.properties = nil
     }
+
+    init(images: [ImageData], properties: TemplateProperties? = nil) {
+        self.colors = nil
+        self.images = images
+        self.properties = properties
+    }
 }
