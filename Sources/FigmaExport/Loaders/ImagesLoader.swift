@@ -138,12 +138,12 @@ final class ImagesLoader {
         }
 
         // Group images by name
-        let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom().name }
+        let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom(platform: platform).name }
 
         // Create image packs for groups
         let imagePacks = groups.compactMap { _, components -> ImagePack? in
             let packImages = components.flatMap { nodeId, component -> [Image] in
-                let (name, idiom) = component.name.parseNameAndIdiom()
+                let (name, idiom) = component.name.parseNameAndIdiom(platform: platform)
                 return scales.compactMap { scale -> Image? in
                     guard let urlString = images[scale]?[nodeId], let url = URL(string: urlString) else {
                         return nil
@@ -173,16 +173,21 @@ final class ImagesLoader {
 
 private extension String {
 
-    func parseNameAndIdiom() -> (name: String, idiom: String) {
-        guard let regex = try? NSRegularExpression(pattern: "(.*)~(.*)$") else {
+    func parseNameAndIdiom(platform: Platform) -> (name: String, idiom: String) {
+        switch platform {
+        case .android:
             return (self, "")
+        case .ios:
+            guard let regex = try? NSRegularExpression(pattern: "(.*)~(.*)$") else {
+                return (self, "")
+            }
+            guard let match = regex.firstMatch(in: self, range: NSRange(startIndex..., in: self)),
+                  let name = Range(match.range(at: 1), in: self),
+                  let idiom = Range(match.range(at: 2), in: self) else {
+                return (self, "")
+            }
+            return (String(self[name]), String(self[idiom]))
         }
-        guard let match = regex.firstMatch(in: self, range: NSRange(startIndex..., in: self)),
-              let name = Range(match.range(at: 1), in: self),
-              let idiom = Range(match.range(at: 2), in: self) else {
-            return (self, "")
-        }
-        return (String(self[name]), String(self[idiom]))
     }
 
 }
