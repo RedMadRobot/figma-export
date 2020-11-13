@@ -3,6 +3,24 @@ import FigmaExportCore
 
 final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
+    public func export2(assets: [AssetPair<ImagePack>], append: Bool) throws -> [FileContents] {
+        // Generate assets
+        let assetsFolderURL = output.assetsFolderURL
+
+        // Generate metadata (Assets.xcassets/Illustrations/Contents.json)
+        let contentsFile = XcodeEmptyContents().makeFileContents(to: assetsFolderURL)
+
+        let imageAssetsFiles = try assets.flatMap { pair -> [FileContents] in
+            try pair.makeFileContents(to: assetsFolderURL)
+        }
+
+        // Generate extensions
+        let imageNames = assets.map { $0.light.name }
+        let extensionFiles = try generateExtensions(names: imageNames, append: append)
+
+        return [contentsFile] + imageAssetsFiles + extensionFiles
+    }
+
     public func export(assets: [AssetPair<ImagePack>], append: Bool) throws -> [FileContents] {
         var files: [FileContents] = []
 
@@ -154,6 +172,12 @@ private extension AssetPair where AssetType == ImagePack {
             return nil
         }
         return AssetPair(light: light, dark: dark?.packForXcode())
+    }
+
+    func makeFileContents(to directory: URL) throws -> [FileContents] {
+        let lightFiles = try light.makeFileContents(to: directory, preservesVector: nil, appearance: .light)
+        let darkFiles = try dark?.makeFileContents(to: directory, preservesVector: nil, appearance: .dark) ?? []
+        return lightFiles + darkFiles
     }
 
 }
