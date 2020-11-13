@@ -76,7 +76,7 @@ extension FigmaExportCommand {
                 swiftUIImageExtensionURL: ios.images.swiftUIImageSwift)
             
             let exporter = XcodeImagesExporter(output: output)
-            let localAndRemoteFiles = try exporter.export2(assets: images, append: filter != nil)
+            let localAndRemoteFiles = try exporter.export(assets: images, append: filter != nil)
             if filter == nil {
                 try? FileManager.default.removeItem(atPath: assetsURL.path)
             }

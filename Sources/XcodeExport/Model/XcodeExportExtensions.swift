@@ -109,6 +109,18 @@ extension ImagePack {
 
 }
 
+// MARK: AssetPair
+
+extension AssetPair where AssetType == ImagePack {
+
+    func makeFileContents(to directory: URL) throws -> [FileContents] {
+        let lightFiles = try light.makeFileContents(to: directory, preservesVector: nil, appearance: .light)
+        let darkFiles = try dark?.makeFileContents(to: directory, preservesVector: nil, appearance: .dark) ?? []
+        return lightFiles + darkFiles
+    }
+
+}
+
 // MARK: Image
 
 extension Image {
@@ -182,14 +194,6 @@ extension Image {
                 return true
             }
         }
-    }
-
-    /// Trims trailing zeros from scale value 1.0 → 1, 1.5 → 1.5, 3.0 → 3
-    private func normalizeScale(_ scale: Double) -> String? {
-        let formatter = NumberFormatter()
-        formatter.decimalSeparator = "."
-        formatter.numberStyle = .decimal
-        return formatter.string(from: NSNumber(value: scale))
     }
 
 }
