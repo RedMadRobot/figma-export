@@ -47,15 +47,6 @@ extension ImagePack {
                 return nil
             }
             return self
-        case .individualScales(let images):
-            let validImages = images.reduce(into: [Scale: Image]()) { result, info in
-                let (scale, image) = info
-                guard image.isValidForXcode(scale: scale) else {
-                    return
-                }
-                result[scale] = image
-            }
-            return .individualScales(validImages)
         case .images(let images):
             return .images(images.filter { $0.isValidForXcode(scale: $0.scale) })
         }
@@ -90,10 +81,6 @@ extension ImagePack {
         switch self {
         case .singleScale(let image):
             return [image.makeFileContents(to: directory, appearance: appearance)]
-        case .individualScales(let images):
-            return images.map { scale, image -> FileContents in
-                image.makeFileContents(to: directory, appearance: appearance)
-            }
         case .images(let images):
             return images.map { $0.makeFileContents(to: directory, appearance: appearance) }
         }
@@ -103,8 +90,6 @@ extension ImagePack {
         switch self {
         case .singleScale(let image):
             return [image.makeXcodeAssetContentsImageData(scale: image.scale)]
-        case .individualScales(let images):
-            return images.map { $1.makeXcodeAssetContentsImageData(scale: $0) }
         case .images(let images):
             return images.map { $0.makeXcodeAssetContentsImageData(scale: $0.scale) }
         }
