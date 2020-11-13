@@ -35,12 +35,12 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
                 data: data
             ))
         }
-        
+
         let imageNames = assets.map { $0.light.name }
-        
+
         let extensionFiles = try generateExtensions(names: imageNames, append: append)
         files.append(contentsOf: extensionFiles)
-        
+
         return files
     }
 
@@ -55,7 +55,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
     }
 
 
-    private func makeFileURL(for image: Image, scale: Double?, dark: Bool = false) -> URL {
+    private func makeFileURL(for image: Image, scale: Scale, dark: Bool = false) -> URL {
         var urlString = image.name
 
         if let idiom = image.idiom, !idiom.isEmpty {
@@ -67,7 +67,9 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         } else {
             urlString.append("L")
         }
-        if let scale = scale, let scaleString = normalizeScale(scale) {
+
+        let scaleValue = scale.value
+        if let scaleString = normalizeScale(scaleValue) {
             urlString.append("@\(scaleString)x")
         }
 
@@ -89,7 +91,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         pack.images.map { saveImage($0, to: directory, scale: $0.scale, dark: dark) }
     }
 
-    private func saveImage(_ image: Image, to directory: URL, scale: Double? = nil, dark: Bool) -> FileContents {
+    private func saveImage(_ image: Image, to directory: URL, scale: Scale, dark: Bool) -> FileContents {
 
         let imageURL = makeFileURL(for: image, scale: scale, dark: dark)
         let destination = Destination(directory: directory, file: imageURL)
@@ -116,7 +118,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         pack.images.map { imageDataForImage($0, scale: $0.scale, dark: dark) }
     }
 
-    private func imageDataForImage(_ image: Image, scale: Double? = nil, dark: Bool) -> XcodeAssetContents.ImageData {
+    private func imageDataForImage(_ image: Image, scale: Scale, dark: Bool) -> XcodeAssetContents.ImageData {
 
         var appearance: [XcodeAssetContents.DarkAppeareance]?
         if dark {
@@ -125,21 +127,16 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
 
         let imageURL = makeFileURL(for: image, scale: scale, dark: dark)
 
-        var scaleString: String?
-        if let scale = scale, let normalizedScale = normalizeScale(scale) {
-            scaleString = normalizedScale
-        }
-
         let idiom = image.idiom.flatMap { XcodeAssetIdiom(rawValue: $0) } ?? .universal
 
         return XcodeAssetContents.ImageData(
             idiom: idiom,
-            scale: scaleString == nil ? nil : "\(scaleString!)x",
+            scale: scale.string,
             appearances: appearance,
             filename: imageURL.absoluteString
         )
     }
-    
+
     /// Trims trailing zeros from scale value 1.0 → 1, 1.5 → 1.5, 3.0 → 3
     private func normalizeScale(_ scale: Double) -> String? {
         let formatter = NumberFormatter()

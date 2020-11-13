@@ -124,7 +124,7 @@ final class ImagesLoader {
                     return nil
                 }
                 let (name, idiom) = component.name.parseNameAndIdiom(platform: platform)
-                return Image(name: name, scale: 1, idiom: idiom, url: url, format: params.format)
+                return Image(name: name, scale: .all, idiom: idiom, url: url, format: params.format)
             }
             return ImagePack(name: packName, images: packImages, platform: platform)
         }
@@ -157,7 +157,7 @@ final class ImagesLoader {
                     guard let urlString = images[scale]?[nodeId], let url = URL(string: urlString) else {
                         return nil
                     }
-                    return Image(name: name, scale: scale, idiom: idiom, url: url, format: "png")
+                    return Image(name: name, scale: .individual(scale), idiom: idiom, url: url, format: "png")
                 }
             }
             return ImagePack(name: packName, images: packImages, platform: platform)

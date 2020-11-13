@@ -287,7 +287,7 @@ extension FigmaExportCommand {
         private func makeRemoteFiles(images: [Image], dark: Bool, outputDirectory: URL) -> [FileContents] {
             images.map { image -> FileContents in
                 let fileURL = URL(string: "\(image.name).\(image.format)")!
-                let scale = image.scale
+                let scale = image.scale.value
                 let dest = Destination(
                     directory: outputDirectory
                         .appendingPathComponent(dark ? "dark" : "light")

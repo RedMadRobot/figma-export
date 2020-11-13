@@ -6,6 +6,32 @@ enum Appearance {
     case dark
 }
 
+// MARK: Scale
+
+extension Scale {
+
+    var string: String? {
+        switch self {
+        case .all:
+            return nil
+        case .individual(let value):
+            guard let normalized = normalizeScale(value) else {
+                return nil
+            }
+            return "\(normalized)x"
+        }
+    }
+
+    /// Trims trailing zeros from scale value 1.0 → 1, 1.5 → 1.5, 3.0 → 3
+    private func normalizeScale(_ scale: Double) -> String? {
+        let formatter = NumberFormatter()
+        formatter.decimalSeparator = "."
+        formatter.numberStyle = .decimal
+        return formatter.string(from: NSNumber(value: scale))
+    }
+
+}
+
 // MARK: XcodeEmptyContents
 
 extension XcodeEmptyContents {
@@ -46,7 +72,7 @@ extension ImagePack {
         return xcodeImagePack
     }
 
-    func makeFileContents(to directory: URL, preservesVector: Bool?) throws -> [FileContents] {
+    func makeFileContents(to directory: URL, preservesVector: Bool?, appearance: Appearance? = nil) throws -> [FileContents] {
         try packForXcode()
             .flatMap { imagePack -> [FileContents] in
                 let name = imagePack.name
@@ -54,18 +80,20 @@ extension ImagePack {
 
                 let properties = { () -> XcodeAssetContents.TemplateProperties? in
                     if let preservesVector = preservesVector {
-                       return XcodeAssetContents.TemplateProperties(preservesVectorRepresentation: preservesVector ? true : nil)
+                        return XcodeAssetContents.TemplateProperties(
+                            preservesVectorRepresentation: preservesVector ? true : nil
+                        )
                     } else {
                         return nil
                     }
                 }()
 
                 let contentsFileContents = try XcodeAssetContents(
-                    images: imagePack.makeXcodeAssetContentsImageData(),
+                    images: imagePack.makeXcodeAssetContentsImageData(appearance: appearance),
                     properties: properties
                 ).makeFileContents(to: dirURL)
 
-                let imagesFileContents = imagePack.makeImageFileContents(to: dirURL)
+                let imagesFileContents = imagePack.makeImageFileContents(to: dirURL, appearance: appearance)
 
                 return imagesFileContents + [contentsFileContents]
             } ?? []
@@ -75,8 +103,8 @@ extension ImagePack {
         images.map { $0.makeFileContents(to: directory, appearance: appearance) }
     }
 
-    func makeXcodeAssetContentsImageData() -> [XcodeAssetContents.ImageData] {
-        images.map { $0.makeXcodeAssetContentsImageData(scale: $0.scale) }
+    func makeXcodeAssetContentsImageData(appearance: Appearance? = nil) -> [XcodeAssetContents.ImageData] {
+        images.map { $0.makeXcodeAssetContentsImageData(scale: $0.scale, appearance: appearance) }
     }
 
 }
@@ -85,42 +113,27 @@ extension ImagePack {
 
 extension Image {
 
-    func isValidForXcode(scale: Double) -> Bool {
-        guard let idiom = idiom, !idiom.isEmpty else {
-            return true
-        }
-
-        guard let device = XcodeAssetIdiom(rawValue: idiom) else {
-            return false
-        }
-
-        switch device {
-        case .iphone:
-            return [1, 2, 3].contains(scale)
-        case .ipad, .tv, .mac:
-            return [1, 2].contains(scale)
-        case .watch:
-            return [2].contains(scale)
-        case .car:
-            return [2, 3].contains(scale)
-        default:
-            return true
-        }
-    }
-
     func makeFileContents(to directory: URL, appearance: Appearance? = nil) -> FileContents {
         let fileURL = makeFileURL(scale: scale, appearance: appearance)
         let destination = Destination(directory: directory, file: fileURL)
         return FileContents(destination: destination, sourceURL: url)
     }
 
-    func makeXcodeAssetContentsImageData(scale: Double?) -> XcodeAssetContents.ImageData {
-        let filename = makeFileURL(scale: scale).absoluteString
+    func makeXcodeAssetContentsImageData(scale: Scale, appearance: Appearance? = nil) -> XcodeAssetContents.ImageData {
+        let filename = makeFileURL(scale: scale, appearance: appearance).absoluteString
         let xcodeIdiom = idiom.flatMap { XcodeAssetIdiom(rawValue: $0) } ?? .universal
-        return XcodeAssetContents.ImageData(idiom: xcodeIdiom, filename: filename)
+        let appearances = appearance.flatMap { $0 == .dark ? [XcodeAssetContents.DarkAppeareance()] : nil }
+        let scaleString = scale.string
+
+        return XcodeAssetContents.ImageData(
+            idiom: xcodeIdiom,
+            scale: scaleString,
+            appearances: appearances,
+            filename: filename
+        )
     }
 
-    func makeFileURL(scale: Double?, appearance: Appearance? = nil) -> URL {
+    private func makeFileURL(scale: Scale, appearance: Appearance? = nil) -> URL {
         var urlString = name
 
         if let idiom = idiom, !idiom.isEmpty {
@@ -136,11 +149,39 @@ extension Image {
             break
         }
 
-        if let scale = scale, let scaleString = normalizeScale(scale), scaleString != "1" {
-            urlString.append("@\(scaleString)x")
+        if let scaleString = scale.string {
+            urlString.append(scaleString)
         }
 
         return URL(string: urlString)!.appendingPathExtension(format)
+    }
+
+    fileprivate func isValidForXcode(scale: Scale) -> Bool {
+        switch scale {
+        case .all:
+            return true
+        case .individual(let value):
+            guard let idiom = idiom, !idiom.isEmpty else {
+                return true
+            }
+
+            guard let device = XcodeAssetIdiom(rawValue: idiom) else {
+                return false
+            }
+
+            switch device {
+            case .iphone:
+                return [1, 2, 3].contains(value)
+            case .ipad, .tv, .mac:
+                return [1, 2].contains(value)
+            case .watch:
+                return [2].contains(value)
+            case .car:
+                return [2, 3].contains(value)
+            default:
+                return true
+            }
+        }
     }
 
     /// Trims trailing zeros from scale value 1.0 → 1, 1.5 → 1.5, 3.0 → 3

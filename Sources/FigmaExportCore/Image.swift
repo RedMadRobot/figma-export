@@ -1,16 +1,30 @@
 import Foundation
 
+public enum Scale {
+    case all
+    case individual(_ value: Double)
+
+    public var value: Double {
+        switch self {
+        case .all:
+            return 1
+        case .individual(let value):
+            return value
+        }
+    }
+}
+
 public struct Image: Asset {
 
     public var name: String
-    public let scale: Double
+    public let scale: Scale
     public let format: String
     public let url: URL
     public let idiom: String?
 
     public var platform: Platform?
 
-    public init(name: String, scale: Double = 1, platform: Platform? = nil, idiom: String? = nil, url: URL, format: String) {
+    public init(name: String, scale: Scale = .all, platform: Platform? = nil, idiom: String? = nil, url: URL, format: String) {
         self.name = name
         self.scale = scale
         self.platform = platform
