@@ -222,15 +222,15 @@ extension FigmaExportCommand {
             // Download files to user's temp directory
             logger.info("Downloading remote files...")
             let remoteFiles = images.flatMap { asset -> [FileContents] in
-                let lightImageFiles = makeRemoteFiles(
+                let lightFiles = makeRemoteFiles(
                     images: asset.light.images,
                     dark: false,
                     outputDirectory: tempDirectoryURL
                 )
-                let darkImageFiles = asset.dark.flatMap { darkImagePack -> [FileContents] in
+                let darkFiles = asset.dark.flatMap { darkImagePack -> [FileContents] in
                     makeRemoteFiles(images: darkImagePack.images, dark: true, outputDirectory: tempDirectoryURL)
                 } ?? []
-                return lightImageFiles + darkImageFiles
+                return lightFiles + darkFiles
             }
             
             var localFiles = try fileDownloader.fetch(files: remoteFiles)
