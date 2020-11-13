@@ -293,10 +293,7 @@ extension FigmaExportCommand {
                         .appendingPathComponent(dark ? "dark" : "light")
                         .appendingPathComponent(String(scale))
                     , file: fileURL)
-                var file = FileContents(destination: dest, sourceURL: image.url)
-                file.scale = scale
-                file.dark = dark
-                return file
+                return FileContents(destination: dest, sourceURL: image.url, scale: scale, dark: dark)
             }
         }
     }
