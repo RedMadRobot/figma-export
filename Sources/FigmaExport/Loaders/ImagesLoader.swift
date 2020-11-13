@@ -115,7 +115,7 @@ final class ImagesLoader {
         let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
 
         // Group images by name
-        let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom().name }
+        let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom(platform: platform).name }
 
         // Create image packs for groups
         let imagePacks = groups.compactMap { _, components -> ImagePack? in
@@ -123,7 +123,7 @@ final class ImagesLoader {
                 guard let urlString = imageIdToImagePath[nodeId], let url = URL(string: urlString) else {
                     return nil
                 }
-                let (name, idiom) = component.name.parseNameAndIdiom()
+                let (name, idiom) = component.name.parseNameAndIdiom(platform: platform)
                 return Image(name: name, scale: 1, idiom: idiom, url: url, format: params.format)
             }
             return ImagePack.images(packImages)
