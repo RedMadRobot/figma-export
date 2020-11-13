@@ -118,7 +118,7 @@ final class ImagesLoader {
         let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom(platform: platform).name }
 
         // Create image packs for groups
-        let imagePacks = groups.compactMap { _, components -> ImagePack? in
+        let imagePacks = groups.compactMap { packName, components -> ImagePack? in
             let packImages = components.compactMap { nodeId, component -> Image? in
                 guard let urlString = imageIdToImagePath[nodeId], let url = URL(string: urlString) else {
                     return nil
@@ -126,7 +126,7 @@ final class ImagesLoader {
                 let (name, idiom) = component.name.parseNameAndIdiom(platform: platform)
                 return Image(name: name, scale: 1, idiom: idiom, url: url, format: params.format)
             }
-            return ImagePack.images(packImages)
+            return ImagePack(name: packName, images: packImages, platform: platform)
         }
         return imagePacks
     }
@@ -150,7 +150,7 @@ final class ImagesLoader {
         let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom(platform: platform).name }
 
         // Create image packs for groups
-        let imagePacks = groups.compactMap { _, components -> ImagePack? in
+        let imagePacks = groups.compactMap { packName, components -> ImagePack? in
             let packImages = components.flatMap { nodeId, component -> [Image] in
                 let (name, idiom) = component.name.parseNameAndIdiom(platform: platform)
                 return scales.compactMap { scale -> Image? in
@@ -160,7 +160,7 @@ final class ImagesLoader {
                     return Image(name: name, scale: scale, idiom: idiom, url: url, format: "png")
                 }
             }
-            return ImagePack.images(packImages)
+            return ImagePack(name: packName, images: packImages, platform: platform)
         }
         return imagePacks
     }

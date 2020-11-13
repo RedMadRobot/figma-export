@@ -5,8 +5,8 @@ final class AssetsProcessorTests: XCTestCase {
     
     func testProcessCamelCase() throws {
         let images = [
-            ImagePack.singleScale(Image(name: "ic_24_icon", url: URL(string: "1")!, format: "pdf")),
-            ImagePack.singleScale(Image(name: "ic_24_icon_name", url: URL(string: "2")!, format: "pdf")),
+            ImagePack(image: Image(name: "ic_24_icon", url: URL(string: "1")!, format: "pdf")),
+            ImagePack(image: Image(name: "ic_24_icon_name", url: URL(string: "2")!, format: "pdf"))
         ]
         
         let processor = ImagesProcessor(
@@ -23,8 +23,8 @@ final class AssetsProcessorTests: XCTestCase {
     
     func testProcessSnakeCase() throws {
         let images = [
-            ImagePack.singleScale(Image(name: "ic/24/Icon", url: URL(string: "1")!, format: "pdf")),
-            ImagePack.singleScale(Image(name: "ic/24/icon/name", url: URL(string: "2")!, format: "pdf")),
+            ImagePack(image: Image(name: "ic/24/Icon", url: URL(string: "1")!, format: "pdf")),
+            ImagePack(image: Image(name: "ic/24/icon/name", url: URL(string: "2")!, format: "pdf")),
         ]
         
         let processor = ImagesProcessor(
@@ -41,8 +41,8 @@ final class AssetsProcessorTests: XCTestCase {
     
     func testProcessWithValidateAndReplace() throws {
         let images = [
-            ImagePack.singleScale(Image(name: "ic_24_icon", url: URL(string: "1")!, format: "pdf")),
-            ImagePack.singleScale(Image(name: "ic_24_icon_name", url: URL(string: "2")!, format: "pdf")),
+            ImagePack(image: Image(name: "ic_24_icon", url: URL(string: "1")!, format: "pdf")),
+            ImagePack(image: Image(name: "ic_24_icon_name", url: URL(string: "2")!, format: "pdf")),
         ]
         
         let processor = ImagesProcessor(
@@ -61,7 +61,7 @@ final class AssetsProcessorTests: XCTestCase {
     
     func testProcessWithReplaceImageNameInSnakeCase() throws {
         let images = [
-            ImagePack.singleScale(Image(name: "32 - Profile", url: URL(string: "1")!, format: "pdf"))
+            ImagePack(image: Image(name: "32 - Profile", url: URL(string: "1")!, format: "pdf"))
         ]
         
         let processor = ImagesProcessor(
@@ -80,7 +80,7 @@ final class AssetsProcessorTests: XCTestCase {
     
     func testProcessWithReplaceImageName() throws {
         let images = [
-            ImagePack.singleScale(Image(name: "32 - Profile", url: URL(string: "1")!, format: "pdf"))
+            ImagePack(image: Image(name: "32 - Profile", url: URL(string: "1")!, format: "pdf"))
         ]
         
         let processor = ImagesProcessor(
@@ -99,7 +99,7 @@ final class AssetsProcessorTests: XCTestCase {
     
     func testProcessWithReplaceImageName2() throws {
         let images = [
-            ImagePack.singleScale(Image(name: "32 - Profile", url: URL(string: "1")!, format: "pdf"))
+            ImagePack(image: Image(name: "32 - Profile", url: URL(string: "1")!, format: "pdf"))
         ]
         
         let processor = ImagesProcessor(
@@ -118,7 +118,7 @@ final class AssetsProcessorTests: XCTestCase {
     
     func testProcessWithReplaceForInvalidAsssetName() throws {
         let images = [
-            ImagePack.singleScale(Image(name: "ic24", url: URL(string: "1")!, format: "pdf"))
+            ImagePack(image: Image(name: "ic24", url: URL(string: "1")!, format: "pdf"))
         ]
         
         let processor = ImagesProcessor(

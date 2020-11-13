@@ -41,15 +41,9 @@ extension XcodeAssetContents {
 extension ImagePack {
 
     func packForXcode() -> ImagePack? {
-        switch self {
-        case .singleScale(let image):
-            guard image.isValidForXcode(scale: image.scale) else {
-                return nil
-            }
-            return self
-        case .images(let images):
-            return .images(images.filter { $0.isValidForXcode(scale: $0.scale) })
-        }
+        var xcodeImagePack = self
+        xcodeImagePack.images = images.filter { $0.isValidForXcode(scale: $0.scale) }
+        return xcodeImagePack
     }
 
     func makeFileContents(to directory: URL, preservesVector: Bool?) throws -> [FileContents] {
@@ -78,21 +72,11 @@ extension ImagePack {
     }
 
     func makeImageFileContents(to directory: URL, appearance: Appearance? = nil) -> [FileContents] {
-        switch self {
-        case .singleScale(let image):
-            return [image.makeFileContents(to: directory, appearance: appearance)]
-        case .images(let images):
-            return images.map { $0.makeFileContents(to: directory, appearance: appearance) }
-        }
+        images.map { $0.makeFileContents(to: directory, appearance: appearance) }
     }
 
     func makeXcodeAssetContentsImageData() -> [XcodeAssetContents.ImageData] {
-        switch self {
-        case .singleScale(let image):
-            return [image.makeXcodeAssetContentsImageData(scale: image.scale)]
-        case .images(let images):
-            return images.map { $0.makeXcodeAssetContentsImageData(scale: $0.scale) }
-        }
+        images.map { $0.makeXcodeAssetContentsImageData(scale: $0.scale) }
     }
 
 }

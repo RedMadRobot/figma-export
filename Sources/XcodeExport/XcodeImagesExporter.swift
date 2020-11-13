@@ -86,12 +86,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
     }
 
     private func saveImagePack(pack: ImagePack, to directory: URL, dark: Bool = false) -> [FileContents] {
-        switch pack {
-        case .singleScale(let image):
-            return [saveImage(image, to: directory, dark: dark)]
-        case .images(let images):
-            return images.map { saveImage($0, to: directory, scale: $0.scale, dark: dark) }
-        }
+        pack.images.map { saveImage($0, to: directory, scale: $0.scale, dark: dark) }
     }
 
     private func saveImage(_ image: Image, to directory: URL, scale: Double? = nil, dark: Bool) -> FileContents {
@@ -118,12 +113,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
     }
 
     private func imageDataFromPack(_ pack: ImagePack, dark: Bool = false) -> [XcodeAssetContents.ImageData] {
-        switch pack {
-        case .singleScale(let image):
-            return [imageDataForImage(image, dark: dark)]
-        case .images(let images):
-            return images.map { imageDataForImage($0, scale: $0.scale, dark: dark) }
-        }
+        pack.images.map { imageDataForImage($0, scale: $0.scale, dark: dark) }
     }
 
     private func imageDataForImage(_ image: Image, scale: Double? = nil, dark: Bool) -> XcodeAssetContents.ImageData {
