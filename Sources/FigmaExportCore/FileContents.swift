@@ -33,27 +33,30 @@ public struct FileContents: Equatable {
     public var scale: Double = 1.0
     
     /// In-memory file
-    public init(destination: Destination, data: Data) {
+    public init(destination: Destination, data: Data, dark: Bool = false) {
         self.destination = destination
         self.data = data
         self.dataFile = nil
         self.sourceURL = nil
+        self.dark = dark
     }
     
     /// Remote file
-    public init(destination: Destination, sourceURL: URL) {
+    public init(destination: Destination, sourceURL: URL, dark: Bool = false) {
         self.destination = destination
         self.data = nil
         self.dataFile = nil
         self.sourceURL = sourceURL
+        self.dark = dark
     }
     
     /// On-disk file
-    public init(destination: Destination, dataFile: URL) {
+    public init(destination: Destination, dataFile: URL, dark: Bool = false) {
         self.destination = destination
         self.data = nil
         self.dataFile = dataFile
         self.sourceURL = nil
+        self.dark = dark
     }
     
     /// Make a copy of the FileContents with different file extension
