@@ -162,7 +162,7 @@ extension Image {
         }
 
         if let scaleString = scale.string {
-            urlString.append(scaleString)
+            urlString.append("@\(scaleString)")
         }
 
         return URL(string: urlString)!.appendingPathExtension(format)
