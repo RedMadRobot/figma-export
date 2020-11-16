@@ -12,11 +12,11 @@ common:
   # [optional]
   icons:
     # [optional] RegExp pattern for icon name validation before exporting. Use to validate icon name in Figma file
-    nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
+    nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_~]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
   # [optional]
   images:
     # [optional] RegExp pattern for image name validation before exporting. Use to validate image name in Figma file
-    nameValidateRegexp: '^(img)_([a-z0-9_]+)$' # RegExp pattern for: img_zero_empty, img_widget_large
+    nameValidateRegexp: '^(img)_([a-z0-9_~]+)$' # RegExp pattern for: img_zero_empty, img_widget_large
 
 # [optional] iOS export parameters
 ios:
