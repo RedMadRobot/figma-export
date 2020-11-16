@@ -73,29 +73,29 @@ extension ImagePack {
     }
 
     func makeFileContents(to directory: URL, preservesVector: Bool?, appearance: Appearance? = nil) throws -> [FileContents] {
-        try packForXcode()
+        let properties = { () -> XcodeAssetContents.TemplateProperties? in
+            if let preservesVector = preservesVector {
+                return XcodeAssetContents.TemplateProperties(
+                    preservesVectorRepresentation: preservesVector ? true : nil
+                )
+            } else {
+                return nil
+            }
+        }()
+
+        return try packForXcode()
             .flatMap { imagePack -> [FileContents] in
                 let name = imagePack.name
                 let dirURL = directory.appendingPathComponent("\(name).imageset")
-
-                let properties = { () -> XcodeAssetContents.TemplateProperties? in
-                    if let preservesVector = preservesVector {
-                        return XcodeAssetContents.TemplateProperties(
-                            preservesVectorRepresentation: preservesVector ? true : nil
-                        )
-                    } else {
-                        return nil
-                    }
-                }()
-
+                
                 let assetsContents = imagePack.makeXcodeAssetContentsImageData(appearance: appearance)
                 let contentsFileContents = try XcodeAssetContents(
                     images: assetsContents,
                     properties: properties
                 ).makeFileContents(to: dirURL)
-
+                
                 let files = imagePack.makeImageFileContents(to: dirURL, appearance: appearance)
-
+                
                 return files + [contentsFileContents]
             } ?? []
     }
