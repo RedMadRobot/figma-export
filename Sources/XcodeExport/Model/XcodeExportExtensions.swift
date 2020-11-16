@@ -88,14 +88,15 @@ extension ImagePack {
                     }
                 }()
 
+                let assetsContents = imagePack.makeXcodeAssetContentsImageData(appearance: appearance)
                 let contentsFileContents = try XcodeAssetContents(
-                    images: imagePack.makeXcodeAssetContentsImageData(appearance: appearance),
+                    images: assetsContents,
                     properties: properties
                 ).makeFileContents(to: dirURL)
 
-                let imagesFileContents = imagePack.makeImageFileContents(to: dirURL, appearance: appearance)
+                let files = imagePack.makeImageFileContents(to: dirURL, appearance: appearance)
 
-                return imagesFileContents + [contentsFileContents]
+                return files + [contentsFileContents]
             } ?? []
     }
 
@@ -113,10 +114,35 @@ extension ImagePack {
 
 extension AssetPair where AssetType == ImagePack {
 
-    func makeFileContents(to directory: URL) throws -> [FileContents] {
-        let lightFiles = try light.makeFileContents(to: directory, preservesVector: nil, appearance: .light)
-        let darkFiles = try dark?.makeFileContents(to: directory, preservesVector: nil, appearance: .dark) ?? []
-        return lightFiles + darkFiles
+    func makeFileContents(to directory: URL, preservesVector: Bool?) throws -> [FileContents] {
+        let name = light.name
+        let dirURL = directory.appendingPathComponent("\(name).imageset")
+
+        let lightPack = light.packForXcode()
+        let darkPack = dark?.packForXcode()
+
+        let properties = { () -> XcodeAssetContents.TemplateProperties? in
+            if let preservesVector = preservesVector {
+                return XcodeAssetContents.TemplateProperties(
+                    preservesVectorRepresentation: preservesVector ? true : nil
+                )
+            } else {
+                return nil
+            }
+        }()
+
+        let lightFiles = lightPack?.makeImageFileContents(to: dirURL, appearance: .light) ?? []
+        let darkFiles = darkPack?.makeImageFileContents(to: dirURL, appearance: .dark) ?? []
+
+        let lightAssetContents = lightPack?.makeXcodeAssetContentsImageData(appearance: .light) ?? []
+        let darkAssetContents = darkPack?.makeXcodeAssetContentsImageData(appearance: .dark) ?? []
+
+        let contentsFileContents = try XcodeAssetContents(
+            images: lightAssetContents + darkAssetContents,
+            properties: properties
+        ).makeFileContents(to: dirURL)
+
+        return [contentsFileContents] + lightFiles + darkFiles
     }
 
 }
