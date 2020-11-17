@@ -52,6 +52,14 @@ struct XcodeAssetContents: Encodable {
             case templateRenderingIntent = "template-rendering-intent"
             case preservesVectorRepresentation = "preserves-vector-representation"
         }
+
+        init?(preservesVectorRepresentation: Bool?) {
+            guard let preservesVectorRepresentation = preservesVectorRepresentation else {
+                return nil
+            }
+            self.preservesVectorRepresentation = preservesVectorRepresentation ? true : nil
+        }
+
     }
     
     let info = Info()
@@ -68,11 +76,7 @@ struct XcodeAssetContents: Encodable {
     init(icons: [ImageData], preservesVectorRepresentation: Bool = false) {
         self.colors = nil
         self.images = icons
-        if preservesVectorRepresentation {
-            self.properties = TemplateProperties(preservesVectorRepresentation: true)
-        } else {
-            self.properties = TemplateProperties(preservesVectorRepresentation: nil)
-        }
+        self.properties = TemplateProperties(preservesVectorRepresentation: preservesVectorRepresentation)
     }
 
     init(images: [ImageData]) {
