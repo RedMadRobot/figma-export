@@ -16,7 +16,10 @@ final class XcodeIconsExporterTests: XCTestCase {
     func testExport() throws {
         let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!)
         let exporter = XcodeIconsExporter(output: output)
-        let result = try exporter.export(assets: [image1, image2], append: false)
+        let result = try exporter.export(
+            icons: [ImagePack(image: image1), ImagePack(image: image2)],
+            append: false
+        )
         
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
@@ -54,7 +57,10 @@ final class XcodeIconsExporterTests: XCTestCase {
     func testExportInSeparateBundle() throws {
         let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!)
         let exporter = XcodeIconsExporter(output: output)
-        let result = try exporter.export(assets: [image1, image2], append: false)
+        let result = try exporter.export(
+            icons: [ImagePack(image: image1), ImagePack(image: image2)],
+            append: false
+        )
         
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
@@ -96,8 +102,11 @@ final class XcodeIconsExporterTests: XCTestCase {
     func testExportSwiftUI() throws {
         let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, swiftUIImageExtensionURL: URL(string: "~/Image+extension.swift")!)
         let exporter = XcodeIconsExporter(output: output)
-        let result = try exporter.export(assets: [image1, image2], append: false)
-        
+        let result = try exporter.export(
+            icons: [ImagePack(image: image1), ImagePack(image: image2)],
+            append: false
+        )
+
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
@@ -134,8 +143,11 @@ final class XcodeIconsExporterTests: XCTestCase {
     func testExportSwiftUIInSeparateBundle() throws {
         let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, swiftUIImageExtensionURL: URL(string: "~/Image+extension.swift")!)
         let exporter = XcodeIconsExporter(output: output)
-        let result = try exporter.export(assets: [image1, image2], append: false)
-        
+        let result = try exporter.export(
+            icons: [ImagePack(image: image1), ImagePack(image: image2)],
+            append: false
+        )
+
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))

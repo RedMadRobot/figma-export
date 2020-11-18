@@ -1,32 +1,32 @@
 {
   "images" : [
     {
-      "filename" : "imgZeroInternetL@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "filename" : "imgZeroInternet~ipadL@1x.png"
     },
     {
-      "filename" : "imgZeroInternetL@1x.png",
-      "idiom" : "universal",
-      "scale" : "1x"
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "filename" : "imgZeroInternet~ipadL@2x.png"
     },
     {
-      "filename" : "imgZeroInternetL@3x.png",
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "1x",
+      "filename" : "imgZeroInternetL@1x.png"
     },
     {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "imgZeroInternetD@2x.png",
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "imgZeroInternetL@2x.png"
     },
     {
+      "idiom" : "universal",
+      "scale" : "3x",
+      "filename" : "imgZeroInternetL@3x.png"
+    },
+    {
+      "idiom" : "universal",
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -34,10 +34,21 @@
         }
       ],
       "filename" : "imgZeroInternetD@1x.png",
-      "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "idiom" : "universal",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "imgZeroInternetD@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -45,12 +56,33 @@
         }
       ],
       "filename" : "imgZeroInternetD@3x.png",
-      "idiom" : "universal",
       "scale" : "3x"
+    },
+    {
+      "idiom" : "ipad",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "imgZeroInternet~ipadD@1x.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "ipad",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "imgZeroInternet~ipadD@2x.png",
+      "scale" : "2x"
     }
   ],
   "info" : {
-    "author" : "xcode",
-    "version" : 1
+    "version" : 1,
+    "author" : "xcode"
   }
 }

@@ -1,16 +1,30 @@
 import Foundation
 
+public enum Scale {
+    case all
+    case individual(_ value: Double)
+
+    public var value: Double {
+        switch self {
+        case .all:
+            return 1
+        case .individual(let value):
+            return value
+        }
+    }
+}
+
 public struct Image: Asset {
 
     public var name: String
-    public let scale: Double
+    public let scale: Scale
     public let format: String
     public let url: URL
     public let idiom: String?
 
     public var platform: Platform?
 
-    public init(name: String, scale: Double = 1, platform: Platform? = nil, idiom: String? = nil, url: URL, format: String) {
+    public init(name: String, scale: Scale = .all, platform: Platform? = nil, idiom: String? = nil, url: URL, format: String) {
         self.name = name
         self.scale = scale
         self.platform = platform
@@ -30,53 +44,29 @@ public struct Image: Asset {
     }
 }
 
-public enum ImagePack: Asset {
-
-    public typealias Scale = Double
-    
-    case singleScale(Image)
-    case images([Image])
-
-    public var single: Image {
-        switch self {
-        case .singleScale(let image):
-            return image
-        case .images:
-            fatalError("Unable to extract image from image pack")
-        }
-    }
-
+public struct ImagePack: Asset {
+    public var images: [Image]
     public var name: String {
-        get {
-            switch self {
-            case .singleScale(let image):
-                return image.name
-            case .images(let images):
-                return images.first!.name
+        didSet {
+            images = images.map { image -> Image in
+                var newImage = image
+                newImage.name = name
+                return newImage
             }
         }
-        set {
-            switch self {
-            case .singleScale(var image):
-                image.name = newValue
-                self = .singleScale(image)
-            case .images(let images):
-                let image = images.map { image -> Image in
-                    var newImage = image
-                    newImage.name = newValue
-                    return newImage
-                }
-                self = .images(image)
-            }
-        }
+    }
+    public var platform: Platform?
+
+    public init(name: String, images: [Image], platform: Platform? = nil) {
+        self.name = name
+        self.images = images
+        self.platform = platform
     }
 
-    public var platform: Platform? {
-        switch self {
-        case .singleScale(let image):
-            return image.platform
-        case .images(let images):
-            return images.first?.platform
-        }
+    public init(image: Image, platform: Platform? = nil) {
+        self.name = image.name
+        self.images = [image]
+        self.platform = platform
     }
+
 }

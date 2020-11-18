@@ -1,32 +1,54 @@
 {
   "images" : [
     {
-      "filename" : "imgZeroEmptyL@3x.png",
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "1x",
+      "filename" : "imgZeroEmptyL@1x.png"
     },
     {
-      "filename" : "imgZeroEmptyL@1x.png",
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "2x",
+      "filename" : "imgZeroEmptyL@2x.png"
     },
     {
-      "filename" : "imgZeroEmptyL@2x.png",
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "3x",
+      "filename" : "imgZeroEmptyL@3x.png"
     },
     {
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "filename" : "imgZeroEmpty~ipadL@1x.png"
+    },
+    {
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "filename" : "imgZeroEmpty~ipadL@2x.png"
+    },
+    {
+      "idiom" : "ipad",
       "appearances" : [
         {
           "appearance" : "luminosity",
           "value" : "dark"
         }
       ],
-      "filename" : "imgZeroEmptyD@2x.png",
-      "idiom" : "universal",
+      "filename" : "imgZeroEmpty~ipadD@1x.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "ipad",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "imgZeroEmpty~ipadD@2x.png",
       "scale" : "2x"
     },
     {
+      "idiom" : "universal",
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -34,10 +56,21 @@
         }
       ],
       "filename" : "imgZeroEmptyD@1x.png",
-      "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "idiom" : "universal",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "imgZeroEmptyD@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -45,12 +78,11 @@
         }
       ],
       "filename" : "imgZeroEmptyD@3x.png",
-      "idiom" : "universal",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "author" : "xcode",
-    "version" : 1
+    "version" : 1,
+    "author" : "xcode"
   }
 }

@@ -24,5 +24,6 @@ public extension UIImage {
     static var ic24DropdownUp: UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
     static var ic24FullscreenDisable: UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
     static var ic24FullscreenEnable: UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
+    static var ic24Profile: UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
     static var ic24ShareIos: UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
 }

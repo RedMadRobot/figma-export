@@ -76,7 +76,7 @@ extension FigmaExportCommand {
                 swiftUIImageExtensionURL: ios.icons.swiftUIImageSwift)
             
             let exporter = XcodeIconsExporter(output: output)
-            let localAndRemoteFiles = try exporter.export(assets: icons.map { $0.single }, append: filter != nil)
+            let localAndRemoteFiles = try exporter.export(icons: icons, append: filter != nil)
             if filter == nil {
                 try? FileManager.default.removeItem(atPath: assetsURL.path)
             }
@@ -128,11 +128,12 @@ extension FigmaExportCommand {
         
             // 3. Download SVG files to user's temp directory
             logger.info("Downloading remote files...")
-            let remoteFiles = icons.map { asset -> FileContents in
-                let image = asset.light
-                let fileURL = URL(string: "\(image.name).svg")!
-                let dest = Destination(directory: tempDirectoryURL, file: fileURL)
-                return FileContents(destination: dest, sourceURL: image.single.url)
+            let remoteFiles = icons.flatMap { asset -> [FileContents] in
+                asset.light.images.map { image -> FileContents in
+                    let fileURL = URL(string: "\(image.name).svg")!
+                    let dest = Destination(directory: tempDirectoryURL, file: fileURL)
+                    return FileContents(destination: dest, sourceURL: image.url)
+                }
             }
             var localFiles = try fileDownloader.fetch(files: remoteFiles)
             

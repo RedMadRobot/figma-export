@@ -33,50 +33,52 @@ public struct FileContents: Equatable {
     public var scale: Double = 1.0
     
     /// In-memory file
-    public init(destination: Destination, data: Data) {
+    public init(destination: Destination, data: Data, scale: Double = 1.0, dark: Bool = false) {
         self.destination = destination
         self.data = data
         self.dataFile = nil
         self.sourceURL = nil
+        self.scale = scale
+        self.dark = dark
     }
     
     /// Remote file
-    public init(destination: Destination, sourceURL: URL) {
+    public init(destination: Destination, sourceURL: URL, scale: Double = 1.0, dark: Bool = false) {
         self.destination = destination
         self.data = nil
         self.dataFile = nil
         self.sourceURL = sourceURL
+        self.scale = scale
+        self.dark = dark
     }
     
     /// On-disk file
-    public init(destination: Destination, dataFile: URL) {
+    public init(destination: Destination, dataFile: URL, scale: Double = 1.0, dark: Bool = false) {
         self.destination = destination
         self.data = nil
         self.dataFile = dataFile
         self.sourceURL = nil
+        self.scale = scale
+        self.dark = dark
     }
     
     /// Make a copy of the FileContents with different file extension
     /// - Parameter newExtension: New file extension
     public func changingExtension(newExtension: String) -> FileContents {
-        var newFile: FileContents
-        
-        let newFileURL = self.destination.file.deletingPathExtension().appendingPathExtension(newExtension)
-        let newDestination = Destination(directory: self.destination.directory, file: newFileURL)
+        let newFileURL = destination.file
+            .deletingPathExtension()
+            .appendingPathExtension(newExtension)
+
+        let newDestination = Destination(directory: destination.directory, file: newFileURL)
         
         if let sourceURL = sourceURL { // Remote file
-            newFile = FileContents(destination: newDestination, sourceURL: sourceURL)
+            return FileContents(destination: newDestination, sourceURL: sourceURL, scale: scale, dark: dark)
         } else if let dataFile = dataFile { // On-disk file
-            newFile = FileContents(destination: newDestination, dataFile: dataFile)
+            return FileContents(destination: newDestination, dataFile: dataFile, scale: scale, dark: dark)
         } else if let data = data { // In-memory file
-            newFile = FileContents(destination: newDestination, data: data)
+            return FileContents(destination: newDestination, data: data, scale: scale, dark: dark)
         } else {
             fatalError("Unable to change file extension.")
         }
-        
-        newFile.scale = self.scale
-        newFile.dark = self.dark
-        
-        return newFile
     }
 }
