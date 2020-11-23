@@ -150,7 +150,7 @@ extension FigmaExportCommand {
                 }
                 let darkFiles = asset.dark?.images.map { image -> FileContents in
                     let fileURL = URL(string: "\(image.name).svg")!
-                    let dest = Destination(directory: tempDirectoryLightURL, file: fileURL)
+                    let dest = Destination(directory: tempDirectoryDarkURL, file: fileURL)
                     return FileContents(destination: dest, sourceURL: image.url, dark: true)
                 } ?? []
                 return lightFiles + darkFiles
