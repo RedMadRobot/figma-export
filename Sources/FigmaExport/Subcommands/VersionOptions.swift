@@ -7,7 +7,7 @@ struct VersionOptions: ParsableArguments {
     
     func validate() throws {
         if version {
-            print("0.18.2")
+            print("0.18.3")
             throw ExitCode.success
         }
     }
