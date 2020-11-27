@@ -45,6 +45,9 @@ struct FigmaExportCommand: ParsableCommand {
         defaultSubcommand: ExportColors.self
     )
     
+    @OptionGroup()
+    var versionOptions: VersionOptions
+    
 }
 
 FigmaExportCommand.main()

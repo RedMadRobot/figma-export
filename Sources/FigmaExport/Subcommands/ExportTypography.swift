@@ -15,8 +15,8 @@ extension FigmaExportCommand {
             abstract: "Exports typography from Figma",
             discussion: "Exports font styles from Figma to Xcode")
         
-        @Option(name: .shortAndLong, default: "figma-export.yaml", help: "An input YAML file with figma and platform properties.")
-        var input: String
+        @Option(name: .shortAndLong, help: "An input YAML file with figma and platform properties.")
+        var input: String = "figma-export.yaml"
         
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
@@ -35,7 +35,7 @@ extension FigmaExportCommand {
             let loader = TextStylesLoader(figmaClient: client, params: params.figma)
             let textStyles = try loader.load()
 
-            if let ios = params.ios {//
+            if let ios = params.ios {
                 logger.info("Saving text styles...")
                 try exportXcodeTextStyles(textStyles: textStyles, iosParams: ios, logger: logger)
                 logger.info("Done!")
