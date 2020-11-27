@@ -3,6 +3,7 @@ import Foundation
 
 enum FigmaExportError: LocalizedError {
     
+    case invalidFileName(String)
     case stylesNotFound
     case componentsNotFound
     case accessTokenNotFound
@@ -10,6 +11,8 @@ enum FigmaExportError: LocalizedError {
     
     var errorDescription: String? {
         switch self {
+        case .invalidFileName(let name):
+            return "File name is invalid: \(name)"
         case .stylesNotFound:
             return "Color/Text styles not found in the Figma file. Have you published Styles to the Library?"
         case .componentsNotFound:

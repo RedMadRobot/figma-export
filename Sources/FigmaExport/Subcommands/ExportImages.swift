@@ -221,14 +221,14 @@ extension FigmaExportCommand {
             
             // Download files to user's temp directory
             logger.info("Downloading remote files...")
-            let remoteFiles = images.flatMap { asset -> [FileContents] in
-                let lightFiles = makeRemoteFiles(
+            let remoteFiles = try images.flatMap { asset -> [FileContents] in
+                let lightFiles = try makeRemoteFiles(
                     images: asset.light.images,
                     dark: false,
                     outputDirectory: tempDirectoryURL
                 )
-                let darkFiles = asset.dark.flatMap { darkImagePack -> [FileContents] in
-                    makeRemoteFiles(images: darkImagePack.images, dark: true, outputDirectory: tempDirectoryURL)
+                let darkFiles = try asset.dark.flatMap { darkImagePack -> [FileContents] in
+                    try makeRemoteFiles(images: darkImagePack.images, dark: true, outputDirectory: tempDirectoryURL)
                 } ?? []
                 return lightFiles + darkFiles
             }
@@ -284,9 +284,12 @@ extension FigmaExportCommand {
         ///   - images: Dictionary of images. Key = scale, value = image info
         ///   - dark: Dark mode?
         ///   - outputDirectory: URL of the output directory
-        private func makeRemoteFiles(images: [Image], dark: Bool, outputDirectory: URL) -> [FileContents] {
-            images.map { image -> FileContents in
-                let fileURL = URL(string: "\(image.name).\(image.format)")!
+        private func makeRemoteFiles(images: [Image], dark: Bool, outputDirectory: URL) throws -> [FileContents] {
+            try images.map { image -> FileContents in
+                guard let name = image.name.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+                   let fileURL = URL(string: "\(name).\(image.format)") else {
+                    throw FigmaExportError.invalidFileName(image.name)
+                }
                 let scale = image.scale.value
                 let dest = Destination(
                     directory: outputDirectory
