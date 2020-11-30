@@ -205,8 +205,8 @@ extension FigmaExportCommand {
             }
             try fileWritter.write(files: localFiles)
             
-            try FileManager.default.removeItem(at: tempDirectoryLightURL)
-            try FileManager.default.removeItem(at: tempDirectoryDarkURL)
+            try? FileManager.default.removeItem(at: tempDirectoryLightURL)
+            try? FileManager.default.removeItem(at: tempDirectoryDarkURL)
         }
         
         private func exportAndroidRasterImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params, logger: Logger) throws {
@@ -275,7 +275,7 @@ extension FigmaExportCommand {
             }
             try fileWritter.write(files: localFiles)
             
-            try FileManager.default.removeItem(at: tempDirectoryURL)
+            try? FileManager.default.removeItem(at: tempDirectoryURL)
         }
         
         /// Make array of remote FileContents for downloading images
