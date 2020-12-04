@@ -29,7 +29,7 @@ extension FigmaExportCommand {
             }
             let fileData = fileContents.data(using: .utf8)
             
-            let destination = FileManager.default.currentDirectoryPath + "/" + "figma-export.yaml"
+            let destination = FileManager.default.currentDirectoryPath + "/" + FigmaExportOptions.input
             try? FileManager.default.removeItem(atPath: destination)
             let success = FileManager.default.createFile(atPath: destination, contents: fileData, attributes: nil)
             if success {

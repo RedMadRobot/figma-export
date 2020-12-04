@@ -14,19 +14,13 @@ extension FigmaExportCommand {
             commandName: "colors",
             abstract: "Exports colors from Figma",
             discussion: "Exports light and dark color palette from Figma to Xcode / Android Studio project")
-        
-        @Option(name: .shortAndLong, help: "An input YAML file with figma and platform properties.")
-        var input: String = "figma-export.yaml"
+
+        @OptionGroup
+        var options: FigmaExportOptions
         
         func run() throws {
+            let (accessToken, params) = options.unpack
             let logger = Logger(label: "com.redmadrobot.figma-export")
-            
-            let reader = ParamsReader(inputPath: input)
-            let params = try reader.read()
-
-            guard let accessToken = ProcessInfo.processInfo.environment["FIGMA_PERSONAL_TOKEN"] else {
-                throw FigmaExportError.accessTokenNotFound
-            }
             let client = FigmaClient(accessToken: accessToken)
 
             logger.info("Using FigmaExport to export colors.")
