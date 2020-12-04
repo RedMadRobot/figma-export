@@ -15,18 +15,12 @@ extension FigmaExportCommand {
             abstract: "Exports typography from Figma",
             discussion: "Exports font styles from Figma to Xcode")
         
-        @Option(name: .shortAndLong, help: "An input YAML file with figma and platform properties.")
-        var input: String = "figma-export.yaml"
+        @OptionGroup
+        var options: FigmaExportOptions
         
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
-            
-            let reader = ParamsReader(inputPath: input)
-            let params = try reader.read()
-
-            guard let accessToken = ProcessInfo.processInfo.environment["FIGMA_PERSONAL_TOKEN"] else {
-                throw FigmaExportError.accessTokenNotFound
-            }
+            let (accessToken, params) = options.unpack
             let client = FigmaClient(accessToken: accessToken)
 
             logger.info("Using FigmaExport to export typography.")

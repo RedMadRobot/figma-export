@@ -15,8 +15,8 @@ extension FigmaExportCommand {
             abstract: "Exports images from Figma",
             discussion: "Exports images from Figma to Xcode / Android Studio project")
 
-        @Option(name: .shortAndLong, help: "An input YAML file with figma and platform properties.")
-        var input: String = "figma-export.yaml"
+        @OptionGroup
+        var options: FigmaExportOptions
         
         @Argument(help: """
         [Optional] Name of the images to export. For example \"img/login\" to export \
@@ -26,14 +26,8 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
+            let (accessToken, params) = options.unpack
             let logger = Logger(label: "com.redmadrobot.figma-export")
-
-            let reader = ParamsReader(inputPath: input)
-            let params = try reader.read()
-
-            guard let accessToken = ProcessInfo.processInfo.environment["FIGMA_PERSONAL_TOKEN"] else {
-                throw FigmaExportError.accessTokenNotFound
-            }
             let client = FigmaClient(accessToken: accessToken)
 
             if let _ = params.ios {

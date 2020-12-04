@@ -115,4 +115,12 @@ struct Params: Decodable {
     let common: Common?
     let ios: iOS?
     let android: Android?
+
+    static var placeholder: Params {
+        Params(
+            figma: Params.Figma(lightFileId: "", darkFileId: nil),
+            common: nil,
+            ios: nil,
+            android: nil)
+    }
 }
