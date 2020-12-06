@@ -20,16 +20,15 @@ extension FigmaExportCommand {
         
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
-            let (accessToken, params) = options.unpack
-            let client = FigmaClient(accessToken: accessToken)
+            let client = FigmaClient(accessToken: options.accessToken)
 
             logger.info("Using FigmaExport to export typography.")
 
             logger.info("Fetching text styles. Please wait...")
-            let loader = TextStylesLoader(figmaClient: client, params: params.figma)
+            let loader = TextStylesLoader(figmaClient: client, params: options.params.figma)
             let textStyles = try loader.load()
 
-            if let ios = params.ios {
+            if let ios = options.params.ios {
                 logger.info("Saving text styles...")
                 try exportXcodeTextStyles(textStyles: textStyles, iosParams: ios, logger: logger)
                 logger.info("Done!")

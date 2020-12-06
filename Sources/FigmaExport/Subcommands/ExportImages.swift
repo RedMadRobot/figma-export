@@ -26,18 +26,17 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
-            let (accessToken, params) = options.unpack
             let logger = Logger(label: "com.redmadrobot.figma-export")
-            let client = FigmaClient(accessToken: accessToken)
+            let client = FigmaClient(accessToken: options.accessToken)
 
-            if let _ = params.ios {
+            if let _ = options.params.ios {
                 logger.info("Using FigmaExport to export images to Xcode project.")
-                try exportiOSImages(client: client, params: params, logger: logger)
+                try exportiOSImages(client: client, params: options.params, logger: logger)
             }
 
-            if let _ = params.android {
+            if let _ = options.params.android {
                 logger.info("Using FigmaExport to export images to Android Studio project.")
-                try exportAndroidImages(client: client, params: params, logger: logger)
+                try exportAndroidImages(client: client, params: options.params, logger: logger)
             }
         }
 
