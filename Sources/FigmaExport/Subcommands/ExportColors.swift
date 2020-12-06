@@ -19,23 +19,22 @@ extension FigmaExportCommand {
         var options: FigmaExportOptions
         
         func run() throws {
-            let (accessToken, params) = options.unpack
             let logger = Logger(label: "com.redmadrobot.figma-export")
-            let client = FigmaClient(accessToken: accessToken)
+            let client = FigmaClient(accessToken: options.accessToken)
 
             logger.info("Using FigmaExport to export colors.")
 
             logger.info("Fetching colors. Please wait...")
-            let loader = ColorsLoader(figmaClient: client, params: params.figma)
+            let loader = ColorsLoader(figmaClient: client, params: options.params.figma)
             let colors = try loader.load()
 
-            if let ios = params.ios {
+            if let ios = options.params.ios {
                 logger.info("Processing colors...")
                 let processor = ColorsProcessor(
                     platform: .ios,
-                    nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
-                    nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
-                    nameStyle: params.ios?.colors.nameStyle
+                    nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
+                    nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
+                    nameStyle: options.params.ios?.colors.nameStyle
                 )
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
 
@@ -45,12 +44,12 @@ extension FigmaExportCommand {
                 logger.info("Done!")
             }
             
-            if let android = params.android {
+            if let android = options.params.android {
                 logger.info("Processing colors...")
                 let processor = ColorsProcessor(
                     platform: .android,
-                    nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
-                    nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
+                    nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
+                    nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
                     nameStyle: .snakeCase
                 )
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()

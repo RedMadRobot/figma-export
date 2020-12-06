@@ -10,11 +10,7 @@ struct FigmaExportOptions: ParsableArguments {
 
     var accessToken: String = ""
 
-    var params = Params.placeholder
-
-    var unpack: (String, Params) {
-        (accessToken, params)
-    }
+    var params: Params!
 
     mutating func validate() throws {
         guard let token = ProcessInfo.processInfo.environment["FIGMA_PERSONAL_TOKEN"] else {
@@ -27,7 +23,7 @@ struct FigmaExportOptions: ParsableArguments {
     private func readParams(at path: String) throws -> Params {
         let url = URL(fileURLWithPath: path)
         let data = try Data(contentsOf: url)
-        let string = String(data: data, encoding: .utf8)!
+        let string = String(decoding: data, as: UTF8.self)
         let decoder = YAMLDecoder()
         return try decoder.decode(Params.self, from: string)
     }
