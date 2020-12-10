@@ -8,7 +8,7 @@ struct FigmaExportOptions: ParsableArguments {
     @Option(name: .shortAndLong, help: "An input YAML file with figma and platform properties.")
     var input: String = Self.input
 
-    var accessToken: String = ""
+    var accessToken: String!
 
     var params: Params!
 
