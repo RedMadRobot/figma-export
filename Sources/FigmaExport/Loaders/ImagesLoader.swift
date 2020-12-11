@@ -173,8 +173,12 @@ final class ImagesLoader {
     }
 
     private func loadImages(fileId: String, nodeIds: [NodeId], params: FormatParams) throws -> [NodeId: ImagePath] {
-        let endpoint = ImageEndpoint(fileId: fileId, nodeIds: nodeIds, params: params)
-        return try figmaClient.request(endpoint)
+        let batchSize = 100
+        let keysWithValues: [(NodeId, ImagePath)] = try nodeIds.chunked(into: batchSize)
+            .map { ImageEndpoint(fileId: fileId, nodeIds: $0, params: params) }
+            .map { try figmaClient.request($0) }
+            .flatMap { $0.map { ($0, $1) } }
+        return Dictionary(uniqueKeysWithValues: keysWithValues)
     }
 }
 
@@ -199,4 +203,14 @@ private extension String {
         }
     }
 
+}
+
+// MARK: - Array Utils
+
+private extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
+        }
+    }
 }
