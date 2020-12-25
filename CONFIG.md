@@ -82,6 +82,8 @@ ios:
     swiftUIImageSwift: "./Source/Image+extension_icons.swift"
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)
     imageSwift: "./Example/Source/UIImage+extension_icons.swift"
+    # Asset render mode: "template", "orignal" or "default". Default value is "template".
+    renderMode: default
 
   # Parameters for exporting images
   images:

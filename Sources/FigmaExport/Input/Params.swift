@@ -57,6 +57,8 @@ struct Params: Decodable {
             
             let imageSwift: URL?
             let swiftUIImageSwift: URL?
+            
+            let renderMode: XcodeRenderMode?
         }
 
         struct Images: Decodable {

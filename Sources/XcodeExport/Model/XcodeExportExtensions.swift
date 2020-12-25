@@ -72,8 +72,13 @@ extension ImagePack {
         return xcodeImagePack
     }
 
-    func makeFileContents(to directory: URL, preservesVector: Bool?, appearance: Appearance? = nil) throws -> [FileContents] {
-        let properties = XcodeAssetContents.TemplateProperties(preservesVectorRepresentation: preservesVector)
+    func makeFileContents(
+        to directory: URL,
+        preservesVector: Bool?,
+        renderMode: XcodeRenderMode,
+        appearance: Appearance? = nil) throws -> [FileContents] {
+        
+        let properties = XcodeAssetContents.Properties(preserveVectorData: preservesVector, renderMode: renderMode)
 
         return try packForXcode()
             .flatMap { imagePack -> [FileContents] in
@@ -106,7 +111,7 @@ extension ImagePack {
 
 extension AssetPair where AssetType == ImagePack {
 
-    func makeFileContents(to directory: URL, preservesVector: Bool?) throws -> [FileContents] {
+    func makeFileContents(to directory: URL, preservesVector: Bool?, renderMode: XcodeRenderMode? = nil) throws -> [FileContents] {
         let name = light.name
         let dirURL = directory.appendingPathComponent("\(name).imageset")
 
@@ -119,7 +124,7 @@ extension AssetPair where AssetType == ImagePack {
         let lightAssetContents = lightPack?.makeXcodeAssetContentsImageData(appearance: .light) ?? []
         let darkAssetContents = darkPack?.makeXcodeAssetContentsImageData(appearance: .dark) ?? []
 
-        let properties = XcodeAssetContents.TemplateProperties(preservesVectorRepresentation: preservesVector)
+        let properties = XcodeAssetContents.Properties(preserveVectorData: preservesVector, renderMode: renderMode)
 
         let contentsFileContents = try XcodeAssetContents(
             images: lightAssetContents + darkAssetContents,
@@ -144,7 +149,7 @@ extension Image {
     func makeXcodeAssetContentsImageData(scale: Scale, appearance: Appearance? = nil) -> XcodeAssetContents.ImageData {
         let filename = makeFileURL(scale: scale, appearance: appearance).absoluteString
         let xcodeIdiom = idiom.flatMap { XcodeAssetIdiom(rawValue: $0) } ?? .universal
-        let appearances = appearance.flatMap { $0 == .dark ? [XcodeAssetContents.DarkAppeareance()] : nil }
+        let appearances = appearance.flatMap { $0 == .dark ? [XcodeAssetContents.DarkAppearance()] : nil }
         let scaleString = scale.string
 
         return XcodeAssetContents.ImageData(

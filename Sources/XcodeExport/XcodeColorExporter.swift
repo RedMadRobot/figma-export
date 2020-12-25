@@ -70,7 +70,7 @@ final public class XcodeColorExporter {
             if let darkColor = colorPair.dark {
                 colors.append(
                     XcodeAssetContents.ColorData(
-                        appearances: [XcodeAssetContents.DarkAppeareance()],
+                        appearances: [XcodeAssetContents.DarkAppearance()],
                         color: XcodeAssetContents.ColorInfo(
                             components: darkColor.toHexComponents())
                     )

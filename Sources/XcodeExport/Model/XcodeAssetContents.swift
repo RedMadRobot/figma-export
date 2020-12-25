@@ -1,3 +1,4 @@
+import FigmaExportCore
 
 enum XcodeAssetIdiom: String, Encodable {
     case universal
@@ -14,7 +15,7 @@ struct XcodeAssetContents: Encodable {
         let version = 1
         let author = "xcode"
     }
-    struct DarkAppeareance: Encodable {
+    struct DarkAppearance: Encodable {
         let appearance = "luminosity"
         let value = "dark"
     }
@@ -34,18 +35,18 @@ struct XcodeAssetContents: Encodable {
     }
     struct ColorData: Encodable {
         let idiom = "universal"
-        var appearances: [DarkAppeareance]?
+        var appearances: [DarkAppearance]?
         var color: ColorInfo
     }
     struct ImageData: Encodable {
         let idiom: XcodeAssetIdiom
         var scale: String?
-        var appearances: [DarkAppeareance]?
+        var appearances: [DarkAppearance]?
         let filename: String
     }
     
-    struct TemplateProperties: Encodable {
-        let templateRenderingIntent = "template"
+    struct Properties: Encodable {
+        let templateRenderingIntent: String?
         let preservesVectorRepresentation: Bool?
         
         enum CodingKeys: String, CodingKey {
@@ -53,11 +54,18 @@ struct XcodeAssetContents: Encodable {
             case preservesVectorRepresentation = "preserves-vector-representation"
         }
 
-        init?(preservesVectorRepresentation: Bool?) {
-            guard let preservesVectorRepresentation = preservesVectorRepresentation else {
+        init?(preserveVectorData: Bool?, renderMode: XcodeRenderMode?) {
+            preservesVectorRepresentation = preserveVectorData == true ? true : nil
+            
+            if let renderMode = renderMode, (renderMode == .original || renderMode == .template) {
+                templateRenderingIntent = renderMode.rawValue
+            } else {
+                templateRenderingIntent = nil
+            }
+            
+            if preservesVectorRepresentation == nil && templateRenderingIntent == nil {
                 return nil
             }
-            self.preservesVectorRepresentation = preservesVectorRepresentation ? true : nil
         }
 
     }
@@ -65,7 +73,7 @@ struct XcodeAssetContents: Encodable {
     let info = Info()
     let colors: [ColorData]?
     let images: [ImageData]?
-    let properties: TemplateProperties?
+    let properties: Properties?
     
     init(colors: [ColorData]) {
         self.colors = colors
@@ -73,10 +81,10 @@ struct XcodeAssetContents: Encodable {
         self.properties = nil
     }
     
-    init(icons: [ImageData], preservesVectorRepresentation: Bool = false) {
+    init(icons: [ImageData], preserveVectorData: Bool = false, renderMode: XcodeRenderMode) {
         self.colors = nil
         self.images = icons
-        self.properties = TemplateProperties(preservesVectorRepresentation: preservesVectorRepresentation)
+        self.properties = Properties(preserveVectorData: preserveVectorData, renderMode: renderMode)
     }
 
     init(images: [ImageData]) {
@@ -85,7 +93,7 @@ struct XcodeAssetContents: Encodable {
         self.properties = nil
     }
 
-    init(images: [ImageData], properties: TemplateProperties? = nil) {
+    init(images: [ImageData], properties: Properties? = nil) {
         self.colors = nil
         self.images = images
         self.properties = properties

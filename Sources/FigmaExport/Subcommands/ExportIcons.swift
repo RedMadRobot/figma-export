@@ -65,7 +65,8 @@ extension FigmaExportCommand {
                 assetsInMainBundle: ios.xcassetsInMainBundle,
                 preservesVectorRepresentation: ios.icons.preservesVectorRepresentation,
                 uiKitImageExtensionURL: ios.icons.imageSwift,
-                swiftUIImageExtensionURL: ios.icons.swiftUIImageSwift)
+                swiftUIImageExtensionURL: ios.icons.swiftUIImageSwift,
+                renderMode: ios.icons.renderMode)
             
             let exporter = XcodeIconsExporter(output: output)
             let localAndRemoteFiles = try exporter.export(icons: icons, append: filter != nil)

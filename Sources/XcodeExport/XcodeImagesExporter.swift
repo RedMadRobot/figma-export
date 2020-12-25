@@ -11,7 +11,7 @@ final public class XcodeImagesExporter: XcodeImagesExporterBase {
         let contentsFile = XcodeEmptyContents().makeFileContents(to: assetsFolderURL)
 
         let imageAssetsFiles = try assets.flatMap { pair -> [FileContents] in
-            try pair.makeFileContents(to: assetsFolderURL, preservesVector: nil)
+            try pair.makeFileContents(to: assetsFolderURL, preservesVector: nil, renderMode: nil)
         }
 
         // Generate extensions
