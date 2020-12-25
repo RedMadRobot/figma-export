@@ -35,7 +35,7 @@ struct FigmaExportCommand: ParsableCommand {
         commandName: "figma-export",
         abstract: "Exports resources from Figma",
         discussion: "Exports resources (colors, icons, images) from Figma to Xcode / Android Studio project",
-        version: "0.18.5",
+        version: "0.18.6",
         subcommands: [
             ExportColors.self,
             ExportIcons.self,
