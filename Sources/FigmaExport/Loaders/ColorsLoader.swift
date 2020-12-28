@@ -34,8 +34,8 @@ final class ColorsLoader {
     /// Соотносит массив Style и Node чтобы получит массив Color
     private func nodesAndStylesToColors(nodes: [NodeId: Node], styles: [Style]) -> [Color] {
         return styles.compactMap { style -> Color? in
-            guard let node = nodes[style.nodeId] else { return nil}
-            guard let fill = node.document.fills.first else { return nil }
+            guard let node = nodes[style.nodeId] else { return nil }
+            guard let fill = node.document.fills.first?.asSolid else { return nil }
             let alpha: Double = fill.opacity ?? fill.color.a
             let platform = Platform(rawValue: style.description)
             
