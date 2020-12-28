@@ -38,10 +38,37 @@ public struct Document: Decodable {
     public let style: TypeStyle?
 }
 
+// https://www.figma.com/plugin-docs/api/Paint/
 public struct Paint: Decodable {
-    public let type: String
+    public let type: PaintType
+    public let opacity: Double?
+    public let color: PaintColor?
+
+    public var asSolid: SolidPaint? {
+        return SolidPaint(self)
+    }
+}
+
+public enum PaintType: String, Decodable {
+    case solid = "SOLID"
+    case image = "IMAGE"
+    case rectangle = "RECTANGLE"
+    case gradientLinear = "GRADIENT_LINEAR"
+    case gradientRadial = "GRADIENT_RADIAL"
+    case gradientAngular = "GRADIENT_ANGULAR"
+    case gradientDiamond = "GRADIENT_DIAMOND"
+}
+
+public struct SolidPaint: Decodable {
     public let opacity: Double?
     public let color: PaintColor
+
+    public init?(_ paint: Paint) {
+        guard paint.type == .solid else { return nil }
+        guard let color = paint.color else { return nil }
+        self.opacity = paint.opacity
+        self.color = color
+    }
 }
 
 public struct PaintColor: Decodable {
