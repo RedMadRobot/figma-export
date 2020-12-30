@@ -30,12 +30,12 @@ extension FigmaExportCommand {
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
             if let _ = options.params.ios {
-                logger.info("Using FigmaExport to export images to Xcode project.")
+                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export images to Xcode project.")
                 try exportiOSImages(client: client, params: options.params, logger: logger)
             }
 
             if let _ = options.params.android {
-                logger.info("Using FigmaExport to export images to Android Studio project.")
+                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export images to Android Studio project.")
                 try exportAndroidImages(client: client, params: options.params, logger: logger)
             }
         }
@@ -90,6 +90,8 @@ extension FigmaExportCommand {
                 logger.error("Unable to add some file references to Xcode project")
             }
             
+            checkForUpdate(logger: logger)
+            
             logger.info("Done!")
         }
         
@@ -118,6 +120,8 @@ extension FigmaExportCommand {
             case .png, .webp:
                 try exportAndroidRasterImages(images: images, params: params, logger: logger)
             }
+            
+            checkForUpdate(logger: logger)
             
             logger.info("Done!")
         }

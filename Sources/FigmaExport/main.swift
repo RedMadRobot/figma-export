@@ -27,6 +27,8 @@ enum FigmaExportError: LocalizedError {
 
 struct FigmaExportCommand: ParsableCommand {
     
+    static let version = "0.18.7"
+    
     static let svgFileConverter = VectorDrawableConverter()
     static let fileWritter = FileWritter()
     static let fileDownloader = FileDownloader()
@@ -35,7 +37,7 @@ struct FigmaExportCommand: ParsableCommand {
         commandName: "figma-export",
         abstract: "Exports resources from Figma",
         discussion: "Exports resources (colors, icons, images) from Figma to Xcode / Android Studio project",
-        version: "0.18.7",
+        version: version,
         subcommands: [
             ExportColors.self,
             ExportIcons.self,

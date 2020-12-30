@@ -22,7 +22,7 @@ extension FigmaExportCommand {
             let logger = Logger(label: "com.redmadrobot.figma-export")
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
-            logger.info("Using FigmaExport to export colors.")
+            logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
 
             logger.info("Fetching colors. Please wait...")
             let loader = ColorsLoader(figmaClient: client, params: options.params.figma)
@@ -41,6 +41,8 @@ extension FigmaExportCommand {
                 logger.info("Exporting colors to Xcode project...")
                 try exportXcodeColors(colorPairs: colorPairs, iosParams: ios, logger: logger)
 
+                checkForUpdate(logger: logger)
+                
                 logger.info("Done!")
             }
             
@@ -57,6 +59,8 @@ extension FigmaExportCommand {
                 logger.info("Exporting colors to Android Studio project...")
                 try exportAndroidColors(colorPairs: colorPairs, androidParams: android)
 
+                checkForUpdate(logger: logger)
+                
                 logger.info("Done!")
             }
         }

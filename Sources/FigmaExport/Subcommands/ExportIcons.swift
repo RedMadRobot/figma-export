@@ -30,12 +30,12 @@ extension FigmaExportCommand {
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
             
             if options.params.ios != nil {
-                logger.info("Using FigmaExport to export icons to Xcode project.")
+                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Xcode project.")
                 try exportiOSIcons(client: client, params: options.params, logger: logger)
             }
             
             if options.params.android != nil {
-                logger.info("Using FigmaExport to export icons to Android Studio project.")
+                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Android Studio project.")
                 try exportAndroidIcons(client: client, params: options.params, logger: logger)
             }
         }
@@ -91,6 +91,8 @@ extension FigmaExportCommand {
             } catch {
                 logger.error("Unable to add some file references to Xcode project")
             }
+            
+            checkForUpdate(logger: logger)
             
             logger.info("Done!")
         }
@@ -167,6 +169,8 @@ extension FigmaExportCommand {
             logger.info("Writting files to Android Studio project...")
             try fileWritter.write(files: localFiles)
 
+            checkForUpdate(logger: logger)
+            
             logger.info("Done!")
         }
     }

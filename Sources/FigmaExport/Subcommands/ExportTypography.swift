@@ -22,7 +22,7 @@ extension FigmaExportCommand {
             let logger = Logger(label: "com.redmadrobot.figma-export")
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
-            logger.info("Using FigmaExport to export typography.")
+            logger.info("Using FigmaExport \(FigmaExportCommand.version) to export typography.")
 
             logger.info("Fetching text styles. Please wait...")
             let loader = TextStylesLoader(figmaClient: client, params: options.params.figma)
