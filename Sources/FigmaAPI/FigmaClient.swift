@@ -7,11 +7,11 @@ final public class FigmaClient {
     private let baseURL = URL(string: "https://api.figma.com/v1/")!
     
     private let session: URLSession
-    
-    public init(accessToken: String) {
+
+    public init(accessToken: String, timeout: TimeInterval?) {
         let config = URLSessionConfiguration.ephemeral
         config.httpAdditionalHeaders = ["X-Figma-Token": accessToken]
-        config.timeoutIntervalForRequest = 30
+        config.timeoutIntervalForRequest = timeout ?? 30
         session = URLSession(configuration: config, delegate: nil, delegateQueue: .main)
     }
     

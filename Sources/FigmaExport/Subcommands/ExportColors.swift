@@ -20,7 +20,7 @@ extension FigmaExportCommand {
         
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
-            let client = FigmaClient(accessToken: options.accessToken)
+            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
             logger.info("Using FigmaExport to export colors.")
 

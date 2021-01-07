@@ -15,6 +15,8 @@ figma:
   lightFileId: shPilWnVdJfo10YF12345
   # [optional] Identifier of the file containing dark color palette and dark images.
   darkFileId: KfF6DnJTWHGZzC912345
+  # [optional] Figma API request timeout, default is 30s
+  # timeout: 30
 
 # [optional] Common export parameters
 common:

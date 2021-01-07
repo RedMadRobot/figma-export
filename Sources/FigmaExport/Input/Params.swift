@@ -8,6 +8,7 @@ struct Params: Decodable {
     struct Figma: Decodable {
         let lightFileId: String
         let darkFileId: String?
+        let timeout: TimeInterval?
     }
     
     struct Common: Decodable {
