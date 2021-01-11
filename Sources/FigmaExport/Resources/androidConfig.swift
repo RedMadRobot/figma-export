@@ -5,7 +5,7 @@ figma:
   lightFileId: shPilWnVdJfo10YF12345
   # [optional] Identifier of the file containing dark color palette and dark images.
   darkFileId: KfF6DnJTWHGZzC912345
-  # [optional] Figma API request timeout, default is 30s
+  # [optional] Figma API request timeout. The default value of this property is 30 (seconds). If you have a lot of resources to export set this value to 60 or more to give Figma API more time to prepare resources for exporting.
   # timeout: 30
 
 # [optional] Android export parameters
