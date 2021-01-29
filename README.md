@@ -13,7 +13,7 @@ Command line utility to export colors, typography, icons and images from Figma t
 * icon — Figma's component with small black vector image
 * image — Figma's components with colorized image (Light/Dark)
 
-The utility supports Dark Mode and Swift UI.
+The utility supports Dark Mode and SwiftUI.
 
 Why we've developed this utility:
 * Figma doesn't support exporting colors and images to Xcode / Android Studio. Manual export takes a long time.
