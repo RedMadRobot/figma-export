@@ -223,14 +223,11 @@ struct LabelStyle {
         var baselineOffset: CGFloat = .zero
         
         if let lineHeight = lineHeight {
-            let lineHeightMultiple = lineHeight / font.lineHeight
-            paragraphStyle.lineHeightMultiple = lineHeightMultiple
-            
-            baselineOffset = 1 / lineHeightMultiple
-            
             let scaledLineHeight: CGFloat = fontMetrics?.scaledValue(for: lineHeight) ?? lineHeight
             paragraphStyle.minimumLineHeight = scaledLineHeight
             paragraphStyle.maximumLineHeight = scaledLineHeight
+            
+            baselineOffset = (scaledLineHeight - font.lineHeight) / 4.0
         }
         
         return [
