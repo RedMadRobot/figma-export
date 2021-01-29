@@ -48,6 +48,7 @@ struct Params: Decodable {
             
             let colorSwift: URL?
             let swiftuiColorSwift: URL?
+            let modifyXcodeproj: Bool
         }
         
         struct Icons: Decodable {
@@ -75,6 +76,7 @@ struct Params: Decodable {
             let swiftUIFontSwift: URL?
             let generateLabels: Bool
             let labelsDirectory: URL?
+            let modifyXcodeproj: Bool
         }
         
         let xcodeprojPath: String

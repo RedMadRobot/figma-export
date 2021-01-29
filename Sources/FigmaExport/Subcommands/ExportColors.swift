@@ -79,7 +79,8 @@ extension FigmaExportCommand {
                 assetsColorsURL: colorsURL,
                 assetsInMainBundle: iosParams.xcassetsInMainBundle,
                 colorSwiftURL: iosParams.colors.colorSwift,
-                swiftuiColorSwiftURL: iosParams.colors.swiftuiColorSwift)
+                swiftuiColorSwiftURL: iosParams.colors.swiftuiColorSwift,
+                modifyXcodeproj: iosParams.colors.modifyXcodeproj)
 
             let exporter = XcodeColorExporter(output: output)
             let files = exporter.export(colorPairs: colorPairs)
@@ -89,7 +90,9 @@ extension FigmaExportCommand {
             }
             
             try fileWritter.write(files: files)
-            
+
+            guard iosParams.colors.modifyXcodeproj else { return }
+
             do {
                 let xcodeProject = try XcodeProjectWritter(xcodeProjPath: iosParams.xcodeprojPath, target: iosParams.target)
                 try files.forEach { file in

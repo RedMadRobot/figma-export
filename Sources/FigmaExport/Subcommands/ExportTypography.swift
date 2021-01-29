@@ -66,6 +66,8 @@ extension FigmaExportCommand {
                 ))
             }
             try fileWritter.write(files: files)
+
+            guard iosParams.typography.modifyXcodeproj else { return }
             
             do {
                 let xcodeProject = try XcodeProjectWritter(xcodeProjPath: iosParams.xcodeprojPath, target: iosParams.target)
