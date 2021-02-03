@@ -39,9 +39,9 @@ public enum DynamicTypeStyle: String, RawRepresentable {
     }
 }
 
-public struct TextStyle {
-    
-    public let name: String
+public struct TextStyle: Asset {
+    public var name: String
+    public var platform: Platform?
     public let fontName: String
     public let fontSize: Double
     public let fontStyle: DynamicTypeStyle?
@@ -50,6 +50,7 @@ public struct TextStyle {
 
     public init(
         name: String,
+        platform: Platform? = nil,
         fontName: String,
         fontSize: Double,
         fontStyle: DynamicTypeStyle?,
@@ -62,5 +63,15 @@ public struct TextStyle {
         self.fontStyle = fontStyle
         self.lineHeight = lineHeight
         self.letterSpacing = letterSpacing
+    }
+
+    // MARK: Hashable
+
+    public static func == (lhs: TextStyle, rhs: TextStyle) -> Bool {
+        return lhs.name == rhs.name
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
     }
 }

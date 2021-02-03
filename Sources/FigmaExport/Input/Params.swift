@@ -78,6 +78,9 @@ struct Params: Decodable {
             let swiftUIFontSwift: URL?
             let generateLabels: Bool
             let labelsDirectory: URL?
+            let nameValidateRegexp: String?
+            let nameReplaceRegexp: String?
+            let nameStyle: NameStyle
         }
 
         let xcodeprojPath: String

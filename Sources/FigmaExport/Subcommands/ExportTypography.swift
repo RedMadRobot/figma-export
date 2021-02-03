@@ -29,8 +29,16 @@ extension FigmaExportCommand {
             let textStyles = try loader.load()
 
             if let ios = options.params.ios {
+                logger.info("Processing typography...")
+                let processor = TypographyProcessor(
+                    platform: .ios,
+                    nameValidateRegexp: options.params.ios?.typography.nameValidateRegexp,
+                    nameReplaceRegexp: options.params.ios?.typography.nameReplaceRegexp,
+                    nameStyle: options.params.ios?.typography.nameStyle
+                )
+                let processedTextStyles = try processor.process(assets: textStyles).get()
                 logger.info("Saving text styles...")
-                try exportXcodeTextStyles(textStyles: textStyles, iosParams: ios, logger: logger)
+                try exportXcodeTextStyles(textStyles: processedTextStyles, iosParams: ios, logger: logger)
                 logger.info("Done!")
             }
         }
