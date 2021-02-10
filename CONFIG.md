@@ -26,6 +26,10 @@ common:
     nameValidateRegexp: '^[a-zA-Z_]+$' # RegExp pattern for: background, background_primary, widget_primary_background
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'color_$1'
+    # [optional] Extract light and dark mode colors from the lightFileId specified in the figma params.
+    useSingleFile: true
+    # [optional] If useSingleFile is true, customize the suffix to denote a dark mode color. Defaults to '_dark'
+    darkModeSuffix: '_dark'
   # [optional]
   icons:
     # [optional] Name of the Figma's frame where icons components are located
@@ -57,7 +61,7 @@ ios:
   # Parameters for exporting colors
   colors:
     # How to export colors? Use .xcassets and UIColor extension (useColorAssets = true) or extension only (useColorAssets = false)
-    useColorAssets: True
+    useColorAssets: true
     # [required if useColorAssets: True] Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
     # Color name style: camelCase or snake_case

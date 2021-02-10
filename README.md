@@ -352,7 +352,7 @@ If a color, icon or image is unique for iOS or Android platform, it should conta
 
 For `figma-export colors`
 
-If you support dark mode your figma project must contains two files. One should contains a dark color palette, and the another light color palette. Names and number of the colors must matches.
+By default, if you support dark mode your figma project must contains two files. One should contains a dark color palette, and the another light color palette. Names and number of the colors must matches. If you would like to specify light and dark colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode colors by adding a suffix like `_dark`. The suffix is also configurable. See [config](Config.md) for more information in the colors section.
 
 Example
 
