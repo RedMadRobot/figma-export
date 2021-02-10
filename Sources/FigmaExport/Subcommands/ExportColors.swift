@@ -25,7 +25,7 @@ extension FigmaExportCommand {
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
 
             logger.info("Fetching colors. Please wait...")
-            let loader = ColorsLoader(figmaClient: client, params: options.params.figma)
+            let loader = ColorsLoader(figmaClient: client, figmaParams: options.params.figma, colorParams: options.params.common?.colors)
             let colors = try loader.load()
 
             if let ios = options.params.ios {
@@ -34,7 +34,9 @@ extension FigmaExportCommand {
                     platform: .ios,
                     nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
                     nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
-                    nameStyle: options.params.ios?.colors.nameStyle
+                    nameStyle: options.params.ios?.colors.nameStyle,
+                    useSingleFile: options.params.common?.colors?.useSingleFile,
+                    darkModeSuffix: options.params.common?.colors?.darkModeSuffix
                 )
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
 
@@ -52,7 +54,9 @@ extension FigmaExportCommand {
                     platform: .android,
                     nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
                     nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
-                    nameStyle: .snakeCase
+                    nameStyle: .snakeCase,
+                    useSingleFile: options.params.common?.colors?.useSingleFile,
+                    darkModeSuffix: options.params.common?.colors?.darkModeSuffix
                 )
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
 

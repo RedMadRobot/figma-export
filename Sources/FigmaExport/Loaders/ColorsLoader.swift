@@ -7,16 +7,32 @@ final class ColorsLoader {
     typealias Output = (light: [Color], dark: [Color]?)
     
     private let figmaClient: FigmaClient
-    private let params: Params.Figma
+    private let figmaParams: Params.Figma
+    private let colorParams: Params.Common.Colors?
 
-    init(figmaClient: FigmaClient, params: Params.Figma) {
+    init(figmaClient: FigmaClient, figmaParams: Params.Figma, colorParams: Params.Common.Colors?) {
         self.figmaClient = figmaClient
-        self.params = params
+        self.figmaParams = figmaParams
+        self.colorParams = colorParams
     }
     
     func load() throws -> (light: [Color], dark: [Color]?) {
-        let colors = try loadColors(fileId: params.lightFileId)
-        let darkSuffix = "_dark"
+        if let useSingleFile = colorParams?.useSingleFile, useSingleFile {
+            return try loadColorsFromSingleFile()
+        } else {
+            return try loadColorsFromLightAndDarkFile()
+        }
+    }
+
+    private func loadColorsFromLightAndDarkFile() throws -> (light: [Color], dark: [Color]?) {
+        let lightColors = try loadColors(fileId: figmaParams.lightFileId)
+        let darkColors = try figmaParams.darkFileId.map { try loadColors(fileId: $0) }
+        return (lightColors, darkColors)
+    }
+
+    private func loadColorsFromSingleFile() throws -> (light: [Color], dark: [Color]?) {
+        let colors = try loadColors(fileId: figmaParams.lightFileId)
+        let darkSuffix = colorParams?.darkModeSuffix ?? "_dark"
         let lightColors = colors
             .filter { !$0.name.hasSuffix(darkSuffix)}
         let darkColors = colors

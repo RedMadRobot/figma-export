@@ -15,6 +15,8 @@ struct Params: Decodable {
         struct Colors: Decodable {
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
+            let useSingleFile: Bool?
+            let darkModeSuffix: String?
         }
         
         struct Icons: Decodable {
