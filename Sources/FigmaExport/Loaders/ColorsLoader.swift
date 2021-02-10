@@ -15,8 +15,17 @@ final class ColorsLoader {
     }
     
     func load() throws -> (light: [Color], dark: [Color]?) {
-        let lightColors = try loadColors(fileId: params.lightFileId)
-        let darkColors = try params.darkFileId.map { try loadColors(fileId: $0) }
+        let colors = try loadColors(fileId: params.lightFileId)
+        let darkSuffix = "_dark"
+        let lightColors = colors
+            .filter { !$0.name.hasSuffix(darkSuffix)}
+        let darkColors = colors
+            .filter { $0.name.hasSuffix(darkSuffix) }
+            .map { color -> Color in
+                var newColor = color
+                newColor.name = String(color.name.dropLast(darkSuffix.count))
+                return newColor
+            }
         return (lightColors, darkColors)
     }
     
