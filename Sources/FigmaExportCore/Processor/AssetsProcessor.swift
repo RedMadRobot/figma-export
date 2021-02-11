@@ -1,3 +1,5 @@
+import Foundation
+
 /// Process asset name
 public protocol AssetNameProcessable {
     
@@ -29,10 +31,31 @@ public extension AssetNameProcessable {
     }
 }
 
+public struct AssetResult<Success, Error> {
+    public var result: Result<Success, Swift.Error>
+    public var warning: AssetsValidatorWarning?
+
+    public func get() throws -> Success {
+        return try result.get()
+    }
+
+    public static func failure(_ error: Swift.Error) -> AssetResult<Success, Error> {
+        return AssetResult(result: .failure(error), warning: nil)
+    }
+
+    public static func success(_ data: Success) -> AssetResult<Success, Error> {
+        return AssetResult(result: .success(data), warning: nil)
+    }
+
+    public static func success(_ data: Success, warning: AssetsValidatorWarning?) -> AssetResult<Success, Error> {
+        return AssetResult(result: .success(data), warning: warning)
+    }
+}
+
 public protocol AssetsProcessable: AssetNameProcessable {
     associatedtype AssetType: Asset
-    typealias ProcessingPairResult = Result<[AssetPair<AssetType>], ErrorGroup>
-    typealias ProcessingResult = Result<[AssetType], ErrorGroup>
+    typealias ProcessingPairResult = AssetResult<[AssetPair<AssetType>], ErrorGroup>
+    typealias ProcessingResult = AssetResult<[AssetType], ErrorGroup>
     
     var platform: Platform { get }
     
@@ -177,10 +200,13 @@ public extension AssetsProcessable {
     }
 
     private func validateAndMakePairs(light: [AssetType], dark: [AssetType]) -> ProcessingPairResult {
+
+        // Error checks
+
         var errors = ErrorGroup()
 
         // 1. countMismatch
-        if light.count != dark.count {
+        if light.count < dark.count {
             errors.all.append(AssetsValidatorError.countMismatch(light: light.count, dark: dark.count))
         }
 
@@ -211,20 +237,13 @@ public extension AssetsProcessable {
             }
         }
 
-        // 3. lightAssetNotFoundInDarkPalette
-
-        let lightElements = lightSet.subtracting(darkSet)
-        if !lightElements.isEmpty {
-            errors.all.append(AssetsValidatorError.lightAssetsNotFoundInDarkPalette(assets: lightElements.map { $0.name }))
-        }
-
-        // 4. darkAssetNotFoundInLightPalette
+        // 3. darkAssetNotFoundInLightPalette
         let darkElements = darkSet.subtracting(lightSet)
         if !darkElements.isEmpty {
             errors.all.append(AssetsValidatorError.darkAssetsNotFoundInLightPalette(assets: darkElements.map { $0.name }))
         }
 
-        // 5. descriptionMismatch
+        // 4. descriptionMismatch
         lightSet.forEach { asset in
             if let platform = asset.platform {
                 let dark = darkSet.first(where: { $0.name == asset.name })
@@ -238,8 +257,18 @@ public extension AssetsProcessable {
             return .failure(errors)
         }
 
+        // Warning checks
+
+        var warning: AssetsValidatorWarning?
+
+        // 1. lightAssetNotFoundInDarkPalette
+        let lightElements = lightSet.subtracting(darkSet)
+        if !lightElements.isEmpty {
+            warning = .lightAssetsNotFoundInDarkPalette(assets: lightElements.map { $0.name })
+        }
+
         let pairs = makeSortedAssetPairs(lightSet: lightSet, darkSet: darkSet)
-        return .success(pairs)
+        return .success(pairs, warning: warning)
     }
     
     private func makeSortedAssetPairs(lightSet: Set<AssetType>) -> [AssetPair<Self.AssetType>] {
@@ -270,9 +299,12 @@ public extension AssetsProcessable {
             .filter { $0.platform == platform || $0.platform == nil }
             .sorted { $0.name < $1.name }
 
-        let darkColors = darkSet
-            .filter { $0.platform == platform || $0.platform == nil }
-            .sorted { $0.name < $1.name }
+        // After validations, only those dark colors in the light color palette are allowed
+        // However the dark array may be smaller than the light array
+        // Create a same size array of dark colors so we can zip in the next step
+        let darkColorMap: [String: AssetType] = darkSet.reduce(into: [:]) { $0[$1.name] = $1 }
+        let darkColors = lightColors
+            .map { lightColor in darkColorMap[lightColor.name] }
 
         let zipResult = zip(lightColors, darkColors)
 
@@ -284,12 +316,12 @@ public extension AssetsProcessable {
 
                 if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
                     newLightAsset.name = self.replace(newLightAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
-                    newDarkAsset.name = self.replace(newDarkAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
+                    newDarkAsset?.name = self.replace(darkAsset?.name ?? "", matchRegExp: regexp, replaceRegExp: replaceRegExp)
                 }
                 
                 if let style = nameStyle {
                     newLightAsset.name = self.normalizeName(newLightAsset.name, style: style)
-                    newDarkAsset.name = self.normalizeName(newDarkAsset.name, style: style)
+                    newDarkAsset?.name = self.normalizeName(darkAsset?.name ?? "", style: style)
                 }
 
                 return AssetPair(light: newLightAsset, dark: newDarkAsset)

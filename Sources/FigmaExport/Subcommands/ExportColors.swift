@@ -38,10 +38,13 @@ extension FigmaExportCommand {
                     useSingleFile: options.params.common?.colors?.useSingleFile,
                     darkModeSuffix: options.params.common?.colors?.darkModeSuffix
                 )
-                let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
+                let colorPairs = processor.process(light: colors.light, dark: colors.dark)
+                if let warning = colorPairs.warning?.errorDescription {
+                    logger.warning("\(warning)")
+                }
 
                 logger.info("Exporting colors to Xcode project...")
-                try exportXcodeColors(colorPairs: colorPairs, iosParams: ios, logger: logger)
+                try exportXcodeColors(colorPairs: try colorPairs.get(), iosParams: ios, logger: logger)
 
                 checkForUpdate(logger: logger)
                 
