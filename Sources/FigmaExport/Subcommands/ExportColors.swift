@@ -61,10 +61,13 @@ extension FigmaExportCommand {
                     useSingleFile: options.params.common?.colors?.useSingleFile,
                     darkModeSuffix: options.params.common?.colors?.darkModeSuffix
                 )
-                let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
+                let colorPairs = processor.process(light: colors.light, dark: colors.dark)
+                if let warning = colorPairs.warning?.errorDescription {
+                    logger.warning("\(warning)")
+                }
 
                 logger.info("Exporting colors to Android Studio project...")
-                try exportAndroidColors(colorPairs: colorPairs, androidParams: android)
+                try exportAndroidColors(colorPairs: colorPairs.get(), androidParams: android)
 
                 checkForUpdate(logger: logger)
                 
