@@ -7,7 +7,7 @@ public enum AssetsValidatorWarning: LocalizedError {
         var warning: String
         switch self {
         case .lightAssetsNotFoundInDarkPalette(let lights):
-            warning = "Using the following colors as universal colors because they are not found in the dark palette: \(lights.joined(separator: ", "))"
+            warning = "The following assets will be considered universal because they are not found in the dark palette: \(lights.joined(separator: ", "))"
         }
         return "⚠️ \(warning)"
     }
