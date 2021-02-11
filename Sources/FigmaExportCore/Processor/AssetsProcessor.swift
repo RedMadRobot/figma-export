@@ -310,22 +310,29 @@ public extension AssetsProcessable {
 
         return zipResult
             .map { lightAsset, darkAsset in
-
-                var newLightAsset = lightAsset
-                var newDarkAsset = darkAsset
-
-                if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
-                    newLightAsset.name = self.replace(newLightAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
-                    newDarkAsset?.name = self.replace(darkAsset?.name ?? "", matchRegExp: regexp, replaceRegExp: replaceRegExp)
+                if let darkAsset = darkAsset {
+                    return AssetPair(light: processedAssetName(lightAsset), dark: processedAssetName(darkAsset))
+                } else {
+                    return AssetPair(light: processedAssetName(lightAsset), dark: nil)
                 }
-                
-                if let style = nameStyle {
-                    newLightAsset.name = self.normalizeName(newLightAsset.name, style: style)
-                    newDarkAsset?.name = self.normalizeName(darkAsset?.name ?? "", style: style)
-                }
-
-                return AssetPair(light: newLightAsset, dark: newDarkAsset)
             }
+    }
+
+    /// Runs the name replacement and name validation regexps, and name styles, if they are defined
+    /// - Returns:
+    ///   - `AssetType` with a processed name
+    private func processedAssetName(_ asset: AssetType) -> AssetType {
+        var newAsset = asset
+
+        if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
+            newAsset.name = self.replace(newAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
+        }
+
+        if let style = nameStyle {
+            newAsset.name = self.normalizeName(newAsset.name, style: style)
+        }
+
+        return newAsset
     }
     
     /// Normalizes asset name by replacing "/" with "_" and by removing duplication (e.g. "color/color" becomes "color"
