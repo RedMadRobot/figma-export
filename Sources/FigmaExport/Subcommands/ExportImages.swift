@@ -57,7 +57,7 @@ extension FigmaExportCommand {
                 nameReplaceRegexp: params.common?.images?.nameReplaceRegexp,
                 nameStyle: params.ios?.images.nameStyle
             )
-            let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
+            let images = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
             if let warning = images.warning?.errorDescription {
                 logger.warning("\(warning)")
             }
