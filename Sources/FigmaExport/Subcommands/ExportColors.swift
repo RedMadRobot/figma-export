@@ -44,7 +44,7 @@ extension FigmaExportCommand {
                 }
 
                 logger.info("Exporting colors to Xcode project...")
-                try exportXcodeColors(colorPairs: try colorPairs.get(), iosParams: ios, logger: logger)
+                try exportXcodeColors(colorPairs: colorPairs.get(), iosParams: ios, logger: logger)
 
                 checkForUpdate(logger: logger)
                 

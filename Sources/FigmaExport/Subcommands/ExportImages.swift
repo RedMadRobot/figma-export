@@ -122,9 +122,9 @@ extension FigmaExportCommand {
             
             switch androidImages.format {
             case .svg:
-                try exportAndroidSVGImages(images: try images.get(), params: params, logger: logger)
+                try exportAndroidSVGImages(images: images.get(), params: params, logger: logger)
             case .png, .webp:
-                try exportAndroidRasterImages(images: try images.get(), params: params, logger: logger)
+                try exportAndroidRasterImages(images: images.get(), params: params, logger: logger)
             }
             
             checkForUpdate(logger: logger)
