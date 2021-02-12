@@ -34,7 +34,7 @@ final class ColorsLoader {
         let colors = try loadColors(fileId: figmaParams.lightFileId)
         let darkSuffix = colorParams?.darkModeSuffix ?? "_dark"
         let lightColors = colors
-            .filter { !$0.name.hasSuffix(darkSuffix)}
+            .filter { !$0.name.hasSuffix(darkSuffix) }
         let darkColors = colors
             .filter { $0.name.hasSuffix(darkSuffix) }
             .map { color -> Color in
