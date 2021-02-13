@@ -1,5 +1,3 @@
-import Foundation
-
 /// Process asset name
 public protocol AssetNameProcessable {
     
@@ -28,27 +26,6 @@ public extension AssetNameProcessable {
         case .snakeCase:
             return name.snakeCased()
         }
-    }
-}
-
-public struct AssetResult<Success, Error> {
-    public var result: Result<Success, Swift.Error>
-    public var warning: AssetsValidatorWarning?
-
-    public func get() throws -> Success {
-        return try result.get()
-    }
-
-    public static func failure(_ error: Swift.Error) -> AssetResult<Success, Error> {
-        return AssetResult(result: .failure(error), warning: nil)
-    }
-
-    public static func success(_ data: Success) -> AssetResult<Success, Error> {
-        return AssetResult(result: .success(data), warning: nil)
-    }
-
-    public static func success(_ data: Success, warning: AssetsValidatorWarning?) -> AssetResult<Success, Error> {
-        return AssetResult(result: .success(data), warning: warning)
     }
 }
 
@@ -146,16 +123,7 @@ public extension AssetsProcessable {
         let assets = set
             .sorted { $0.name < $1.name }
             .filter { $0.platform == nil || $0.platform == platform }
-            .map { asset -> AssetType in
-                var newAsset = asset
-                if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
-                    newAsset.name = self.replace(newAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
-                }
-                if let style = nameStyle {
-                    newAsset.name = self.normalizeName(newAsset.name, style: style)
-                }
-                return newAsset
-            }
+            .map { processedAssetName($0) }
         
         return .success(assets)
     }
@@ -275,46 +243,31 @@ public extension AssetsProcessable {
         return lightSet
             .sorted { $0.name < $1.name }
             .filter { $0.platform == nil || $0.platform == platform }
-            .map { lightAsset -> AssetPair<AssetType> in
-
-                var newLightAsset = lightAsset
-
-                if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
-                    newLightAsset.name = self.replace(newLightAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
-                }
-                
-                if let style = nameStyle {
-                    newLightAsset.name = self.normalizeName(newLightAsset.name, style: style)
-                }
-
-                return AssetPair(light: newLightAsset, dark: nil)
-            }
+            .map { AssetPair(light: processedAssetName($0), dark: nil) }
     }
 
     private func makeSortedAssetPairs(
         lightSet: Set<AssetType>,
         darkSet: Set<AssetType>) -> [AssetPair<Self.AssetType>] {
 
-        let lightColors = lightSet
+        let lightAssets = lightSet
             .filter { $0.platform == platform || $0.platform == nil }
             .sorted { $0.name < $1.name }
 
-        // After validations, only those dark colors in the light color palette are allowed
+        // After validations, only those dark assets in the light asset set are allowed
         // However the dark array may be smaller than the light array
-        // Create a same size array of dark colors so we can zip in the next step
-        let darkColorMap: [String: AssetType] = darkSet.reduce(into: [:]) { $0[$1.name] = $1 }
-        let darkColors = lightColors
-            .map { lightColor in darkColorMap[lightColor.name] }
+        // Create a same size array of dark assets so we can zip in the next step
+        let darkAssetMap: [String: AssetType] = darkSet.reduce(into: [:]) { $0[$1.name] = $1 }
+        let darkAssets = lightAssets.map { lightAsset in darkAssetMap[lightAsset.name] }
 
-        let zipResult = zip(lightColors, darkColors)
+        let zipResult = zip(lightAssets, darkAssets)
 
         return zipResult
             .map { lightAsset, darkAsset in
-                if let darkAsset = darkAsset {
-                    return AssetPair(light: processedAssetName(lightAsset), dark: processedAssetName(darkAsset))
-                } else {
-                    return AssetPair(light: processedAssetName(lightAsset), dark: nil)
-                }
+                AssetPair(
+                    light: processedAssetName(lightAsset),
+                    dark: darkAsset.map { processedAssetName($0) }
+                )
             }
     }
 
@@ -325,11 +278,11 @@ public extension AssetsProcessable {
         var newAsset = asset
 
         if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
-            newAsset.name = self.replace(newAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
+            newAsset.name = replace(newAsset.name, matchRegExp: regexp, replaceRegExp: replaceRegExp)
         }
 
         if let style = nameStyle {
-            newAsset.name = self.normalizeName(newAsset.name, style: style)
+            newAsset.name = normalizeName(newAsset.name, style: style)
         }
 
         return newAsset
