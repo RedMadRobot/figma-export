@@ -402,7 +402,7 @@ figma-export is released under the MIT license. [See LICENSE](./LICENSE) for det
 
 ## Feedback
 
-If you have any issues with the FigmaExport or you want some new features feel free to create an issue or contact me.
+If you have any issues with the FigmaExport or you want some new features feel free to [create an issue](https://github.com/RedMadRobot/figma-export/issues/new), [open a discussion](https://github.com/RedMadRobot/figma-export/discussions/new) or contact me.
 
 ## Authors
 
