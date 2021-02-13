@@ -33,7 +33,7 @@ common:
   # [optional]
   icons:
     # [optional] Name of the Figma's frame where icons components are located
-    figmaFrameName: Colors
+    figmaFrameName: Icons
     # [optional] RegExp pattern for icon name validation before exporting 
     nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
     # [optional] RegExp pattern for replacing. Supports only $n
