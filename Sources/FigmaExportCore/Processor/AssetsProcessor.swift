@@ -213,11 +213,17 @@ public extension AssetsProcessable {
 
         // 4. descriptionMismatch
         lightSet.forEach { asset in
-            if let platform = asset.platform {
-                let dark = darkSet.first(where: { $0.name == asset.name })
-                if dark?.platform != platform {
-                    errors.all.append(AssetsValidatorError.descriptionMismatch(assetName: asset.name, light: platform.rawValue, dark: dark?.platform?.rawValue ?? ""))
-                }
+            if
+                let platform = asset.platform,
+                let dark = darkSet.first(where: { $0.name == asset.name }),
+                dark.platform != platform {
+                
+                let error = AssetsValidatorError.descriptionMismatch(
+                    assetName: asset.name,
+                    light: platform.rawValue,
+                    dark: dark.platform?.rawValue ?? "")
+                
+                errors.all.append(error)
             }
         }
 
