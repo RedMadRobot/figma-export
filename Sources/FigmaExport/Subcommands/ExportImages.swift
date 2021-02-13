@@ -57,7 +57,10 @@ extension FigmaExportCommand {
                 nameReplaceRegexp: params.common?.images?.nameReplaceRegexp,
                 nameStyle: params.ios?.images.nameStyle
             )
-            let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
+            let images = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
+            if let warning = images.warning?.errorDescription {
+                logger.warning("\(warning)")
+            }
 
             let assetsURL = ios.xcassetsPath.appendingPathComponent(ios.images.assetsFolder)
             
@@ -68,7 +71,7 @@ extension FigmaExportCommand {
                 swiftUIImageExtensionURL: ios.images.swiftUIImageSwift)
             
             let exporter = XcodeImagesExporter(output: output)
-            let localAndRemoteFiles = try exporter.export(assets: images, append: filter != nil)
+            let localAndRemoteFiles = try exporter.export(assets: images.get(), append: filter != nil)
             if filter == nil {
                 try? FileManager.default.removeItem(atPath: assetsURL.path)
             }
@@ -112,13 +115,16 @@ extension FigmaExportCommand {
                 nameReplaceRegexp: params.common?.images?.nameReplaceRegexp,
                 nameStyle: .snakeCase
             )
-            let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
+            let images = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
+            if let warning = images.warning?.errorDescription {
+                logger.warning("\(warning)")
+            }
             
             switch androidImages.format {
             case .svg:
-                try exportAndroidSVGImages(images: images, params: params, logger: logger)
+                try exportAndroidSVGImages(images: images.get(), params: params, logger: logger)
             case .png, .webp:
-                try exportAndroidRasterImages(images: images, params: params, logger: logger)
+                try exportAndroidRasterImages(images: images.get(), params: params, logger: logger)
             }
             
             checkForUpdate(logger: logger)
