@@ -130,4 +130,54 @@ final class AssetsProcessorTests: XCTestCase {
         
         XCTAssertThrowsError(try processor.process(assets: images).get())
     }
+    
+    // Light count can exceed dark count
+    func testProcessWithUniversalAsset() throws {
+        let lights = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+        
+        let darks = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+        
+        let processor = ColorsProcessor(
+            platform: .ios,
+            nameValidateRegexp: nil,
+            nameReplaceRegexp: nil,
+            nameStyle: .camelCase,
+            useSingleFile: false,
+            darkModeSuffix: ""
+        )
+        let colors = try processor.process(light: lights, dark: darks).get()
+        
+        XCTAssertEqual(
+            [colors.compactMap { $0.light.name }, colors.compactMap { $0.dark?.name }],
+            [["primaryLink", "primaryText"], ["primaryText"]]
+        )
+    }
+    
+    // Dark count cannot exceed light count
+    func testProcessWithUniversalAsset2() throws {
+        let lights = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+        ]
+        
+        let darks = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+        
+        let processor = ColorsProcessor(
+            platform: .ios,
+            nameValidateRegexp: nil,
+            nameReplaceRegexp: nil,
+            nameStyle: .camelCase,
+            useSingleFile: false,
+            darkModeSuffix: ""
+        )
+        
+        XCTAssertThrowsError(try processor.process(light: lights, dark: darks).get())
+    }
 }
