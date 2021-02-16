@@ -29,7 +29,7 @@ final class XcodeColorExporterTests: XCTestCase {
     // MARK: - Tests
     
     func testExport_without_assets() {
-        let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, assetsInSwiftPackage: false, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
@@ -75,7 +75,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
     
     func testExport_with_assets() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, assetsInSwiftPackage: false, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         
@@ -111,7 +111,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
     
     func testExport_with_assets_in_separate_bundle() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: false, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: false, assetsInSwiftPackage: false, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         
@@ -149,9 +149,49 @@ final class XcodeColorExporterTests: XCTestCase {
         """
         XCTAssertEqual(generatedCode, referenceCode)
     }
+
+    func testExport_with_assets_in_swift_package() {
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: false, assetsInSwiftPackage: true, colorSwiftURL: colorsFile)
+        let exporter = XcodeColorExporter(output: output)
+        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
+
+        XCTAssertEqual(result.count, 4)
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
+        XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("Assets.xcassets/Colors/Contents.json"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("colorPair1.colorset/Contents.json"))
+        XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("colorPair2.colorset/Contents.json"))
+
+        let content = result[0].data
+        XCTAssertNotNil(content)
+
+        let generatedCode = String(data: content!, encoding: .utf8)
+        let referenceCode = """
+        //
+        //  The code generated using FigmaExport — Command line utility to export
+        //  colors, typography, icons and images from Figma to Xcode project.
+        //
+        //  https://github.com/RedMadRobot/figma-export
+        //
+        //  Don’t edit this code manually to avoid runtime crashes
+        //
+
+        import UIKit
+
+        private class BundleProvider {
+            static let bundle = Bundle.module
+        }
+
+        public extension UIColor {
+            static var colorPair1: UIColor { UIColor(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
+            static var colorPair2: UIColor { UIColor(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
+        }
+
+        """
+        XCTAssertEqual(generatedCode, referenceCode)
+    }
     
     func testExport_swiftui() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, colorSwiftURL: nil, swiftuiColorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, assetsInSwiftPackage: false, colorSwiftURL: nil, swiftuiColorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         

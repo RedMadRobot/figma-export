@@ -100,12 +100,12 @@ final public class XcodeColorExporter {
                 return "    static var \(colorPair.light.name): Color { Color(#function, bundle: BundleProvider.bundle) }"
             }
         }
-        
+
         return """
         \(header)
         
         import SwiftUI
-        \(output.assetsInMainBundle ? "" : bundleProvider)
+        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPM : bundleProvider))
         public extension Color {
         \(strings.joined(separator: "\n"))
         }
@@ -157,7 +157,7 @@ final public class XcodeColorExporter {
         \(header)
 
         import UIKit
-        \((!output.assetsInMainBundle && formAsset) ? bundleProvider : "")
+        \((!output.assetsInMainBundle && formAsset) ? (output.assetsInSwiftPackage ? bundleProviderSwiftPM : bundleProvider) : "")
         public extension UIColor {
         \(contents.joined(separator: "\n"))
         }
