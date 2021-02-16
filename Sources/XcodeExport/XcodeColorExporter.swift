@@ -105,7 +105,7 @@ final public class XcodeColorExporter {
         \(header)
         
         import SwiftUI
-        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPM : bundleProvider))
+        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider))
         public extension Color {
         \(strings.joined(separator: "\n"))
         }
@@ -157,7 +157,7 @@ final public class XcodeColorExporter {
         \(header)
 
         import UIKit
-        \((!output.assetsInMainBundle && formAsset) ? (output.assetsInSwiftPackage ? bundleProviderSwiftPM : bundleProvider) : "")
+        \((!output.assetsInMainBundle && formAsset) ? (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider) : "")
         public extension UIColor {
         \(contents.joined(separator: "\n"))
         }
