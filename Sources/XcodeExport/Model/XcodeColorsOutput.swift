@@ -11,12 +11,12 @@ public struct XcodeColorsOutput {
     public init(
         assetsColorsURL: URL?,
         assetsInMainBundle: Bool,
-        assetsInSwiftPackage: Bool,
+        assetsInSwiftPackage: Bool? = false,
         colorSwiftURL: URL? = nil,
         swiftuiColorSwiftURL: URL? = nil) {
         self.assetsColorsURL = assetsColorsURL
         self.assetsInMainBundle = assetsInMainBundle
-        self.assetsInSwiftPackage = assetsInSwiftPackage
+        self.assetsInSwiftPackage = assetsInSwiftPackage ?? false
         self.colorSwiftURL = colorSwiftURL
         self.swiftuiColorSwiftURL = swiftuiColorSwiftURL
     }

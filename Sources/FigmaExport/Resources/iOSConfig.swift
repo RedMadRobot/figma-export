@@ -34,7 +34,7 @@ ios:
   xcassetsPath: "./Resources/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?
   xcassetsInMainBundle: true
-  # Is Assets.xcassets located in a swift package?
+  # [optional] Is Assets.xcassets located in a swift package? Default value is false.
   xcassetsInSwiftPackage: false
 
   # Parameters for exporting colors

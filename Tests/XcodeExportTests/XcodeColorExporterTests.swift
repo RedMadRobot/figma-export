@@ -29,7 +29,7 @@ final class XcodeColorExporterTests: XCTestCase {
     // MARK: - Tests
     
     func testExport_without_assets() {
-        let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, assetsInSwiftPackage: false, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
@@ -75,7 +75,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
     
     func testExport_with_assets() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, assetsInSwiftPackage: false, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         
@@ -111,7 +111,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
     
     func testExport_with_assets_in_separate_bundle() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: false, assetsInSwiftPackage: false, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: false, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         
@@ -191,7 +191,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
     
     func testExport_swiftui() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, assetsInSwiftPackage: false, colorSwiftURL: nil, swiftuiColorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, colorSwiftURL: nil, swiftuiColorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         
