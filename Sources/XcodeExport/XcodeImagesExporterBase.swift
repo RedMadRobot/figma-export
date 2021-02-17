@@ -92,7 +92,7 @@ public class XcodeImagesExporterBase {
         \(header)
 
         import SwiftUI
-        \(output.assetsInMainBundle ? "" : bundleProvider)
+        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider))
         public extension Image {
         \(images.joined(separator: "\n"))
         }
@@ -113,7 +113,7 @@ public class XcodeImagesExporterBase {
         \(header)
 
         import UIKit
-        \(output.assetsInMainBundle ? "" : bundleProvider)
+        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider))
         public extension UIImage {
         \(images.joined(separator: "\n"))
         }

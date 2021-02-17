@@ -28,7 +28,7 @@ ios:
   xcassetsPath: "./UIComponents/Resource/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?
   xcassetsInMainBundle: false
-  
+
   # Parameters for exporting colors
   colors:
     # Should be generate color assets instead of pure swift code
