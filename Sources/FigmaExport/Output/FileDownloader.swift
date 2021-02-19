@@ -19,11 +19,11 @@ final class FileDownloader {
         let remoteFileCount = files.filter { $0.sourceURL != nil }.count
         var downloaded = 0
 
-        let chankedFiles = files.chunked(
+        let chunkedFiles = files.chunked(
             into: session.configuration.httpMaximumConnectionsPerHost
         )
 
-        chankedFiles.forEach { filesBatch in
+        chunkedFiles.forEach { filesBatch in
             let group = DispatchGroup()
 
             filesBatch.forEach { file in
