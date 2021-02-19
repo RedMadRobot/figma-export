@@ -22,7 +22,7 @@ figma:
 common:
   # [optional]
   colors:
-    # [optional] RegExp pattern for color name validation before exporting 
+    # [optional] RegExp pattern for color name validation before exporting
     nameValidateRegexp: '^[a-zA-Z_]+$' # RegExp pattern for: background, background_primary, widget_primary_background
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'color_$1'
@@ -34,7 +34,7 @@ common:
   icons:
     # [optional] Name of the Figma's frame where icons components are located
     figmaFrameName: Icons
-    # [optional] RegExp pattern for icon name validation before exporting 
+    # [optional] RegExp pattern for icon name validation before exporting
     nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'icon_$2_$1'
@@ -99,6 +99,8 @@ ios:
     assetsFolder: Illustrations
     # Image name style: camelCase or snake_case
     nameStyle: camelCase
+    # An array of asset scales that should be downloaded. The valid values are 1, 2, 3.
+    scales: [1, 2, 3]
     # [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
     swiftUIImageSwift: "./Source/Image+extension_illustrations.swift"
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
