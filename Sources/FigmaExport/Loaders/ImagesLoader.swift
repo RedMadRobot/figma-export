@@ -7,15 +7,15 @@ final class ImagesLoader {
     let figmaClient: FigmaClient
     let params: Params
     let platform: Platform
-    
+
     private var iconsFrameName: String {
         params.common?.icons?.figmaFrameName ?? "Icons"
     }
-    
+
     private var imagesFrameName: String {
         params.common?.images?.figmaFrameName ?? "Illustrations"
     }
-    
+
     init(figmaClient: FigmaClient, params: Params, platform: Platform) {
         self.figmaClient = figmaClient
         self.params = params
@@ -67,7 +67,7 @@ final class ImagesLoader {
                 frameName: imagesFrameName,
                 params: SVGParams(),
                 filter: filter)
-            
+
             let darkPacks = try params.figma.darkFileId.map {
                 try _loadImages(
                     fileId: $0,
@@ -88,14 +88,14 @@ final class ImagesLoader {
                     ($0.description == platform.rawValue || $0.description == nil || $0.description == "") &&
                     $0.description?.contains("none") == false
             }
-        
+
         if let filter = filter {
             let assetsFilter = AssetsFilter(filter: filter)
             components = components.filter { component -> Bool in
                 assetsFilter.match(name: component.name)
             }
         }
-        
+
         return Dictionary(uniqueKeysWithValues: components.map { ($0.nodeId, $0) })
     }
 
@@ -106,11 +106,11 @@ final class ImagesLoader {
         filter: String? = nil
     ) throws -> [ImagePack] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
-        
+
         guard !imagesDict.isEmpty else {
             throw FigmaExportError.componentsNotFound
         }
-        
+
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
         let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
 
@@ -133,13 +133,13 @@ final class ImagesLoader {
 
     private func loadPNGImages(fileId: String, frameName: String, filter: String? = nil, platform: Platform) throws -> [ImagePack] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
-        
+
         guard !imagesDict.isEmpty else {
             throw FigmaExportError.componentsNotFound
         }
 
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
-        let scales = platform == .android ? [1, 2, 3, 1.5, 4.0] : [1, 2, 3]
+        let scales = getScales(platform: platform)
 
         var images: [Double: [NodeId: ImagePath]] = [:]
         for scale in scales {
@@ -163,6 +163,16 @@ final class ImagesLoader {
             return ImagePack(name: packName, images: packImages, platform: platform)
         }
         return imagePacks
+    }
+
+    private func getScales(platform: Platform) -> [Double] {
+        if platform == .android {
+            return [1, 2, 3, 1.5, 4.0]
+        } else {
+            let validScales: [Double] = [1, 2, 3]
+            let customScales = params.ios?.images.scales?.filter { validScales.contains($0) } ?? []
+            return customScales.isEmpty ? validScales : customScales
+        }
     }
 
     // MARK: - Figma
