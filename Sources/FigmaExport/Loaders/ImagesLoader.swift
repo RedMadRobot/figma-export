@@ -171,7 +171,7 @@ final class ImagesLoader {
         } else {
             let validScales: [Double] = [1, 2, 3]
             let customScales = params.ios?.images.scales?.filter { validScales.contains($0) } ?? []
-            return !customScales.isEmpty ? customScales : validScales
+            return customScales.isEmpty ? validScales : customScales
         }
     }
 
