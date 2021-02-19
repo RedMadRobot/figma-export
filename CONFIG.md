@@ -99,7 +99,7 @@ ios:
     assetsFolder: Illustrations
     # Image name style: camelCase or snake_case
     nameStyle: camelCase
-    # An array of asset scales that should be downloaded. The valid values are 1, 2, 3.
+    # [optional] An array of asset scales that should be downloaded. The valid values are 1, 2, 3. The deafault value is [1, 2, 3].
     scales: [1, 2, 3]
     # [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
     swiftUIImageSwift: "./Source/Image+extension_illustrations.swift"
