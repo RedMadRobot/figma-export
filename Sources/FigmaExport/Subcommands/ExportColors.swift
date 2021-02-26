@@ -117,7 +117,7 @@ extension FigmaExportCommand {
         private func exportAndroidColors(colorPairs: [AssetPair<Color>], androidParams: Params.Android) throws {
             let exporter = AndroidColorExporter(
                 outputDirectory: androidParams.mainRes,
-                outputHexFormat: androidParams.colors?.hexFormat ?? "rgba"
+                outputHexFormat: androidParams.colors?.hexFormat.rawValue ?? "rgba"
             )
             let files = exporter.export(colorPairs: colorPairs)
             

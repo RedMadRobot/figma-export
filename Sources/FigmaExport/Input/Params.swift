@@ -93,7 +93,11 @@ struct Params: Decodable {
 
     struct Android: Decodable {
         struct Colors: Decodable {
-            let hexFormat: String
+            enum HexFormat: String, Decodable {
+                case argb
+                case rgba
+            }
+            let hexFormat: HexFormat
         }
         struct Icons: Decodable {
             let output: String
