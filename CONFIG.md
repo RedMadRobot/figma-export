@@ -46,6 +46,12 @@ common:
     nameValidateRegexp: '^(img)_([a-z0-9_]+)$' # RegExp pattern for: img_image_name
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'image_$2'
+  # [optional]
+  typography:
+    # [optional] RegExp pattern for text style name validation before exporting
+    nameValidateRegexp: '^[a-zA-Z0-9_]+$' # RegExp pattern for: h1_regular, h1_medium
+    # [optional] RegExp pattern for replacing. Supports only $n
+    nameReplaceRegexp: 'font_$1'
 
 # [optional] iOS export parameters
 ios:
@@ -116,6 +122,8 @@ ios:
     generateLabels: true
     # Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
     labelsDirectory: "./Source/UIComponents/"
+    # Typography name style: camelCase or snake_case
+    nameStyle: camelCase
 
 # [optional] Android export parameters
 android:
