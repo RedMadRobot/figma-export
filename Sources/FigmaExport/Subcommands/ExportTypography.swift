@@ -32,8 +32,8 @@ extension FigmaExportCommand {
                 logger.info("Processing typography...")
                 let processor = TypographyProcessor(
                     platform: .ios,
-                    nameValidateRegexp: options.params.ios?.typography.nameValidateRegexp,
-                    nameReplaceRegexp: options.params.ios?.typography.nameReplaceRegexp,
+                    nameValidateRegexp: options.params.common?.typography?.nameValidateRegexp,
+                    nameReplaceRegexp: options.params.common?.typography?.nameReplaceRegexp,
                     nameStyle: options.params.ios?.typography.nameStyle
                 )
                 let processedTextStyles = try processor.process(assets: textStyles).get()

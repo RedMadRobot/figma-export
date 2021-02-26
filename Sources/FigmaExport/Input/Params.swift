@@ -31,9 +31,15 @@ struct Params: Decodable {
             let nameReplaceRegexp: String?
         }
 
+        struct Typography: Decodable {
+            let nameValidateRegexp: String?
+            let nameReplaceRegexp: String?
+        }
+
         let colors: Colors?
         let icons: Icons?
         let images: Images?
+        let typography: Typography?
     }
 
     enum VectorFormat: String, Decodable {
@@ -78,8 +84,6 @@ struct Params: Decodable {
             let swiftUIFontSwift: URL?
             let generateLabels: Bool
             let labelsDirectory: URL?
-            let nameValidateRegexp: String?
-            let nameReplaceRegexp: String?
             let nameStyle: NameStyle
         }
 
