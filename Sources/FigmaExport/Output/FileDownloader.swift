@@ -12,55 +12,53 @@ final class FileDownloader {
     }
 
     func fetch(files: [FileContents]) throws -> [FileContents] {
+        let group = DispatchGroup()
         var errors: [Error] = []
-        
+
         var newFiles = [FileContents]()
 
         let remoteFileCount = files.filter { $0.sourceURL != nil }.count
         var downloaded = 0
 
-        let chunkedFiles = files.chunked(
-            into: session.configuration.httpMaximumConnectionsPerHost
-        )
+        let semaphore = DispatchSemaphore(value: session.configuration.httpMaximumConnectionsPerHost)
 
-        chunkedFiles.forEach { filesBatch in
-            let group = DispatchGroup()
-
-            filesBatch.forEach { file in
-                guard let remoteURL = file.sourceURL else {
-                    newFiles.append(file)
-                    return
-                }
-
-                group.enter()
-                let task = session.downloadTask(with: remoteURL) { localURL, _, error in
-                    defer { group.leave() }
-
-                    guard let fileURL = localURL, error == nil else {
-                        errors.append(error!)
-                        return
-                    }
-                    let newFile = FileContents(
-                        destination: file.destination,
-                        dataFile: fileURL,
-                        scale: file.scale,
-                        dark: file.dark
-                    )
-                    newFiles.append(newFile)
-                    downloaded += 1
-                    self.logger.info("Downloaded \(downloaded)/\(remoteFileCount)")
-                }
-
-                task.resume()
+        files.forEach { file in
+            guard let remoteURL = file.sourceURL else {
+                newFiles.append(file)
+                return
             }
 
-            group.wait()
+            let task = session.downloadTask(with: remoteURL) { localURL, _, error in
+                defer {
+                    semaphore.signal()
+                    group.leave()
+                }
+
+                guard let fileURL = localURL, error == nil else {
+                    errors.append(error!)
+                    return
+                }
+                let newFile = FileContents(
+                    destination: file.destination,
+                    dataFile: fileURL,
+                    scale: file.scale,
+                    dark: file.dark
+                )
+                newFiles.append(newFile)
+                downloaded += 1
+                self.logger.info("Downloaded \(downloaded)/\(remoteFileCount)")
+            }
+
+            group.enter()
+            semaphore.wait()
+            task.resume()
         }
-        
+        group.wait()
+
         if !errors.isEmpty {
             throw ErrorGroup(all: errors)
         }
-        
+
         return newFiles
     }
 }
