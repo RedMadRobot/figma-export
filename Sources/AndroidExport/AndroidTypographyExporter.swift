@@ -36,15 +36,23 @@ final public class AndroidTypographyExporter {
             textStyleNode.addAttribute(XMLNode.attribute(withName: "name", stringValue: textStyle.name) as! XMLNode)
             resources.addChild(textStyleNode)
 
-            let fontFamilyItem = XMLElement(name: "item", stringValue: textStyle.fontName)
+            let fontFamilyItem = XMLElement(name: "item", stringValue: androidFontName(from: textStyle.fontName))
             fontFamilyItem.addAttribute(XMLNode.attribute(withName: "name", stringValue: "android:fontFamily") as! XMLNode)
             textStyleNode.addChild(fontFamilyItem)
 
-            let fontSizeItem = XMLElement(name: "item", stringValue: "\(textStyle.fontSize)")
-            fontSizeItem.addAttribute(XMLNode.attribute(withName: "name", stringValue: "android:fontSize") as! XMLNode)
+            let fontSizeItem = XMLElement(name: "item", stringValue: androidFontSize(from: textStyle.fontSize))
+            fontSizeItem.addAttribute(XMLNode.attribute(withName: "name", stringValue: "android:textSize") as! XMLNode)
             textStyleNode.addChild(fontSizeItem)
         }
 
         return xml.xmlData(options: .nodePrettyPrint)
+    }
+
+    private func androidFontName(from postscriptName: String) -> String {
+        "@font/\(postscriptName.lowercased().replacingOccurrences(of: "-", with: "_"))"
+    }
+
+    private func androidFontSize(from points: Double) -> String {
+        "\(points)sp"
     }
 }
