@@ -32,3 +32,5 @@ android:
       encoding: lossy
       # Encoding quality in percents. Only for lossy encoding.
       quality: 85
+  typography:
+    nameStyle: camelCase
