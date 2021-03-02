@@ -4,11 +4,9 @@ import FigmaExportCore
 final public class AndroidColorExporter {
 
     private let outputDirectory: URL
-    private let outputHexFormat: String
 
-    public init(outputDirectory: URL, outputHexFormat: String) {
+    public init(outputDirectory: URL) {
         self.outputDirectory = outputDirectory
-        self.outputHexFormat = outputHexFormat
     }
     
     public func export(colorPairs: [AssetPair<Color>]) -> [FileContents] {
@@ -45,7 +43,7 @@ final public class AndroidColorExporter {
         colorPairs.forEach { colorPair in
             if dark, colorPair.dark == nil { return }
             let name = dark ? colorPair.dark!.name : colorPair.light.name
-            let hex = dark ? colorPair.dark!.hex(outputHexFormat: outputHexFormat) : colorPair.light.hex(outputHexFormat: outputHexFormat)
+            let hex = dark ? colorPair.dark!.hex : colorPair.light.hex
             let colorNode = XMLElement(name: "color", stringValue: hex)
             colorNode.addAttribute(XMLNode.attribute(withName: "name", stringValue: name) as! XMLNode)
             resources.addChild(colorNode)
@@ -60,19 +58,14 @@ private extension Color {
         String(format: "%02X", arguments: [Int((double * 255).rounded())])
     }
 
-    func hex(outputHexFormat: String) -> String {
+    var hex: String {
         let rr = doubleToHex(red)
         let gg = doubleToHex(green)
         let bb = doubleToHex(blue)
         var result = "#\(rr)\(gg)\(bb)"
         if alpha != 1.0 {
             let aa = doubleToHex(alpha)
-            switch outputHexFormat {
-                case "argb":
-                    result = "#\(aa)\(rr)\(gg)\(bb)"
-                default:
-                    result.append(aa)
-            }
+            result = "#\(aa)\(rr)\(gg)\(bb)"
         }
         return result
     }

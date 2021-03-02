@@ -92,13 +92,6 @@ struct Params: Decodable {
     }
 
     struct Android: Decodable {
-        struct Colors: Decodable {
-            enum HexFormat: String, Decodable {
-                case argb
-                case rgba
-            }
-            let hexFormat: HexFormat
-        }
         struct Icons: Decodable {
             let output: String
         }
@@ -123,7 +116,6 @@ struct Params: Decodable {
         let mainRes: URL
         let icons: Icons?
         let images: Images?
-        let colors: Colors?
     }
 
     let figma: Figma

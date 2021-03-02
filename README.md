@@ -198,7 +198,7 @@ Example of these files:
 
 ### Android
 
-Colors will be exported to `values/colors.xml` and `values-night/colors.xml` files in `rgba` or `argb` format.
+Colors will be exported to `values/colors.xml` and `values-night/colors.xml` files.
 
 Icons will be exported to `drawable` directory as vector xml files.
 
@@ -274,7 +274,6 @@ Run `fastlane sync_colors` to run FigmaExport.
 
 In the `figma-export.yaml` file you must specify the following properties:
 - `android.mainRes`
-- `android.colors.hexFormat` if you want export colors
 - `android.icons.output` if you want export icons
 - `android.images.output` if you want export images
 

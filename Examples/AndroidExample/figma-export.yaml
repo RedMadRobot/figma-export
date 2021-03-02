@@ -16,9 +16,6 @@ common:
 android:
   # Relative or absolute path to the `main/res` folder including it. The colors/icons/imags will be exported to this folder
   mainRes: ./app/src/main/res
-  # Parameters for exporting colors: rgba, argb
-  colors:
-    hexFormat: rgba
   # Parameters for exporting icons
   icons:
     # Where to place icons relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export icons` command
