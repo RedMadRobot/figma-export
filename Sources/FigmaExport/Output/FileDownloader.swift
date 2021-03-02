@@ -20,7 +20,7 @@ final class FileDownloader {
         let remoteFileCount = files.filter { $0.sourceURL != nil }.count
         var downloaded = 0
 
-        let semaphore = DispatchSemaphore(value: session.configuration.httpMaximumConnectionsPerHost)
+        let semaphore = DispatchSemaphore(value: session.configuration.httpMaximumConnectionsPerHost - 1)
 
         files.forEach { file in
             guard let remoteURL = file.sourceURL else {
