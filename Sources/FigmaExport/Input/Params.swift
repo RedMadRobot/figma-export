@@ -120,9 +120,13 @@ struct Params: Decodable {
             let format: Format
             let webpOptions: FormatOptions?
         }
+        struct Typography: Decodable {
+            let nameStyle: NameStyle
+        }
         let mainRes: URL
         let icons: Icons?
         let images: Images?
+        let typography: Typography?
     }
 
     let figma: Figma

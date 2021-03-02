@@ -41,6 +41,20 @@ extension FigmaExportCommand {
                 try exportXcodeTextStyles(textStyles: processedTextStyles, iosParams: ios, logger: logger)
                 logger.info("Done!")
             }
+
+            if let android = options.params.android {
+                logger.info("Processing typography...")
+                let processor = TypographyProcessor(
+                    platform: .android,
+                    nameValidateRegexp: options.params.common?.typography?.nameValidateRegexp,
+                    nameReplaceRegexp: options.params.common?.typography?.nameReplaceRegexp,
+                    nameStyle: options.params.android?.typography?.nameStyle
+                )
+                let processedTextStyles = try processor.process(assets: textStyles).get()
+                logger.info("Saving text styles...")
+                try exportAndroidTextStyles(textStyles: processedTextStyles, androidParams: android, logger: logger)
+                logger.info("Done!")
+            }
         }
         
         private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS, logger: Logger) throws {
@@ -86,6 +100,17 @@ extension FigmaExportCommand {
             } catch {
                 logger.error("Unable to add some file references to Xcode project")
             }
+        }
+
+        private func exportAndroidTextStyles(textStyles: [TextStyle], androidParams: Params.Android, logger: Logger) throws {
+
+            let exporter = AndroidTypographyExporter(outputDirectory: androidParams.mainRes)
+            let files = try exporter.exportFonts(textStyles: textStyles)
+
+            let fileURL = androidParams.mainRes.appendingPathComponent("values/typography.xml")
+
+            try? FileManager.default.removeItem(atPath: fileURL.path)
+            try fileWritter.write(files: files)
         }
     }
 }
