@@ -38,3 +38,4 @@ There is an example Android Studio project in `AndroidExample` directory which d
 * To export colors run: `figma-export colors`
 * To export icons run: `figma-export icons`
 * To export images run: `figma-export images`
+* To export typography run: `figma-export typography`
