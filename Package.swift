@@ -45,6 +45,7 @@ let package = Package(
         // Loads data via Figma REST API
         .target(
             name: "FigmaAPI",
+            dependencies: ["FigmaExportCore"],
             path: "./Sources/FigmaAPI"
         ),
         
