@@ -1,6 +1,5 @@
 import Foundation
-//import FigmaExportCore
-//import Stencil
+import FigmaExportCore
 import Stencil
 
 final public class XcodeTypographyExporter {

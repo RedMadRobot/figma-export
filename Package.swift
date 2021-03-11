@@ -32,40 +32,49 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Yams", package: "Yams"),
                 .product(name: "Logging", package: "swift-log")
-            ]
+            ],
+            path: "./Sources/FigmaExport"
         ),
         
         // Shared target
-        .target(name: "FigmaExportCore"),
+        .target(
+            name: "FigmaExportCore",
+            path: "./Sources/FigmaExportCore"
+        ),
         
         // Loads data via Figma REST API
-        .target(name: "FigmaAPI"),
+        .target(
+            name: "FigmaAPI",
+            path: "./Sources/FigmaAPI"
+        ),
         
         // Exports resources to Xcode project
         .target(
             name: "XcodeExport",
-            dependencies: ["FigmaExportCore", "Stencil"]
+            dependencies: ["FigmaExportCore", "Stencil"],
+            path: "./Sources/XcodeExport"
         ),
 
         // Exports resources to Android project
         .target(
             name: "AndroidExport",
-            dependencies: ["FigmaExportCore"]
+            dependencies: ["FigmaExportCore"],
+            path: "./Sources/AndroidExport"
         ),
         
         // MARK: - Tests
-        
-        .testTarget(
-            name: "FigmaExportTests",
-            dependencies: ["FigmaExport"]
-        ),
-        .testTarget(
-            name: "FigmaExportCoreTests",
-            dependencies: ["FigmaExportCore"]
-        ),
-        .testTarget(
-            name: "XcodeExportTests",
-            dependencies: ["XcodeExport"]
-        )
+//
+//        .testTarget(
+//            name: "FigmaExportTests",
+//            dependencies: ["FigmaExport"]
+//        ),
+//        .testTarget(
+//            name: "FigmaExportCoreTests",
+//            dependencies: ["FigmaExportCore"]
+//        ),
+//        .testTarget(
+//            name: "XcodeExportTests",
+//            dependencies: ["XcodeExport"]
+//        )
     ]
 )

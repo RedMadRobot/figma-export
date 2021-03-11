@@ -54,11 +54,24 @@ ios:
     assetsFolder: Icons
     # Icon name style: camelCase or snake_case
     nameStyle: camelCase
-    # [optional] An array of icon names that will supports Preseve Vecotor Data
-    preservesVectorRepresentation:
+    # [optional] Default mode for supports Preseve Vector Data
+    preservesVectorRepresentation: false
+    # [optional] An array of icon names that will supports Preseve Vector Data
+    preservesVectorRepresentationIcons:
     - ic24TabBarMain
     - ic24TabBarEvents
     - ic24TabBarProfile
+    # [optional] Default rendering intent for all icons in application (template or original)
+    renderIntent: original
+    # [optional] An array of icon names that will rendered as original
+    renderAsOriginalIcons:
+    - ic24TabBarMain
+    - ic24TabBarEvents
+    - ic24TabBarProfile
+    # [optional] An array of icon names that will rendered as template
+    renderAsTemplateIcons:
+    - ic24TabBarCart
+    - ic24TabBarCatalog
     # [optional] Absolute or relative path to swift file where to export icons (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
     swiftUIImageSwift: "./Source/Image+extension_icons.swift"
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)

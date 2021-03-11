@@ -1,5 +1,5 @@
 import ArgumentParser
-//import FigmaExportCore
+import FigmaExportCore
 import Foundation
 import Logging
 

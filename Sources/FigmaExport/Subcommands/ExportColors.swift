@@ -1,9 +1,9 @@
 import ArgumentParser
 import Foundation
-//import FigmaAPI
-//import XcodeExport
-//import AndroidExport
-//import FigmaExportCore
+import FigmaAPI
+import XcodeExport
+import AndroidExport
+import FigmaExportCore
 import Logging
 
 extension FigmaExportCommand {

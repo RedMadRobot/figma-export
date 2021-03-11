@@ -34,7 +34,7 @@ struct XcodeAssetContents: Encodable {
     }
     
     struct TemplateProperties: Encodable {
-        let templateRenderingIntent = "template"
+        var templateRenderingIntent = "template"
         let preservesVectorRepresentation: Bool?
         
         enum CodingKeys: String, CodingKey {
@@ -46,7 +46,7 @@ struct XcodeAssetContents: Encodable {
     let info = Info()
     let colors: [ColorData]?
     let images: [ImageData]?
-    let properties: TemplateProperties?
+    var properties: TemplateProperties?
     
     init(colors: [ColorData]) {
         self.colors = colors
@@ -54,13 +54,17 @@ struct XcodeAssetContents: Encodable {
         self.properties = nil
     }
     
-    init(icons: [ImageData], preservesVectorRepresentation: Bool = false) {
+    init(icons: [ImageData],
+         preservesVectorRepresentation: Bool = false,
+         templateRenderingIntent: String? = nil) {
         self.colors = nil
         self.images = icons
-        if preservesVectorRepresentation {
-            self.properties = TemplateProperties(preservesVectorRepresentation: true)
-        } else {
-            self.properties = TemplateProperties(preservesVectorRepresentation: nil)
+
+        self.properties = TemplateProperties(
+            preservesVectorRepresentation: preservesVectorRepresentation
+        )
+        if let intent = templateRenderingIntent {
+            self.properties?.templateRenderingIntent = intent
         }
     }
 

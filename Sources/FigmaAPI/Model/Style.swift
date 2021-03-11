@@ -1,3 +1,5 @@
+import FigmaExportCore
+
 public enum StyleType: String, Decodable {
     case fill = "FILL"
     case text = "TEXT"
@@ -11,7 +13,7 @@ public struct Style: Decodable {
     public let name: String
     public let description: String
     
-    func getName() -> String {
+    public func getName() -> String {
         let components = self.name.components(separatedBy: "/")
         let name = "\(components.first?.lowerCamelCased() ?? "")"
         return name

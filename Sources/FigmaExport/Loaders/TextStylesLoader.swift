@@ -1,5 +1,5 @@
-//import FigmaAPI
-//import FigmaExportCore
+import FigmaAPI
+import FigmaExportCore
 
 /// Loads text styles from Figma
 final class TextStylesLoader {

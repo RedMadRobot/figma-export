@@ -1,5 +1,5 @@
 import Foundation
-//import FigmaExportCore
+import FigmaExportCore
 
 extension NameStyle: Decodable {}
 
@@ -50,10 +50,17 @@ struct Params: Decodable {
         }
         
         struct Icons: Decodable {
+            let nameStyle: NameStyle
+
             let format: VectorFormat
             let assetsFolder: String
-            let preservesVectorRepresentation: [String]?
-            let nameStyle: NameStyle
+
+            let preservesVectorRepresentation: Bool
+            let preservesVectorRepresentationIcons: [String]?
+            
+            let renderIntent: RenderIntent?
+            let renderAsOriginalIcons: [String]?
+            let renderAsTemplateIcons: [String]?
             
             let imageSwift: URL?
             let swiftUIImageSwift: URL?

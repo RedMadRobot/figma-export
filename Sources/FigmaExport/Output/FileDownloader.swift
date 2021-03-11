@@ -1,5 +1,5 @@
 import Foundation
-//import FigmaExportCore
+import FigmaExportCore
 import Logging
 
 final class FileDownloader {

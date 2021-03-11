@@ -1,6 +1,6 @@
 import Foundation
-//import FigmaAPI
-//import FigmaExportCore
+import FigmaAPI
+import FigmaExportCore
 
 final class ImagesLoader {
 
@@ -22,23 +22,49 @@ final class ImagesLoader {
         self.platform = platform
     }
 
-    func loadIcons(filter: String? = nil) throws -> [ImagePack] {
+    func loadIcons(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
         switch (platform, params.ios?.icons.format) {
         case (.android, _),
              (.ios, .svg):
-            return try _loadImages(
+            let lightImages = try _loadImages(
                 fileId: params.figma.lightFileId,
                 frameName: iconsFrameName,
                 params: SVGParams(),
                 filter: filter
-            ).map { ImagePack.singleScale($0) }
+            )
+            let darkImages = try params.figma.darkFileId.map {
+                try _loadImages(
+                   fileId: $0,
+                   frameName: iconsFrameName,
+                   params: SVGParams(),
+                   filter: filter
+               )
+            }
+            let result = (
+                lightImages.map { ImagePack.singleScale($0) },
+                darkImages?.map { ImagePack.singleScale($0) }
+            )
+            return result
         case (.ios, _):
-            return try _loadImages(
+            let lightImages = try _loadImages(
                 fileId: params.figma.lightFileId,
                 frameName: iconsFrameName,
                 params: PDFParams(),
                 filter: filter
-            ).map { ImagePack.singleScale($0) }
+            )
+            let darkImages = try params.figma.darkFileId.map {
+                try _loadImages(
+                   fileId: $0,
+                   frameName: iconsFrameName,
+                   params: PDFParams(),
+                   filter: filter
+               )
+            }
+            let result = (
+                lightImages.map { ImagePack.singleScale($0) },
+                darkImages?.map { ImagePack.singleScale($0) }
+            )
+            return result
         }
     }
 

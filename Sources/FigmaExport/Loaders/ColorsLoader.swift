@@ -1,5 +1,5 @@
-//import FigmaAPI
-//import FigmaExportCore
+import FigmaAPI
+import FigmaExportCore
 
 /// Loads colors from Figma
 final class ColorsLoader {

@@ -1,4 +1,4 @@
-//import FigmaExportCore
+import FigmaExportCore
 import Foundation
 
 public class XcodeImagesExporterBase {

@@ -1,9 +1,9 @@
 import Foundation
 import ArgumentParser
-//import FigmaAPI
-//import XcodeExport
-//import FigmaExportCore
-//import AndroidExport
+import FigmaAPI
+import XcodeExport
+import FigmaExportCore
+import AndroidExport
 import Logging
 
 extension FigmaExportCommand {
@@ -66,18 +66,22 @@ extension FigmaExportCommand {
                 nameReplaceRegexp: params.common?.icons?.nameReplaceRegexp,
                 nameStyle: params.ios?.icons.nameStyle
             )
-            let icons = try processor.process(assets: images).get()
+            let icons = try processor.process(light: images.light, dark: images.dark).get()
 
             let assetsURL = ios.xcassetsPathImages.appendingPathComponent(ios.icons.assetsFolder)
             let output = XcodeImagesOutput(
                 assetsFolderURL: assetsURL,
                 assetsInMainBundle: ios.xcassetsInMainBundle,
                 preservesVectorRepresentation: ios.icons.preservesVectorRepresentation,
+                preservesVectorRepresentationIcons: ios.icons.preservesVectorRepresentationIcons,
+                renderIntent: ios.icons.renderIntent,
+                renderAsOriginalIcons: ios.icons.renderAsOriginalIcons,
+                renderAsTemplateIcons: ios.icons.renderAsTemplateIcons,
                 uiKitImageExtensionURL: ios.icons.imageSwift,
                 swiftUIImageExtensionURL: ios.icons.swiftUIImageSwift)
             
             let exporter = XcodeIconsExporter(output: output)
-            let localAndRemoteFiles = try exporter.export(assets: icons.map { $0.single }, append: filter != nil)
+            let localAndRemoteFiles = try exporter.export(assets: icons, append: filter != nil)
             if filter == nil {
                 try? FileManager.default.removeItem(atPath: assetsURL.path)
             }
@@ -122,7 +126,7 @@ extension FigmaExportCommand {
                 nameReplaceRegexp: params.common?.icons?.nameReplaceRegexp,
                 nameStyle: .snakeCase
             )
-            let icons = try processor.process(light: images, dark: nil).get()
+            let icons = try processor.process(light: images.light, dark: images.dark).get()
             
             // Create empty temp directory
             let tempDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
