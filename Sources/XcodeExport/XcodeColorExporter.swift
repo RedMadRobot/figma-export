@@ -1,5 +1,5 @@
 import Foundation
-import FigmaExportCore
+//import FigmaExportCore
 
 final public class XcodeColorExporter {
     
@@ -70,7 +70,7 @@ final public class XcodeColorExporter {
             if let darkColor = colorPair.dark {
                 colors.append(
                     XcodeAssetContents.ColorData(
-                        appearances: [XcodeAssetContents.DarkAppearance()],
+                        appearances: [XcodeAssetContents.DarkAppeareance()],
                         color: XcodeAssetContents.ColorInfo(
                             components: darkColor.toHexComponents())
                     )
@@ -100,12 +100,12 @@ final public class XcodeColorExporter {
                 return "    static var \(colorPair.light.name): Color { Color(#function, bundle: BundleProvider.bundle) }"
             }
         }
-
+        
         return """
         \(header)
         
         import SwiftUI
-        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider))
+        \(output.assetsInMainBundle ? "" : bundleProvider)
         public extension Color {
         \(strings.joined(separator: "\n"))
         }
@@ -157,7 +157,7 @@ final public class XcodeColorExporter {
         \(header)
 
         import UIKit
-        \((!output.assetsInMainBundle && formAsset) ? (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider) : "")
+        \((!output.assetsInMainBundle && formAsset) ? bundleProvider : "")
         public extension UIColor {
         \(contents.joined(separator: "\n"))
         }

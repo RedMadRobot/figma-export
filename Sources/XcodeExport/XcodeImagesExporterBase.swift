@@ -1,4 +1,4 @@
-import FigmaExportCore
+//import FigmaExportCore
 import Foundation
 
 public class XcodeImagesExporterBase {
@@ -92,7 +92,7 @@ public class XcodeImagesExporterBase {
         \(header)
 
         import SwiftUI
-        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider))
+        \(output.assetsInMainBundle ? "" : bundleProvider)
         public extension Image {
         \(images.joined(separator: "\n"))
         }
@@ -113,7 +113,7 @@ public class XcodeImagesExporterBase {
         \(header)
 
         import UIKit
-        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider))
+        \(output.assetsInMainBundle ? "" : bundleProvider)
         public extension UIImage {
         \(images.joined(separator: "\n"))
         }

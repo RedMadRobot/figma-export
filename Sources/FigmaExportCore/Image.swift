@@ -1,40 +1,21 @@
 import Foundation
 
-public enum Scale {
-    case all
-    case individual(_ value: Double)
-
-    public var value: Double {
-        switch self {
-        case .all:
-            return 1
-        case .individual(let value):
-            return value
-        }
-    }
-}
-
 public struct Image: Asset {
-
+    
     public var name: String
-    public let scale: Scale
     public let format: String
     public let url: URL
-    public let idiom: String?
-
     public var platform: Platform?
-
-    public init(name: String, scale: Scale = .all, platform: Platform? = nil, idiom: String? = nil, url: URL, format: String) {
+    
+    public init(name: String, platform: Platform? = nil, url: URL, format: String) {
         self.name = name
-        self.scale = scale
         self.platform = platform
         self.url = url
-        self.idiom = idiom
         self.format = format
     }
-
+    
     // MARK: Hashable
-
+    
     public static func == (lhs: Image, rhs: Image) -> Bool {
         return lhs.name == rhs.name
     }
@@ -44,29 +25,51 @@ public struct Image: Asset {
     }
 }
 
-public struct ImagePack: Asset {
-    public var images: [Image]
+public enum ImagePack: Asset {
+
+    public typealias Scale = Double
+    
+    case singleScale(Image)
+    case individualScales([Scale: Image])
+
+    public var single: Image {
+        switch self {
+        case .singleScale(let image):
+            return image
+        case .individualScales:
+            fatalError("Unable to extract image from image pack")
+        }
+    }
+
     public var name: String {
-        didSet {
-            images = images.map { image -> Image in
-                var newImage = image
-                newImage.name = name
-                return newImage
+        get {
+            switch self {
+            case .singleScale(let image):
+                return image.name
+            case .individualScales(let images):
+                return images.first!.value.name
+            }
+        }
+        set {
+            switch self {
+            case .singleScale(var image):
+                image.name = newValue
+                self = .singleScale(image)
+            case .individualScales(var images):
+                for key in images.keys {
+                    images[key]?.name = newValue
+                }
+                self = .individualScales(images)
             }
         }
     }
-    public var platform: Platform?
 
-    public init(name: String, images: [Image], platform: Platform? = nil) {
-        self.name = name
-        self.images = images
-        self.platform = platform
+    public var platform: Platform? {
+        switch self {
+        case .singleScale(let image):
+            return image.platform
+        case .individualScales(let images):
+            return images.first?.value.platform
+        }
     }
-
-    public init(image: Image, platform: Platform? = nil) {
-        self.name = image.name
-        self.images = [image]
-        self.platform = platform
-    }
-
 }

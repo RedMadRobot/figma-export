@@ -1,9 +1,9 @@
 import ArgumentParser
 import Foundation
-import FigmaAPI
-import XcodeExport
-import AndroidExport
-import FigmaExportCore
+//import FigmaAPI
+//import XcodeExport
+//import AndroidExport
+//import FigmaExportCore
 import Logging
 
 extension FigmaExportCommand {
@@ -14,63 +14,57 @@ extension FigmaExportCommand {
             commandName: "colors",
             abstract: "Exports colors from Figma",
             discussion: "Exports light and dark color palette from Figma to Xcode / Android Studio project")
-
-        @OptionGroup
-        var options: FigmaExportOptions
+        
+        @Option(name: .shortAndLong, default: "figma-export.yaml", help: "An input YAML file with figma and platform properties.")
+        var input: String
         
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
-            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
+            
+            let reader = ParamsReader(inputPath: input)
+            let params = try reader.read()
 
-            logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
+            guard let accessToken = ProcessInfo.processInfo.environment["FIGMA_PERSONAL_TOKEN"] else {
+                throw FigmaExportError.accessTokenNotFound
+            }
+            
+            let client = FigmaClient(accessToken: accessToken)
+
+            logger.info("Using FigmaExport to export colors.")
 
             logger.info("Fetching colors. Please wait...")
-            let loader = ColorsLoader(figmaClient: client, figmaParams: options.params.figma, colorParams: options.params.common?.colors)
+            let loader = ColorsLoader(figmaClient: client, params: params.figma)
             let colors = try loader.load()
 
-            if let ios = options.params.ios {
+            if let ios = params.ios {
                 logger.info("Processing colors...")
                 let processor = ColorsProcessor(
                     platform: .ios,
-                    nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
-                    nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
-                    nameStyle: options.params.ios?.colors.nameStyle,
-                    useSingleFile: options.params.common?.colors?.useSingleFile,
-                    darkModeSuffix: options.params.common?.colors?.darkModeSuffix
+                    nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
+                    nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
+                    nameStyle: params.ios?.colors.nameStyle
                 )
-                let colorPairs = processor.process(light: colors.light, dark: colors.dark)
-                if let warning = colorPairs.warning?.errorDescription {
-                    logger.warning("\(warning)")
-                }
+                let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
 
                 logger.info("Exporting colors to Xcode project...")
-                try exportXcodeColors(colorPairs: colorPairs.get(), iosParams: ios, logger: logger)
+                try exportXcodeColors(colorPairs: colorPairs, iosParams: ios, logger: logger)
 
-                checkForUpdate(logger: logger)
-                
                 logger.info("Done!")
             }
             
-            if let android = options.params.android {
+            if let android = params.android {
                 logger.info("Processing colors...")
                 let processor = ColorsProcessor(
                     platform: .android,
-                    nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
-                    nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
-                    nameStyle: .snakeCase,
-                    useSingleFile: options.params.common?.colors?.useSingleFile,
-                    darkModeSuffix: options.params.common?.colors?.darkModeSuffix
+                    nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
+                    nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
+                    nameStyle: .snakeCase
                 )
-                let colorPairs = processor.process(light: colors.light, dark: colors.dark)
-                if let warning = colorPairs.warning?.errorDescription {
-                    logger.warning("\(warning)")
-                }
+                let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
 
                 logger.info("Exporting colors to Android Studio project...")
-                try exportAndroidColors(colorPairs: colorPairs.get(), androidParams: android)
+                try exportAndroidColors(colorPairs: colorPairs, androidParams: android)
 
-                checkForUpdate(logger: logger)
-                
                 logger.info("Done!")
             }
         }
@@ -79,7 +73,7 @@ extension FigmaExportCommand {
             var colorsURL: URL?
             if iosParams.colors.useColorAssets {
                 if let folder = iosParams.colors.assetsFolder {
-                    colorsURL = iosParams.xcassetsPath.appendingPathComponent(folder)
+                    colorsURL = iosParams.xcassetsPathColors.appendingPathComponent(folder)
                 } else {
                     throw FigmaExportError.colorsAssetsFolderNotSpecified
                 }
@@ -88,7 +82,6 @@ extension FigmaExportCommand {
             let output = XcodeColorsOutput(
                 assetsColorsURL: colorsURL,
                 assetsInMainBundle: iosParams.xcassetsInMainBundle,
-                assetsInSwiftPackage: iosParams.xcassetsInSwiftPackage,
                 colorSwiftURL: iosParams.colors.colorSwift,
                 swiftuiColorSwiftURL: iosParams.colors.swiftuiColorSwift)
 

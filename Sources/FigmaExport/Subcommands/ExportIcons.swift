@@ -1,9 +1,9 @@
 import Foundation
 import ArgumentParser
-import FigmaAPI
-import XcodeExport
-import FigmaExportCore
-import AndroidExport
+//import FigmaAPI
+//import XcodeExport
+//import FigmaExportCore
+//import AndroidExport
 import Logging
 
 extension FigmaExportCommand {
@@ -15,8 +15,9 @@ extension FigmaExportCommand {
             abstract: "Exports icons from Figma",
             discussion: "Exports icons from Figma to Xcode / Android Studio project")
         
-        @OptionGroup
-        var options: FigmaExportOptions
+        @Option(name: .shortAndLong, default: "figma-export.yaml",
+                help: "An input YAML file with figma and platform properties.")
+        var input: String
         
         @Argument(help: """
         [Optional] Name of the icons to export. For example \"ic/24/edit\" \
@@ -27,16 +28,24 @@ extension FigmaExportCommand {
         
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
-            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
-            
-            if options.params.ios != nil {
-                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Xcode project.")
-                try exportiOSIcons(client: client, params: options.params, logger: logger)
+
+            let reader = ParamsReader(inputPath: input)
+            let params = try reader.read()
+
+            guard let accessToken = ProcessInfo.processInfo.environment["FIGMA_PERSONAL_TOKEN"] else {
+                throw FigmaExportError.accessTokenNotFound
             }
             
-            if options.params.android != nil {
-                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Android Studio project.")
-                try exportAndroidIcons(client: client, params: options.params, logger: logger)
+            let client = FigmaClient(accessToken: accessToken)
+            
+            if params.ios != nil {
+                logger.info("Using FigmaExport to export icons to Xcode project.")
+                try exportiOSIcons(client: client, params: params, logger: logger)
+            }
+            
+            if params.android != nil {
+                logger.info("Using FigmaExport to export icons to Android Studio project.")
+                try exportAndroidIcons(client: client, params: params, logger: logger)
             }
         }
         
@@ -59,18 +68,16 @@ extension FigmaExportCommand {
             )
             let icons = try processor.process(assets: images).get()
 
-            let assetsURL = ios.xcassetsPath.appendingPathComponent(ios.icons.assetsFolder)
+            let assetsURL = ios.xcassetsPathImages.appendingPathComponent(ios.icons.assetsFolder)
             let output = XcodeImagesOutput(
                 assetsFolderURL: assetsURL,
                 assetsInMainBundle: ios.xcassetsInMainBundle,
-                assetsInSwiftPackage: ios.xcassetsInSwiftPackage,
                 preservesVectorRepresentation: ios.icons.preservesVectorRepresentation,
                 uiKitImageExtensionURL: ios.icons.imageSwift,
-                swiftUIImageExtensionURL: ios.icons.swiftUIImageSwift,
-                renderMode: ios.icons.renderMode)
+                swiftUIImageExtensionURL: ios.icons.swiftUIImageSwift)
             
             let exporter = XcodeIconsExporter(output: output)
-            let localAndRemoteFiles = try exporter.export(icons: icons, append: filter != nil)
+            let localAndRemoteFiles = try exporter.export(assets: icons.map { $0.single }, append: filter != nil)
             if filter == nil {
                 try? FileManager.default.removeItem(atPath: assetsURL.path)
             }
@@ -92,8 +99,6 @@ extension FigmaExportCommand {
             } catch {
                 logger.error("Unable to add some file references to Xcode project")
             }
-            
-            checkForUpdate(logger: logger)
             
             logger.info("Done!")
         }
@@ -124,12 +129,11 @@ extension FigmaExportCommand {
         
             // 3. Download SVG files to user's temp directory
             logger.info("Downloading remote files...")
-            let remoteFiles = icons.flatMap { asset -> [FileContents] in
-                asset.light.images.map { image -> FileContents in
-                    let fileURL = URL(string: "\(image.name).svg")!
-                    let dest = Destination(directory: tempDirectoryURL, file: fileURL)
-                    return FileContents(destination: dest, sourceURL: image.url)
-                }
+            let remoteFiles = icons.map { asset -> FileContents in
+                let image = asset.light
+                let fileURL = URL(string: "\(image.name).svg")!
+                let dest = Destination(directory: tempDirectoryURL, file: fileURL)
+                return FileContents(destination: dest, sourceURL: image.single.url)
             }
             var localFiles = try fileDownloader.fetch(files: remoteFiles)
             
@@ -138,7 +142,7 @@ extension FigmaExportCommand {
             
             // 5. Convert all SVG to XML files
             logger.info("Converting SVGs to XMLs...")
-            try svgFileConverter.convert(inputDirectoryUrl: tempDirectoryURL)
+            try svgFileConverter.convert(inputDirectoryPath: tempDirectoryURL.path)
             
             // Create output directory main/res/custom-directory/drawable/
             let outputDirectory = URL(fileURLWithPath: android.mainRes
@@ -170,8 +174,6 @@ extension FigmaExportCommand {
             logger.info("Writting files to Android Studio project...")
             try fileWritter.write(files: localFiles)
 
-            checkForUpdate(logger: logger)
-            
             logger.info("Done!")
         }
     }

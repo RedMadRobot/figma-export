@@ -5,8 +5,6 @@ figma:
   lightFileId: shPilWnVdJfo10YF12345
   # [optional] Identifier of the file containing dark color palette and dark images.
   darkFileId: KfF6DnJTWHGZzC912345
-  # [optional] Figma API request timeout. The default value of this property is 30 (seconds). If you have a lot of resources to export set this value to 60 or more to give Figma API more time to prepare resources for exporting.
-  # timeout: 30
 
 # [optional] Common export parameters
 common:
@@ -34,8 +32,6 @@ ios:
   xcassetsPath: "./Resources/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?
   xcassetsInMainBundle: true
-  # [optional] Is Assets.xcassets located in a swift package? Default value is false.
-  xcassetsInSwiftPackage: false
 
   # Parameters for exporting colors
   colors:

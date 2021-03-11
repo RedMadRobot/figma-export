@@ -10,6 +10,12 @@ public struct Style: Decodable {
     public let nodeId: String
     public let name: String
     public let description: String
+    
+    func getName() -> String {
+        let components = self.name.components(separatedBy: "/")
+        let name = "\(components.first?.lowerCamelCased() ?? "")"
+        return name
+    }
 }
 
 public struct StylesResponse: Decodable {

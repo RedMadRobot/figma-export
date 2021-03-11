@@ -1,5 +1,5 @@
-import FigmaAPI
-import FigmaExportCore
+//import FigmaAPI
+//import FigmaExportCore
 
 /// Loads text styles from Figma
 final class TextStylesLoader {
@@ -34,10 +34,10 @@ final class TextStylesLoader {
             let lineHeight: Double? = textStyle.lineHeightUnit == .intrinsic ? nil : textStyle.lineHeightPx
             
             return TextStyle(
-                name: style.name,
-                fontName: textStyle.fontPostScriptName,
+                name: style.getName(),
+                fontName: textStyle.fontPostScriptName ?? "",
                 fontSize: textStyle.fontSize,
-                fontStyle: DynamicTypeStyle(rawValue: style.description),
+//                fontStyle: DynamicTypeStyle(rawValue: style.description),
                 lineHeight: lineHeight,
                 letterSpacing: textStyle.letterSpacing
             )

@@ -1,5 +1,6 @@
 import Foundation
-import FigmaExportCore
+//import FigmaExportCore
+//import Stencil
 import Stencil
 
 final public class XcodeTypographyExporter {
@@ -8,38 +9,114 @@ final public class XcodeTypographyExporter {
     
     public func exportFonts(textStyles: [TextStyle], fontExtensionURL: URL) throws -> [FileContents] {
         let strings: [String] = textStyles.map {
-            let dynamicType: String = $0.fontStyle != nil ? ", textStyle: .\($0.fontStyle!.textStyleName), scaled: true" : ""
+            let lineHeight = $0.lineHeight == nil ? "" : "\n        self.lineHeight = \($0.lineHeight!)"
             return """
-                static func \($0.name)() -> UIFont {
-                    customFont("\($0.fontName)", size: \($0.fontSize)\(dynamicType))
-                }
+                @objc lazy var \($0.name): SQStyleLabel = {
+                    self.font = self.customFont("\($0.fontName)", size: \($0.fontSize))\(lineHeight)
+                    return self
+                }()
             """
         }
         let contents = """
         \(header)
         
+        import Foundation
         import UIKit
 
-        public extension UIFont {
-        
-        \(strings.joined(separator: "\n\n"))
-        
-            private static func customFont(
-                _ name: String,
-                size: CGFloat,
-                textStyle: UIFont.TextStyle? = nil,
-                scaled: Bool = false) -> UIFont {
+        protocol Style {
+            func build()
+        }
 
-                guard let font = UIFont(name: name, size: size) else {
-                    print("Warning: Font \\(name) not found.")
-                    return UIFont.systemFont(ofSize: size, weight: .regular)
+        protocol UIStyle: Style {
+            associatedtype Element
+            
+            var style: Element { get set }
+        }
+
+        class SQStyle: NSObject {
+
+            var element: Style!
+            var font: UIFont?
+            var _colorText: UIColor?
+            var lineHeight: CGFloat?
+
+            init(element: Style) {
+                self.element = element
+            }
+
+            func build() {
+                self.element.build()
+            }
+            
+           func customFont(
+               _ name: String,
+               size: CGFloat,
+               scaled: Bool = false) -> UIFont {
+
+               guard let font = UIFont(name: name, size: size) else {
+                   return UIFont.systemFont(ofSize: size, weight: .regular)
+               }
+               
+               return font
+           }
+
+        }
+
+        class SQStyleLabel: SQStyle {
+
+            var textAlignment: NSTextAlignment?
+
+        \(strings.joined(separator: "\n\n"))
+
+            lazy var centrerAlignment: SQStyleLabel = {
+                self.textAlignment = .center
+                return self
+            }()
+
+            lazy var leftAlignment: SQStyleLabel = {
+                self.textAlignment = .left
+                return self
+            }()
+
+            lazy var rightAlignment: SQStyleLabel = {
+                self.textAlignment = .right
+                return self
+            }()
+
+            lazy var colorText = { (color: UIColor?) -> SQStyleLabel in
+                self._colorText = color
+                return self
+            }
+
+            func safeValue(forKey key: String) {
+                let copy = Mirror(reflecting: self)
+                for child in copy.children.makeIterator() {
+                    if String(describing: child.label) == "Optional(\\"$__lazy_storage_$_\\(key)\\")" {
+                        self.value(forKey: key)
+                    } else {
+                        fatalError("not font style: \\(key)")
+                    }
                 }
-                
-                if scaled, let textStyle = textStyle {
-                    let metrics = UIFontMetrics(forTextStyle: textStyle)
-                    return metrics.scaledFont(for: font)
-                } else {
-                    return font
+            }
+        }
+
+        class SQStyleButton: SQStyle {
+            
+        \(strings.joined(separator: "\n\n"))
+
+            lazy var colorText = { (color: UIColor?) -> SQStyleLabel in
+                self._colorText = color
+                return self
+            }
+
+            func safeValue(forKey key: String) {
+                let copy = Mirror(reflecting: self)
+                for child in copy.children.makeIterator() {
+                    if String(describing: child.label) == "Optional(\\"$__lazy_storage_$_\\(key)\\")" {
+                        self.value(forKey: key)
+                    } else {
+                        fatalError("not font style: \\(key)")
+                    }
                 }
             }
         }
@@ -85,22 +162,24 @@ final public class XcodeTypographyExporter {
     
     public func exportLabels(textStyles: [TextStyle], labelsDirectory: URL) throws -> [FileContents] {
         let dict = textStyles.map { style -> [String: Any] in
-            let type: String = style.fontStyle?.textStyleName ?? ""
+            let type: String = style.name
             return [
                 "className": style.name.first!.uppercased() + style.name.dropFirst(),
                 "varName": style.name,
                 "size": style.fontSize,
-                "supportsDynamicType": style.fontStyle != nil,
+                "supportsDynamicType": true,
                 "type": type,
                 "tracking": style.letterSpacing,
                 "lineHeight": style.lineHeight ?? 0
             ]}
         let contents = try TEMPLATE_Label_swift.render(["styles": dict])
+        let buttonContents = try TEMPLATE_button_swift.render(["style": dict])
         
-        let labelSwift = try makeFileContents(data: contents, directoryURL: labelsDirectory, fileName: "Label.swift")
-        let labelStyleSwift = try makeFileContents(data: labelStyleSwiftContents, directoryURL: labelsDirectory, fileName: "LabelStyle.swift")
         
-        return [labelSwift, labelStyleSwift]
+        let labelSwift = try makeFileContents(data: contents, directoryURL: labelsDirectory, fileName: "SQLabel.swift")
+        let buttonStyleSwift = try makeFileContents(data: buttonContents, directoryURL: labelsDirectory, fileName: "SQButton.swift")
+        
+        return [labelSwift, buttonStyleSwift]
     }
     
     private func makeFileContents(data: String, directoryURL: URL, fileName: String) throws -> FileContents {
@@ -111,131 +190,128 @@ final public class XcodeTypographyExporter {
     }
 }
 
+private let TEMPLATE_button_swift = Template(templateString: """
+\(header)
+
+import UIKit
+
+@IBDesignable class SQButton: UIButton, UIStyle {
+    
+    private var _style: SQStyleButton?
+    
+    lazy var style: SQStyleButton = {
+        self._style = self._style == nil ? SQStyleButton(element: self) : self._style!
+       return self._style!
+    }()
+    
+    func build() {
+        self.titleLabel?.font = self._style?.font
+        self.titleLabel?.textColor = self._style?._colorText
+    }
+    
+    @IBInspectable var styleFont: String = "" {
+        didSet {
+            self.style.safeValue(forKey: self.styleFont)
+            self.updateAttributedText()
+        }
+    }
+    
+    private func updateAttributedText() {
+        
+        guard let font = self.style.font else { return }
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        let lineHeight = ((100.0 * (self.style.lineHeight ?? 0.0)) / (font).lineHeight) / 100
+        paragraphStyle.lineHeightMultiple = lineHeight
+        
+        let attributedString: NSMutableAttributedString
+        if let labelAttributedText = self.titleLabel?.attributedText {
+            attributedString = NSMutableAttributedString(attributedString: labelAttributedText)
+        } else {
+            attributedString = NSMutableAttributedString(string: self.titleLabel?.text ?? "")
+        }
+
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
+                                      value: paragraphStyle,
+                                      range: NSMakeRange(.zero, attributedString.length))
+        
+        attributedString.addAttribute(NSAttributedString.Key.font,
+                                      value: self.style.font ?? UIFont(),
+                                      range: NSMakeRange(.zero, attributedString.length))
+        
+        attributedString.addAttribute(NSAttributedString.Key.foregroundColor,
+                                      value: self.style._colorText ?? (self.titleLabel?.textColor ?? .black),
+                                      range: NSMakeRange(.zero, attributedString.length))
+        
+        
+        self.titleLabel?.attributedText = attributedString
+        invalidateIntrinsicContentSize()
+    }
+    
+}
+"""
+)
+
 private let TEMPLATE_Label_swift = Template(templateString: """
 \(header)
 
 import UIKit
 
-public class Label: UILabel {
+class SQLabel: UILabel, UIStyle {
 
-    var style: LabelStyle? { nil }
+     private var _style: SQStyleLabel?
+     
+     override var text: String? {
+         didSet {
+             if self._style != nil {
+                 self.updateAttributedText()
+             }
+         }
+     }
 
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+     func build() {
+         self.font = self._style?.font
+         self.textColor = self._style?._colorText
+     }
 
-        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            updateText()
+     lazy var style: SQStyleLabel = {
+         self._style = self._style == nil ? SQStyleLabel(element: self) : self._style!
+        return self._style!
+     }()
+
+    @IBInspectable var styleFont: String = "" {
+        didSet {
+            self.style.safeValue(forKey: self.styleFont)
         }
-    }
-
-    convenience init(text: String?, textColor: UIColor) {
-        self.init()
-        self.text = text
-        self.textColor = textColor
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
-        updateText()
-    }
-
-    private func commonInit() {
-        font = style?.font
-        adjustsFontForContentSizeCategory = true
-    }
-
-    private func updateText() {
-        text = super.text
-    }
-
-    public override var text: String? {
-        get {
-            guard style?.attributes != nil else {
-                return super.text
-            }
-
-            return attributedText?.string
-        }
-        set {
-            guard let style = style else {
-                super.text = newValue
-                return
-            }
-
-            guard let newText = newValue else {
-                attributedText = nil
-                super.text = nil
-                return
-            }
-
-            let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
-            attributedText = NSAttributedString(string: newText, attributes: attributes)
-        }
-    }
-
-}
-{% for style in styles %}
-public final class {{ style.className }}Label: Label {
-
-    override var style: LabelStyle? {
-        LabelStyle(
-            font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
-            fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
-            lineHeight: {{ style.lineHeight }}{% endif %}{% if style.tracking != 0 %},
-            tracking: {{ style.tracking}}{% endif %}
-        )
-    }
-}
-{% endfor %}
-""")
-
-private let labelStyleSwiftContents = """
-\(header)
-
-import UIKit
-
-struct LabelStyle {
-
-    let font: UIFont
-    let fontMetrics: UIFontMetrics?
-    let lineHeight: CGFloat?
-    let tracking: CGFloat
-    
-    init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0) {
-        self.font = font
-        self.fontMetrics = fontMetrics
-        self.lineHeight = lineHeight
-        self.tracking = tracking
     }
     
-    func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
-        
+    private func updateAttributedText() {
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = alignment
-        paragraphStyle.lineBreakMode = lineBreakMode
+        let lineHeight = ((100.0 * (self.style.lineHeight ?? 0.0)) / (self.style.font ?? self.font).lineHeight) / 100
+        paragraphStyle.lineHeightMultiple = lineHeight
         
-        var baselineOffset: CGFloat = .zero
-        
-        if let lineHeight = lineHeight {
-            let scaledLineHeight: CGFloat = fontMetrics?.scaledValue(for: lineHeight) ?? lineHeight
-            paragraphStyle.minimumLineHeight = scaledLineHeight
-            paragraphStyle.maximumLineHeight = scaledLineHeight
-            
-            baselineOffset = (scaledLineHeight - font.lineHeight) / 4.0
+        let attributedString: NSMutableAttributedString
+        if let labelAttributedText = self.attributedText {
+            attributedString = NSMutableAttributedString(attributedString: labelAttributedText)
+        } else {
+            attributedString = NSMutableAttributedString(string: self.text ?? "")
         }
+
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
+                                      value: paragraphStyle,
+                                      range: NSMakeRange(.zero, attributedString.length))
         
-        return [
-            NSAttributedString.Key.paragraphStyle: paragraphStyle,
-            NSAttributedString.Key.kern: tracking,
-            NSAttributedString.Key.baselineOffset: baselineOffset,
-            NSAttributedString.Key.font: font
-        ]
+        attributedString.addAttribute(NSAttributedString.Key.font,
+                                      value: self.style.font ?? UIFont(),
+                                      range: NSMakeRange(.zero, attributedString.length))
+        
+        attributedString.addAttribute(NSAttributedString.Key.foregroundColor,
+                                      value: self.style._colorText ?? (self.textColor ?? .black),
+                                      range: NSMakeRange(.zero, attributedString.length))
+        
+        
+        self.attributedText = attributedString
+        invalidateIntrinsicContentSize()
     }
 }
-"""
+""")

@@ -1,5 +1,5 @@
 import Foundation
-import FigmaExportCore
+//import FigmaExportCore
 
 /// PNG to WebP converter
 final class WebpConverter {

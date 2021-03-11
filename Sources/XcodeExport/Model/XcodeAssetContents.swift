@@ -1,21 +1,9 @@
-import FigmaExportCore
-
-enum XcodeAssetIdiom: String, Encodable {
-    case universal
-    case iphone
-    case ipad
-    case mac
-    case tv
-    case watch
-    case car
-}
-
 struct XcodeAssetContents: Encodable {
     struct Info: Encodable {
         let version = 1
         let author = "xcode"
     }
-    struct DarkAppearance: Encodable {
+    struct DarkAppeareance: Encodable {
         let appearance = "luminosity"
         let value = "dark"
     }
@@ -35,45 +23,30 @@ struct XcodeAssetContents: Encodable {
     }
     struct ColorData: Encodable {
         let idiom = "universal"
-        var appearances: [DarkAppearance]?
+        var appearances: [DarkAppeareance]?
         var color: ColorInfo
     }
     struct ImageData: Encodable {
-        let idiom: XcodeAssetIdiom
+        let idiom = "universal"
         var scale: String?
-        var appearances: [DarkAppearance]?
+        var appearances: [DarkAppeareance]?
         let filename: String
     }
     
-    struct Properties: Encodable {
-        let templateRenderingIntent: String?
+    struct TemplateProperties: Encodable {
+        let templateRenderingIntent = "template"
         let preservesVectorRepresentation: Bool?
         
         enum CodingKeys: String, CodingKey {
             case templateRenderingIntent = "template-rendering-intent"
             case preservesVectorRepresentation = "preserves-vector-representation"
         }
-
-        init?(preserveVectorData: Bool?, renderMode: XcodeRenderMode?) {
-            preservesVectorRepresentation = preserveVectorData == true ? true : nil
-            
-            if let renderMode = renderMode, (renderMode == .original || renderMode == .template) {
-                templateRenderingIntent = renderMode.rawValue
-            } else {
-                templateRenderingIntent = nil
-            }
-            
-            if preservesVectorRepresentation == nil && templateRenderingIntent == nil {
-                return nil
-            }
-        }
-
     }
     
     let info = Info()
     let colors: [ColorData]?
     let images: [ImageData]?
-    let properties: Properties?
+    let properties: TemplateProperties?
     
     init(colors: [ColorData]) {
         self.colors = colors
@@ -81,21 +54,19 @@ struct XcodeAssetContents: Encodable {
         self.properties = nil
     }
     
-    init(icons: [ImageData], preserveVectorData: Bool = false, renderMode: XcodeRenderMode) {
+    init(icons: [ImageData], preservesVectorRepresentation: Bool = false) {
         self.colors = nil
         self.images = icons
-        self.properties = Properties(preserveVectorData: preserveVectorData, renderMode: renderMode)
+        if preservesVectorRepresentation {
+            self.properties = TemplateProperties(preservesVectorRepresentation: true)
+        } else {
+            self.properties = TemplateProperties(preservesVectorRepresentation: nil)
+        }
     }
 
     init(images: [ImageData]) {
         self.colors = nil
         self.images = images
         self.properties = nil
-    }
-
-    init(images: [ImageData], properties: Properties? = nil) {
-        self.colors = nil
-        self.images = images
-        self.properties = properties
     }
 }

@@ -18,7 +18,7 @@ extension BaseEndpoint where Root == Content {
 extension BaseEndpoint {
 
     public func content(from response: URLResponse?, with body: Data) throws -> Content {
-        do {
+        do { 
             let resource = try JSONDecoder.default.decode(Root.self, from: body)
             return content(from: resource)
         } catch let mainError {

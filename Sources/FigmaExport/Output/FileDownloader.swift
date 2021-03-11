@@ -1,5 +1,5 @@
 import Foundation
-import FigmaExportCore
+//import FigmaExportCore
 import Logging
 
 final class FileDownloader {
@@ -14,13 +14,11 @@ final class FileDownloader {
     func fetch(files: [FileContents]) throws -> [FileContents] {
         let group = DispatchGroup()
         var errors: [Error] = []
-
+        
         var newFiles = [FileContents]()
 
         let remoteFileCount = files.filter { $0.sourceURL != nil }.count
         var downloaded = 0
-
-        let semaphore = DispatchSemaphore(value: session.configuration.httpMaximumConnectionsPerHost - 1)
 
         files.forEach { file in
             guard let remoteURL = file.sourceURL else {
@@ -28,37 +26,30 @@ final class FileDownloader {
                 return
             }
 
+            group.enter()
             let task = session.downloadTask(with: remoteURL) { localURL, _, error in
-                defer {
-                    semaphore.signal()
-                    group.leave()
-                }
-
+                defer { group.leave() }
+                
                 guard let fileURL = localURL, error == nil else {
                     errors.append(error!)
                     return
                 }
-                let newFile = FileContents(
-                    destination: file.destination,
-                    dataFile: fileURL,
-                    scale: file.scale,
-                    dark: file.dark
-                )
+                var newFile = FileContents(destination: file.destination, dataFile: fileURL)
+                newFile.dark = file.dark
+                newFile.scale = file.scale
                 newFiles.append(newFile)
                 downloaded += 1
                 self.logger.info("Downloaded \(downloaded)/\(remoteFileCount)")
             }
-
-            group.enter()
-            semaphore.wait()
+            
             task.resume()
         }
         group.wait()
-
+        
         if !errors.isEmpty {
             throw ErrorGroup(all: errors)
         }
-
+        
         return newFiles
     }
 }
