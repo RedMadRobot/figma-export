@@ -215,26 +215,16 @@ Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` 
 
  ```FIGMA_PERSONAL_TOKEN=value```
 
-### Manual
-[Download](https://github.com/RedMadRobot/figma-export/releases) latest release and read [Usage](#usage)
-
 ### Homebrew
 ```
-brew install RedMadRobot/formulae/figma-export
+brew install sequenia/formulae/figma-export
 ```
 If you want to export raster images in WebP format install [cwebp](https://developers.google.com/speed/webp/docs/using) command line utility.
 ```
 brew install webp
 ```
 
-### CocoaPods + Fastlane
-Add the following line to your Podfile:
-```ruby
-pod 'FigmaExport'
-```
-
-This will download the FigmaExport binaries and dependencies in `Pods/` during your next
-`pod install` execution and will allow you to invoke it via `Pods/FigmaExport/Release/figma-export` in your Fastfile.
+### Usage with Fastlane
 
 Add the following line to your Fastfile:
 ```ruby

@@ -1,6 +1,5 @@
 prefix ?= /usr/local
 bindir = $(prefix)/bin
-libdir = $(prefix)/lib
 
 build:
 	swift package clean
