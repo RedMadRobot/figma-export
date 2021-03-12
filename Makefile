@@ -3,19 +3,14 @@ bindir = $(prefix)/bin
 libdir = $(prefix)/lib
 
 build:
+	swift package clean
 	swift build -c release --disable-sandbox
 
 install: build
-	install ".build/release/swift-syntax-highlight" "$(bindir)"
-	install ".build/release/libSwiftSyntax.dylib" "$(libdir)"
-	install_name_tool -change \
-		".build/x86_64-apple-macosx10.10/release/libSwiftSyntax.dylib" \
-		"$(libdir)/libSwiftSyntax.dylib" \
-		"$(bindir)/swift-syntax-highlight"
+	install ".build/release/figma-export" "$(bindir)"
 
 uninstall:
-	rm -rf "$(bindir)/swift-syntax-highlight"
-	rm -rf "$(libdir)/libSwiftSyntax.dylib"
+	rm -rf "$(bindir)/figma-export"
 
 clean:
 	rm -rf .build
