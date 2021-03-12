@@ -268,8 +268,13 @@ extension FigmaExportCommand {
             logger.info("Writting files to Android Studio project...")
             
             // Move PNG/WebP files to main/res/figma-export-images/drawable-XXXdpi/
+            let isSingleScale = params.android?.images?.scales?.count == 1
             localFiles = localFiles.map { fileContents -> FileContents in
-                let directoryName = Drawable.scaleToDrawableName(fileContents.scale, dark: fileContents.dark)
+                let directoryName = Drawable.scaleToDrawableName(
+                    fileContents.scale,
+                    dark: fileContents.dark,
+                    singleScale: isSingleScale
+                )
                 let directory = URL(fileURLWithPath: android.mainRes.appendingPathComponent(androidImages.output).path)
                     .appendingPathComponent(directoryName, isDirectory: true)
                 return FileContents(

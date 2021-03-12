@@ -116,6 +116,7 @@ struct Params: Decodable {
                 let encoding: Encoding
                 let quality: Int?
             }
+            let scales: [Double]?
             let output: String
             let format: Format
             let webpOptions: FormatOptions?

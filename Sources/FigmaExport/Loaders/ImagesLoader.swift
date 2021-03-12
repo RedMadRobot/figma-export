@@ -166,13 +166,19 @@ final class ImagesLoader {
     }
 
     private func getScales(platform: Platform) -> [Double] {
-        if platform == .android {
-            return [1, 2, 3, 1.5, 4.0]
-        } else {
-            let validScales: [Double] = [1, 2, 3]
-            let customScales = params.ios?.images.scales?.filter { validScales.contains($0) } ?? []
-            return customScales.isEmpty ? validScales : customScales
+        var validScales: [Double] = []
+        var customScales: [Double] = []
+        let filterScales = { (platformScales: [Double]?) -> [Double] in
+            platformScales?.filter { validScales.contains($0) } ?? []
         }
+        if platform == .android {
+            validScales = [1, 2, 3, 1.5, 4.0]
+            customScales = filterScales(params.android?.images?.scales)
+        } else {
+            validScales = [1, 2, 3]
+            customScales = filterScales(params.ios?.images.scales)
+        }
+        return customScales.isEmpty ? validScales : customScales
     }
 
     // MARK: - Figma

@@ -1,6 +1,9 @@
 public enum Drawable {
     
-    public static func scaleToDrawableName(_ scale: Double, dark: Bool) -> String {
+    public static func scaleToDrawableName(_ scale: Double, dark: Bool, singleScale: Bool) -> String {
+        if singleScale {
+            return dark ? "drawable-night" : "drawable"
+        }
         switch scale {
         case 1:
             return dark ? "drawable-night-mdpi" : "drawable-mdpi"
