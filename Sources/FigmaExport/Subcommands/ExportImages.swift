@@ -47,7 +47,7 @@ extension FigmaExportCommand {
             }
 
             logger.info("Fetching images info from Figma. Please wait...")
-            let loader = ImagesLoader(client: client, params: params, platform: .ios)
+            let loader = ImagesLoader(client: client, params: params, platform: .ios, logger: logger)
             let imagesTuple = try loader.loadImages(filter: filter)
 
             logger.info("Processing images...")
@@ -106,7 +106,7 @@ extension FigmaExportCommand {
             }
 
             logger.info("Fetching images info from Figma. Please wait...")
-            let loader = ImagesLoader(client: client, params: params, platform: .android)
+            let loader = ImagesLoader(client: client, params: params, platform: .android, logger: logger)
             let imagesTuple = try loader.loadImages(filter: filter)
 
             logger.info("Processing images...")

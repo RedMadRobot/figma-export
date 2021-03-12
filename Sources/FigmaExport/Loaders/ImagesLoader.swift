@@ -1,6 +1,7 @@
 import Foundation
 import FigmaAPI
 import FigmaExportCore
+import Logging
 
 final class ImagesLoader {
 
@@ -15,31 +16,33 @@ final class ImagesLoader {
     private var imagesFrameName: String {
         params.common?.images?.figmaFrameName ?? "Illustrations"
     }
+    
+    private let logger: Logger
 
-    init(client: Client, params: Params, platform: Platform) {
+    init(client: Client, params: Params, platform: Platform, logger: Logger) {
         self.client = client
         self.params = params
         self.platform = platform
+        self.logger = logger
     }
 
     func loadIcons(filter: String? = nil) throws -> [ImagePack] {
+        let formatParams: FormatParams
+        
         switch (platform, params.ios?.icons.format) {
         case (.android, _),
              (.ios, .svg):
-            return try _loadImages(
-                fileId: params.figma.lightFileId,
-                frameName: iconsFrameName,
-                params: SVGParams(),
-                filter: filter
-            )
+            formatParams = SVGParams()
         case (.ios, _):
-            return try _loadImages(
-                fileId: params.figma.lightFileId,
-                frameName: iconsFrameName,
-                params: PDFParams(),
-                filter: filter
-            )
+            formatParams = PDFParams()
         }
+        
+        return try _loadImages(
+            fileId: params.figma.lightFileId,
+            frameName: iconsFrameName,
+            params: formatParams,
+            filter: filter
+        )
     }
 
     func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
@@ -112,6 +115,8 @@ final class ImagesLoader {
         }
 
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
+        
+        logger.info("Fetching vector images...")
         let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
 
         // Group images by name
@@ -143,6 +148,7 @@ final class ImagesLoader {
 
         var images: [Double: [NodeId: ImagePath]] = [:]
         for scale in scales {
+            logger.info("Fetching PNG images for scale \(scale)...")
             images[scale] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: scale))
         }
 
