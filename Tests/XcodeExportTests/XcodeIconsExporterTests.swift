@@ -6,8 +6,6 @@ final class XcodeIconsExporterTests: XCTestCase {
     
     // MARK: - Properties
     
-    private let fileManager = FileManager.default
-
     private let image1 = Image(name: "image1", url: URL(string: "1")!, format: "pdf")
     private let image2 = Image(name: "image2", url: URL(string: "2")!, format: "pdf")
 

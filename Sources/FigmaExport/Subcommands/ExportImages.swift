@@ -40,14 +40,14 @@ extension FigmaExportCommand {
             }
         }
 
-        private func exportiOSImages(client: FigmaClient, params: Params, logger: Logger) throws {
+        private func exportiOSImages(client: Client, params: Params, logger: Logger) throws {
             guard let ios = params.ios else {
                 logger.info("Nothing to do. You haven’t specified ios parameter in the config file.")
                 return
             }
 
             logger.info("Fetching images info from Figma. Please wait...")
-            let loader = ImagesLoader(figmaClient: client, params: params, platform: .ios)
+            let loader = ImagesLoader(client: client, params: params, platform: .ios)
             let imagesTuple = try loader.loadImages(filter: filter)
 
             logger.info("Processing images...")
@@ -99,14 +99,14 @@ extension FigmaExportCommand {
             logger.info("Done!")
         }
         
-        private func exportAndroidImages(client: FigmaClient, params: Params, logger: Logger) throws {
+        private func exportAndroidImages(client: Client, params: Params, logger: Logger) throws {
             guard let androidImages = params.android?.images else {
                 logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
                 return
             }
 
             logger.info("Fetching images info from Figma. Please wait...")
-            let loader = ImagesLoader(figmaClient: client, params: params, platform: .android)
+            let loader = ImagesLoader(client: client, params: params, platform: .android)
             let imagesTuple = try loader.loadImages(filter: filter)
 
             logger.info("Processing images...")

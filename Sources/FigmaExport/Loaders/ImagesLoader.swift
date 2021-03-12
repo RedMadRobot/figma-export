@@ -4,7 +4,7 @@ import FigmaExportCore
 
 final class ImagesLoader {
 
-    let figmaClient: FigmaClient
+    let client: Client
     let params: Params
     let platform: Platform
 
@@ -16,8 +16,8 @@ final class ImagesLoader {
         params.common?.images?.figmaFrameName ?? "Illustrations"
     }
 
-    init(figmaClient: FigmaClient, params: Params, platform: Platform) {
-        self.figmaClient = figmaClient
+    init(client: Client, params: Params, platform: Platform) {
+        self.client = client
         self.params = params
         self.platform = platform
     }
@@ -185,14 +185,14 @@ final class ImagesLoader {
 
     private func loadComponents(fileId: String) throws -> [Component] {
         let endpoint = ComponentsEndpoint(fileId: fileId)
-        return try figmaClient.request(endpoint)
+        return try client.request(endpoint)
     }
 
     private func loadImages(fileId: String, nodeIds: [NodeId], params: FormatParams) throws -> [NodeId: ImagePath] {
         let batchSize = 100
         let keysWithValues: [(NodeId, ImagePath)] = try nodeIds.chunked(into: batchSize)
             .map { ImageEndpoint(fileId: fileId, nodeIds: $0, params: params) }
-            .map { try figmaClient.request($0) }
+            .map { try client.request($0) }
             .flatMap { $0.map { ($0, $1) } }
         return Dictionary(uniqueKeysWithValues: keysWithValues)
     }
