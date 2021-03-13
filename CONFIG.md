@@ -63,13 +63,11 @@ ios:
   xcassetsPath: "./Resources/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?
   xcassetsInMainBundle: true
-  # [optional] Is Assets.xcassets located in a swift package? Default value is false.
-  xcassetsInSwiftPackage: false
 
   # Parameters for exporting colors
   colors:
     # How to export colors? Use .xcassets and UIColor extension (useColorAssets = true) or extension only (useColorAssets = false)
-    useColorAssets: true
+    useColorAssets: True
     # [required if useColorAssets: True] Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
     # Color name style: camelCase or snake_case
@@ -87,17 +85,28 @@ ios:
     assetsFolder: Icons
     # Icon name style: camelCase or snake_case
     nameStyle: camelCase
-    # [optional] An array of icon names that will supports Preseve Vecotor Data
-    preservesVectorRepresentation:
+    # [optional] Default mode for supports Preseve Vector Data
+    preservesVectorRepresentation: false
+    # [optional] An array of icon names that will supports Preseve Vector Data
+    preservesVectorRepresentationIcons:
     - ic24TabBarMain
     - ic24TabBarEvents
     - ic24TabBarProfile
+    # [optional] Default rendering intent for all icons in application (template or original)
+    renderIntent: original
+    # [optional] An array of icon names that will rendered as original
+    renderAsOriginalIcons:
+    - ic24TabBarMain
+    - ic24TabBarEvents
+    - ic24TabBarProfile
+    # [optional] An array of icon names that will rendered as template
+    renderAsTemplateIcons:
+    - ic24TabBarCart
+    - ic24TabBarCatalog
     # [optional] Absolute or relative path to swift file where to export icons (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
     swiftUIImageSwift: "./Source/Image+extension_icons.swift"
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)
     imageSwift: "./Example/Source/UIImage+extension_icons.swift"
-    # Asset render mode: "template", "orignal" or "default". Default value is "template".
-    renderMode: default
 
   # Parameters for exporting images
   images:
@@ -105,8 +114,6 @@ ios:
     assetsFolder: Illustrations
     # Image name style: camelCase or snake_case
     nameStyle: camelCase
-    # [optional] An array of asset scales that should be downloaded. The valid values are 1, 2, 3. The deafault value is [1, 2, 3].
-    scales: [1, 2, 3]
     # [optional] Absolute or relative path to swift file where to export images (SwiftUI’s Image) for accessing from the code (e.g. Image.illZeroNoInternet)
     swiftUIImageSwift: "./Source/Image+extension_illustrations.swift"
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
@@ -122,8 +129,6 @@ ios:
     generateLabels: true
     # Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
     labelsDirectory: "./Source/UIComponents/"
-    # Typography name style: camelCase or snake_case
-    nameStyle: camelCase
 
 # [optional] Android export parameters
 android:
@@ -132,7 +137,7 @@ android:
   # Parameters for exporting images
   images:
     # Image file format: svg or png
-    format: webp
+    format: svg
     # Format options for webp format only
     webpOptions:
       # Encoding type: lossy or lossless

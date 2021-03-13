@@ -3,9 +3,7 @@
 <img src="images/logo.png"/><br/>
 
 [![SPM compatible](https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat)](https://swift.org/package-manager)
-[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/RedMadRobot/Catbird/blob/master/LICENSE)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/FigmaExport.svg)](https://cocoapods.org/pods/FigmaExport)
-[![codebeat badge](https://codebeat.co/badges/6c346142-a942-4c13-ae6b-5517b4c50b1d)](https://codebeat.co/projects/github-com-redmadrobot-figma-export-master)
+[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/sequenia/figma-export/blob/master/LICENSE)
 
 Command line utility to export colors, typography, icons and images from Figma to Xcode / Android Studio project.
 * color - Figma's color style
@@ -228,20 +226,22 @@ brew install webp
 
 Add the following line to your Fastfile:
 ```ruby
-lane :sync_colors do
-  Dir.chdir("../") do
-    sh "Pods/FigmaExport/Release/figma-export colors ."
+lane :sync_figma do
+  Dir.chdir('../') do
+    `figma-export colors`
+    `figma-export icons`
+    `figma-export images`
   end
 end
 ```
 
 Don't forget to place figma-export.yaml file at the root of the project directory.
 
-Run `fastlane sync_colors` to run FigmaExport.
+Run `fastlane sync_figma` to run FigmaExport.
 
 ## Usage
 1. Open `Terminal.app`
-2. Go (cd) to the folder with `figma-export` binary file
+2. Go (cd) to the folder with `figma-export.yaml` file
 3. Run `figma-export`
   
    To export colors use `colors` argument:
@@ -399,3 +399,5 @@ If you have any issues with the FigmaExport or you want some new features feel f
 ## Authors
 
 Daniil Subbotin - d.subbotin@redmadrobot.com
+Ivan Michaylovsky - ivan.michaylovsky@sequenia.com
+Semen Kologrivov - semen@sequenia.com
