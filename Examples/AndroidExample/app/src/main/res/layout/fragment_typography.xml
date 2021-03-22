@@ -20,28 +20,44 @@
             style="@style/largeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_large_title" />
+            android:text="@string/label_large_title"
+            android:textColor="@color/text_secondary"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
 
         <TextView
             android:id="@+id/textViewHeader"
             style="@style/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_header" />
+            android:text="@string/label_header"
+            android:textColor="@color/text_secondary"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
 
         <TextView
             android:id="@+id/textViewBody"
             style="@style/body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_body" />
+            android:text="@string/label_body"
+            android:textColor="@color/text_secondary" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
 
         <TextView
             android:id="@+id/textViewCaption"
             style="@style/caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_caption" />
+            android:text="@string/label_caption"
+            android:textColor="@color/text_secondary"/>
 
     </LinearLayout>
 
