@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="body">
+        <item name="android:fontFamily">@font/ptsans_regular</item>
+        <item name="android:textSize">16.0sp</item>
+    </style>
+    <style name="caption">
+        <item name="android:fontFamily">@font/ptsans_regular</item>
+        <item name="android:textSize">14.0sp</item>
+    </style>
+    <style name="header">
+        <item name="android:fontFamily">@font/ptsans_bold</item>
+        <item name="android:textSize">20.0sp</item>
+    </style>
+    <style name="largeTitle">
+        <item name="android:fontFamily">@font/ptsans_bold</item>
+        <item name="android:textSize">34.0sp</item>
+    </style>
+</resources>

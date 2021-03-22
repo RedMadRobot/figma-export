@@ -32,3 +32,7 @@ android:
       encoding: lossy
       # Encoding quality in percents. Only for lossy encoding.
       quality: 85
+  # Parameters for exporting typography
+  typography:
+    # Typography name style: camelCase or snake_case
+    nameStyle: camelCase
