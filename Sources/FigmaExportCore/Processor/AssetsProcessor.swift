@@ -90,6 +90,10 @@ public struct ImagesProcessor: AssetsProcessable {
         self.nameReplaceRegexp = nameReplaceRegexp
         self.nameStyle = nameStyle
     }
+
+    public var description: String {
+        "ImagesProcessor(nameValidateRegexp: \(nameValidateRegexp)"
+    }
 }
 
 public extension AssetsProcessable {
