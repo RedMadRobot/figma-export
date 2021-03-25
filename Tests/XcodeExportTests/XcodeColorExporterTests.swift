@@ -109,6 +109,43 @@ final class XcodeColorExporterTests: XCTestCase {
         """
         XCTAssertEqual(generatedCode, referenceCode)
     }
+
+    func testExport_with_objc() {
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, colorSwiftURL: colorsFile)
+        let exporter = XcodeColorExporter(output: output)
+        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
+
+        XCTAssertEqual(result.count, 4)
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
+        XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("Assets.xcassets/Colors/Contents.json"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("colorPair1.colorset/Contents.json"))
+        XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("colorPair2.colorset/Contents.json"))
+
+        let content = result[0].data
+        XCTAssertNotNil(content)
+
+        let generatedCode = String(data: content!, encoding: .utf8)
+        let referenceCode = """
+        //
+        //  The code generated using FigmaExport — Command line utility to export
+        //  colors, typography, icons and images from Figma to Xcode project.
+        //
+        //  https://github.com/RedMadRobot/figma-export
+        //
+        //  Don’t edit this code manually to avoid runtime crashes
+        //
+
+        import UIKit
+
+        @objc
+        public extension UIColor {
+            @objc static var colorPair1: UIColor { UIColor(named: #function)! }
+            @objc static var colorPair2: UIColor { UIColor(named: #function)! }
+        }
+
+        """
+        XCTAssertEqual(generatedCode, referenceCode)
+    }
     
     func testExport_with_assets_in_separate_bundle() {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: false, colorSwiftURL: colorsFile)
