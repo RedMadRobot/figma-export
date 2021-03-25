@@ -25,6 +25,8 @@ ios:
   xcassetsPath: "./ExampleSwiftUI/Resources/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?
   xcassetsInMainBundle: true
+  # [optional] Add @objc attribute to generated properties so that they are accessible in Objective-C. Defaults to false
+  addObjcAttribute: true
   
   # Parameters for exporting colors
   colors:
