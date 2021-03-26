@@ -3,14 +3,50 @@ import FigmaExportCore
 import Stencil
 
 final public class XcodeTypographyExporter {
+    private let output: XcodeTypographyOutput
 
-    public init() {}
+    public init(output: XcodeTypographyOutput) {
+        self.output = output
+    }
+
+    public func export(textStyles: [TextStyle]) throws -> [FileContents] {
+        var files: [FileContents] = []
+
+        // UIKit UIFont extension
+        if let fontExtensionURL = output.fontExtensionURL {
+            files.append(contentsOf: try exportFonts(
+                textStyles: textStyles,
+                fontExtensionURL: fontExtensionURL,
+                addObjcAttribute: output.addObjcAttribute
+            ))
+        }
+
+        // SwiftUI Font extension
+        if let swiftUIFontExtensionURL = output.swiftUIFontExtensionURL {
+            files.append(contentsOf: try exportFonts(
+                textStyles: textStyles,
+                swiftUIFontExtensionURL: swiftUIFontExtensionURL
+            ))
+        }
+
+        // UIKit Labels
+        if output.generateLabels, let labelsDirectory = output.labelsDirectory  {
+            // Label.swift
+            // LabelStyle.swift
+            files.append(contentsOf: try exportLabels(
+                textStyles: textStyles,
+                labelsDirectory: labelsDirectory
+            ))
+        }
+
+        return files
+    }
     
-    public func exportFonts(textStyles: [TextStyle], fontExtensionURL: URL) throws -> [FileContents] {
+    private func exportFonts(textStyles: [TextStyle], fontExtensionURL: URL, addObjcAttribute: Bool) throws -> [FileContents] {
         let strings: [String] = textStyles.map {
             let dynamicType: String = $0.fontStyle != nil ? ", textStyle: .\($0.fontStyle!.textStyleName), scaled: true" : ""
             return """
-                static func \($0.name)() -> UIFont {
+                \(addObjcAttribute ? "@objc ": "")static func \($0.name)() -> UIFont {
                     customFont("\($0.fontName)", size: \($0.fontSize)\(dynamicType))
                 }
             """
@@ -21,9 +57,9 @@ final public class XcodeTypographyExporter {
         import UIKit
 
         public extension UIFont {
-        
+
         \(strings.joined(separator: "\n\n"))
-        
+
             private static func customFont(
                 _ name: String,
                 size: CGFloat,
@@ -54,7 +90,7 @@ final public class XcodeTypographyExporter {
         return [FileContents(destination: destination, data: data)]
     }
     
-    public func exportFonts(textStyles: [TextStyle], swiftUIFontExtensionURL: URL) throws -> [FileContents] {
+    private func exportFonts(textStyles: [TextStyle], swiftUIFontExtensionURL: URL) throws -> [FileContents] {
         let strings: [String] = textStyles.map {
             return """
                 static func \($0.name)() -> Font {
@@ -83,7 +119,7 @@ final public class XcodeTypographyExporter {
         return [FileContents(destination: destination, data: data)]
     }
     
-    public func exportLabels(textStyles: [TextStyle], labelsDirectory: URL) throws -> [FileContents] {
+    private func exportLabels(textStyles: [TextStyle], labelsDirectory: URL) throws -> [FileContents] {
         let dict = textStyles.map { style -> [String: Any] in
             let type: String = style.fontStyle?.textStyleName ?? ""
             return [
