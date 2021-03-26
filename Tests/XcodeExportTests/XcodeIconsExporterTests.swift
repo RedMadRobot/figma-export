@@ -6,8 +6,6 @@ import FigmaExportCore
 final class XcodeIconsExporterTests: XCTestCase {
     
     // MARK: - Properties
-    
-    private let fileManager = FileManager.default
 
     private let image1 = Image(name: "image1", url: URL(string: "1")!, format: "pdf")
     private let image2 = Image(name: "image2", url: URL(string: "2")!, format: "pdf")
@@ -287,7 +285,7 @@ private extension XcodeIconsExporterTests {
         let content = try XCTUnwrap(file.data)
 
         let directoryURL = URL(fileURLWithPath: file.destination.directory.path)
-        try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.createDirectory(atPath: directoryURL.path, withIntermediateDirectories: true, attributes: [:])
         let fileURL = URL(fileURLWithPath: file.destination.url.path)
 
         try content.write(to: fileURL, options: .atomicWrite)
