@@ -4,7 +4,7 @@ import FigmaExportCore
 final public class AndroidColorExporter {
 
     private let outputDirectory: URL
-    
+
     public init(outputDirectory: URL) {
         self.outputDirectory = outputDirectory
     }
@@ -65,7 +65,7 @@ private extension Color {
         var result = "#\(rr)\(gg)\(bb)"
         if alpha != 1.0 {
             let aa = doubleToHex(alpha)
-            result.append(aa)
+            result = "#\(aa)\(rr)\(gg)\(bb)"
         }
         return result
     }

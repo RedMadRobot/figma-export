@@ -22,4 +22,10 @@
         android:name="com.redmadrobot.androidexample.ui.IconsFragment"
         android:label="@string/title_icons"
         tools:layout="@layout/fragment_icons" />
+
+    <fragment
+        android:id="@+id/navigation_typography"
+        android:name="com.redmadrobot.androidexample.ui.TypographyFragment"
+        android:label="@string/title_typography"
+        tools:layout="@layout/fragment_typography" />
 </navigation>

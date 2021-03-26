@@ -33,29 +33,6 @@ extension String {
         }
         return false
     }
-    
-    /// A Boolean value indicating whether this string is considered upper camel case.
-    ///
-    /// For example, the following strings are all upper camel case:
-    ///
-    /// - "UpperCamelCase"
-    /// - "Example"
-    /// - "DateFormatter"
-    ///
-    /// String can contain lowercase and uppercase letters only.
-    /// In upper camel case, words are separated by uppercase letters.
-    var isUpperCamelCase: Bool {
-        // Check if the first character is uppercase and the rest contains letters
-        if let firstCharacter = self.first, firstCharacter.isUppercase && self.allSatisfy({ $0.isLetter }) {
-            return true
-        }
-        return false
-    }
-    
-    /// Checks if all characters are letters
-    private var isAllLetters: Bool {
-        return self.allSatisfy({ $0.isLetter })
-    }
 }
 
 public extension String {
@@ -99,20 +76,6 @@ public extension String {
             strings[0] = firstString.lowercased()
         }
         return strings.joined()
-    }
-    
-    /// Returns an upper camel case version of the string.
-    ///
-    /// Here's an example of transforming a string to upper camel case.
-    ///
-    ///     let event = "Keynote Event"
-    ///     print(event.upperCamelCased())
-    ///     // Prints "KeynoteEvent"
-    ///
-    /// - Returns: An upper camel case copy of the string.
-    func upperCamelCased() -> String {
-        if self.isUpperCamelCase { return self }
-        return lowercasedStrings().joined()
     }
     
     /// Returns snake case version of the string.

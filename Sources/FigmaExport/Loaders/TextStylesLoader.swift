@@ -4,13 +4,11 @@ import FigmaExportCore
 /// Loads text styles from Figma
 final class TextStylesLoader {
     
-    typealias Output = [TextStyle]
-    
-    private let figmaClient: FigmaClient
+    private let client: Client
     private let params: Params.Figma
 
-    init(figmaClient: FigmaClient, params: Params.Figma) {
-        self.figmaClient = figmaClient
+    init(client: Client, params: Params.Figma) {
+        self.client = client
         self.params = params
     }
     
@@ -46,12 +44,12 @@ final class TextStylesLoader {
 
     private func loadStyles(fileId: String) throws -> [Style] {
         let endpoint = StylesEndpoint(fileId: fileId)
-        let styles = try figmaClient.request(endpoint)
+        let styles = try client.request(endpoint)
         return styles.filter { $0.styleType == .text }
     }
 
     private func loadNodes(fileId: String, nodeIds: [String]) throws -> [NodeId: Node] {
         let endpoint = NodesEndpoint(fileId: fileId, nodeIds: nodeIds)
-        return try figmaClient.request(endpoint)
+        return try client.request(endpoint)
     }
 }

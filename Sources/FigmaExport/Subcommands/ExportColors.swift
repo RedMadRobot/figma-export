@@ -25,7 +25,7 @@ extension FigmaExportCommand {
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
 
             logger.info("Fetching colors. Please wait...")
-            let loader = ColorsLoader(figmaClient: client, figmaParams: options.params.figma, colorParams: options.params.common?.colors)
+            let loader = ColorsLoader(client: client, figmaParams: options.params.figma, colorParams: options.params.common?.colors)
             let colors = try loader.load()
 
             if let ios = options.params.ios {
