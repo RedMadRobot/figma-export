@@ -1,4 +1,5 @@
 import XCTest
+import Foundation
 import FigmaExportCore
 @testable import XcodeExport
 
