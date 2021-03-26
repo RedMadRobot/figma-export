@@ -24,7 +24,7 @@ public class XcodeImagesExporterBase {
                         return "    static var \(name): Image { Image(#function, bundle: BundleProvider.bundle) }"
                     }
                 }
-                let string = strings.joined(separator: "\n") + "\n}"
+                let string = strings.joined(separator: "\n") + "\n}\n"
                 contents = try appendContent(string: string, to: url)
             }
             else {
@@ -46,7 +46,7 @@ public class XcodeImagesExporterBase {
                         return "    static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
                     }
                 }
-                let string = strings.joined(separator: "\n") + "\n}"
+                let string = strings.joined(separator: "\n") + "\n}\n"
                 contents = try appendContent(string: string, to: url)
             } else {
                 contents = makeUIKitExtension(assetNames: names)
@@ -59,11 +59,16 @@ public class XcodeImagesExporterBase {
     }
     
     private func appendContent(string: String, to fileURL: URL) throws -> String {
-        var existingContents = try String(contentsOf: URL(fileURLWithPath: fileURL.path), encoding: .utf8)
+        var existingContents = try String(
+            contentsOf: URL(fileURLWithPath: fileURL.path),
+            encoding: .utf8
+        )
 
         if let index = existingContents.lastIndex(of: "}") {
-           let nextIndex = existingContents.index(after: index)
-           existingContents.replaceSubrange(index...nextIndex, with: string)
+            existingContents.replaceSubrange(
+                index..<existingContents.endIndex,
+                with: string
+            )
         }
         return existingContents
     }

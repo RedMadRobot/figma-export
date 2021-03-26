@@ -229,4 +229,67 @@ final class XcodeIconsExporterTests: XCTestCase {
         """
         XCTAssertEqual(generatedCode, referenceCode)
     }
+
+    func testAppendAfterExport() throws {
+        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!)
+        let exporter = XcodeIconsExporter(output: output)
+        let result = try exporter.export(
+            icons: [ImagePack(image: image1)],
+            append: false
+        )
+
+        XCTAssertEqual(result.count, 4)
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
+        XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
+        XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
+
+        try write(file: result[3])
+
+        let appendResult = try exporter.export(
+            icons: [ImagePack(image: image2)],
+            append: true
+        )
+
+        XCTAssertEqual(appendResult.count, 4)
+        XCTAssertTrue(appendResult[0].destination.url.absoluteString.hasSuffix("Contents.json"))
+        XCTAssertTrue(appendResult[1].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
+
+        let resultContent = try XCTUnwrap(appendResult[3].data)
+
+        let generatedCode = String(data: resultContent, encoding: .utf8)
+        let referenceCode = """
+        //
+        //  The code generated using FigmaExport — Command line utility to export
+        //  colors, typography, icons and images from Figma to Xcode project.
+        //
+        //  https://github.com/RedMadRobot/figma-export
+        //
+        //  Don’t edit this code manually to avoid runtime crashes
+        //
+
+        import UIKit
+
+        public extension UIImage {
+            static var image1: UIImage { UIImage(named: #function)! }
+            static var image2: UIImage { UIImage(named: #function)! }
+        }
+
+        """
+        XCTAssertEqual(generatedCode, referenceCode)
+    }
+}
+
+private extension XcodeIconsExporterTests {
+
+    func write(file: FileContents) throws {
+        let content = try XCTUnwrap(file.data)
+
+        let directoryURL = URL(fileURLWithPath: file.destination.directory.path)
+        try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+        let fileURL = URL(fileURLWithPath: file.destination.url.path)
+
+        try content.write(to: fileURL, options: .atomicWrite)
+    }
+
 }
