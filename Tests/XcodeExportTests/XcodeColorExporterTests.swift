@@ -111,7 +111,12 @@ final class XcodeColorExporterTests: XCTestCase {
     }
 
     func testExport_with_objc() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(
+            assetsColorsURL: colorsAsssetCatalog,
+            assetsInMainBundle: true,
+            addObjcAttribute: true,
+            colorSwiftURL: colorsFile
+        )
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
 
@@ -137,7 +142,6 @@ final class XcodeColorExporterTests: XCTestCase {
 
         import UIKit
 
-        @objc
         public extension UIColor {
             @objc static var colorPair1: UIColor { UIColor(named: #function)! }
             @objc static var colorPair2: UIColor { UIColor(named: #function)! }
