@@ -53,7 +53,12 @@ final class XcodeIconsExporterTests: XCTestCase {
     }
 
     func testExportWithObjc() throws {
-        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!)
+        let output = XcodeImagesOutput(
+            assetsFolderURL: URL(string: "~/")!,
+            assetsInMainBundle: true,
+            addObjcAttribute: true,
+            uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!
+        )
         let exporter = XcodeIconsExporter(output: output)
         let result = try exporter.export(
             icons: [ImagePack(image: image1), ImagePack(image: image2)],
@@ -84,10 +89,9 @@ final class XcodeIconsExporterTests: XCTestCase {
 
         import UIKit
 
-        @objc
         public extension UIImage {
-            static var image1: UIImage { UIImage(named: #function)! }
-            static var image2: UIImage { UIImage(named: #function)! }
+            @objc static var image1: UIImage { UIImage(named: #function)! }
+            @objc static var image2: UIImage { UIImage(named: #function)! }
         }
 
         """
