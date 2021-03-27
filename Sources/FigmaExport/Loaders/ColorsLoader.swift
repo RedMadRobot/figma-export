@@ -4,14 +4,12 @@ import FigmaExportCore
 /// Loads colors from Figma
 final class ColorsLoader {
     
-    typealias Output = (light: [Color], dark: [Color]?)
-    
-    private let figmaClient: FigmaClient
+    private let client: Client
     private let figmaParams: Params.Figma
     private let colorParams: Params.Common.Colors?
 
-    init(figmaClient: FigmaClient, figmaParams: Params.Figma, colorParams: Params.Common.Colors?) {
-        self.figmaClient = figmaClient
+    init(client: Client, figmaParams: Params.Figma, colorParams: Params.Common.Colors?) {
+        self.client = client
         self.figmaParams = figmaParams
         self.colorParams = colorParams
     }
@@ -71,7 +69,7 @@ final class ColorsLoader {
     
     private func loadStyles(fileId: String) throws -> [Style] {
         let endpoint = StylesEndpoint(fileId: fileId)
-        let styles = try figmaClient.request(endpoint)
+        let styles = try client.request(endpoint)
         return styles.filter {
             $0.styleType == .fill && useStyle($0)
         }
@@ -86,6 +84,6 @@ final class ColorsLoader {
     
     private func loadNodes(fileId: String, nodeIds: [String]) throws -> [NodeId: Node] {
         let endpoint = NodesEndpoint(fileId: fileId, nodeIds: nodeIds)
-        return try figmaClient.request(endpoint)
+        return try client.request(endpoint)
     }
 }

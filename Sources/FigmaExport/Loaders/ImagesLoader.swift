@@ -1,45 +1,48 @@
 import Foundation
 import FigmaAPI
 import FigmaExportCore
+import Logging
 
 final class ImagesLoader {
 
-    let figmaClient: FigmaClient
+    let client: Client
     let params: Params
     let platform: Platform
-    
+
     private var iconsFrameName: String {
         params.common?.icons?.figmaFrameName ?? "Icons"
     }
-    
+
     private var imagesFrameName: String {
         params.common?.images?.figmaFrameName ?? "Illustrations"
     }
     
-    init(figmaClient: FigmaClient, params: Params, platform: Platform) {
-        self.figmaClient = figmaClient
+    private let logger: Logger
+
+    init(client: Client, params: Params, platform: Platform, logger: Logger) {
+        self.client = client
         self.params = params
         self.platform = platform
+        self.logger = logger
     }
 
     func loadIcons(filter: String? = nil) throws -> [ImagePack] {
+        let formatParams: FormatParams
+        
         switch (platform, params.ios?.icons.format) {
         case (.android, _),
              (.ios, .svg):
-            return try _loadImages(
-                fileId: params.figma.lightFileId,
-                frameName: iconsFrameName,
-                params: SVGParams(),
-                filter: filter
-            )
+            formatParams = SVGParams()
         case (.ios, _):
-            return try _loadImages(
-                fileId: params.figma.lightFileId,
-                frameName: iconsFrameName,
-                params: PDFParams(),
-                filter: filter
-            )
+            formatParams = PDFParams()
         }
+        
+        return try _loadImages(
+            fileId: params.figma.lightFileId,
+            frameName: iconsFrameName,
+            params: formatParams,
+            filter: filter
+        )
     }
 
     func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
@@ -67,7 +70,7 @@ final class ImagesLoader {
                 frameName: imagesFrameName,
                 params: SVGParams(),
                 filter: filter)
-            
+
             let darkPacks = try params.figma.darkFileId.map {
                 try _loadImages(
                     fileId: $0,
@@ -88,14 +91,14 @@ final class ImagesLoader {
                     ($0.description == platform.rawValue || $0.description == nil || $0.description == "") &&
                     $0.description?.contains("none") == false
             }
-        
+
         if let filter = filter {
             let assetsFilter = AssetsFilter(filter: filter)
             components = components.filter { component -> Bool in
                 assetsFilter.match(name: component.name)
             }
         }
-        
+
         return Dictionary(uniqueKeysWithValues: components.map { ($0.nodeId, $0) })
     }
 
@@ -106,12 +109,14 @@ final class ImagesLoader {
         filter: String? = nil
     ) throws -> [ImagePack] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
-        
+
         guard !imagesDict.isEmpty else {
             throw FigmaExportError.componentsNotFound
         }
-        
+
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
+        
+        logger.info("Fetching vector images...")
         let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
 
         // Group images by name
@@ -133,16 +138,17 @@ final class ImagesLoader {
 
     private func loadPNGImages(fileId: String, frameName: String, filter: String? = nil, platform: Platform) throws -> [ImagePack] {
         let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
-        
+
         guard !imagesDict.isEmpty else {
             throw FigmaExportError.componentsNotFound
         }
 
         let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
-        let scales = platform == .android ? [1, 2, 3, 1.5, 4.0] : [1, 2, 3]
+        let scales = getScales(platform: platform)
 
         var images: [Double: [NodeId: ImagePath]] = [:]
         for scale in scales {
+            logger.info("Fetching PNG images for scale \(scale)...")
             images[scale] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: scale))
         }
 
@@ -165,18 +171,34 @@ final class ImagesLoader {
         return imagePacks
     }
 
+    private func getScales(platform: Platform) -> [Double] {
+        var validScales: [Double] = []
+        var customScales: [Double] = []
+        let filterScales = { (platformScales: [Double]?) -> [Double] in
+            platformScales?.filter { validScales.contains($0) } ?? []
+        }
+        if platform == .android {
+            validScales = [1, 2, 3, 1.5, 4.0]
+            customScales = filterScales(params.android?.images?.scales)
+        } else {
+            validScales = [1, 2, 3]
+            customScales = filterScales(params.ios?.images.scales)
+        }
+        return customScales.isEmpty ? validScales : customScales
+    }
+
     // MARK: - Figma
 
     private func loadComponents(fileId: String) throws -> [Component] {
         let endpoint = ComponentsEndpoint(fileId: fileId)
-        return try figmaClient.request(endpoint)
+        return try client.request(endpoint)
     }
 
     private func loadImages(fileId: String, nodeIds: [NodeId], params: FormatParams) throws -> [NodeId: ImagePath] {
         let batchSize = 100
         let keysWithValues: [(NodeId, ImagePath)] = try nodeIds.chunked(into: batchSize)
             .map { ImageEndpoint(fileId: fileId, nodeIds: $0, params: params) }
-            .map { try figmaClient.request($0) }
+            .map { try client.request($0) }
             .flatMap { $0.map { ($0, $1) } }
         return Dictionary(uniqueKeysWithValues: keysWithValues)
     }
@@ -203,14 +225,4 @@ private extension String {
         }
     }
 
-}
-
-// MARK: - Array Utils
-
-private extension Array {
-    func chunked(into size: Int) -> [[Element]] {
-        stride(from: 0, to: count, by: size).map {
-            Array(self[$0 ..< Swift.min($0 + size, count)])
-        }
-    }
 }

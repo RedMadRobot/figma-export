@@ -13,11 +13,3 @@ struct FigmaClientError: Decodable, LocalizedError {
         }
     }
 }
-
-extension FigmaClientError: Equatable {
-    
-    static let notFound = FigmaClientError(
-        status: 404,
-        err: "Not found"
-    )
-}

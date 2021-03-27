@@ -4,8 +4,6 @@ import FigmaExportCore
 
 final class XcodeTypographyExporterTests: XCTestCase {
     
-    private var emptyTextStyles: [TextStyle] = []
-    
     func testExportUIKitFonts() throws {
         let exporter = XcodeTypographyExporter()
         

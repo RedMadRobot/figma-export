@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/title_icons" />
 
+    <item
+        android:id="@+id/navigation_typography"
+        android:icon="@drawable/ic_24_dots"
+        android:title="@string/title_typography" />
+
 </menu>

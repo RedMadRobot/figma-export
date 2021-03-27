@@ -40,14 +40,14 @@ extension FigmaExportCommand {
             }
         }
         
-        private func exportiOSIcons(client: FigmaClient, params: Params, logger: Logger) throws {
+        private func exportiOSIcons(client: Client, params: Params, logger: Logger) throws {
             guard let ios = params.ios else {
                 logger.info("Nothing to do. You haven’t specified ios parameter in the config file.")
                 return
             }
 
             logger.info("Fetching icons info from Figma. Please wait...")
-            let loader = ImagesLoader(figmaClient: client, params: params, platform: .ios)
+            let loader = ImagesLoader(client: client, params: params, platform: .ios, logger: logger)
             let images = try loader.loadIcons(filter: filter)
 
             logger.info("Processing icons...")
@@ -98,7 +98,7 @@ extension FigmaExportCommand {
             logger.info("Done!")
         }
         
-        private func exportAndroidIcons(client: FigmaClient, params: Params, logger: Logger) throws {
+        private func exportAndroidIcons(client: Client, params: Params, logger: Logger) throws {
             guard let android = params.android, let androidIcons = android.icons else {
                 logger.info("Nothing to do. You haven’t specified android.icons parameter in the config file.")
                 return
@@ -106,7 +106,7 @@ extension FigmaExportCommand {
             
             // 1. Get Icons info
             logger.info("Fetching icons info from Figma. Please wait...")
-            let loader = ImagesLoader(figmaClient: client, params: params, platform: .android)
+            let loader = ImagesLoader(client: client, params: params, platform: .android, logger: logger)
             let images = try loader.loadIcons(filter: filter)
 
             // 2. Proccess images

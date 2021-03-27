@@ -65,6 +65,7 @@ ios:
     fontSwift: "./ExampleSwiftUI/View/Common/UIFont+extension.swift"
     # [optional] Absolute or relative path to swift file where to export SwiftUI fonts (Font extension).
     swiftUIFontSwift: "./ExampleSwiftUI/View/Common/Font+extension.swift"
-
     # Will FigmaExport generate UILabel for each text style (font) e.g. HeaderLabel, BodyLabel, CaptionLabel.
     generateLabels: false
+    # Typography name style: camelCase or snake_case
+    nameStyle: camelCase

@@ -10,7 +10,7 @@ struct Params: Decodable {
         let darkFileId: String?
         let timeout: TimeInterval?
     }
-    
+
     struct Common: Decodable {
         struct Colors: Decodable {
             let nameValidateRegexp: String?
@@ -18,67 +18,75 @@ struct Params: Decodable {
             let useSingleFile: Bool?
             let darkModeSuffix: String?
         }
-        
+
         struct Icons: Decodable {
             let nameValidateRegexp: String?
             let figmaFrameName: String?
             let nameReplaceRegexp: String?
         }
-        
+
         struct Images: Decodable {
             let nameValidateRegexp: String?
             let figmaFrameName: String?
             let nameReplaceRegexp: String?
         }
-        
+
+        struct Typography: Decodable {
+            let nameValidateRegexp: String?
+            let nameReplaceRegexp: String?
+        }
+
         let colors: Colors?
         let icons: Icons?
         let images: Images?
+        let typography: Typography?
     }
-    
+
     enum VectorFormat: String, Decodable {
         case pdf
         case svg
     }
-    
+
     struct iOS: Decodable {
-        
+
         struct Colors: Decodable {
             let useColorAssets: Bool
             let assetsFolder: String?
             let nameStyle: NameStyle
-            
+
             let colorSwift: URL?
             let swiftuiColorSwift: URL?
         }
-        
+
         struct Icons: Decodable {
             let format: VectorFormat
             let assetsFolder: String
             let preservesVectorRepresentation: [String]?
             let nameStyle: NameStyle
-            
+
             let imageSwift: URL?
             let swiftUIImageSwift: URL?
-            
+
             let renderMode: XcodeRenderMode?
         }
 
         struct Images: Decodable {
             let assetsFolder: String
             let nameStyle: NameStyle
-            
+            let scales: [Double]?
+
             let imageSwift: URL?
             let swiftUIImageSwift: URL?
         }
-        
+
         struct Typography: Decodable {
             let fontSwift: URL?
             let swiftUIFontSwift: URL?
             let generateLabels: Bool
             let labelsDirectory: URL?
+            let nameStyle: NameStyle
         }
-        
+
         let xcodeprojPath: String
         let target: String
         let xcassetsPath: URL
@@ -108,13 +116,18 @@ struct Params: Decodable {
                 let encoding: Encoding
                 let quality: Int?
             }
+            let scales: [Double]?
             let output: String
             let format: Format
             let webpOptions: FormatOptions?
         }
+        struct Typography: Decodable {
+            let nameStyle: NameStyle
+        }
         let mainRes: URL
         let icons: Icons?
         let images: Images?
+        let typography: Typography?
     }
 
     let figma: Figma
