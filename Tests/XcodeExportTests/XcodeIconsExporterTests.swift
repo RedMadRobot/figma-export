@@ -10,10 +10,17 @@ final class XcodeIconsExporterTests: XCTestCase {
     private let image1 = Image(name: "image1", url: URL(string: "1")!, format: "pdf")
     private let image2 = Image(name: "image2", url: URL(string: "2")!, format: "pdf")
 
+    private let uiKitImageExtensionURL = FileManager.default
+        .temporaryDirectory
+        .appendingPathComponent("UIImage+extension.swift")
+    private let swiftUIImageExtensionURL = FileManager.default
+        .temporaryDirectory
+        .appendingPathComponent("Image+extension.swift")
+
     // MARK: - Tests
     
     func testExport() throws {
-        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!)
+        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, uiKitImageExtensionURL: uiKitImageExtensionURL)
         let exporter = XcodeIconsExporter(output: output)
         let result = try exporter.export(
             icons: [ImagePack(image: image1), ImagePack(image: image2)],
@@ -54,7 +61,7 @@ final class XcodeIconsExporterTests: XCTestCase {
     }
     
     func testExportInSeparateBundle() throws {
-        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, assetsInSwiftPackage: false, uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!)
+        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, assetsInSwiftPackage: false, uiKitImageExtensionURL: uiKitImageExtensionURL)
         let exporter = XcodeIconsExporter(output: output)
         let result = try exporter.export(
             icons: [ImagePack(image: image1), ImagePack(image: image2)],
@@ -99,7 +106,7 @@ final class XcodeIconsExporterTests: XCTestCase {
     }
 
     func testExportInSwiftPackage() throws {
-        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, assetsInSwiftPackage: true, uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!)
+        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, assetsInSwiftPackage: true, uiKitImageExtensionURL: uiKitImageExtensionURL)
         let exporter = XcodeIconsExporter(output: output)
         let result = try exporter.export(
             icons: [ImagePack(image: image1), ImagePack(image: image2)],
@@ -144,7 +151,7 @@ final class XcodeIconsExporterTests: XCTestCase {
     }
     
     func testExportSwiftUI() throws {
-        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, swiftUIImageExtensionURL: URL(string: "~/Image+extension.swift")!)
+        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, swiftUIImageExtensionURL: swiftUIImageExtensionURL)
         let exporter = XcodeIconsExporter(output: output)
         let result = try exporter.export(
             icons: [ImagePack(image: image1), ImagePack(image: image2)],
@@ -185,7 +192,7 @@ final class XcodeIconsExporterTests: XCTestCase {
     }
     
     func testExportSwiftUIInSeparateBundle() throws {
-        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, swiftUIImageExtensionURL: URL(string: "~/Image+extension.swift")!)
+        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, swiftUIImageExtensionURL: swiftUIImageExtensionURL)
         let exporter = XcodeIconsExporter(output: output)
         let result = try exporter.export(
             icons: [ImagePack(image: image1), ImagePack(image: image2)],
@@ -230,7 +237,11 @@ final class XcodeIconsExporterTests: XCTestCase {
     }
 
     func testAppendAfterExport() throws {
-        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!)
+        let output = XcodeImagesOutput(
+            assetsFolderURL: URL(string: "~/")!,
+            assetsInMainBundle: true,
+            uiKitImageExtensionURL: uiKitImageExtensionURL
+        )
         let exporter = XcodeIconsExporter(output: output)
         let result = try exporter.export(
             icons: [ImagePack(image: image1)],
