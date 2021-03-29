@@ -57,9 +57,9 @@ final public class XcodeTypographyExporter {
         import UIKit
 
         public extension UIFont {
-
+        
         \(strings.joined(separator: "\n\n"))
-
+        
             private static func customFont(
                 _ name: String,
                 size: CGFloat,
