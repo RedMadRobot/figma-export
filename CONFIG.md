@@ -65,6 +65,8 @@ ios:
   xcassetsInMainBundle: true
   # [optional] Is Assets.xcassets located in a swift package? Default value is false.
   xcassetsInSwiftPackage: false
+  # [optional] Add @objc attribute to generated properties so that they are accessible in Objective-C. Defaults to false
+  addObjcAttribute: false
 
   # Parameters for exporting colors
   colors:

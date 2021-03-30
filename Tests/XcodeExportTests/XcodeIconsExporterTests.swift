@@ -59,6 +59,52 @@ final class XcodeIconsExporterTests: XCTestCase {
         """
         XCTAssertEqual(generatedCode, referenceCode)
     }
+
+    func testExportWithObjc() throws {
+        let output = XcodeImagesOutput(
+            assetsFolderURL: URL(string: "~/")!,
+            assetsInMainBundle: true,
+            addObjcAttribute: true,
+            uiKitImageExtensionURL: URL(string: "~/UIImage+extension.swift")!
+        )
+        let exporter = XcodeIconsExporter(output: output)
+        let result = try exporter.export(
+            icons: [ImagePack(image: image1), ImagePack(image: image2)],
+            append: false
+        )
+
+        XCTAssertEqual(result.count, 6)
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
+        XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
+        XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
+        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/Contents.json"))
+        XCTAssertTrue(result[5].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
+
+        let content = result[5].data
+        XCTAssertNotNil(content)
+
+        let generatedCode = String(data: content!, encoding: .utf8)
+        let referenceCode = """
+        //
+        //  The code generated using FigmaExport — Command line utility to export
+        //  colors, typography, icons and images from Figma to Xcode project.
+        //
+        //  https://github.com/RedMadRobot/figma-export
+        //
+        //  Don’t edit this code manually to avoid runtime crashes
+        //
+
+        import UIKit
+
+        public extension UIImage {
+            @objc static var image1: UIImage { UIImage(named: #function)! }
+            @objc static var image2: UIImage { UIImage(named: #function)! }
+        }
+
+        """
+        XCTAssertEqual(generatedCode, referenceCode)
+    }
     
     func testExportInSeparateBundle() throws {
         let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: false, assetsInSwiftPackage: false, uiKitImageExtensionURL: uiKitImageExtensionURL)

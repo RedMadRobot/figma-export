@@ -15,7 +15,11 @@ final public class XcodeColorExporter {
         // UIKit UIColor extension
         if let colorSwiftURL = output.colorSwiftURL {
             
-            let contents = prepareColorDotSwiftContents(colorPairs, formAsset: output.assetsColorsURL != nil)
+            let contents = prepareColorDotSwiftContents(
+                colorPairs,
+                formAsset: output.assetsColorsURL != nil,
+                objcAttribute: output.addObjcAttribute
+            )
             let contentsData = contents.data(using: .utf8)!
             
             let fileURL = URL(string: colorSwiftURL.lastPathComponent)!
@@ -113,22 +117,26 @@ final public class XcodeColorExporter {
         """
     }
     
-    private func prepareColorDotSwiftContents(_ colorPairs: [AssetPair<Color>], formAsset: Bool) -> String {
+    private func prepareColorDotSwiftContents(
+        _ colorPairs: [AssetPair<Color>],
+        formAsset: Bool,
+        objcAttribute: Bool
+    ) -> String {
         var contents = [String]()
         
         colorPairs.forEach { colorPair in
             let content: String
             if formAsset {
                 if output.assetsInMainBundle {
-                    content = "    static var \(colorPair.light.name): UIColor { UIColor(named: #function)! }"
+                    content = "    \(objcAttribute ? "@objc " : "")static var \(colorPair.light.name): UIColor { UIColor(named: #function)! }"
                 } else {
-                    content = "    static var \(colorPair.light.name): UIColor { UIColor(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+                    content = "    \(objcAttribute ? "@objc " : "")static var \(colorPair.light.name): UIColor { UIColor(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
                 }
             } else {
                 let lightComponents = colorPair.light.toRgbComponents()
                 if let darkComponents = colorPair.dark?.toRgbComponents() {
                     content = """
-                        static var \(colorPair.light.name): UIColor {
+                        \(objcAttribute ? "@objc " : "")static var \(colorPair.light.name): UIColor {
                             if #available(iOS 13.0, *) {
                                 return UIColor { traitCollection -> UIColor in
                                     if traitCollection.userInterfaceStyle == .dark {
@@ -144,7 +152,7 @@ final public class XcodeColorExporter {
                     """
                 } else {
                     content = """
-                        static var \(colorPair.light.name): UIColor {
+                        \(objcAttribute ? "@objc " : "")static var \(colorPair.light.name): UIColor {
                             return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
                         }
                     """

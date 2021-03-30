@@ -89,6 +89,7 @@ extension FigmaExportCommand {
                 assetsColorsURL: colorsURL,
                 assetsInMainBundle: iosParams.xcassetsInMainBundle,
                 assetsInSwiftPackage: iosParams.xcassetsInSwiftPackage,
+                addObjcAttribute: iosParams.addObjcAttribute,
                 colorSwiftURL: iosParams.colors.colorSwift,
                 swiftuiColorSwiftURL: iosParams.colors.swiftuiColorSwift)
 

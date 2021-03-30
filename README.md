@@ -52,6 +52,7 @@ Table of Contents:
 * Export text styles to Xcode project
 * Supports Dark Mode
 * Supports SwiftUI and UIKit
+* Supports Objective-C
 
 > Exporting icons and images works only for Professional/Organisation Figma plan because FigmaExport use *Shareable team libraries*.
 

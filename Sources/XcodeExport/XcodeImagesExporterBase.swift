@@ -37,13 +37,14 @@ public class XcodeImagesExporterBase {
         // UIKit extension UIImage {
         if let url = output.uiKitImageExtensionURL {
             let contents: String
+            let addObjcAttribute = output.addObjcAttribute
             
             if append {
                 let strings = names.map { name -> String in
                     if output.assetsInMainBundle {
-                        return "    static var \(name): UIImage { UIImage(named: #function)! }"
+                        return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function)! }"
                     } else {
-                        return "    static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+                        return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
                     }
                 }
                 let string = strings.joined(separator: "\n") + "\n}\n"
@@ -106,11 +107,12 @@ public class XcodeImagesExporterBase {
     }
     
     private func makeUIKitExtension(assetNames: [String]) -> String {
+        let addObjcAttribute = output.addObjcAttribute
         let images = assetNames.map { name -> String in
             if output.assetsInMainBundle {
-                return "    static var \(name): UIImage { UIImage(named: #function)! }"
+                return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function)! }"
             } else {
-                return "    static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+                return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
             }
         }
         
