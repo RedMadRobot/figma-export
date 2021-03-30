@@ -42,9 +42,9 @@ public class XcodeImagesExporterBase {
             if append {
                 let strings = names.map { name -> String in
                     if output.assetsInMainBundle {
-                        return "     \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function)! }"
+                        return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function)! }"
                     } else {
-                        return "     \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+                        return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
                     }
                 }
                 let string = strings.joined(separator: "\n") + "\n}\n"
