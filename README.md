@@ -49,7 +49,7 @@ Table of Contents:
 * Export light & dark color palette directly to Xcode / Android studio project
 * Export icons to Xcode / Android Studio project 
 * Export images to Xcode / Android Studio project
-* Export text styles to Xcode project
+* Export text styles to Xcode / Android Studio project
 * Supports Dark Mode
 * Supports SwiftUI and UIKit
 * Supports Objective-C
