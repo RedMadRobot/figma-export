@@ -19,14 +19,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         let files = try exporter.export(textStyles: styles)
         
         let contents = """
-        //
-        //  The code generated using FigmaExport — Command line utility to export
-        //  colors, typography, icons and images from Figma to Xcode project.
-        //
-        //  https://github.com/RedMadRobot/figma-export
-        //
-        //  Don’t edit this code manually to avoid runtime crashes
-        //
+        \(header)
 
         import UIKit
 
@@ -103,14 +96,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         let files = try exporter.export(textStyles: styles)
 
         let contents = """
-        //
-        //  The code generated using FigmaExport — Command line utility to export
-        //  colors, typography, icons and images from Figma to Xcode project.
-        //
-        //  https://github.com/RedMadRobot/figma-export
-        //
-        //  Don’t edit this code manually to avoid runtime crashes
-        //
+        \(header)
 
         import UIKit
 
@@ -187,14 +173,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         let files = try exporter.export(textStyles: styles)
 
         let contents = """
-        //
-        //  The code generated using FigmaExport — Command line utility to export
-        //  colors, typography, icons and images from Figma to Xcode project.
-        //
-        //  https://github.com/RedMadRobot/figma-export
-        //
-        //  Don’t edit this code manually to avoid runtime crashes
-        //
+        \(header)
 
         import SwiftUI
 
@@ -249,14 +228,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         let files = try exporter.export(textStyles: styles)
         
         let contentsLabel = """
-        //
-        //  The code generated using FigmaExport — Command line utility to export
-        //  colors, typography, icons and images from Figma to Xcode project.
-        //
-        //  https://github.com/RedMadRobot/figma-export
-        //
-        //  Don’t edit this code manually to avoid runtime crashes
-        //
+        \(header)
 
         import UIKit
 
@@ -369,14 +341,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         """
         
         let contentsLabelStyle = """
-        //
-        //  The code generated using FigmaExport — Command line utility to export
-        //  colors, typography, icons and images from Figma to Xcode project.
-        //
-        //  https://github.com/RedMadRobot/figma-export
-        //
-        //  Don’t edit this code manually to avoid runtime crashes
-        //
+        \(header)
 
         import UIKit
         
