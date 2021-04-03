@@ -65,6 +65,8 @@ ios:
   xcassetsInMainBundle: true
   # [optional] Is Assets.xcassets located in a swift package? Default value is false.
   xcassetsInSwiftPackage: false
+  # [optional] Add @objc attribute to generated properties so that they are accessible in Objective-C. Defaults to false
+  addObjcAttribute: false
 
   # Parameters for exporting colors
   colors:
@@ -141,4 +143,8 @@ android:
       encoding: lossy
       # Encoding quality in percents. Only for lossy encoding.
       quality: 90
+  # Parameters for exporting typography
+  typography:
+    # Typography name style: camelCase or snake_case
+    nameStyle: camelCase
 ```

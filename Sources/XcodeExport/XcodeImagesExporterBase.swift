@@ -24,7 +24,7 @@ public class XcodeImagesExporterBase {
                         return "    static var \(name): Image { Image(#function, bundle: BundleProvider.bundle) }"
                     }
                 }
-                let string = strings.joined(separator: "\n") + "\n}"
+                let string = strings.joined(separator: "\n") + "\n}\n"
                 contents = try appendContent(string: string, to: url)
             }
             else {
@@ -37,16 +37,17 @@ public class XcodeImagesExporterBase {
         // UIKit extension UIImage {
         if let url = output.uiKitImageExtensionURL {
             let contents: String
+            let addObjcAttribute = output.addObjcAttribute
             
             if append {
                 let strings = names.map { name -> String in
                     if output.assetsInMainBundle {
-                        return "    static var \(name): UIImage { UIImage(named: #function)! }"
+                        return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function)! }"
                     } else {
-                        return "    static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+                        return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
                     }
                 }
-                let string = strings.joined(separator: "\n") + "\n}"
+                let string = strings.joined(separator: "\n") + "\n}\n"
                 contents = try appendContent(string: string, to: url)
             } else {
                 contents = makeUIKitExtension(assetNames: names)
@@ -59,11 +60,16 @@ public class XcodeImagesExporterBase {
     }
     
     private func appendContent(string: String, to fileURL: URL) throws -> String {
-        var existingContents = try String(contentsOf: URL(fileURLWithPath: fileURL.path), encoding: .utf8)
+        var existingContents = try String(
+            contentsOf: URL(fileURLWithPath: fileURL.path),
+            encoding: .utf8
+        )
 
         if let index = existingContents.lastIndex(of: "}") {
-           let nextIndex = existingContents.index(after: index)
-           existingContents.replaceSubrange(index...nextIndex, with: string)
+            existingContents.replaceSubrange(
+                index..<existingContents.endIndex,
+                with: string
+            )
         }
         return existingContents
     }
@@ -101,11 +107,12 @@ public class XcodeImagesExporterBase {
     }
     
     private func makeUIKitExtension(assetNames: [String]) -> String {
+        let addObjcAttribute = output.addObjcAttribute
         let images = assetNames.map { name -> String in
             if output.assetsInMainBundle {
-                return "    static var \(name): UIImage { UIImage(named: #function)! }"
+                return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function)! }"
             } else {
-                return "    static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
+                return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
             }
         }
         

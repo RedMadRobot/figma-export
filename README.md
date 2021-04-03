@@ -6,6 +6,7 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/RedMadRobot/Catbird/blob/master/LICENSE)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/FigmaExport.svg)](https://cocoapods.org/pods/FigmaExport)
 [![codebeat badge](https://codebeat.co/badges/6c346142-a942-4c13-ae6b-5517b4c50b1d)](https://codebeat.co/projects/github-com-redmadrobot-figma-export-master)
+[![Test](https://github.com/RedMadRobot/figma-export/actions/workflows/tests.yml/badge.svg)](https://github.com/RedMadRobot/figma-export/actions/workflows/tests.yml)
 
 Command line utility to export colors, typography, icons and images from Figma to Xcode / Android Studio project.
 * color - Figma's color style
@@ -48,9 +49,10 @@ Table of Contents:
 * Export light & dark color palette directly to Xcode / Android studio project
 * Export icons to Xcode / Android Studio project 
 * Export images to Xcode / Android Studio project
-* Export text styles to Xcode project
+* Export text styles to Xcode / Android Studio project
 * Supports Dark Mode
 * Supports SwiftUI and UIKit
+* Supports Objective-C
 
 > Exporting icons and images works only for Professional/Organisation Figma plan because FigmaExport use *Shareable team libraries*.
 
@@ -205,6 +207,8 @@ Icons will be exported to `drawable` directory as vector xml files.
 Vector images will be exported to `drawable` and `drawable-night` directories as vector `xml` files.
 Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` directories as `png` or `webp` files.
 
+Typography will be exported to `values/typography.xml`
+
 ## Installation
 
  Before installation you must provide Figma personal access token via environment variables.
@@ -266,7 +270,7 @@ Run `fastlane sync_colors` to run FigmaExport.
 
    `./figma-export images -i figma-export.yaml`
 
-   To export typography (iOS only) use `typography` argument:
+   To export typography use `typography` argument:
 
    `./figma-export typography -i figma-export.yaml`
 
@@ -339,10 +343,21 @@ It will generate config file in the current directory.
 
 ### Exporting Typography
 
+#### iOS
 1. Add a custom font to the Xcode project. Drag & drop font file to the Xcode project, set target membership, and add font file name in the Info.plist file. [See developer documentation for more info.](https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app)<br><img src="images/fonts.png" width="400" />
 2. Run `figma-export typography` to export text styles
 3. Add generated Swift files to your Xcode project. FigmaExport doesn’t add swift files to `.xcodeproj` file.
 4. Use generated fonts and labels in your code. E.g. `button.titleLabel?.font = UIFont.body()`, `let label = HeaderLabel()`.
+
+### Android
+1. Place font file under the `res` directory of your module
+2. Run `figma-export typography` to export text styles
+3. Create a top level style as a parent for the generated styles. For example: 
+```
+<style name="FigmaExport.TextAppearance" parent="Widget.AppCompat">
+</style>
+```
+4. Use the generated styles in your code
 
 ## Design requirements
 

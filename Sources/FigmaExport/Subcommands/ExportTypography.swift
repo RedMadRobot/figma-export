@@ -41,38 +41,32 @@ extension FigmaExportCommand {
                 try exportXcodeTextStyles(textStyles: processedTextStyles, iosParams: ios, logger: logger)
                 logger.info("Done!")
             }
+
+            if let android = options.params.android {
+                logger.info("Processing typography...")
+                let processor = TypographyProcessor(
+                    platform: .android,
+                    nameValidateRegexp: options.params.common?.typography?.nameValidateRegexp,
+                    nameReplaceRegexp: options.params.common?.typography?.nameReplaceRegexp,
+                    nameStyle: options.params.android?.typography?.nameStyle
+                )
+                let processedTextStyles = try processor.process(assets: textStyles).get()
+                logger.info("Saving text styles...")
+                try exportAndroidTextStyles(textStyles: processedTextStyles, androidParams: android, logger: logger)
+                logger.info("Done!")
+            }
         }
         
         private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS, logger: Logger) throws {
-            let exporter = XcodeTypographyExporter()
+            let output = XcodeTypographyOutput(
+                fontExtensionURL: iosParams.typography.fontSwift,
+                swiftUIFontExtensionURL: iosParams.typography.swiftUIFontSwift,
+                labelsDirectory: iosParams.typography.labelsDirectory,
+                addObjcAttribute: iosParams.addObjcAttribute
+            )
+            let exporter = XcodeTypographyExporter(output: output)
+            let files = try exporter.export(textStyles: textStyles)
             
-            var files: [FileContents] = []
-            
-            // UIKit UIFont extension
-            if let fontExtensionURL = iosParams.typography.fontSwift {
-                files.append(contentsOf: try exporter.exportFonts(
-                    textStyles: textStyles,
-                    fontExtensionURL: fontExtensionURL
-                ))
-            }
-            
-            // SwiftUI Font extension
-            if let swiftUIFontExtensionURL = iosParams.typography.swiftUIFontSwift {
-                files.append(contentsOf: try exporter.exportFonts(
-                    textStyles: textStyles,
-                    swiftUIFontExtensionURL: swiftUIFontExtensionURL
-                ))
-            }
-            
-            // UIKit Labels
-            if iosParams.typography.generateLabels, let labelsDirectory = iosParams.typography.labelsDirectory  {
-                // Label.swift
-                // LabelStyle.swift
-                files.append(contentsOf: try exporter.exportLabels(
-                    textStyles: textStyles,
-                    labelsDirectory: labelsDirectory
-                ))
-            }
             try fileWritter.write(files: files)
             
             do {
@@ -86,6 +80,17 @@ extension FigmaExportCommand {
             } catch {
                 logger.error("Unable to add some file references to Xcode project")
             }
+        }
+
+        private func exportAndroidTextStyles(textStyles: [TextStyle], androidParams: Params.Android, logger: Logger) throws {
+
+            let exporter = AndroidTypographyExporter(outputDirectory: androidParams.mainRes)
+            let files = try exporter.exportFonts(textStyles: textStyles)
+
+            let fileURL = androidParams.mainRes.appendingPathComponent("values/typography.xml")
+
+            try? FileManager.default.removeItem(atPath: fileURL.path)
+            try fileWritter.write(files: files)
         }
     }
 }
