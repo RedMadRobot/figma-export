@@ -46,9 +46,8 @@ struct FigmaExportCommand: ParsableCommand {
             ExportTypography.self,
             GenerateConfigFile.self
         ],
-        defaultSubcommand: ExportIcons.self
+        defaultSubcommand: ExportColors.self
     )
 }
 
 FigmaExportCommand.main()
-
