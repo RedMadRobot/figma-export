@@ -61,6 +61,7 @@ extension FigmaExportCommand {
             let output = XcodeTypographyOutput(
                 fontExtensionURL: iosParams.typography.fontSwift,
                 swiftUIFontExtensionURL: iosParams.typography.swiftUIFontSwift,
+                generateLabels: iosParams.typography.generateLabels,
                 labelsDirectory: iosParams.typography.labelsDirectory,
                 addObjcAttribute: iosParams.addObjcAttribute
             )
