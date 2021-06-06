@@ -19,6 +19,10 @@ final class AssetsProcessorTests: XCTestCase {
             icons.map { $0.name },
             ["ic24Icon", "ic24IconName"]
         )
+
+        XCTAssertEqual(processor.description, "ImagesProcessor")
+
+        fatalError("some unexpected behavior")
     }
     
     func testProcessSnakeCase() throws {

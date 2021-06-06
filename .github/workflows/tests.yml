@@ -15,11 +15,13 @@ jobs:
   test:
     name: Run tests
     runs-on: macOS-latest
+    env:
+      NSUnbufferedIO: YES
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Select Xcode version
-        run: sudo xcode-select --switch /Applications/Xcode_12.app
+      - name: Install xcaudit
+        uses: Alexander-Ignition/XCAudit@main
       - name: Build and test
-        run: swift test --enable-code-coverage --disable-automatic-resolution
+        run: swift test --enable-code-coverage --disable-automatic-resolution 2>&1 | xcaudit
         shell: bash
