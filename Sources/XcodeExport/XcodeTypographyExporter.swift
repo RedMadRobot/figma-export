@@ -92,10 +92,10 @@ final public class XcodeTypographyExporter {
                 for child in copy.children.makeIterator() {
                     if String(describing: child.label) == "Optional(\\"$__lazy_storage_$_\\(key)\\")" {
                         self.value(forKey: key)
-                    } else {
-                        fatalError("not font style: \\(key)")
+                        return
                     }
                 }
+                fatalError("not font style: \\(key)")
             }
         }
 
@@ -103,7 +103,7 @@ final public class XcodeTypographyExporter {
             
         \(strings.joined(separator: "\n\n"))
 
-            lazy var colorText = { (color: UIColor?) -> SQStyleLabel in
+            lazy var colorText = { (color: UIColor?) -> SQStyleButton in
                 self._colorText = color
                 return self
             }
@@ -113,10 +113,10 @@ final public class XcodeTypographyExporter {
                 for child in copy.children.makeIterator() {
                     if String(describing: child.label) == "Optional(\\"$__lazy_storage_$_\\(key)\\")" {
                         self.value(forKey: key)
-                    } else {
-                        fatalError("not font style: \\(key)")
+                        return
                     }
                 }
+                fatalError("not font style: \\(key)")
             }
         }
         """
