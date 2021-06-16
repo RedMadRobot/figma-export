@@ -7,7 +7,7 @@ final public class XcodeTypographyExporter {
     public init() {}
     
     public func exportFonts(textStyles: [TextStyle], fontExtensionURL: URL) throws -> [FileContents] {
-        let strings: [String] = textStyles.map {
+        let stringsLabel: [String] = textStyles.map {
             let lineHeight = $0.lineHeight == nil ? "" : "\n        self.lineHeight = \($0.lineHeight!)"
             return """
                 @objc lazy var \($0.name): SQStyleLabel = {
@@ -16,6 +16,17 @@ final public class XcodeTypographyExporter {
                 }()
             """
         }
+        
+        let stringsButton: [String] = textStyles.map {
+            let lineHeight = $0.lineHeight == nil ? "" : "\n        self.lineHeight = \($0.lineHeight!)"
+            return """
+                @objc lazy var \($0.name): SQStyleButton = {
+                    self.font = self.customFont("\($0.fontName)", size: \($0.fontSize))\(lineHeight)
+                    return self
+                }()
+            """
+        }
+        
         let contents = """
         \(header)
         
@@ -65,7 +76,7 @@ final public class XcodeTypographyExporter {
 
             var textAlignment: NSTextAlignment?
 
-        \(strings.joined(separator: "\n\n"))
+        \(stringsLabel.joined(separator: "\n\n"))
 
             lazy var centrerAlignment: SQStyleLabel = {
                 self.textAlignment = .center
@@ -101,7 +112,7 @@ final public class XcodeTypographyExporter {
 
         class SQStyleButton: SQStyle {
             
-        \(strings.joined(separator: "\n\n"))
+        \(stringsButton.joined(separator: "\n\n"))
 
             lazy var colorText = { (color: UIColor?) -> SQStyleButton in
                 self._colorText = color
