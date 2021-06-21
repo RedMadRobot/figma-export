@@ -301,6 +301,8 @@ public extension AssetsProcessable {
             let split = asset.name.split(separator: "/")
             if split.count == 2, split[0] == split[1] {
                 renamedAsset.name = String(split[0])
+            } else if asset is Color, split.count == 2 {
+                renamedAsset.name = String(split[1])
             } else {
                 renamedAsset.name = renamedAsset.name.replacingOccurrences(of: "/", with: "_")
             }
