@@ -75,6 +75,8 @@ final public class XcodeTypographyExporter {
         class SQStyleLabel: SQStyle {
 
             var textAlignment: NSTextAlignment?
+            var lineBreakMode: NSLineBreakMode?
+            var strikethroughStyle: NSUnderlineStyle?
 
         \(stringsLabel.joined(separator: "\n\n"))
 
@@ -90,6 +92,116 @@ final public class XcodeTypographyExporter {
 
             lazy var rightAlignment: SQStyleLabel = {
                 self.textAlignment = .right
+                return self
+            }()
+        
+            lazy var lineBreakModeByWordWrapping: SQStyleLabel = {
+                self.lineBreakMode = .byWordWrapping
+                return self
+            }()
+            
+            lazy var lineBreakModeByCharWrapping: SQStyleLabel = {
+                self.lineBreakMode = .byCharWrapping
+                return self
+            }()
+
+            lazy var lineBreakModeByClipping: SQStyleLabel = {
+                self.lineBreakMode = .byClipping
+                return self
+            }()
+            
+            lazy var lineBreakModeByTruncatingHead: SQStyleLabel = {
+                self.lineBreakMode = .byTruncatingHead
+                return self
+            }()
+            
+            lazy var lineBreakModeByTruncatingTail: SQStyleLabel = {
+                self.lineBreakMode = .byTruncatingTail
+                return self
+            }()
+            
+            lazy var lineBreakModeByTruncatingMiddle: SQStyleLabel = {
+                self.lineBreakMode = .byTruncatingMiddle
+                return self
+            }()
+        
+            lazy var strikethroughStyleSingle: SQStyleLabel = {
+                self.strikethroughStyle = .single
+                return self
+            }()
+
+            lazy var strikethroughStyleThick: SQStyleLabel = {
+                self.strikethroughStyle = .thick
+                return self
+            }()
+            
+            lazy var strikethroughStyleDouble: SQStyleLabel = {
+                self.strikethroughStyle = .double
+                return self
+            }()
+         
+            lazy var strikethroughStylePatternDot: SQStyleLabel = {
+                self.strikethroughStyle = .patternDot
+                return self
+            }()
+
+            lazy var strikethroughStylePatternDash: SQStyleLabel = {
+                self.strikethroughStyle = .patternDash
+                return self
+            }()
+            
+            lazy var strikethroughStylePatternDashDot: SQStyleLabel = {
+                self.strikethroughStyle = .patternDashDot
+                return self
+            }()
+            
+            lazy var strikethroughStylePatternDashDotDot: SQStyleLabel = {
+                self.strikethroughStyle = .patternDashDotDot
+                return self
+            }()
+
+            lazy var strikethroughStyleByWord: SQStyleLabel = {
+                self.strikethroughStyle = .byWord
+                return self
+            }()
+        
+            lazy var underlineStyleSingle: SQStyleLabel = {
+                self.underlineStyle = .single
+                return self
+            }()
+
+            lazy var underlineStyleThick: SQStyleLabel = {
+                self.underlineStyle = .thick
+                return self
+            }()
+            
+            lazy var underlineStyleDouble: SQStyleLabel = {
+                self.underlineStyle = .double
+                return self
+            }()
+         
+            lazy var underlineStylePatternDot: SQStyleLabel = {
+                self.underlineStyle = .patternDot
+                return self
+            }()
+
+            lazy var underlineStylePatternDash: SQStyleLabel = {
+                self.underlineStyle = .patternDash
+                return self
+            }()
+            
+            lazy var underlineStylePatternDashDot: SQStyleLabel = {
+                self.underlineStyle = .patternDashDot
+                return self
+            }()
+            
+            lazy var underlineStylePatternDashDotDot: SQStyleLabel = {
+                self.underlineStyle = .patternDashDotDot
+                return self
+            }()
+
+            lazy var underlineStyleByWord: SQStyleLabel = {
+                self.underlineStyle = .byWord
                 return self
             }()
 
@@ -216,7 +328,7 @@ import UIKit
     
     func build() {
         self.titleLabel?.font = self._style?.font
-        self.titleLabel?.textColor = self._style?._colorText
+        self.setTitleColor(self._style?._colorText, for: .normal)
     }
     
     @IBInspectable var styleFont: String = "" {
@@ -233,6 +345,7 @@ import UIKit
         let paragraphStyle = NSMutableParagraphStyle()
         let lineHeight = ((100.0 * (self.style.lineHeight ?? 0.0)) / (font).lineHeight) / 100
         paragraphStyle.lineHeightMultiple = lineHeight
+
         
         let attributedString: NSMutableAttributedString
         if let labelAttributedText = self.titleLabel?.attributedText {
@@ -244,15 +357,6 @@ import UIKit
         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
                                       value: paragraphStyle,
                                       range: NSMakeRange(.zero, attributedString.length))
-        
-        attributedString.addAttribute(NSAttributedString.Key.font,
-                                      value: self.style.font ?? UIFont(),
-                                      range: NSMakeRange(.zero, attributedString.length))
-        
-        attributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                      value: self.style._colorText ?? (self.titleLabel?.textColor ?? .black),
-                                      range: NSMakeRange(.zero, attributedString.length))
-        
         
         self.titleLabel?.attributedText = attributedString
         invalidateIntrinsicContentSize()
@@ -299,6 +403,8 @@ class SQLabel: UILabel, UIStyle {
         let paragraphStyle = NSMutableParagraphStyle()
         let lineHeight = ((100.0 * (self.style.lineHeight ?? 0.0)) / (self.style.font ?? self.font).lineHeight) / 100
         paragraphStyle.lineHeightMultiple = lineHeight
+        paragraphStyle.lineBreakMode = self.style.lineBreakMode ?? self.lineBreakMode
+        paragraphStyle.alignment = self.style.textAlignment ?? self.textAlignment
         
         let attributedString: NSMutableAttributedString
         if let labelAttributedText = self.attributedText {
@@ -310,15 +416,18 @@ class SQLabel: UILabel, UIStyle {
         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
                                       value: paragraphStyle,
                                       range: NSMakeRange(.zero, attributedString.length))
-        
-        attributedString.addAttribute(NSAttributedString.Key.font,
-                                      value: self.style.font ?? UIFont(),
-                                      range: NSMakeRange(.zero, attributedString.length))
-        
-        attributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                      value: self.style._colorText ?? (self.textColor ?? .black),
-                                      range: NSMakeRange(.zero, attributedString.length))
-        
+
+        if let strikethroughStyle = self.style.strikethroughStyle {
+            attributedString.addAttribute(NSAttributedString.Key.strikethroughStyle,
+                                          value: strikethroughStyle,
+                                          range: NSMakeRange(.zero, attributedString.length))
+        }
+
+        if let underlineStyle = self.style.underlineStyle {
+            attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
+                                          value: underlineStyle.rawValue,
+                                          range: NSMakeRange(.zero, attributedString.length))
+        }
         
         self.attributedText = attributedString
         invalidateIntrinsicContentSize()
