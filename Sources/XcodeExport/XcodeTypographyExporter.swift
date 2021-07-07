@@ -387,6 +387,7 @@ class SQLabel: UILabel, UIStyle {
      func build() {
          self.font = self._style?.font
          self.textColor = self._style?._colorText
+         self.updateAttributedText()
      }
 
      lazy var style: SQStyleLabel = {
