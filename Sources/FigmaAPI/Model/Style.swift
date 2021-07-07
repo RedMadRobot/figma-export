@@ -15,7 +15,7 @@ public struct Style: Decodable {
     
     public func getName() -> String {
         let components = self.name.components(separatedBy: "/")
-        let name = "\(components.first?.lowerCamelCased() ?? "")"
+        let name = "\(components.last?.lowerCamelCased() ?? "")"
         return name
     }
 }

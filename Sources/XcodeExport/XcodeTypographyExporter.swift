@@ -30,6 +30,9 @@ final public class XcodeTypographyExporter {
         let contents = """
         \(header)
         
+        // swiftlint:disable all
+        // swiftformat:disable all
+        
         import Foundation
         import UIKit
 
@@ -316,6 +319,9 @@ final public class XcodeTypographyExporter {
 private let TEMPLATE_button_swift = Template(templateString: """
 \(header)
 
+// swiftlint:disable all
+// swiftformat:disable all
+
 import UIKit
 
 @IBDesignable class SQButton: UIButton, UIStyle {
@@ -369,6 +375,9 @@ import UIKit
 
 private let TEMPLATE_Label_swift = Template(templateString: """
 \(header)
+
+// swiftlint:disable all
+// swiftformat:disable all
 
 import UIKit
 
