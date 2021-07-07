@@ -77,6 +77,7 @@ final public class XcodeTypographyExporter {
             var textAlignment: NSTextAlignment?
             var lineBreakMode: NSLineBreakMode?
             var strikethroughStyle: NSUnderlineStyle?
+            var underlineStyle: NSUnderlineStyle?
 
         \(stringsLabel.joined(separator: "\n\n"))
 
