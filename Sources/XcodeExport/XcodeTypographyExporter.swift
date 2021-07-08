@@ -430,7 +430,7 @@ class SQLabel: UILabel, UIStyle {
 
         if let strikethroughStyle = self.style.strikethroughStyle {
             attributedString.addAttribute(NSAttributedString.Key.strikethroughStyle,
-                                          value: strikethroughStyle,
+                                          value: strikethroughStyle.rawValue,
                                           range: NSMakeRange(.zero, attributedString.length))
         }
 
