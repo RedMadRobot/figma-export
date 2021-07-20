@@ -2,13 +2,13 @@
 
 The UI-Kit of the example project in Figma:
 
-[FigmaExport Example File [Light]](https://www.figma.com/file/BEjfU0kCVnPqXdRLfoLvkf/FigmaExport-Example-File-Dark)
+[FigmaExport Example File [Light]](https://www.figma.com/file/MRVOEjTRatddzaMN7iYlAe/FigmaExport-Example-File-Light)
 
-<a href="https://www.figma.com/file/BEjfU0kCVnPqXdRLfoLvkf/FigmaExport-Example-File-Dark"><img src="../images/figma_l.png" width="600" /></a>
+<a href="https://www.figma.com/file/MRVOEjTRatddzaMN7iYlAe/FigmaExport-Example-File-Light"><img src="../images/figma_l.png" width="600" /></a>
 
-[FigmaExport Example File [Dark]](https://www.figma.com/file/QwF30YrucxVwQyBNT0C09i/FigmaExport-Example-File-Dark)
+[FigmaExport Example File [Dark]](https://www.figma.com/file/eLY5YHbCBNdFmMEVuWKnx5/FigmaExport-Example-File-Dark)
 
-<a href="https://www.figma.com/file/QwF30YrucxVwQyBNT0C09i/FigmaExport-Example-File-Dark"><img src="../images/figma_d.png" width="600" /></a>
+<a href="https://www.figma.com/file/eLY5YHbCBNdFmMEVuWKnx5/FigmaExport-Example-File-Dark"><img src="../images/figma_d.png" width="600" /></a>
 ### Example iOS project
 
 There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories which demostrates how to use figma-export with UIKit and SwiftUI.
