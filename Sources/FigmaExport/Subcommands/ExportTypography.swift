@@ -27,14 +27,16 @@ extension FigmaExportCommand {
             logger.info("Fetching text styles. Please wait...")
             let loader = TextStylesLoader(client: client, params: options.params.figma)
             let textStyles = try loader.load()
-
-            if let ios = options.params.ios {
+            
+            if let ios = options.params.ios,
+               let typographyParams = ios.typography {
+                
                 logger.info("Processing typography...")
                 let processor = TypographyProcessor(
                     platform: .ios,
                     nameValidateRegexp: options.params.common?.typography?.nameValidateRegexp,
                     nameReplaceRegexp: options.params.common?.typography?.nameReplaceRegexp,
-                    nameStyle: options.params.ios?.typography.nameStyle
+                    nameStyle: typographyParams.nameStyle
                 )
                 let processedTextStyles = try processor.process(assets: textStyles).get()
                 logger.info("Saving text styles...")
@@ -59,10 +61,10 @@ extension FigmaExportCommand {
         
         private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS, logger: Logger) throws {
             let output = XcodeTypographyOutput(
-                fontExtensionURL: iosParams.typography.fontSwift,
-                swiftUIFontExtensionURL: iosParams.typography.swiftUIFontSwift,
-                generateLabels: iosParams.typography.generateLabels,
-                labelsDirectory: iosParams.typography.labelsDirectory,
+                fontExtensionURL: iosParams.typography?.fontSwift,
+                swiftUIFontExtensionURL: iosParams.typography?.swiftUIFontSwift,
+                generateLabels: iosParams.typography?.generateLabels,
+                labelsDirectory: iosParams.typography?.labelsDirectory,
                 addObjcAttribute: iosParams.addObjcAttribute
             )
             let exporter = XcodeTypographyExporter(output: output)

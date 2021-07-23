@@ -34,7 +34,7 @@ extension FigmaExportCommand {
                     platform: .ios,
                     nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
                     nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
-                    nameStyle: options.params.ios?.colors.nameStyle,
+                    nameStyle: options.params.ios?.colors?.nameStyle,
                     useSingleFile: options.params.common?.colors?.useSingleFile,
                     darkModeSuffix: options.params.common?.colors?.darkModeSuffix
                 )
@@ -76,9 +76,14 @@ extension FigmaExportCommand {
         }
         
         private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS, logger: Logger) throws {
+            guard let colorParams = iosParams.colors else {
+                logger.error("Nothing to do. Add ios.colors parameters to the config file.")
+                return
+            }
+            
             var colorsURL: URL?
-            if iosParams.colors.useColorAssets {
-                if let folder = iosParams.colors.assetsFolder {
+            if colorParams.useColorAssets {
+                if let folder = colorParams.assetsFolder {
                     colorsURL = iosParams.xcassetsPath.appendingPathComponent(folder)
                 } else {
                     throw FigmaExportError.colorsAssetsFolderNotSpecified
@@ -90,13 +95,13 @@ extension FigmaExportCommand {
                 assetsInMainBundle: iosParams.xcassetsInMainBundle,
                 assetsInSwiftPackage: iosParams.xcassetsInSwiftPackage,
                 addObjcAttribute: iosParams.addObjcAttribute,
-                colorSwiftURL: iosParams.colors.colorSwift,
-                swiftuiColorSwiftURL: iosParams.colors.swiftuiColorSwift)
+                colorSwiftURL: colorParams.colorSwift,
+                swiftuiColorSwiftURL: colorParams.swiftuiColorSwift)
 
             let exporter = XcodeColorExporter(output: output)
             let files = exporter.export(colorPairs: colorPairs)
             
-            if iosParams.colors.useColorAssets, let url = colorsURL {
+            if colorParams.useColorAssets, let url = colorsURL {
                 try? FileManager.default.removeItem(atPath: url.path)
             }
             

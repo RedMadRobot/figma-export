@@ -41,8 +41,9 @@ extension FigmaExportCommand {
         }
 
         private func exportiOSImages(client: Client, params: Params, logger: Logger) throws {
-            guard let ios = params.ios else {
-                logger.info("Nothing to do. You haven’t specified ios parameter in the config file.")
+            guard let ios = params.ios,
+                  let imagesParams = ios.images else {
+                logger.info("Nothing to do. You haven’t specified ios.images parameters in the config file.")
                 return
             }
 
@@ -55,22 +56,22 @@ extension FigmaExportCommand {
                 platform: .ios,
                 nameValidateRegexp: params.common?.images?.nameValidateRegexp,
                 nameReplaceRegexp: params.common?.images?.nameReplaceRegexp,
-                nameStyle: params.ios?.images.nameStyle
+                nameStyle: imagesParams.nameStyle
             )
             let images = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
             if let warning = images.warning?.errorDescription {
                 logger.warning("\(warning)")
             }
 
-            let assetsURL = ios.xcassetsPath.appendingPathComponent(ios.images.assetsFolder)
+            let assetsURL = ios.xcassetsPath.appendingPathComponent(imagesParams.assetsFolder)
             
             let output = XcodeImagesOutput(
                 assetsFolderURL: assetsURL,
                 assetsInMainBundle: ios.xcassetsInMainBundle,
                 assetsInSwiftPackage: ios.xcassetsInSwiftPackage,
                 addObjcAttribute: ios.addObjcAttribute,
-                uiKitImageExtensionURL: ios.images.imageSwift,
-                swiftUIImageExtensionURL: ios.images.swiftUIImageSwift)
+                uiKitImageExtensionURL: imagesParams.imageSwift,
+                swiftUIImageExtensionURL: imagesParams.swiftUIImageSwift)
             
             let exporter = XcodeImagesExporter(output: output)
             let localAndRemoteFiles = try exporter.export(assets: images.get(), append: filter != nil)

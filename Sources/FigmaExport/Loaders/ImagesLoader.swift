@@ -29,7 +29,7 @@ final class ImagesLoader {
     func loadIcons(filter: String? = nil) throws -> [ImagePack] {
         let formatParams: FormatParams
         
-        switch (platform, params.ios?.icons.format) {
+        switch (platform, params.ios?.icons?.format) {
         case (.android, _),
              (.ios, .svg):
             formatParams = SVGParams()
@@ -182,7 +182,7 @@ final class ImagesLoader {
             customScales = filterScales(params.android?.images?.scales)
         } else {
             validScales = [1, 2, 3]
-            customScales = filterScales(params.ios?.images.scales)
+            customScales = filterScales(params.ios?.images?.scales)
         }
         return customScales.isEmpty ? validScales : customScales
     }
