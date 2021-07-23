@@ -128,7 +128,7 @@ final public class XcodeTypographyExporter {
                 "size": style.fontSize,
                 "supportsDynamicType": style.fontStyle != nil,
                 "type": type,
-                "tracking": style.letterSpacing,
+                "tracking": style.letterSpacing.floatingPointFixed,
                 "lineHeight": style.lineHeight ?? 0
             ]}
         let contents = try TEMPLATE_Label_swift.render(["styles": dict])
