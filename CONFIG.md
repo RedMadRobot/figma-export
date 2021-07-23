@@ -68,7 +68,7 @@ ios:
   # [optional] Add @objc attribute to generated properties so that they are accessible in Objective-C. Defaults to false
   addObjcAttribute: false
 
-  # Parameters for exporting colors
+  # [optional] Parameters for exporting colors
   colors:
     # How to export colors? Use .xcassets and UIColor extension (useColorAssets = true) or extension only (useColorAssets = false)
     useColorAssets: true
@@ -81,7 +81,7 @@ ios:
     # [optional] Absolute or relative path to swift file where to export SwiftUI colors (Color) for accessing from the code (e.g. Color.backgroundPrimary)
     swiftuiColorSwift: "./Source/Color+extension.swift"
 
-  # Parameters for exporting icons
+  # [optional] Parameters for exporting icons
   icons:
     # Image file format: pdf or svg
     format: pdf
@@ -101,7 +101,7 @@ ios:
     # Asset render mode: "template", "orignal" or "default". Default value is "template".
     renderMode: default
 
-  # Parameters for exporting images
+  # [optional] Parameters for exporting images
   images:
     # Name of the folder inside Assets.xcassets where to place images (.imageset directories)
     assetsFolder: Illustrations
@@ -114,7 +114,7 @@ ios:
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing illustrations from the code (e.g. UIImage.illZeroNoInternet)
     imageSwift: "./Example/Source/UIImage+extension_illustrations.swift"
 
-  # Parameters for exporting typography
+  # [optional] Parameters for exporting typography
   typography:
     # [optional] Absolute or relative path to swift file where to export UIKit fonts (UIFont extension).
     fontSwift: "./Source/UIComponents/UIFont+extension.swift"

@@ -41,8 +41,9 @@ extension FigmaExportCommand {
         }
         
         private func exportiOSIcons(client: Client, params: Params, logger: Logger) throws {
-            guard let ios = params.ios else {
-                logger.info("Nothing to do. You haven’t specified ios parameter in the config file.")
+            guard let ios = params.ios,
+                  let iconsParams = ios.icons else {
+                logger.info("Nothing to do. You haven’t specified ios.icons parameters in the config file.")
                 return
             }
 
@@ -55,20 +56,20 @@ extension FigmaExportCommand {
                 platform: .ios,
                 nameValidateRegexp: params.common?.icons?.nameValidateRegexp,
                 nameReplaceRegexp: params.common?.icons?.nameReplaceRegexp,
-                nameStyle: params.ios?.icons.nameStyle
+                nameStyle: iconsParams.nameStyle
             )
             let icons = try processor.process(assets: images).get()
 
-            let assetsURL = ios.xcassetsPath.appendingPathComponent(ios.icons.assetsFolder)
+            let assetsURL = ios.xcassetsPath.appendingPathComponent(iconsParams.assetsFolder)
             let output = XcodeImagesOutput(
                 assetsFolderURL: assetsURL,
                 assetsInMainBundle: ios.xcassetsInMainBundle,
                 assetsInSwiftPackage: ios.xcassetsInSwiftPackage,
                 addObjcAttribute: ios.addObjcAttribute,
-                preservesVectorRepresentation: ios.icons.preservesVectorRepresentation,
-                uiKitImageExtensionURL: ios.icons.imageSwift,
-                swiftUIImageExtensionURL: ios.icons.swiftUIImageSwift,
-                renderMode: ios.icons.renderMode)
+                preservesVectorRepresentation: iconsParams.preservesVectorRepresentation,
+                uiKitImageExtensionURL: iconsParams.imageSwift,
+                swiftUIImageExtensionURL: iconsParams.swiftUIImageSwift,
+                renderMode: iconsParams.renderMode)
             
             let exporter = XcodeIconsExporter(output: output)
             let localAndRemoteFiles = try exporter.export(icons: icons, append: filter != nil)
