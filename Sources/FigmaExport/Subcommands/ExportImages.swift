@@ -4,7 +4,6 @@ import FigmaAPI
 import XcodeExport
 import FigmaExportCore
 import AndroidExport
-import Logging
 
 extension FigmaExportCommand {
 
@@ -26,21 +25,20 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
-            let logger = Logger(label: "com.redmadrobot.figma-export")
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
             if let _ = options.params.ios {
                 logger.info("Using FigmaExport \(FigmaExportCommand.version) to export images to Xcode project.")
-                try exportiOSImages(client: client, params: options.params, logger: logger)
+                try exportiOSImages(client: client, params: options.params)
             }
 
             if let _ = options.params.android {
                 logger.info("Using FigmaExport \(FigmaExportCommand.version) to export images to Android Studio project.")
-                try exportAndroidImages(client: client, params: options.params, logger: logger)
+                try exportAndroidImages(client: client, params: options.params)
             }
         }
 
-        private func exportiOSImages(client: Client, params: Params, logger: Logger) throws {
+        private func exportiOSImages(client: Client, params: Params) throws {
             guard let ios = params.ios,
                   let imagesParams = ios.images else {
                 logger.info("Nothing to do. You haven’t specified ios.images parameters in the config file.")
@@ -101,7 +99,7 @@ extension FigmaExportCommand {
             logger.info("Done!")
         }
         
-        private func exportAndroidImages(client: Client, params: Params, logger: Logger) throws {
+        private func exportAndroidImages(client: Client, params: Params) throws {
             guard let androidImages = params.android?.images else {
                 logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
                 return
@@ -125,9 +123,9 @@ extension FigmaExportCommand {
             
             switch androidImages.format {
             case .svg:
-                try exportAndroidSVGImages(images: images.get(), params: params, logger: logger)
+                try exportAndroidSVGImages(images: images.get(), params: params)
             case .png, .webp:
-                try exportAndroidRasterImages(images: images.get(), params: params, logger: logger)
+                try exportAndroidRasterImages(images: images.get(), params: params)
             }
             
             checkForUpdate(logger: logger)
@@ -135,7 +133,7 @@ extension FigmaExportCommand {
             logger.info("Done!")
         }
         
-        private func exportAndroidSVGImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params, logger: Logger) throws {
+        private func exportAndroidSVGImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params) throws {
             guard let android = params.android, let androidImages = android.images else {
                 logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
                 return
@@ -215,7 +213,7 @@ extension FigmaExportCommand {
             try? FileManager.default.removeItem(at: tempDirectoryDarkURL)
         }
         
-        private func exportAndroidRasterImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params, logger: Logger) throws {
+        private func exportAndroidRasterImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params) throws {
             guard let android = params.android, let androidImages = android.images else {
                 logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
                 return

@@ -4,7 +4,6 @@ import FigmaAPI
 import XcodeExport
 import FigmaExportCore
 import AndroidExport
-import Logging
 
 extension FigmaExportCommand {
     
@@ -26,21 +25,20 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
-            let logger = Logger(label: "com.redmadrobot.figma-export")
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
             
             if options.params.ios != nil {
                 logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Xcode project.")
-                try exportiOSIcons(client: client, params: options.params, logger: logger)
+                try exportiOSIcons(client: client, params: options.params)
             }
             
             if options.params.android != nil {
                 logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Android Studio project.")
-                try exportAndroidIcons(client: client, params: options.params, logger: logger)
+                try exportAndroidIcons(client: client, params: options.params)
             }
         }
         
-        private func exportiOSIcons(client: Client, params: Params, logger: Logger) throws {
+        private func exportiOSIcons(client: Client, params: Params) throws {
             guard let ios = params.ios,
                   let iconsParams = ios.icons else {
                 logger.info("Nothing to do. You haven’t specified ios.icons parameters in the config file.")
@@ -105,7 +103,7 @@ extension FigmaExportCommand {
             logger.info("Done!")
         }
         
-        private func exportAndroidIcons(client: Client, params: Params, logger: Logger) throws {
+        private func exportAndroidIcons(client: Client, params: Params) throws {
             guard let android = params.android, let androidIcons = android.icons else {
                 logger.info("Nothing to do. You haven’t specified android.icons parameter in the config file.")
                 return

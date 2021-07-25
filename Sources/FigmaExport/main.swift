@@ -1,5 +1,6 @@
 import ArgumentParser
 import Foundation
+import Logging
 
 enum FigmaExportError: LocalizedError {
     
@@ -32,6 +33,7 @@ struct FigmaExportCommand: ParsableCommand {
     static let svgFileConverter = VectorDrawableConverter()
     static let fileWritter = FileWritter()
     static let fileDownloader = FileDownloader()
+    static let logger = Logger(label: "com.redmadrobot.figma-export")
     
     static var configuration = CommandConfiguration(
         commandName: "figma-export",

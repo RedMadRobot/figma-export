@@ -1,7 +1,6 @@
 import ArgumentParser
 import FigmaExportCore
 import Foundation
-import Logging
 
 extension Platform: ExpressibleByArgument {}
 
@@ -18,8 +17,6 @@ extension FigmaExportCommand {
         var platform: Platform
         
         func run() throws {
-            let logger = Logger(label: "com.redmadrobot.figma-export")
-            
             let fileContents: String
             switch platform {
             case .android:

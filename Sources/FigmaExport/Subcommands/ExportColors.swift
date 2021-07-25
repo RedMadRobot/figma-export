@@ -4,7 +4,6 @@ import FigmaAPI
 import XcodeExport
 import AndroidExport
 import FigmaExportCore
-import Logging
 
 extension FigmaExportCommand {
     
@@ -19,7 +18,6 @@ extension FigmaExportCommand {
         var options: FigmaExportOptions
         
         func run() throws {
-            let logger = Logger(label: "com.redmadrobot.figma-export")
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
@@ -42,7 +40,7 @@ extension FigmaExportCommand {
                 }
 
                 logger.info("Exporting colors to Xcode project...")
-                try exportXcodeColors(colorPairs: colorPairs.get(), iosParams: ios, logger: logger)
+                try exportXcodeColors(colorPairs: colorPairs.get(), iosParams: ios)
 
                 checkForUpdate(logger: logger)
                 
@@ -71,7 +69,7 @@ extension FigmaExportCommand {
             }
         }
         
-        private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS, logger: Logger) throws {
+        private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS) throws {
             guard let colorParams = iosParams.colors else {
                 logger.error("Nothing to do. Add ios.colors parameters to the config file.")
                 return

@@ -4,7 +4,6 @@ import FigmaAPI
 import XcodeExport
 import AndroidExport
 import FigmaExportCore
-import Logging
 
 extension FigmaExportCommand {
     
@@ -19,7 +18,6 @@ extension FigmaExportCommand {
         var options: FigmaExportOptions
         
         func run() throws {
-            let logger = Logger(label: "com.redmadrobot.figma-export")
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export typography.")
@@ -40,7 +38,7 @@ extension FigmaExportCommand {
                 )
                 let processedTextStyles = try processor.process(assets: textStyles).get()
                 logger.info("Saving text styles...")
-                try exportXcodeTextStyles(textStyles: processedTextStyles, iosParams: ios, logger: logger)
+                try exportXcodeTextStyles(textStyles: processedTextStyles, iosParams: ios)
                 logger.info("Done!")
             }
 
@@ -54,7 +52,7 @@ extension FigmaExportCommand {
                 )
                 let processedTextStyles = try processor.process(assets: textStyles).get()
                 logger.info("Saving text styles...")
-                try exportAndroidTextStyles(textStyles: processedTextStyles, androidParams: android, logger: logger)
+                try exportAndroidTextStyles(textStyles: processedTextStyles, androidParams: android)
                 logger.info("Done!")
             }
         }
@@ -79,7 +77,7 @@ extension FigmaExportCommand {
             )
         }
         
-        private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS, logger: Logger) throws {
+        private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS) throws {
             let output = createXcodeOutput(from: iosParams)
             let exporter = XcodeTypographyExporter(output: output)
             let files = try exporter.export(textStyles: textStyles)
@@ -99,7 +97,7 @@ extension FigmaExportCommand {
             }
         }
 
-        private func exportAndroidTextStyles(textStyles: [TextStyle], androidParams: Params.Android, logger: Logger) throws {
+        private func exportAndroidTextStyles(textStyles: [TextStyle], androidParams: Params.Android) throws {
 
             let exporter = AndroidTypographyExporter(outputDirectory: androidParams.mainRes)
             let files = try exporter.exportFonts(textStyles: textStyles)
