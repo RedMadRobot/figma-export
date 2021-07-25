@@ -34,9 +34,7 @@ extension FigmaExportCommand {
                     platform: .ios,
                     nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
                     nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
-                    nameStyle: options.params.ios?.colors?.nameStyle,
-                    useSingleFile: options.params.common?.colors?.useSingleFile,
-                    darkModeSuffix: options.params.common?.colors?.darkModeSuffix
+                    nameStyle: options.params.ios?.colors?.nameStyle
                 )
                 let colorPairs = processor.process(light: colors.light, dark: colors.dark)
                 if let warning = colorPairs.warning?.errorDescription {
@@ -57,9 +55,7 @@ extension FigmaExportCommand {
                     platform: .android,
                     nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
                     nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
-                    nameStyle: .snakeCase,
-                    useSingleFile: options.params.common?.colors?.useSingleFile,
-                    darkModeSuffix: options.params.common?.colors?.darkModeSuffix
+                    nameStyle: .snakeCase
                 )
                 let colorPairs = processor.process(light: colors.light, dark: colors.dark)
                 if let warning = colorPairs.warning?.errorDescription {
@@ -96,7 +92,8 @@ extension FigmaExportCommand {
                 assetsInSwiftPackage: iosParams.xcassetsInSwiftPackage,
                 addObjcAttribute: iosParams.addObjcAttribute,
                 colorSwiftURL: colorParams.colorSwift,
-                swiftuiColorSwiftURL: colorParams.swiftuiColorSwift)
+                swiftuiColorSwiftURL: colorParams.swiftuiColorSwift,
+                groupUsingNamespace: colorParams.groupUsingNamespace)
 
             let exporter = XcodeColorExporter(output: output)
             let files = exporter.export(colorPairs: colorPairs)

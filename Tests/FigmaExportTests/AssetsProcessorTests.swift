@@ -146,9 +146,7 @@ final class AssetsProcessorTests: XCTestCase {
             platform: .ios,
             nameValidateRegexp: nil,
             nameReplaceRegexp: nil,
-            nameStyle: .camelCase,
-            useSingleFile: false,
-            darkModeSuffix: ""
+            nameStyle: .camelCase
         )
         let colors = try processor.process(light: lights, dark: darks).get()
         
@@ -173,9 +171,7 @@ final class AssetsProcessorTests: XCTestCase {
             platform: .ios,
             nameValidateRegexp: nil,
             nameReplaceRegexp: nil,
-            nameStyle: .camelCase,
-            useSingleFile: false,
-            darkModeSuffix: ""
+            nameStyle: .camelCase
         )
         
         XCTAssertThrowsError(try processor.process(light: lights, dark: darks).get())

@@ -80,6 +80,8 @@ ios:
     colorSwift: "./Sources/UIColor+extension.swift"
     # [optional] Absolute or relative path to swift file where to export SwiftUI colors (Color) for accessing from the code (e.g. Color.backgroundPrimary)
     swiftuiColorSwift: "./Source/Color+extension.swift"
+    # [optional] If true and a color style name contains symbol "/" then "/" symbol indicates grouping by folders, and each folder will have the "Provides Namespace" property enabled. Defaults to `false`.
+    groupUsingNamespace: true
 
   # [optional] Parameters for exporting icons
   icons:

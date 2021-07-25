@@ -18,7 +18,8 @@ final public class XcodeColorExporter {
             let contents = prepareColorDotSwiftContents(
                 colorPairs,
                 formAsset: output.assetsColorsURL != nil,
-                objcAttribute: output.addObjcAttribute
+                objcAttribute: output.addObjcAttribute,
+                groupUsingNamespace: output.groupUsingNamespace
             )
             let contentsData = contents.data(using: .utf8)!
             
@@ -36,7 +37,7 @@ final public class XcodeColorExporter {
         // SwiftUI Color extension
         if let colorSwiftURL = output.swiftuiColorSwiftURL {
             
-            let contents = prepareSwiftUIColorDotSwiftContents(colorPairs)
+            let contents = prepareSwiftUIColorDotSwiftContents(colorPairs, groupUsingNamespace: output.groupUsingNamespace)
             let contentsData = contents.data(using: .utf8)!
             
             let fileURL = URL(string: colorSwiftURL.lastPathComponent)!
@@ -61,7 +62,28 @@ final public class XcodeColorExporter {
         
         // Assets.xcassets/Colors/***.colorset/Contents.json
         colorPairs.forEach { colorPair in
-            let name = colorPair.light.name
+            
+            var name = colorPair.light.name
+            var assetsColorsURL = assetsColorsURL
+            
+            if output.groupUsingNamespace,
+               let lastName = colorPair.light.originalName.split(separator: "/").last {
+                name = String(lastName)
+                
+                colorPair.light.originalName.split(separator: "/")
+                    .dropLast()
+                    .map { String($0) }
+                    .forEach {
+                        assetsColorsURL.appendPathComponent($0, isDirectory: true)
+                        
+                        let contentsJson = XcodeFolderNamespaceContents()
+                        files.append(FileContents(
+                            destination: Destination(directory: assetsColorsURL, file: contentsJson.fileURL),
+                            data: contentsJson.data
+                        ))
+                    }
+            }
+            
             let dirURL = assetsColorsURL.appendingPathComponent("\(name).colorset")
             
             var colors: [XcodeAssetContents.ColorData] = [
@@ -95,14 +117,12 @@ final public class XcodeColorExporter {
         return files
     }
     
-    private func prepareSwiftUIColorDotSwiftContents(_ colorPairs: [AssetPair<Color>]) -> String {
+    private func prepareSwiftUIColorDotSwiftContents(_ colorPairs: [AssetPair<Color>], groupUsingNamespace: Bool) -> String {
         
         let strings = colorPairs.map { colorPair -> String in
-            if output.assetsInMainBundle {
-                return "    static var \(colorPair.light.name): Color { Color(#function) }"
-            } else {
-                return "    static var \(colorPair.light.name): Color { Color(#function, bundle: BundleProvider.bundle) }"
-            }
+            let bundle = output.assetsInMainBundle ? "" : ", bundle: BundleProvider.bundle"
+            let named = groupUsingNamespace ? "\"\(colorPair.light.originalName)\"" : "#function"
+            return "    static var \(colorPair.light.name): Color { Color(\(named)\(bundle)) }"
         }
 
         return """
@@ -120,18 +140,18 @@ final public class XcodeColorExporter {
     private func prepareColorDotSwiftContents(
         _ colorPairs: [AssetPair<Color>],
         formAsset: Bool,
-        objcAttribute: Bool
+        objcAttribute: Bool,
+        groupUsingNamespace: Bool
     ) -> String {
         var contents = [String]()
         
         colorPairs.forEach { colorPair in
             let content: String
             if formAsset {
-                if output.assetsInMainBundle {
-                    content = "    \(objcAttribute ? "@objc " : "")static var \(colorPair.light.name): UIColor { UIColor(named: #function)! }"
-                } else {
-                    content = "    \(objcAttribute ? "@objc " : "")static var \(colorPair.light.name): UIColor { UIColor(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
-                }
+                let bundle = output.assetsInMainBundle ? "" : ", in: BundleProvider.bundle, compatibleWith: nil"
+                let prefix = objcAttribute ? "@objc " : ""
+                let named = groupUsingNamespace ? "\"\(colorPair.light.originalName)\"" : "#function"
+                content = "    \(prefix)static var \(colorPair.light.name): UIColor { UIColor(named: \(named)\(bundle))! }"
             } else {
                 let lightComponents = colorPair.light.toRgbComponents()
                 if let darkComponents = colorPair.dark?.toRgbComponents() {
