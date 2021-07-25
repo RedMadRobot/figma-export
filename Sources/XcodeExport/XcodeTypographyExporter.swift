@@ -79,6 +79,7 @@ final public class XcodeTypographyExporter {
                 }
             }
         }
+        
         """
         
         let data = contents.data(using: .utf8)!
@@ -108,6 +109,7 @@ final public class XcodeTypographyExporter {
             
         \(strings.joined(separator: "\n"))
         }
+        
         """
 
         let data = contents.data(using: .utf8)!
@@ -274,4 +276,5 @@ struct LabelStyle {
         ]
     }
 }
+
 """

@@ -60,6 +60,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 }
             }
         }
+        
         """
         
         files.forEach {
@@ -137,6 +138,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 }
             }
         }
+        
         """
 
         files.forEach {
@@ -192,6 +194,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 Font.custom("PTSans-Regular", size: 14.0)
             }
         }
+        
         """
         
         files.forEach {
@@ -383,6 +386,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 ]
             }
         }
+        
         """
         
         XCTAssertEqual(files.count, 2, "Must be generated 2 files but generated \(files.count)")
