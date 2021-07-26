@@ -53,6 +53,7 @@ struct Params: Decodable {
             let useColorAssets: Bool
             let assetsFolder: String?
             let nameStyle: NameStyle
+            let groupUsingNamespace: Bool?
 
             let colorSwift: URL?
             let swiftuiColorSwift: URL?

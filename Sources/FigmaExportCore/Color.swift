@@ -2,10 +2,10 @@ import Foundation
 
 public struct Color: Asset {
     
-    /// Raw name of the color
     public var name: String
     
-    /// Platform-specific color
+    public let originalName: String
+    
     public let platform: Platform?
     
     /// Color components, Double value from 0 to 1
@@ -13,6 +13,7 @@ public struct Color: Asset {
     
     public init(name: String, platform: Platform? = nil, red: Double, green: Double, blue: Double, alpha: Double) {
         self.name = name
+        self.originalName = name
         self.platform = platform
         self.red = red
         self.green = green

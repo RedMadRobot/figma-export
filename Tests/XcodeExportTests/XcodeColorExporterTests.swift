@@ -8,7 +8,7 @@ final class XcodeColorExporterTests: XCTestCase {
     
     private let fileManager = FileManager.default
     private var colorsFile: URL!
-    private var colorsAsssetCatalog: URL!
+    private var colorsAssetCatalog: URL!
     
     private let colorPair1 = AssetPair<Color>(
         light: Color(name: "colorPair1", red: 1, green: 1, blue: 1, alpha: 1),
@@ -18,12 +18,22 @@ final class XcodeColorExporterTests: XCTestCase {
         light: Color(name: "colorPair2", red: 119.0/255.0, green: 3.0/255.0, blue: 1.0, alpha: 0.5),
         dark: nil)
     
+    private lazy var color3: Color = {
+        var color = Color(name: "background/primary", red: 119.0/255.0, green: 3.0/255.0, blue: 1.0, alpha: 0.5)
+        color.name = "backgroundPrimary"
+        return color
+    }()
+    
+    private lazy var colorPair3 = AssetPair<Color>(
+        light: color3,
+        dark: nil)
+    
     // MARK: - Setup
     
     override func setUp() {
         super.setUp()
         colorsFile = fileManager.temporaryDirectory.appendingPathComponent("Colors.swift")
-        colorsAsssetCatalog = fileManager.temporaryDirectory.appendingPathComponent("Assets.xcassets/Colors")
+        colorsAssetCatalog = fileManager.temporaryDirectory.appendingPathComponent("Assets.xcassets/Colors")
     }
     
     // MARK: - Tests
@@ -68,7 +78,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
     
     func testExport_with_assets() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         
@@ -98,7 +108,7 @@ final class XcodeColorExporterTests: XCTestCase {
 
     func testExport_with_objc() {
         let output = XcodeColorsOutput(
-            assetsColorsURL: colorsAsssetCatalog,
+            assetsColorsURL: colorsAssetCatalog,
             assetsInMainBundle: true,
             addObjcAttribute: true,
             colorSwiftURL: colorsFile
@@ -131,7 +141,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
     
     func testExport_with_assets_in_separate_bundle() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: false, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: false, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         
@@ -164,7 +174,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
 
     func testExport_with_assets_in_swift_package() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: false, assetsInSwiftPackage: true, colorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: false, assetsInSwiftPackage: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
 
@@ -197,7 +207,7 @@ final class XcodeColorExporterTests: XCTestCase {
     }
     
     func testExport_swiftui() {
-        let output = XcodeColorsOutput(assetsColorsURL: colorsAsssetCatalog, assetsInMainBundle: true, colorSwiftURL: nil, swiftuiColorSwiftURL: colorsFile)
+        let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: true, colorSwiftURL: nil, swiftuiColorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
         
@@ -225,4 +235,36 @@ final class XcodeColorExporterTests: XCTestCase {
         XCTAssertEqual(generatedCode, referenceCode)
     }
     
+    func testExport_withProvidesNamespace() {
+        let output = XcodeColorsOutput(
+            assetsColorsURL: colorsAssetCatalog,
+            assetsInMainBundle: true,
+            colorSwiftURL: colorsFile,
+            groupUsingNamespace: true
+        )
+        let exporter = XcodeColorExporter(output: output)
+        let result = exporter.export(colorPairs: [colorPair3])
+        
+        XCTAssertEqual(result.count, 4)
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
+        XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("Assets.xcassets/Colors/Contents.json"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("background/Contents.json"))
+        XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("primary.colorset/Contents.json"))
+        
+        let content = result[0].data
+        XCTAssertNotNil(content)
+        
+        let generatedCode = String(data: content!, encoding: .utf8)
+        let referenceCode = """
+        \(header)
+
+        import UIKit
+
+        public extension UIColor {
+            static var backgroundPrimary: UIColor { UIColor(named: "background/primary")! }
+        }
+
+        """
+        XCTAssertEqual(generatedCode, referenceCode)
+    }
 }

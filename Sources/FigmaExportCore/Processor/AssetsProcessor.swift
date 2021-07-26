@@ -47,16 +47,12 @@ public struct ColorsProcessor: AssetsProcessable {
     public let nameValidateRegexp: String?
     public let nameReplaceRegexp: String?
     public let nameStyle: NameStyle?
-    public let useSingleFile: Bool?
-    public let darkModeSuffix: String?
     
-    public init(platform: Platform, nameValidateRegexp: String?, nameReplaceRegexp: String?, nameStyle: NameStyle?, useSingleFile: Bool?, darkModeSuffix: String?) {
+    public init(platform: Platform, nameValidateRegexp: String?, nameReplaceRegexp: String?, nameStyle: NameStyle?) {
         self.platform = platform
         self.nameValidateRegexp = nameValidateRegexp
         self.nameReplaceRegexp = nameReplaceRegexp
         self.nameStyle = nameStyle
-        self.useSingleFile = useSingleFile
-        self.darkModeSuffix = darkModeSuffix
     }
 }
 
