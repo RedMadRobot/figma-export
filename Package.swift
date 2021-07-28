@@ -16,7 +16,7 @@ let package = Package(
         .package(url: "https://github.com/jpsim/Yams.git", from: "4.0.0"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.4.0"),
         .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.14.0"),
-        .package(url: "https://github.com/tuist/XcodeProj.git", from: "7.18.0"),
+        .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.0.0"),
     ],
     targets: [
         
