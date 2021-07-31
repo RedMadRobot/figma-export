@@ -57,11 +57,11 @@
       },
       {
         "package": "XcodeProj",
-        "repositoryURL": "https://github.com/tuist/XcodeProj.git",
+        "repositoryURL": "https://github.com/subdan/XcodeProj",
         "state": {
           "branch": null,
-          "revision": "0b18c3e7a10c241323397a80cb445051f4494971",
-          "version": "8.0.0"
+          "revision": "1a590cfb9866e727f5939089246d43402f9a2d96",
+          "version": "8.0.1"
         }
       },
       {
