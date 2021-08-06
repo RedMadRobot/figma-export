@@ -66,6 +66,10 @@ let package = Package(
         .testTarget(
             name: "XcodeExportTests",
             dependencies: ["XcodeExport"]
+        ),
+        .testTarget(
+            name: "AndroidExportTests",
+            dependencies: ["AndroidExport"]
         )
     ]
 )
