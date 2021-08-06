@@ -14,7 +14,7 @@ final public class AndroidColorExporter {
         let lightFile = makeColorsFile(colorPairs: colorPairs, dark: false)
         var result = [lightFile]
             
-        if colorPairs.first?.dark != nil {
+        if colorPairs.contains(where: { $0.dark != nil }) {
             let darkFile = makeColorsFile(colorPairs: colorPairs, dark: true)
             result.append(darkFile)
         }

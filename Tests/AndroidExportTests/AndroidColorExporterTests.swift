@@ -9,12 +9,14 @@ final class AndroidColorExporterTests: XCTestCase {
     private let outputDirectory = URL(string: "~/")!
     
     private let colorPair1 = AssetPair<Color>(
-        light: Color(name: "colorPair1", red: 1, green: 1, blue: 1, alpha: 1),
-        dark: Color(name: "colorPair1", red: 0, green: 0, blue: 0, alpha: 1))
+        light: Color(name: "colorPair1", red: 119.0/255.0, green: 3.0/255.0, blue: 1.0, alpha: 0.5),
+        dark: nil
+    )
     
     private let colorPair2 = AssetPair<Color>(
-        light: Color(name: "colorPair2", red: 119.0/255.0, green: 3.0/255.0, blue: 1.0, alpha: 0.5),
-        dark: nil)
+        light: Color(name: "colorPair2", red: 1, green: 1, blue: 1, alpha: 1),
+        dark: Color(name: "colorPair2", red: 0, green: 0, blue: 0, alpha: 1)
+    )
     
     // MARK: - Setup
     
@@ -39,16 +41,16 @@ final class AndroidColorExporterTests: XCTestCase {
         let referenceCodeLight = """
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
-            <color name="colorPair1">#FFFFFF</color>
-            <color name="colorPair2">#807703FF</color>
+            <color name="colorPair1">#807703FF</color>
+            <color name="colorPair2">#FFFFFF</color>
         </resources>
         """
         
         let referenceCodeDark = """
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
-            <color name="colorPair1">#000000</color>
-            <color name="colorPair2">#807703FF</color>
+            <color name="colorPair1">#807703FF</color>
+            <color name="colorPair2">#000000</color>
         </resources>
         """
         
