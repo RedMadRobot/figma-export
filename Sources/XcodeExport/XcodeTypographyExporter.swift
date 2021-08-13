@@ -37,6 +37,14 @@ final public class XcodeTypographyExporter {
                 textStyles: textStyles,
                 labelsDirectory: labelsDirectory
             ))
+            
+            // LabelStyle extensions
+            if let labelStyleExtensionsURL = output.labelStyleExtensionsURL {
+                files.append(contentsOf: try exportLabelStylesExtensions(
+                    textStyles: textStyles,
+                    labelStyleExtensionURL: labelStyleExtensionsURL
+                ))
+            }
         }
 
         return files
@@ -119,6 +127,27 @@ final public class XcodeTypographyExporter {
         
         let destination = Destination(directory: directoryURL, file: fileURL)
         return [FileContents(destination: destination, data: data)]
+    }
+    
+    private func exportLabelStylesExtensions(textStyles: [TextStyle], labelStyleExtensionURL: URL) throws -> [FileContents] {
+        let dict = textStyles.map { style -> [String: Any] in
+            let type: String = style.fontStyle?.textStyleName ?? ""
+            return [
+                "className": style.name.first!.uppercased() + style.name.dropFirst(),
+                "varName": style.name,
+                "size": style.fontSize,
+                "supportsDynamicType": style.fontStyle != nil,
+                "type": type,
+                "tracking": style.letterSpacing.floatingPointFixed,
+                "lineHeight": style.lineHeight ?? 0
+            ]}
+        let contents = try labelStyleExtensionSwiftContents.render(["styles": dict])
+        
+        let fileName = labelStyleExtensionURL.lastPathComponent
+        let directoryURL = labelStyleExtensionURL.deletingLastPathComponent()
+        let labelStylesSwiftExtension = try makeFileContents(data: contents, directoryURL: directoryURL, fileName: fileName)
+        
+        return [labelStylesSwiftExtension]
     }
     
     private func exportLabels(textStyles: [TextStyle], labelsDirectory: URL) throws -> [FileContents] {
@@ -231,6 +260,25 @@ public final class {{ style.className }}Label: Label {
     }
 }
 {% endfor %}
+""")
+
+private let labelStyleExtensionSwiftContents = Template(templateString: """
+\(header)
+
+import UIKit
+
+public extension LabelStyle {
+    {% for style in styles %}
+    static func {{ style.varName }}() -> LabelStyle {
+        LabelStyle(
+            font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
+            fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
+            lineHeight: {{ style.lineHeight }}{% endif %}{% if style.tracking != 0 %},
+            tracking: {{ style.tracking}}{% endif %}
+        )
+    }
+    {% endfor %}
+}
 """)
 
 private let labelStyleSwiftContents = """
