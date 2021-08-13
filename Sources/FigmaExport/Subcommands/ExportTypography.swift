@@ -61,11 +61,13 @@ extension FigmaExportCommand {
         
         private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS, logger: Logger) throws {
             let output = XcodeTypographyOutput(
-                fontExtensionURL: iosParams.typography?.fontSwift,
-                swiftUIFontExtensionURL: iosParams.typography?.swiftUIFontSwift,
+                urls: .init(
+                    fontExtensionURL: iosParams.typography?.fontSwift,
+                    swiftUIFontExtensionURL: iosParams.typography?.swiftUIFontSwift,
+                    labelsDirectory: iosParams.typography?.labelsDirectory,
+                    labelStyleExtensionsURL: iosParams.typography?.labelStyleSwift
+                ),
                 generateLabels: iosParams.typography?.generateLabels,
-                labelsDirectory: iosParams.typography?.labelsDirectory,
-                labelStyleExtensionsURL: iosParams.typography?.labelStyleSwift,
                 addObjcAttribute: iosParams.addObjcAttribute
             )
             let exporter = XcodeTypographyExporter(output: output)

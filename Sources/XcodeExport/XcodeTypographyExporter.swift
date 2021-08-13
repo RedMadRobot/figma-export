@@ -13,7 +13,7 @@ final public class XcodeTypographyExporter {
         var files: [FileContents] = []
 
         // UIKit UIFont extension
-        if let fontExtensionURL = output.fontExtensionURL {
+        if let fontExtensionURL = output.urls.fontExtensionURL {
             files.append(contentsOf: try exportFonts(
                 textStyles: textStyles,
                 fontExtensionURL: fontExtensionURL,
@@ -22,7 +22,7 @@ final public class XcodeTypographyExporter {
         }
 
         // SwiftUI Font extension
-        if let swiftUIFontExtensionURL = output.swiftUIFontExtensionURL {
+        if let swiftUIFontExtensionURL = output.urls.swiftUIFontExtensionURL {
             files.append(contentsOf: try exportFonts(
                 textStyles: textStyles,
                 swiftUIFontExtensionURL: swiftUIFontExtensionURL
@@ -30,7 +30,7 @@ final public class XcodeTypographyExporter {
         }
 
         // UIKit Labels
-        if output.generateLabels, let labelsDirectory = output.labelsDirectory  {
+        if output.generateLabels, let labelsDirectory = output.urls.labelsDirectory  {
             // Label.swift
             // LabelStyle.swift
             files.append(contentsOf: try exportLabels(
@@ -39,7 +39,7 @@ final public class XcodeTypographyExporter {
             ))
             
             // LabelStyle extensions
-            if let labelStyleExtensionsURL = output.labelStyleExtensionsURL {
+            if let labelStyleExtensionsURL = output.urls.labelStyleExtensionsURL {
                 files.append(contentsOf: try exportLabelStylesExtensions(
                     textStyles: textStyles,
                     labelStyleExtensionURL: labelStyleExtensionsURL
