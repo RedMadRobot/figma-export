@@ -286,7 +286,7 @@ private let labelStyleSwiftContents = """
 
 import UIKit
 
-struct LabelStyle {
+public struct LabelStyle {
 
     let font: UIFont
     let fontMetrics: UIFontMetrics?
@@ -300,7 +300,7 @@ struct LabelStyle {
         self.tracking = tracking
     }
     
-    func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
+    public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = alignment
