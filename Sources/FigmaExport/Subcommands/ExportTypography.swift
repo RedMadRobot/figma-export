@@ -59,17 +59,28 @@ extension FigmaExportCommand {
             }
         }
         
-        private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS, logger: Logger) throws {
-            let output = XcodeTypographyOutput(
-                urls: .init(
-                    fontExtensionURL: iosParams.typography?.fontSwift,
-                    swiftUIFontExtensionURL: iosParams.typography?.swiftUIFontSwift,
-                    labelsDirectory: iosParams.typography?.labelsDirectory,
-                    labelStyleExtensionsURL: iosParams.typography?.labelStyleSwift
-                ),
+        private func createXcodeOutput(from iosParams: Params.iOS) -> XcodeTypographyOutput {
+            let fontUrls = XcodeTypographyOutput.FontURLs(
+                fontExtensionURL: iosParams.typography?.fontSwift,
+                swiftUIFontExtensionURL: iosParams.typography?.swiftUIFontSwift
+            )
+            let labelUrls = XcodeTypographyOutput.LabelURLs(
+                labelsDirectory: iosParams.typography?.labelsDirectory,
+                labelStyleExtensionsURL: iosParams.typography?.labelStyleSwift
+            )
+            let urls = XcodeTypographyOutput.URLs(
+                fonts: fontUrls,
+                labels: labelUrls
+            )
+            return XcodeTypographyOutput(
+                urls: urls,
                 generateLabels: iosParams.typography?.generateLabels,
                 addObjcAttribute: iosParams.addObjcAttribute
             )
+        }
+        
+        private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS, logger: Logger) throws {
+            let output = createXcodeOutput(from: iosParams)
             let exporter = XcodeTypographyExporter(output: output)
             let files = try exporter.export(textStyles: textStyles)
             
