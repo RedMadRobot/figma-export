@@ -35,7 +35,8 @@ final public class XcodeTypographyExporter {
             // LabelStyle.swift
             files.append(contentsOf: try exportLabels(
                 textStyles: textStyles,
-                labelsDirectory: labelsDirectory
+                labelsDirectory: labelsDirectory,
+                separateStyles: output.urls.labels.labelStyleExtensionsURL != nil
             ))
             
             // LabelStyle extensions
@@ -150,7 +151,7 @@ final public class XcodeTypographyExporter {
         return [labelStylesSwiftExtension]
     }
     
-    private func exportLabels(textStyles: [TextStyle], labelsDirectory: URL) throws -> [FileContents] {
+    private func exportLabels(textStyles: [TextStyle], labelsDirectory: URL, separateStyles: Bool) throws -> [FileContents] {
         let dict = textStyles.map { style -> [String: Any] in
             let type: String = style.fontStyle?.textStyleName ?? ""
             return [
@@ -162,7 +163,10 @@ final public class XcodeTypographyExporter {
                 "tracking": style.letterSpacing.floatingPointFixed,
                 "lineHeight": style.lineHeight ?? 0
             ]}
-        let contents = try TEMPLATE_Label_swift.render(["styles": dict])
+        let contents = try TEMPLATE_Label_swift.render([
+            "styles": dict,
+            "separateStyles": separateStyles
+        ])
         
         let labelSwift = try makeFileContents(data: contents, directoryURL: labelsDirectory, fileName: "Label.swift")
         let labelStyleSwift = try makeFileContents(data: labelStyleSwiftContents, directoryURL: labelsDirectory, fileName: "LabelStyle.swift")
@@ -251,12 +255,12 @@ public class Label: UILabel {
 public final class {{ style.className }}Label: Label {
 
     override var style: LabelStyle? {
-        LabelStyle(
+        {% if !separateStyles %}LabelStyle(
             font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
             fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
             lineHeight: {{ style.lineHeight }}{% endif %}{% if style.tracking != 0 %},
             tracking: {{ style.tracking}}{% endif %}
-        )
+        ){% else %}.{{ style.varName }}(){% endif %}
     }
 }
 {% endfor %}
