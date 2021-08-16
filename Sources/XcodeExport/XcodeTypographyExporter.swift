@@ -255,12 +255,12 @@ public class Label: UILabel {
 public final class {{ style.className }}Label: Label {
 
     override var style: LabelStyle? {
-        {% if !separateStyles %}LabelStyle(
+        {% if separateStyles %}.{{ style.varName }}(){% else %}LabelStyle(
             font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
             fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
             lineHeight: {{ style.lineHeight }}{% endif %}{% if style.tracking != 0 %},
             tracking: {{ style.tracking}}{% endif %}
-        ){% else %}.{{ style.varName }}(){% endif %}
+        ){% endif %}
     }
 }
 {% endfor %}
