@@ -346,8 +346,7 @@ It will generate config file in the current directory.
 #### iOS
 1. Add a custom font to the Xcode project. Drag & drop font file to the Xcode project, set target membership, and add font file name in the Info.plist file. [See developer documentation for more info.](https://developer.apple.com/documentation/uikit/text_display_and_fonts/adding_a_custom_font_to_your_app)<br><img src="images/fonts.png" width="400" />
 2. Run `figma-export typography` to export text styles
-3. Add generated Swift files to your Xcode project. FigmaExport doesn’t add swift files to `.xcodeproj` file.
-4. Use generated fonts and labels in your code. E.g. `button.titleLabel?.font = UIFont.body()`, `let label = HeaderLabel()`.
+3. Use generated fonts and labels in your code. E.g. `button.titleLabel?.font = UIFont.body()`, `let label = HeaderLabel()`.
 
 ### Android
 1. Place font file under the `res` directory of your module
