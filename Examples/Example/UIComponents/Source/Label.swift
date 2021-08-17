@@ -21,7 +21,7 @@ public class Label: UILabel {
         }
     }
 
-    convenience init(text: String?, textColor: UIColor) {
+    public convenience init(text: String?, textColor: UIColor) {
         self.init()
         self.text = text
         self.textColor = textColor
@@ -74,25 +74,6 @@ public class Label: UILabel {
 
 }
 
-public final class LargeTitleLabel: Label {
-
-    override var style: LabelStyle? {
-        LabelStyle(
-            font: UIFont.largeTitle(),
-            fontMetrics: UIFontMetrics(forTextStyle: .largeTitle)
-        )
-    }
-}
-
-public final class HeaderLabel: Label {
-
-    override var style: LabelStyle? {
-        LabelStyle(
-            font: UIFont.header()
-        )
-    }
-}
-
 public final class BodyLabel: Label {
 
     override var style: LabelStyle? {
@@ -111,6 +92,25 @@ public final class CaptionLabel: Label {
             font: UIFont.caption(),
             fontMetrics: UIFontMetrics(forTextStyle: .footnote),
             lineHeight: 20.0
+        )
+    }
+}
+
+public final class HeaderLabel: Label {
+
+    override var style: LabelStyle? {
+        LabelStyle(
+            font: UIFont.header()
+        )
+    }
+}
+
+public final class LargeTitleLabel: Label {
+
+    override var style: LabelStyle? {
+        LabelStyle(
+            font: UIFont.largeTitle(),
+            fontMetrics: UIFontMetrics(forTextStyle: .largeTitle)
         )
     }
 }

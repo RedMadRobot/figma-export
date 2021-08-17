@@ -276,7 +276,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 }
             }
 
-            convenience init(text: String?, textColor: UIColor) {
+            public convenience init(text: String?, textColor: UIColor) {
                 self.init()
                 self.text = text
                 self.textColor = textColor
@@ -513,7 +513,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 }
             }
 
-            convenience init(text: String?, textColor: UIColor) {
+            public convenience init(text: String?, textColor: UIColor) {
                 self.init()
                 self.text = text
                 self.textColor = textColor
