@@ -13,7 +13,7 @@ final public class XcodeTypographyExporter {
         var files: [FileContents] = []
 
         // UIKit UIFont extension
-        if let fontExtensionURL = output.fontExtensionURL {
+        if let fontExtensionURL = output.urls.fonts.fontExtensionURL {
             files.append(contentsOf: try exportFonts(
                 textStyles: textStyles,
                 fontExtensionURL: fontExtensionURL,
@@ -22,7 +22,7 @@ final public class XcodeTypographyExporter {
         }
 
         // SwiftUI Font extension
-        if let swiftUIFontExtensionURL = output.swiftUIFontExtensionURL {
+        if let swiftUIFontExtensionURL = output.urls.fonts.swiftUIFontExtensionURL {
             files.append(contentsOf: try exportFonts(
                 textStyles: textStyles,
                 swiftUIFontExtensionURL: swiftUIFontExtensionURL
@@ -30,13 +30,22 @@ final public class XcodeTypographyExporter {
         }
 
         // UIKit Labels
-        if output.generateLabels, let labelsDirectory = output.labelsDirectory  {
+        if output.generateLabels, let labelsDirectory = output.urls.labels.labelsDirectory  {
             // Label.swift
             // LabelStyle.swift
             files.append(contentsOf: try exportLabels(
                 textStyles: textStyles,
-                labelsDirectory: labelsDirectory
+                labelsDirectory: labelsDirectory,
+                separateStyles: output.urls.labels.labelStyleExtensionsURL != nil
             ))
+            
+            // LabelStyle extensions
+            if let labelStyleExtensionsURL = output.urls.labels.labelStyleExtensionsURL {
+                files.append(contentsOf: try exportLabelStylesExtensions(
+                    textStyles: textStyles,
+                    labelStyleExtensionURL: labelStyleExtensionsURL
+                ))
+            }
         }
 
         return files
@@ -121,7 +130,7 @@ final public class XcodeTypographyExporter {
         return [FileContents(destination: destination, data: data)]
     }
     
-    private func exportLabels(textStyles: [TextStyle], labelsDirectory: URL) throws -> [FileContents] {
+    private func exportLabelStylesExtensions(textStyles: [TextStyle], labelStyleExtensionURL: URL) throws -> [FileContents] {
         let dict = textStyles.map { style -> [String: Any] in
             let type: String = style.fontStyle?.textStyleName ?? ""
             return [
@@ -133,7 +142,31 @@ final public class XcodeTypographyExporter {
                 "tracking": style.letterSpacing.floatingPointFixed,
                 "lineHeight": style.lineHeight ?? 0
             ]}
-        let contents = try TEMPLATE_Label_swift.render(["styles": dict])
+        let contents = try labelStyleExtensionSwiftContents.render(["styles": dict])
+        
+        let fileName = labelStyleExtensionURL.lastPathComponent
+        let directoryURL = labelStyleExtensionURL.deletingLastPathComponent()
+        let labelStylesSwiftExtension = try makeFileContents(data: contents, directoryURL: directoryURL, fileName: fileName)
+        
+        return [labelStylesSwiftExtension]
+    }
+    
+    private func exportLabels(textStyles: [TextStyle], labelsDirectory: URL, separateStyles: Bool) throws -> [FileContents] {
+        let dict = textStyles.map { style -> [String: Any] in
+            let type: String = style.fontStyle?.textStyleName ?? ""
+            return [
+                "className": style.name.first!.uppercased() + style.name.dropFirst(),
+                "varName": style.name,
+                "size": style.fontSize,
+                "supportsDynamicType": style.fontStyle != nil,
+                "type": type,
+                "tracking": style.letterSpacing.floatingPointFixed,
+                "lineHeight": style.lineHeight ?? 0
+            ]}
+        let contents = try TEMPLATE_Label_swift.render([
+            "styles": dict,
+            "separateStyles": separateStyles
+        ])
         
         let labelSwift = try makeFileContents(data: contents, directoryURL: labelsDirectory, fileName: "Label.swift")
         let labelStyleSwift = try makeFileContents(data: labelStyleSwiftContents, directoryURL: labelsDirectory, fileName: "LabelStyle.swift")
@@ -222,6 +255,25 @@ public class Label: UILabel {
 public final class {{ style.className }}Label: Label {
 
     override var style: LabelStyle? {
+        {% if separateStyles %}.{{ style.varName }}(){% else %}LabelStyle(
+            font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
+            fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
+            lineHeight: {{ style.lineHeight }}{% endif %}{% if style.tracking != 0 %},
+            tracking: {{ style.tracking}}{% endif %}
+        ){% endif %}
+    }
+}
+{% endfor %}
+""")
+
+private let labelStyleExtensionSwiftContents = Template(templateString: """
+\(header)
+
+import UIKit
+
+public extension LabelStyle {
+    {% for style in styles %}
+    static func {{ style.varName }}() -> LabelStyle {
         LabelStyle(
             font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
             fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
@@ -229,8 +281,8 @@ public final class {{ style.className }}Label: Label {
             tracking: {{ style.tracking}}{% endif %}
         )
     }
+    {% endfor %}
 }
-{% endfor %}
 """)
 
 private let labelStyleSwiftContents = """
@@ -238,7 +290,7 @@ private let labelStyleSwiftContents = """
 
 import UIKit
 
-struct LabelStyle {
+public struct LabelStyle {
 
     let font: UIFont
     let fontMetrics: UIFontMetrics?
@@ -252,7 +304,7 @@ struct LabelStyle {
         self.tracking = tracking
     }
     
-    func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
+    public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = alignment

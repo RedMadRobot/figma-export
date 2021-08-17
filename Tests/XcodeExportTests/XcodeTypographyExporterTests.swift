@@ -5,9 +5,15 @@ import FigmaExportCore
 final class XcodeTypographyExporterTests: XCTestCase {
     
     func testExportUIKitFonts() throws {
-        let output = XcodeTypographyOutput(
+        let fontUrls = XcodeTypographyOutput.FontURLs(
             fontExtensionURL: URL(string: "~/UIFont+extension.swift")!
         )
+        let labelUrls = XcodeTypographyOutput.LabelURLs()
+        let urls = XcodeTypographyOutput.URLs(
+            fonts: fontUrls,
+            labels: labelUrls
+        )
+        let output = XcodeTypographyOutput(urls: urls)
         let exporter = XcodeTypographyExporter(output: output)
         
         let styles = [
@@ -82,8 +88,16 @@ final class XcodeTypographyExporterTests: XCTestCase {
     }
 
     func testExportUIKitFontsWithObjc() throws {
+        let fontUrls = XcodeTypographyOutput.FontURLs(
+            fontExtensionURL: URL(string: "~/UIFont+extension.swift")!
+        )
+        let labelUrls = XcodeTypographyOutput.LabelURLs()
+        let urls = XcodeTypographyOutput.URLs(
+            fonts: fontUrls,
+            labels: labelUrls
+        )
         let output = XcodeTypographyOutput(
-            fontExtensionURL: URL(string: "~/UIFont+extension.swift")!,
+            urls: urls,
             addObjcAttribute: true
         )
         let exporter = XcodeTypographyExporter(output: output)
@@ -160,9 +174,15 @@ final class XcodeTypographyExporterTests: XCTestCase {
     }
     
     func testExportSwiftUIFonts() throws {
-        let output = XcodeTypographyOutput(
+        let fontUrls = XcodeTypographyOutput.FontURLs(
             swiftUIFontExtensionURL: URL(string: "~/Font+extension.swift")!
         )
+        let labelUrls = XcodeTypographyOutput.LabelURLs()
+        let urls = XcodeTypographyOutput.URLs(
+            fonts: fontUrls,
+            labels: labelUrls
+        )
+        let output = XcodeTypographyOutput(urls: urls)
         let exporter = XcodeTypographyExporter(output: output)
         
         let styles = [
@@ -215,10 +235,256 @@ final class XcodeTypographyExporterTests: XCTestCase {
         )
     }
     
-    func testExportLabel() throws {
+    func testExportStyleExtensions() throws {
+        let fontUrls = XcodeTypographyOutput.FontURLs()
+        let labelUrls = XcodeTypographyOutput.LabelURLs(
+            labelsDirectory: URL(string: "~/")!,
+            labelStyleExtensionsURL: URL(string: "~/LabelStyle+extension.swift")!
+        )
+        let urls = XcodeTypographyOutput.URLs(
+            fonts: fontUrls,
+            labels: labelUrls
+        )
         let output = XcodeTypographyOutput(
-            generateLabels:true,
+            urls: urls,
+            generateLabels: true
+        )
+        let exporter = XcodeTypographyExporter(output: output)
+        
+        let styles = [
+            makeTextStyle(name: "largeTitle", fontName: "PTSans-Bold", fontStyle: .largeTitle, fontSize: 34, lineHeight: nil),
+            makeTextStyle(name: "header", fontName: "PTSans-Bold", fontSize: 20, lineHeight: nil),
+            makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16, lineHeight: nil, letterSpacing: 1.2),
+            makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
+        ]
+        let files = try exporter.export(textStyles: styles)
+        
+        let contentsLabel = """
+        \(header)
+
+        import UIKit
+
+        public class Label: UILabel {
+
+            var style: LabelStyle? { nil }
+
+            public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+                super.traitCollectionDidChange(previousTraitCollection)
+
+                if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+                    updateText()
+                }
+            }
+
+            convenience init(text: String?, textColor: UIColor) {
+                self.init()
+                self.text = text
+                self.textColor = textColor
+            }
+
+            override init(frame: CGRect) {
+                super.init(frame: frame)
+                commonInit()
+            }
+
+            required init?(coder aDecoder: NSCoder) {
+                super.init(coder: aDecoder)
+                commonInit()
+                updateText()
+            }
+
+            private func commonInit() {
+                font = style?.font
+                adjustsFontForContentSizeCategory = true
+            }
+
+            private func updateText() {
+                text = super.text
+            }
+
+            public override var text: String? {
+                get {
+                    guard style?.attributes != nil else {
+                        return super.text
+                    }
+
+                    return attributedText?.string
+                }
+                set {
+                    guard let style = style else {
+                        super.text = newValue
+                        return
+                    }
+
+                    guard let newText = newValue else {
+                        attributedText = nil
+                        super.text = nil
+                        return
+                    }
+
+                    let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
+                    attributedText = NSAttributedString(string: newText, attributes: attributes)
+                }
+            }
+
+        }
+
+        public final class LargeTitleLabel: Label {
+
+            override var style: LabelStyle? {
+                .largeTitle()
+            }
+        }
+
+        public final class HeaderLabel: Label {
+
+            override var style: LabelStyle? {
+                .header()
+            }
+        }
+
+        public final class BodyLabel: Label {
+
+            override var style: LabelStyle? {
+                .body()
+            }
+        }
+
+        public final class CaptionLabel: Label {
+
+            override var style: LabelStyle? {
+                .caption()
+            }
+        }
+
+        """
+        
+        let contentsLabelStyle = """
+        \(header)
+
+        import UIKit
+        
+        public struct LabelStyle {
+        
+            let font: UIFont
+            let fontMetrics: UIFontMetrics?
+            let lineHeight: CGFloat?
+            let tracking: CGFloat
+            
+            init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0) {
+                self.font = font
+                self.fontMetrics = fontMetrics
+                self.lineHeight = lineHeight
+                self.tracking = tracking
+            }
+            
+            public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = alignment
+                paragraphStyle.lineBreakMode = lineBreakMode
+                
+                var baselineOffset: CGFloat = .zero
+                
+                if let lineHeight = lineHeight {
+                    let scaledLineHeight: CGFloat = fontMetrics?.scaledValue(for: lineHeight) ?? lineHeight
+                    paragraphStyle.minimumLineHeight = scaledLineHeight
+                    paragraphStyle.maximumLineHeight = scaledLineHeight
+                    
+                    baselineOffset = (scaledLineHeight - font.lineHeight) / 4.0
+                }
+                
+                return [
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle,
+                    NSAttributedString.Key.kern: tracking,
+                    NSAttributedString.Key.baselineOffset: baselineOffset,
+                    NSAttributedString.Key.font: font
+                ]
+            }
+        }
+        
+        """
+        
+        let styleExtensionContent = """
+        \(header)
+        
+        import UIKit
+        
+        public extension LabelStyle {
+            
+            static func largeTitle() -> LabelStyle {
+                LabelStyle(
+                    font: UIFont.largeTitle(),
+                    fontMetrics: UIFontMetrics(forTextStyle: .largeTitle)
+                )
+            }
+            
+            static func header() -> LabelStyle {
+                LabelStyle(
+                    font: UIFont.header()
+                )
+            }
+            
+            static func body() -> LabelStyle {
+                LabelStyle(
+                    font: UIFont.body(),
+                    fontMetrics: UIFontMetrics(forTextStyle: .body),
+                    tracking: 1.2
+                )
+            }
+            
+            static func caption() -> LabelStyle {
+                LabelStyle(
+                    font: UIFont.caption(),
+                    fontMetrics: UIFontMetrics(forTextStyle: .footnote),
+                    lineHeight: 20.0
+                )
+            }
+            
+        }
+        """
+                
+        XCTAssertEqual(files.count, 3, "Must be generated 3 files but generated \(files.count)")
+        XCTAssertEqual(
+            files,
+            [
+                FileContents(
+                    destination: Destination(
+                        directory: URL(string: "~/")!,
+                        file: URL(string: "Label.swift")!
+                    ),
+                    data: contentsLabel.data(using: .utf8)!
+                ),
+                FileContents(
+                    destination: Destination(
+                        directory: URL(string: "~/")!,
+                        file: URL(string: "LabelStyle.swift")!
+                    ),
+                    data: contentsLabelStyle.data(using: .utf8)!
+                ),
+                FileContents(
+                    destination: Destination(
+                        directory: URL(string: "~/")!,
+                        file: URL(string: "LabelStyle+extension.swift")!
+                    ),
+                    data: styleExtensionContent.data(using: .utf8)!
+                )
+            ]
+        )
+    }
+    
+    func testExportLabel() throws {
+        let fontUrls = XcodeTypographyOutput.FontURLs()
+        let labelUrls = XcodeTypographyOutput.LabelURLs(
             labelsDirectory: URL(string: "~/")!
+        )
+        let urls = XcodeTypographyOutput.URLs(
+            fonts: fontUrls,
+            labels: labelUrls
+        )
+        let output = XcodeTypographyOutput(
+            urls: urls,
+            generateLabels: true
         )
         let exporter = XcodeTypographyExporter(output: output)
         
@@ -348,7 +614,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
 
         import UIKit
         
-        struct LabelStyle {
+        public struct LabelStyle {
         
             let font: UIFont
             let fontMetrics: UIFontMetrics?
@@ -362,7 +628,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 self.tracking = tracking
             }
             
-            func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
+            public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
                 
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.alignment = alignment
