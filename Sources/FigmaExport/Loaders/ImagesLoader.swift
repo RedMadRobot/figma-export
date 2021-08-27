@@ -55,6 +55,11 @@ final class ImagesLoader {
             .filter { !$0.name.hasSuffix(darkSuffix) }
         let darkIcons = icons
             .filter { $0.name.hasSuffix(darkSuffix) }
+            .map { icon -> ImagePack in
+                var newIcon = icon
+                newIcon.name = String(icon.name.dropLast(darkSuffix.count))
+                return newIcon
+            }
         return (lightIcons, darkIcons)
     }
 
