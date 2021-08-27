@@ -60,9 +60,6 @@ extension FigmaExportCommand {
             )
 
             let icons = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
-            if let warning = icons.warning?.errorDescription {
-                logger.warning("\(warning)")
-            }
 
             let assetsURL = ios.xcassetsPath.appendingPathComponent(iconsParams.assetsFolder)
 
@@ -77,7 +74,7 @@ extension FigmaExportCommand {
                 renderMode: iconsParams.renderMode)
             
             let exporter = XcodeIconsExporter(output: output)
-            let localAndRemoteFiles = try exporter.export(icons: icons, append: filter != nil)
+            let localAndRemoteFiles = try exporter.export(icons: icons.get(), append: filter != nil)
             if filter == nil {
                 try? FileManager.default.removeItem(atPath: assetsURL.path)
             }
@@ -125,10 +122,7 @@ extension FigmaExportCommand {
                 nameStyle: .snakeCase
             )
 
-            let icons = processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
-            if let warning = icons.warning?.errorDescription {
-                logger.warning("\(warning)")
-            }
+            let icons = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
             
             // Create empty temp directory
             let tempDirectoryLightURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
