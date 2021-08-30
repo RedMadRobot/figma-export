@@ -60,6 +60,9 @@ extension FigmaExportCommand {
             )
 
             let icons = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
+            if let warning = icons.warning?.errorDescription {
+                logger.warning("\(warning)")
+            }
 
             let assetsURL = ios.xcassetsPath.appendingPathComponent(iconsParams.assetsFolder)
 
@@ -122,7 +125,10 @@ extension FigmaExportCommand {
                 nameStyle: .snakeCase
             )
 
-            let icons = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
+            let icons = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
+            if let warning = icons.warning?.errorDescription {
+                logger.warning("\(warning)")
+            }
             
             // Create empty temp directory
             let tempDirectoryLightURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
@@ -130,7 +136,7 @@ extension FigmaExportCommand {
         
             // 3. Download SVG files to user's temp directory
             logger.info("Downloading remote files...")
-            let remoteFiles = icons.flatMap { asset -> [FileContents] in
+            let remoteFiles = try icons.get().flatMap { asset -> [FileContents] in
                 let lightFiles = asset.light.images.map { image -> FileContents in
                     let fileURL = URL(string: "\(image.name).svg")!
                     let dest = Destination(directory: tempDirectoryLightURL, file: fileURL)
@@ -191,7 +197,6 @@ extension FigmaExportCommand {
             logger.info("Writing files to Android Studio project...")
             try fileWritter.write(files: localFiles)
 
-            logger.info("Remove temp directory...")
             try? FileManager.default.removeItem(at: tempDirectoryLightURL)
             try? FileManager.default.removeItem(at: tempDirectoryDarkURL)
 

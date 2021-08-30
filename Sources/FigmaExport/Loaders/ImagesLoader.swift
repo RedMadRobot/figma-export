@@ -27,7 +27,7 @@ final class ImagesLoader {
     }
 
     func loadIcons(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
-        if let useSingleFile = params.common?.icons?.useSingleFile, useSingleFile {
+        if params.common?.icons?.useSingleFile == true {
             return try loadIconsFromSingleFile(filter: filter)
         } else {
             return try loadIconsFromLightAndDarkFile(filter: filter)
@@ -90,7 +90,7 @@ final class ImagesLoader {
     }
 
     func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
-        if let useSingleFile = params.common?.images?.useSingleFile, useSingleFile {
+        if params.common?.images?.useSingleFile == true {
             return try loadImagesFromSingleFile(filter: filter)
         } else {
             return try loadImagesFromLightAndDarkFile(filter: filter)
