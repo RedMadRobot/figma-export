@@ -115,14 +115,23 @@ extension AssetPair where AssetType == ImagePack {
         let name = light.name
         let dirURL = directory.appendingPathComponent("\(name).imageset")
 
+        var lightAssetContents: [XcodeAssetContents.ImageData] = []
+        var darkAssetContents: [XcodeAssetContents.ImageData] = []
+        var lightFiles: [FileContents] = []
+        var darkFiles: [FileContents] = []
+
         let lightPack = light.packForXcode()
         let darkPack = dark?.packForXcode()
 
-        let lightFiles = lightPack?.makeImageFileContents(to: dirURL, appearance: .light) ?? []
-        let darkFiles = darkPack?.makeImageFileContents(to: dirURL, appearance: .dark) ?? []
-
-        let lightAssetContents = lightPack?.makeXcodeAssetContentsImageData(appearance: .light) ?? []
-        let darkAssetContents = darkPack?.makeXcodeAssetContentsImageData(appearance: .dark) ?? []
+        if darkPack != nil {
+            lightAssetContents = lightPack?.makeXcodeAssetContentsImageData(appearance: .light) ?? []
+            darkAssetContents = darkPack?.makeXcodeAssetContentsImageData(appearance: .dark) ?? []
+            lightFiles = lightPack?.makeImageFileContents(to: dirURL, appearance: .light) ?? []
+            darkFiles = darkPack?.makeImageFileContents(to: dirURL, appearance: .dark) ?? []
+        } else {
+            lightAssetContents = lightPack?.makeXcodeAssetContentsImageData() ?? []
+            lightFiles = lightPack?.makeImageFileContents(to: dirURL) ?? []
+        }
 
         let properties = XcodeAssetContents.Properties(preserveVectorData: preservesVector, renderMode: renderMode)
 

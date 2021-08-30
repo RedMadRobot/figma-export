@@ -30,9 +30,9 @@ final class XcodeIconsExporterTests: XCTestCase {
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
-        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1L.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
         XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("image2.imageset/Contents.json"))
-        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2L.pdf"))
+        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
         XCTAssertTrue(result[5].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
 
         let content = result[5].data
@@ -69,9 +69,9 @@ final class XcodeIconsExporterTests: XCTestCase {
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
-        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1L.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
         XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("image2.imageset/Contents.json"))
-        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2L.pdf"))
+        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
         XCTAssertTrue(result[5].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
 
         let content = result[5].data
@@ -103,9 +103,9 @@ final class XcodeIconsExporterTests: XCTestCase {
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
-        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1L.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
         XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("image2.imageset/Contents.json"))
-        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2L.pdf"))
+        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
         XCTAssertTrue(result[5].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
 
         let content = result[5].data
@@ -141,9 +141,9 @@ final class XcodeIconsExporterTests: XCTestCase {
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
-        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1L.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
         XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("image2.imageset/Contents.json"))
-        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2L.pdf"))
+        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
         XCTAssertTrue(result[5].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
 
         let content = result[5].data
@@ -179,9 +179,9 @@ final class XcodeIconsExporterTests: XCTestCase {
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
-        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1L.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
         XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("image2.imageset/Contents.json"))
-        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2L.pdf"))
+        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
         XCTAssertTrue(result[5].destination.url.absoluteString.hasSuffix("Image+extension.swift"))
 
         let content = result[5].data
@@ -213,9 +213,9 @@ final class XcodeIconsExporterTests: XCTestCase {
         XCTAssertEqual(result.count, 6)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
-        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1L.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
         XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("image2.imageset/Contents.json"))
-        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2L.pdf"))
+        XCTAssertTrue(result[4].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
         XCTAssertTrue(result[5].destination.url.absoluteString.hasSuffix("Image+extension.swift"))
 
         let content = result[5].data
@@ -255,7 +255,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("image1.imageset/Contents.json"))
-        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1L.pdf"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("image1.imageset/image1.pdf"))
         XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
 
         try write(file: result[3])
@@ -268,7 +268,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         XCTAssertEqual(appendResult.count, 4)
         XCTAssertTrue(appendResult[0].destination.url.absoluteString.hasSuffix("Contents.json"))
         XCTAssertTrue(appendResult[1].destination.url.absoluteString.hasSuffix("image2.imageset/Contents.json"))
-        XCTAssertTrue(appendResult[2].destination.url.absoluteString.hasSuffix("image2.imageset/image2L.pdf"))
+        XCTAssertTrue(appendResult[2].destination.url.absoluteString.hasSuffix("image2.imageset/image2.pdf"))
         let resultContent = try XCTUnwrap(appendResult[3].data)
 
         let generatedCode = String(data: resultContent, encoding: .utf8)
