@@ -79,8 +79,8 @@ final class ImagesLoader {
             params: formatParams,
             filter: filter
         )
-        let darkIcons = try? params.figma.darkFileId.map {
-            try _loadImages(
+        let darkIcons = params.figma.darkFileId.flatMap {
+            try? _loadImages(
                 fileId: $0,
                 frameName: iconsFrameName,
                 params: formatParams,
@@ -133,8 +133,8 @@ final class ImagesLoader {
                 frameName: imagesFrameName,
                 filter: filter,
                 platform: platform)
-            let darkImages = try? params.figma.darkFileId.map {
-                try loadPNGImages(
+            let darkImages = params.figma.darkFileId.flatMap {
+                try? loadPNGImages(
                     fileId: $0,
                     frameName: imagesFrameName,
                     filter: filter,
@@ -151,8 +151,8 @@ final class ImagesLoader {
                 params: SVGParams(),
                 filter: filter)
 
-            let darkPacks = try? params.figma.darkFileId.map {
-                try _loadImages(
+            let darkPacks = params.figma.darkFileId.flatMap {
+                try? _loadImages(
                     fileId: $0,
                     frameName: imagesFrameName,
                     params: SVGParams(),
