@@ -100,10 +100,10 @@ extension FigmaExportCommand {
                 try? FileManager.default.removeItem(atPath: url.path)
             }
             
-            try fileWritter.write(files: files)
+            try fileWriter.write(files: files)
             
             do {
-                let xcodeProject = try XcodeProjectWritter(xcodeProjPath: iosParams.xcodeprojPath, target: iosParams.target)
+                let xcodeProject = try XcodeProjectWriter(xcodeProjPath: iosParams.xcodeprojPath, target: iosParams.target)
                 try files.forEach { file in
                     if file.destination.file.pathExtension == "swift" {
                         try xcodeProject.addFileReferenceToXcodeProj(file.destination.url)
@@ -125,7 +125,7 @@ extension FigmaExportCommand {
             try? FileManager.default.removeItem(atPath: lightColorsFileURL.path)
             try? FileManager.default.removeItem(atPath: darkColorsFileURL.path)
             
-            try fileWritter.write(files: files)
+            try fileWriter.write(files: files)
         }
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 import FigmaExportCore
 
-final class FileWritter {
+final class FileWriter {
     
     private let fileManager: FileManager
     

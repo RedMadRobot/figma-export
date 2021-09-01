@@ -2,7 +2,7 @@ import Foundation
 import XcodeProj
 import PathKit
 
-enum XcodeProjectWritterError: LocalizedError {
+enum XcodeProjectWriterError: LocalizedError {
     case unableToFindTarget(String)
     
     var errorDescription: String? {
@@ -13,7 +13,7 @@ enum XcodeProjectWritterError: LocalizedError {
     }
 }
 
-final class XcodeProjectWritter {
+final class XcodeProjectWriter {
     
     let xcodeprojPath: Path
     let rootPath = Path("./")
@@ -29,7 +29,7 @@ final class XcodeProjectWritter {
         if let target = pbxproj.targets(named: target).first {
             myTarget = target
         } else {
-            throw XcodeProjectWritterError.unableToFindTarget(target)
+            throw XcodeProjectWriterError.unableToFindTarget(target)
         }
         project = pbxproj.projects.first!
     }

@@ -84,10 +84,10 @@ extension FigmaExportCommand {
             let localFiles = try fileDownloader.fetch(files: localAndRemoteFiles)
 
             logger.info("Writting files to Xcode project...")
-            try fileWritter.write(files: localFiles)
+            try fileWriter.write(files: localFiles)
 
             do {
-                let xcodeProject = try XcodeProjectWritter(xcodeProjPath: ios.xcodeprojPath, target: ios.target)
+                let xcodeProject = try XcodeProjectWriter(xcodeProjPath: ios.xcodeprojPath, target: ios.target)
                 try localFiles.forEach { file in
                     if file.destination.file.pathExtension == "swift" {
                         try xcodeProject.addFileReferenceToXcodeProj(file.destination.url)
@@ -151,7 +151,7 @@ extension FigmaExportCommand {
             var localFiles = try fileDownloader.fetch(files: remoteFiles)
             
             // 4. Move downloaded SVG files to new empty temp directory
-            try fileWritter.write(files: localFiles)
+            try fileWriter.write(files: localFiles)
             
             // 5. Convert all SVG to XML files
             logger.info("Converting SVGs to XMLs...")
@@ -193,7 +193,7 @@ extension FigmaExportCommand {
             }
 
             logger.info("Writing files to Android Studio project...")
-            try fileWritter.write(files: localFiles)
+            try fileWriter.write(files: localFiles)
 
             try? FileManager.default.removeItem(at: tempDirectoryLightURL)
             try? FileManager.default.removeItem(at: tempDirectoryDarkURL)

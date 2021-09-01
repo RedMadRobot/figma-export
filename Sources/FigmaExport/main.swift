@@ -31,7 +31,7 @@ struct FigmaExportCommand: ParsableCommand {
     static let version = "0.26.0"
     
     static let svgFileConverter = VectorDrawableConverter()
-    static let fileWritter = FileWritter()
+    static let fileWriter = FileWriter()
     static let fileDownloader = FileDownloader()
     static let logger = Logger(label: "com.redmadrobot.figma-export")
     
