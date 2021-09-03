@@ -29,6 +29,16 @@ public struct TypeStyle: Decodable {
     public var lineHeightPx: Double
     public var letterSpacing: Double
     public var lineHeightUnit: LineHeightUnit
+    public var textCase: TextCase?
+}
+
+public enum TextCase: String, Decodable {
+    case original = "ORIGINAL"
+    case upper = "UPPER"
+    case lower = "LOWER"
+    case title = "TITLE"
+    case smallCaps = "SMALL_CAPS"
+    case smallCapsForced = "SMALL_CAPS_FORCED"
 }
 
 public struct Document: Decodable {

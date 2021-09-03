@@ -68,10 +68,21 @@ public class Label: UILabel {
             }
 
             let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
-            attributedText = NSAttributedString(string: newText, attributes: attributes)
+            attributedText = NSAttributedString(string: convertText(newText), attributes: attributes)
         }
     }
 
+    private func convertText(_ text: String) -> String {
+        guard let style = style else { return text }
+        switch style.textCase {
+        case .uppercased:
+            return text.uppercased()
+        case .lowercased:
+            return text.lowercased()
+        default:
+            return text
+        }
+    }
 }
 
 public final class BodyLabel: Label {
@@ -111,6 +122,17 @@ public final class LargeTitleLabel: Label {
         LabelStyle(
             font: UIFont.largeTitle(),
             fontMetrics: UIFontMetrics(forTextStyle: .largeTitle)
+        )
+    }
+}
+
+public final class UppercasedLabel: Label {
+
+    override var style: LabelStyle? {
+        LabelStyle(
+            font: UIFont.uppercased(),
+            lineHeight: 20.0,
+            textCase: .uppercased
         )
     }
 }

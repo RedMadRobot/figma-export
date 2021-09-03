@@ -18,6 +18,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         
         let styles = [
             makeTextStyle(name: "largeTitle", fontName: "PTSans-Bold", fontStyle: .largeTitle, fontSize: 34),
+            makeTextStyle(name: "titleSection", fontName: "PTSans-Bold", fontSize: 20, textCase: .uppercased),
             makeTextStyle(name: "header", fontName: "PTSans-Bold", fontSize: 20),
             makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16),
             makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
@@ -33,6 +34,10 @@ final class XcodeTypographyExporterTests: XCTestCase {
         
             static func largeTitle() -> UIFont {
                 customFont("PTSans-Bold", size: 34.0, textStyle: .largeTitle, scaled: true)
+            }
+        
+            static func titleSection() -> UIFont {
+                customFont("PTSans-Bold", size: 20.0)
             }
         
             static func header() -> UIFont {
@@ -104,6 +109,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
 
         let styles = [
             makeTextStyle(name: "largeTitle", fontName: "PTSans-Bold", fontStyle: .largeTitle, fontSize: 34),
+            makeTextStyle(name: "titleSection", fontName: "PTSans-Bold", fontSize: 20, textCase: .uppercased),
             makeTextStyle(name: "header", fontName: "PTSans-Bold", fontSize: 20),
             makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16),
             makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
@@ -119,6 +125,10 @@ final class XcodeTypographyExporterTests: XCTestCase {
 
             @objc static func largeTitle() -> UIFont {
                 customFont("PTSans-Bold", size: 34.0, textStyle: .largeTitle, scaled: true)
+            }
+
+            @objc static func titleSection() -> UIFont {
+                customFont("PTSans-Bold", size: 20.0)
             }
 
             @objc static func header() -> UIFont {
@@ -187,6 +197,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         
         let styles = [
             makeTextStyle(name: "largeTitle", fontName: "PTSans-Bold", fontStyle: .largeTitle, fontSize: 34),
+            makeTextStyle(name: "titleSection", fontName: "PTSans-Bold", fontSize: 20, textCase: .uppercased),
             makeTextStyle(name: "header", fontName: "PTSans-Bold", fontSize: 20),
             makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16),
             makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
@@ -203,6 +214,9 @@ final class XcodeTypographyExporterTests: XCTestCase {
             
             static func largeTitle() -> Font {
                 Font.custom("PTSans-Bold", size: 34.0)
+            }
+            static func titleSection() -> Font {
+                Font.custom("PTSans-Bold", size: 20.0)
             }
             static func header() -> Font {
                 Font.custom("PTSans-Bold", size: 20.0)
@@ -253,6 +267,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         
         let styles = [
             makeTextStyle(name: "largeTitle", fontName: "PTSans-Bold", fontStyle: .largeTitle, fontSize: 34, lineHeight: nil),
+            makeTextStyle(name: "titleSection", fontName: "PTSans-Bold", fontSize: 20, textCase: .uppercased),
             makeTextStyle(name: "header", fontName: "PTSans-Bold", fontSize: 20, lineHeight: nil),
             makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16, lineHeight: nil, letterSpacing: 1.2),
             makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
@@ -323,10 +338,21 @@ final class XcodeTypographyExporterTests: XCTestCase {
                     }
 
                     let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
-                    attributedText = NSAttributedString(string: newText, attributes: attributes)
+                    attributedText = NSAttributedString(string: convertText(newText), attributes: attributes)
                 }
             }
 
+            private func convertText(_ text: String) -> String {
+                guard let style = style else { return text }
+                switch style.textCase {
+                case .uppercased:
+                    return text.uppercased()
+                case .lowercased:
+                    return text.lowercased()
+                default:
+                    return text
+                }
+            }
         }
 
         public final class LargeTitleLabel: Label {
@@ -335,7 +361,14 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 .largeTitle()
             }
         }
+        
+        public final class TitleSectionLabel: Label {
 
+            override var style: LabelStyle? {
+                .titleSection()
+            }
+        }
+        
         public final class HeaderLabel: Label {
 
             override var style: LabelStyle? {
@@ -365,17 +398,25 @@ final class XcodeTypographyExporterTests: XCTestCase {
         import UIKit
         
         public struct LabelStyle {
-        
+
+            enum TextCase {
+                case uppercased
+                case lowercased
+                case original
+            }
+
             let font: UIFont
             let fontMetrics: UIFontMetrics?
             let lineHeight: CGFloat?
             let tracking: CGFloat
+            let textCase: TextCase
             
-            init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0) {
+            init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0, textCase: TextCase = .original) {
                 self.font = font
                 self.fontMetrics = fontMetrics
                 self.lineHeight = lineHeight
                 self.tracking = tracking
+                self.textCase = textCase
             }
             
             public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
@@ -419,6 +460,13 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 )
             }
             
+            static func titleSection() -> LabelStyle {
+                LabelStyle(
+                    font: UIFont.titleSection(),
+                    textCase: .uppercased
+                )
+            }
+            
             static func header() -> LabelStyle {
                 LabelStyle(
                     font: UIFont.header()
@@ -445,6 +493,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         """
                 
         XCTAssertEqual(files.count, 3, "Must be generated 3 files but generated \(files.count)")
+        let expected = files.map { String(data: $0.data!, encoding: .utf8) }
         XCTAssertEqual(
             files,
             [
@@ -469,7 +518,8 @@ final class XcodeTypographyExporterTests: XCTestCase {
                     ),
                     data: styleExtensionContent.data(using: .utf8)!
                 )
-            ]
+            ],
+            "Expected: \(expected),\nActual: \(contentsLabel)\n\(contentsLabelStyle)\n\(styleExtensionContent)"
         )
     }
     
@@ -490,6 +540,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         
         let styles = [
             makeTextStyle(name: "largeTitle", fontName: "PTSans-Bold", fontStyle: .largeTitle, fontSize: 34, lineHeight: nil),
+            makeTextStyle(name: "titleSection", fontName: "PTSans-Bold", fontSize: 20, textCase: .uppercased),
             makeTextStyle(name: "header", fontName: "PTSans-Bold", fontSize: 20, lineHeight: nil),
             makeTextStyle(name: "body", fontName: "PTSans-Regular", fontStyle: .body, fontSize: 16, lineHeight: nil, letterSpacing: 1.2),
             makeTextStyle(name: "caption", fontName: "PTSans-Regular", fontStyle: .footnote, fontSize: 14, lineHeight: 20)
@@ -560,10 +611,21 @@ final class XcodeTypographyExporterTests: XCTestCase {
                     }
 
                     let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
-                    attributedText = NSAttributedString(string: newText, attributes: attributes)
+                    attributedText = NSAttributedString(string: convertText(newText), attributes: attributes)
                 }
             }
 
+            private func convertText(_ text: String) -> String {
+                guard let style = style else { return text }
+                switch style.textCase {
+                case .uppercased:
+                    return text.uppercased()
+                case .lowercased:
+                    return text.lowercased()
+                default:
+                    return text
+                }
+            }
         }
 
         public final class LargeTitleLabel: Label {
@@ -572,6 +634,16 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 LabelStyle(
                     font: UIFont.largeTitle(),
                     fontMetrics: UIFontMetrics(forTextStyle: .largeTitle)
+                )
+            }
+        }
+
+        public final class TitleSectionLabel: Label {
+
+            override var style: LabelStyle? {
+                LabelStyle(
+                    font: UIFont.titleSection(),
+                    textCase: .uppercased
                 )
             }
         }
@@ -615,17 +687,25 @@ final class XcodeTypographyExporterTests: XCTestCase {
         import UIKit
         
         public struct LabelStyle {
-        
+
+            enum TextCase {
+                case uppercased
+                case lowercased
+                case original
+            }
+
             let font: UIFont
             let fontMetrics: UIFontMetrics?
             let lineHeight: CGFloat?
             let tracking: CGFloat
+            let textCase: TextCase
             
-            init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0) {
+            init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0, textCase: TextCase = .original) {
                 self.font = font
                 self.fontMetrics = fontMetrics
                 self.lineHeight = lineHeight
                 self.tracking = tracking
+                self.textCase = textCase
             }
             
             public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
@@ -656,6 +736,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
         """
         
         XCTAssertEqual(files.count, 2, "Must be generated 2 files but generated \(files.count)")
+        let expected = files.map { String(data: $0.data!, encoding: .utf8) }
         XCTAssertEqual(
             files,
             [
@@ -673,7 +754,8 @@ final class XcodeTypographyExporterTests: XCTestCase {
                     ),
                     data: contentsLabelStyle.data(using: .utf8)!
                 )
-            ]
+            ],
+            "Expected: \(expected),\nActual: \(contentsLabel) \(contentsLabelStyle)"
         )
     }
     
@@ -683,7 +765,8 @@ final class XcodeTypographyExporterTests: XCTestCase {
         fontStyle: DynamicTypeStyle? = nil,
         fontSize: Double,
         lineHeight: Double? = nil,
-        letterSpacing: Double = 0) -> TextStyle {
+        letterSpacing: Double = 0,
+        textCase: TextStyle.TextCase = .original) -> TextStyle {
         
         return TextStyle(
             name: name,
@@ -691,6 +774,7 @@ final class XcodeTypographyExporterTests: XCTestCase {
             fontSize: fontSize,
             fontStyle: fontStyle,
             lineHeight: lineHeight,
-            letterSpacing: letterSpacing)
+            letterSpacing: letterSpacing,
+            textCase: textCase)
     }
 }

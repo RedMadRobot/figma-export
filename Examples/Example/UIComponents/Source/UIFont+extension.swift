@@ -27,6 +27,10 @@ public extension UIFont {
         customFont("PTSans-Bold", size: 34.0, textStyle: .largeTitle, scaled: true)
     }
 
+    static func uppercased() -> UIFont {
+        customFont("PTSans-Regular", size: 14.0)
+    }
+
     private static func customFont(
         _ name: String,
         size: CGFloat,

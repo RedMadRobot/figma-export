@@ -11,16 +11,24 @@ import UIKit
 
 public struct LabelStyle {
 
+    enum TextCase {
+        case uppercased
+        case lowercased
+        case original
+    }
+
     let font: UIFont
     let fontMetrics: UIFontMetrics?
     let lineHeight: CGFloat?
     let tracking: CGFloat
+    let textCase: TextCase
     
-    init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0) {
+    init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0, textCase: TextCase = .original) {
         self.font = font
         self.fontMetrics = fontMetrics
         self.lineHeight = lineHeight
         self.tracking = tracking
+        self.textCase = textCase
     }
     
     public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {

@@ -31,6 +31,16 @@ final class TextStylesLoader {
             
             let lineHeight: Double? = textStyle.lineHeightUnit == .intrinsic ? nil : textStyle.lineHeightPx
             
+            let textCase: TextStyle.TextCase
+            switch textStyle.textCase {
+            case .lower:
+                textCase = .lowercased
+            case .upper:
+                textCase = .uppercased
+            default:
+                textCase = .original
+            }
+            
             return TextStyle(
                 name: style.name,
                 fontName: textStyle.fontPostScriptName,
