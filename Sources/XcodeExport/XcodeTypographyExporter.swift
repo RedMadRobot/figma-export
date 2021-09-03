@@ -140,7 +140,8 @@ final public class XcodeTypographyExporter {
                 "supportsDynamicType": style.fontStyle != nil,
                 "type": type,
                 "tracking": style.letterSpacing.floatingPointFixed,
-                "lineHeight": style.lineHeight ?? 0
+                "lineHeight": style.lineHeight ?? 0,
+                "textCase": style.textCase.rawValue
             ]}
         let contents = try labelStyleExtensionSwiftContents.render(["styles": dict])
         
@@ -161,7 +162,8 @@ final public class XcodeTypographyExporter {
                 "supportsDynamicType": style.fontStyle != nil,
                 "type": type,
                 "tracking": style.letterSpacing.floatingPointFixed,
-                "lineHeight": style.lineHeight ?? 0
+                "lineHeight": style.lineHeight ?? 0,
+                "textCase": style.textCase.rawValue
             ]}
         let contents = try TEMPLATE_Label_swift.render([
             "styles": dict,
@@ -245,11 +247,9 @@ public class Label: UILabel {
                 return
             }
 
-            let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
-            attributedText = NSAttributedString(string: newText, attributes: attributes)
+            attributedText = style.attributedString(from: newText, alignment: textAlignment, lineBreakMode: lineBreakMode)
         }
     }
-
 }
 {% for style in styles %}
 public final class {{ style.className }}Label: Label {
@@ -259,7 +259,8 @@ public final class {{ style.className }}Label: Label {
             font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
             fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
             lineHeight: {{ style.lineHeight }}{% endif %}{% if style.tracking != 0 %},
-            tracking: {{ style.tracking}}{% endif %}
+            tracking: {{ style.tracking }}{% endif %}{% if style.textCase != \"original\" %},
+            textCase: .{{ style.textCase }}{% endif %}
         ){% endif %}
     }
 }
@@ -278,7 +279,8 @@ public extension LabelStyle {
             font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
             fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
             lineHeight: {{ style.lineHeight }}{% endif %}{% if style.tracking != 0 %},
-            tracking: {{ style.tracking}}{% endif %}
+            tracking: {{ style.tracking }}{% endif %}{% if style.textCase != \"original\" %},
+            textCase: .{{ style.textCase }}{% endif %}
         )
     }
     {% endfor %}
@@ -292,19 +294,30 @@ import UIKit
 
 public struct LabelStyle {
 
+    enum TextCase {
+        case uppercased
+        case lowercased
+        case original
+    }
+
     let font: UIFont
     let fontMetrics: UIFontMetrics?
     let lineHeight: CGFloat?
     let tracking: CGFloat
+    let textCase: TextCase
     
-    init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0) {
+    init(font: UIFont, fontMetrics: UIFontMetrics? = nil, lineHeight: CGFloat? = nil, tracking: CGFloat = 0, textCase: TextCase = .original) {
         self.font = font
         self.fontMetrics = fontMetrics
         self.lineHeight = lineHeight
         self.tracking = tracking
+        self.textCase = textCase
     }
     
-    public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
+    public func attributes(
+        for alignment: NSTextAlignment = .left,
+        lineBreakMode: NSLineBreakMode = .byTruncatingTail
+    ) -> [NSAttributedString.Key: Any] {
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = alignment
@@ -326,6 +339,26 @@ public struct LabelStyle {
             NSAttributedString.Key.baselineOffset: baselineOffset,
             NSAttributedString.Key.font: font
         ]
+    }
+
+    public func attributedString(
+        from string: String,
+        alignment: NSTextAlignment = .left,
+        lineBreakMode: NSLineBreakMode = .byTruncatingTail
+    ) -> NSAttributedString {
+        let attributes = attributes(for: alignment, lineBreakMode: lineBreakMode)
+        return NSAttributedString(string: convertText(string), attributes: attributes)
+    }
+
+    private func convertText(_ text: String) -> String {
+        switch textCase {
+        case .uppercased:
+            return text.uppercased()
+        case .lowercased:
+            return text.lowercased()
+        default:
+            return text
+        }
     }
 }
 

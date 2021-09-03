@@ -40,6 +40,13 @@ public enum DynamicTypeStyle: String, RawRepresentable {
 }
 
 public struct TextStyle: Asset {
+    
+    public enum TextCase: String {
+        case original
+        case uppercased
+        case lowercased
+    }
+    
     public var name: String
     public var platform: Platform?
     public let fontName: String
@@ -47,6 +54,7 @@ public struct TextStyle: Asset {
     public let fontStyle: DynamicTypeStyle?
     public let lineHeight: Double?
     public let letterSpacing: Double
+    public let textCase: TextCase
 
     public init(
         name: String,
@@ -55,7 +63,8 @@ public struct TextStyle: Asset {
         fontSize: Double,
         fontStyle: DynamicTypeStyle?,
         lineHeight: Double? = nil,
-        letterSpacing: Double) {
+        letterSpacing: Double,
+        textCase: TextCase = .original) {
         
         self.name = name
         self.fontName = fontName
@@ -63,6 +72,7 @@ public struct TextStyle: Asset {
         self.fontStyle = fontStyle
         self.lineHeight = lineHeight
         self.letterSpacing = letterSpacing
+        self.textCase = textCase
     }
 
     // MARK: Hashable

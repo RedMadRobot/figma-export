@@ -67,50 +67,42 @@ public class Label: UILabel {
                 return
             }
 
-            let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
-            attributedText = NSAttributedString(string: newText, attributes: attributes)
+            attributedText = style.attributedString(from: newText, alignment: textAlignment, lineBreakMode: lineBreakMode)
         }
     }
-
 }
 
 public final class BodyLabel: Label {
 
     override var style: LabelStyle? {
-        LabelStyle(
-            font: UIFont.body(),
-            fontMetrics: UIFontMetrics(forTextStyle: .body),
-            lineHeight: 24.0
-        )
+        .body()
     }
 }
 
 public final class CaptionLabel: Label {
 
     override var style: LabelStyle? {
-        LabelStyle(
-            font: UIFont.caption(),
-            fontMetrics: UIFontMetrics(forTextStyle: .footnote),
-            lineHeight: 20.0
-        )
+        .caption()
     }
 }
 
 public final class HeaderLabel: Label {
 
     override var style: LabelStyle? {
-        LabelStyle(
-            font: UIFont.header()
-        )
+        .header()
     }
 }
 
 public final class LargeTitleLabel: Label {
 
     override var style: LabelStyle? {
-        LabelStyle(
-            font: UIFont.largeTitle(),
-            fontMetrics: UIFontMetrics(forTextStyle: .largeTitle)
-        )
+        .largeTitle()
+    }
+}
+
+public final class UppercasedLabel: Label {
+
+    override var style: LabelStyle? {
+        .uppercased()
     }
 }

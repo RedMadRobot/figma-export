@@ -21,13 +21,14 @@
 		0FF26049250F5E4D00D890E1 /* UIComponents.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0FF26041250F5E4D00D890E1 /* UIComponents.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0FF26054250F5EB700D890E1 /* SolidButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F6C6D25090F4900879906 /* SolidButton.swift */; };
 		0FF26058250F5F2600D890E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FF26057250F5F1D00D890E1 /* Assets.xcassets */; };
-		1F0B4A2B1B6DE81FA15ECE5F /* LabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A098EC7E2840A136A90A2E /* LabelStyle.swift */; };
+		4F753258E89A6E4E74380E0B /* LabelStyle+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EA0CB0AD17B7F78FDF5365 /* LabelStyle+extension.swift */; };
 		6B86A3CE5140E866246D4E63 /* UIColor+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26544004529E9C3913E349BC /* UIColor+extension.swift */; };
+		6C0820CAA69D4CB062A970DB /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5BB0AEFC0367945BD842F3 /* UIFont+extension.swift */; };
 		6F73358ABD24D9019DC620AE /* UIImage+extension_icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8654869BAAACD6B2D49C2B27 /* UIImage+extension_icons.swift */; };
 		6F794E67610B12040B8FC10A /* UIImage+extension_icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A9B4FEE86EE1F17562F75F /* UIImage+extension_icons.swift */; };
-		86AF56B26E2BA693427CFE8B /* UIFont+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3475E8E2126C5DF2C229C7AA /* UIFont+extension.swift */; };
+		6FD802044D6D33062295DA95 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A31F0D45AC7915B56AA005B /* Label.swift */; };
 		B046F6739B5D3EB024E58F92 /* UIImage+extension_illustrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494D7859E56EB26CD8ABDD0A /* UIImage+extension_illustrations.swift */; };
-		BB9EE1EE0F7E020A2AD7909E /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61D12E3FAB0053729800360 /* Label.swift */; };
+		B0F95D2B84DF769D81C6E92C /* LabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B227F548B92C23DA49DF1284 /* LabelStyle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,15 +72,16 @@
 		0FF26044250F5E4D00D890E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0FF26057250F5F1D00D890E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11966572636132EBFF5F81BB /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
-		26544004529E9C3913E349BC /* UIColor+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+extension.swift"; path = "UIColor+extension.swift"; sourceTree = "<group>"; };
-		3475E8E2126C5DF2C229C7AA /* UIFont+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIFont+extension.swift"; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
-		494D7859E56EB26CD8ABDD0A /* UIImage+extension_illustrations.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+extension_illustrations.swift"; path = "UIImage+extension_illustrations.swift"; sourceTree = "<group>"; };
+		26544004529E9C3913E349BC /* UIColor+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; path = "UIColor+extension.swift"; sourceTree = "<group>"; };
+		2A31F0D45AC7915B56AA005B /* Label.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Label.swift; path = Label.swift; sourceTree = "<group>"; };
+		33EA0CB0AD17B7F78FDF5365 /* LabelStyle+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "LabelStyle+extension.swift"; path = "LabelStyle+extension.swift"; sourceTree = "<group>"; };
+		494D7859E56EB26CD8ABDD0A /* UIImage+extension_illustrations.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; path = "UIImage+extension_illustrations.swift"; sourceTree = "<group>"; };
+		5D5BB0AEFC0367945BD842F3 /* UIFont+extension.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIFont+extension.swift"; path = "UIFont+extension.swift"; sourceTree = "<group>"; };
 		8654869BAAACD6B2D49C2B27 /* UIImage+extension_icons.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; path = "UIImage+extension_icons.swift"; sourceTree = "<group>"; };
-		A1A098EC7E2840A136A90A2E /* LabelStyle.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LabelStyle.swift; path = LabelStyle.swift; sourceTree = "<group>"; };
+		B227F548B92C23DA49DF1284 /* LabelStyle.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LabelStyle.swift; path = LabelStyle.swift; sourceTree = "<group>"; };
 		C2FF91A431F7153FD4C7A3C3 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		D0A9B4FEE86EE1F17562F75F /* UIImage+extension_icons.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+extension_icons.swift"; path = "UIImage+extension_icons.swift"; sourceTree = "<group>"; };
+		D0A9B4FEE86EE1F17562F75F /* UIImage+extension_icons.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; path = "UIImage+extension_icons.swift"; sourceTree = "<group>"; };
 		EE92E0072EBEBC415D106D58 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F61D12E3FAB0053729800360 /* Label.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Label.swift; path = Label.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +200,18 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		3ABF27C9809F411DB5BBBEB5 /* Typography */ = {
+			isa = PBXGroup;
+			children = (
+				5D5BB0AEFC0367945BD842F3 /* UIFont+extension.swift */,
+				2A31F0D45AC7915B56AA005B /* Label.swift */,
+				B227F548B92C23DA49DF1284 /* LabelStyle.swift */,
+				33EA0CB0AD17B7F78FDF5365 /* LabelStyle+extension.swift */,
+			);
+			name = Typography;
+			path = Typography;
+			sourceTree = "<group>";
+		};
 		C32585C16F5BA33E985EE69A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,10 +227,8 @@
 				8654869BAAACD6B2D49C2B27 /* UIImage+extension_icons.swift */,
 				26544004529E9C3913E349BC /* UIColor+extension.swift */,
 				494D7859E56EB26CD8ABDD0A /* UIImage+extension_illustrations.swift */,
-				3475E8E2126C5DF2C229C7AA /* UIFont+extension.swift */,
-				F61D12E3FAB0053729800360 /* Label.swift */,
-				A1A098EC7E2840A136A90A2E /* LabelStyle.swift */,
 				D0A9B4FEE86EE1F17562F75F /* UIImage+extension_icons.swift */,
+				3ABF27C9809F411DB5BBBEB5 /* Typography */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -378,10 +390,11 @@
 				6F73358ABD24D9019DC620AE /* UIImage+extension_icons.swift in Sources */,
 				6B86A3CE5140E866246D4E63 /* UIColor+extension.swift in Sources */,
 				B046F6739B5D3EB024E58F92 /* UIImage+extension_illustrations.swift in Sources */,
-				86AF56B26E2BA693427CFE8B /* UIFont+extension.swift in Sources */,
-				BB9EE1EE0F7E020A2AD7909E /* Label.swift in Sources */,
-				1F0B4A2B1B6DE81FA15ECE5F /* LabelStyle.swift in Sources */,
 				6F794E67610B12040B8FC10A /* UIImage+extension_icons.swift in Sources */,
+				6C0820CAA69D4CB062A970DB /* UIFont+extension.swift in Sources */,
+				6FD802044D6D33062295DA95 /* Label.swift in Sources */,
+				B0F95D2B84DF769D81C6E92C /* LabelStyle.swift in Sources */,
+				4F753258E89A6E4E74380E0B /* LabelStyle+extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
