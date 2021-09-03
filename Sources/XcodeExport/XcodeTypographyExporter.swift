@@ -247,20 +247,7 @@ public class Label: UILabel {
                 return
             }
 
-            let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
-            attributedText = NSAttributedString(string: convertText(newText), attributes: attributes)
-        }
-    }
-
-    private func convertText(_ text: String) -> String {
-        guard let style = style else { return text }
-        switch style.textCase {
-        case .uppercased:
-            return text.uppercased()
-        case .lowercased:
-            return text.lowercased()
-        default:
-            return text
+            attributedText = style.attributedString(from: newText, alignment: textAlignment, lineBreakMode: lineBreakMode)
         }
     }
 }
@@ -327,7 +314,10 @@ public struct LabelStyle {
         self.textCase = textCase
     }
     
-    public func attributes(for alignment: NSTextAlignment, lineBreakMode: NSLineBreakMode) -> [NSAttributedString.Key: Any] {
+    public func attributes(
+        for alignment: NSTextAlignment = .left,
+        lineBreakMode: NSLineBreakMode = .byTruncatingTail
+    ) -> [NSAttributedString.Key: Any] {
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = alignment
@@ -349,6 +339,26 @@ public struct LabelStyle {
             NSAttributedString.Key.baselineOffset: baselineOffset,
             NSAttributedString.Key.font: font
         ]
+    }
+
+    public func attributedString(
+        from string: String,
+        alignment: NSTextAlignment = .left,
+        lineBreakMode: NSLineBreakMode = .byTruncatingTail
+    ) -> NSAttributedString {
+        let attributes = attributes(for: alignment, lineBreakMode: lineBreakMode)
+        return NSAttributedString(string: convertText(string), attributes: attributes)
+    }
+
+    private func convertText(_ text: String) -> String {
+        switch textCase {
+        case .uppercased:
+            return text.uppercased()
+        case .lowercased:
+            return text.lowercased()
+        default:
+            return text
+        }
     }
 }
 

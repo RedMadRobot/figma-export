@@ -67,20 +67,7 @@ public class Label: UILabel {
                 return
             }
 
-            let attributes = style.attributes(for: textAlignment, lineBreakMode: lineBreakMode)
-            attributedText = NSAttributedString(string: convertText(newText), attributes: attributes)
-        }
-    }
-
-    private func convertText(_ text: String) -> String {
-        guard let style = style else { return text }
-        switch style.textCase {
-        case .uppercased:
-            return text.uppercased()
-        case .lowercased:
-            return text.lowercased()
-        default:
-            return text
+            attributedText = style.attributedString(from: newText, alignment: textAlignment, lineBreakMode: lineBreakMode)
         }
     }
 }
