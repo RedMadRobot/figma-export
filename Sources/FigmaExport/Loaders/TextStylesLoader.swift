@@ -47,7 +47,8 @@ final class TextStylesLoader {
                 fontSize: textStyle.fontSize,
                 fontStyle: DynamicTypeStyle(rawValue: style.description),
                 lineHeight: lineHeight,
-                letterSpacing: textStyle.letterSpacing
+                letterSpacing: textStyle.letterSpacing,
+                textCase: textCase
             )
         }
     }
