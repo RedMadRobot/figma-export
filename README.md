@@ -366,7 +366,7 @@ If a color, icon or image is unique for iOS or Android platform, it should conta
 
 For `figma-export colors`
 
-By default, if you support dark mode your figma project must contains two files. One should contains a dark color palette, and the another light color palette. If you would like to specify light and dark colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode colors by adding a suffix like `_dark`. The suffix is also configurable. See [config](Config.md) for more information in the colors section.
+By default, if you support dark mode your figma project must contains two files. One should contains a dark color palette, and the another light color palette. If you would like to specify light and dark colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode colors by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the colors section.
 
 The light color palette may contain more colors than the dark color palette. If a light-only color is present, it will be considered as universal color for the iOS color palette. Names of the dark colors must match the light colors.
 
@@ -379,14 +379,14 @@ File | Styles
 
 For `figma-export icons`
 
-By default your Figma file should contains a frame with `Icons` name which contains components for each icon. You may change a frame name in a [config](Config.md) file by setting `common.icons.figmaFrameName` property.
-If you support dark mode and want separate icons for dark mode, Figma project must contains two files. One should contains a dark icons, and another light icons. If you would like to have light and dark icons in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode icons by adding a suffix like `_dark`. The suffix is also configurable. See [config](Config.md) for more information in the icons section.
+By default your Figma file should contains a frame with `Icons` name which contains components for each icon. You may change a frame name in a [CONFIG.md](CONFIG.md) file by setting `common.icons.figmaFrameName` property.
+If you support dark mode and want separate icons for dark mode, Figma project must contains two files. One should contains a dark icons, and another light icons. If you would like to have light and dark icons in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode icons by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the icons section.
 
 For `figma-export images`
 
-Your Figma file should contains a frame with `Illustrations` name which contains components for each illustration. You may change a frame name in a [config](Config.md) file by setting `common.images.figmaFrameName` property.
+Your Figma file should contains a frame with `Illustrations` name which contains components for each illustration. You may change a frame name in a [CONFIG.md](CONFIG.md) file by setting `common.images.figmaFrameName` property.
 
-If you support dark mode you must have two Figma files. The rules for these two files follow the same rules as described above for colors. But If you would like to specify light and dark illustrations in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode illustrations by adding a suffix like `_dark`. The suffix is also configurable. See [config](Config.md) for more information in the illustrations section.
+If you support dark mode you must have two Figma files. The rules for these two files follow the same rules as described above for colors. But If you would like to specify light and dark illustrations in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode illustrations by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the illustrations section.
 
 If you want to specify image variants for different devices (iPhone, iPad, Mac etc.), add an extra `~` mark with idiom name. For example add `~ipad` postfix:
 
