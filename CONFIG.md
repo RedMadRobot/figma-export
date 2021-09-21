@@ -111,13 +111,13 @@ ios:
     # Asset render mode: "template", "original" or "default". Default value is "template".
     renderMode: default
     # Configure the suffix for filtering Icons and to denote a asset render mode: "default". 
-    # ❗️ It will work, if renderMode have default value is "template". Defaults to nil.
+    # It will work when renderMode value is "template". Defaults to nil.
     renderModeDefaultSuffix: '_default'
     # Configure the suffix for filtering Icons and to denote a asset render mode: "original". 
-    # ❗️ It will work, if renderMode have default value is "template". Defaults to nil.
+    # It will work when renderMode value is "template". Defaults to nil.
     renderModeOriginalSuffix: '_original'
     # Configure the suffix for filtering Icons and to denote a asset render mode: "template". 
-    # ❗️ It will work, if renderMode have default value isn't "template". Defaults to nil.
+    # It will work when renderMode value isn't "template". Defaults to nil.
     renderModeTemplateSuffix: '_template'
 
   # [optional] Parameters for exporting images
