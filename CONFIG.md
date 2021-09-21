@@ -118,7 +118,7 @@ ios:
     renderModeOriginalSuffix: '_original'
     # Configure the suffix for filtering Icons and to denote a asset render mode: "template". 
     # ❗️ It will work, if renderMode have default value isn't "template". Defaults to nil.
-    renderModeOriginalSuffix: '_template'
+    renderModeTemplateSuffix: '_template'
 
   # [optional] Parameters for exporting images
   images:
