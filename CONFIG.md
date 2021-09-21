@@ -108,8 +108,17 @@ ios:
     swiftUIImageSwift: "./Source/Image+extension_icons.swift"
     # [optional] Absolute or relative path to swift file where to generate extension for UIImage for accessing icons from the code (e.g. UIImage.ic24ArrowRight)
     imageSwift: "./Example/Source/UIImage+extension_icons.swift"
-    # Asset render mode: "template", "orignal" or "default". Default value is "template".
+    # Asset render mode: "template", "original" or "default". Default value is "template".
     renderMode: default
+    # Configure the suffix for filtering Icons and to denote a asset render mode: "default". 
+    # It will work when renderMode value is "template". Defaults to nil.
+    renderModeDefaultSuffix: '_default'
+    # Configure the suffix for filtering Icons and to denote a asset render mode: "original". 
+    # It will work when renderMode value is "template". Defaults to nil.
+    renderModeOriginalSuffix: '_original'
+    # Configure the suffix for filtering Icons and to denote a asset render mode: "template". 
+    # It will work when renderMode value isn't "template". Defaults to nil.
+    renderModeTemplateSuffix: '_template'
 
   # [optional] Parameters for exporting images
   images:

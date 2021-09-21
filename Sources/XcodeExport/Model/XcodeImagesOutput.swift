@@ -9,6 +9,9 @@ public struct XcodeImagesOutput {
     let addObjcAttribute: Bool
     let preservesVectorRepresentation: [String]?
     let renderMode: XcodeRenderMode?
+    let renderModeDefaultSuffix: String?
+    let renderModeOriginalSuffix: String?
+    let renderModeTemplateSuffix: String?
     
     let uiKitImageExtensionURL: URL?
     let swiftUIImageExtensionURL: URL?
@@ -27,7 +30,10 @@ public struct XcodeImagesOutput {
         preservesVectorRepresentation: [String]? = nil,
         uiKitImageExtensionURL: URL? = nil,
         swiftUIImageExtensionURL: URL? = nil,
-        renderMode: XcodeRenderMode? = nil) {
+        renderMode: XcodeRenderMode? = nil,
+        renderModeDefaultSuffix: String? = nil,
+        renderModeOriginalSuffix: String? = nil,
+        renderModeTemplateSuffix: String? = nil) {
         
         self.assetsFolderURL = assetsFolderURL
         self.assetsInMainBundle = assetsInMainBundle
@@ -37,5 +43,8 @@ public struct XcodeImagesOutput {
         self.uiKitImageExtensionURL = uiKitImageExtensionURL
         self.swiftUIImageExtensionURL = swiftUIImageExtensionURL
         self.renderMode = renderMode
+        self.renderModeDefaultSuffix = renderModeDefaultSuffix
+        self.renderModeOriginalSuffix = renderModeOriginalSuffix
+        self.renderModeTemplateSuffix = renderModeTemplateSuffix
     }
 }
