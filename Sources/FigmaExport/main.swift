@@ -28,7 +28,7 @@ enum FigmaExportError: LocalizedError {
 
 struct FigmaExportCommand: ParsableCommand {
     
-    static let version = "0.28.0"
+    static let version = "0.29.0"
     
     static let svgFileConverter = VectorDrawableConverter()
     static let fileWriter = FileWriter()
