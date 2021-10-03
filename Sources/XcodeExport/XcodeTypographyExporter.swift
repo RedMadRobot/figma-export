@@ -102,11 +102,29 @@ final public class XcodeTypographyExporter {
     
     private func exportFonts(textStyles: [TextStyle], swiftUIFontExtensionURL: URL) throws -> [FileContents] {
         let strings: [String] = textStyles.map {
-            return """
-                static func \($0.name)() -> Font {
-                    Font.custom("\($0.fontName)", size: \($0.fontSize))
-                }
-            """
+            
+            var dynamicType: String?
+            if $0.fontStyle != nil {
+                dynamicType = ", relativeTo: .\($0.fontStyle!.textStyleName)"
+            }
+            
+            if let dynamicType = dynamicType {
+                return """
+                    static func \($0.name)() -> Font {
+                        if #available(iOS 14.0, *) {
+                            return Font.custom("\($0.fontName)", size: \($0.fontSize)\(dynamicType))
+                        } else {
+                            return Font.custom("\($0.fontName)", size: \($0.fontSize))
+                        }
+                    }
+                """
+            } else {
+                return """
+                    static func \($0.name)() -> Font {
+                        Font.custom("\($0.fontName)", size: \($0.fontSize))
+                    }
+                """
+            }
         }
         
         let contents = """

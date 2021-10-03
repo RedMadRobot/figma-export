@@ -213,7 +213,11 @@ final class XcodeTypographyExporterTests: XCTestCase {
         public extension Font {
             
             static func largeTitle() -> Font {
-                Font.custom("PTSans-Bold", size: 34.0)
+                if #available(iOS 14.0, *) {
+                    return Font.custom("PTSans-Bold", size: 34.0, relativeTo: .largeTitle)
+                } else {
+                    return Font.custom("PTSans-Bold", size: 34.0)
+                }
             }
             static func titleSection() -> Font {
                 Font.custom("PTSans-Bold", size: 20.0)
@@ -222,10 +226,18 @@ final class XcodeTypographyExporterTests: XCTestCase {
                 Font.custom("PTSans-Bold", size: 20.0)
             }
             static func body() -> Font {
-                Font.custom("PTSans-Regular", size: 16.0)
+                if #available(iOS 14.0, *) {
+                    return Font.custom("PTSans-Regular", size: 16.0, relativeTo: .body)
+                } else {
+                    return Font.custom("PTSans-Regular", size: 16.0)
+                }
             }
             static func caption() -> Font {
-                Font.custom("PTSans-Regular", size: 14.0)
+                if #available(iOS 14.0, *) {
+                    return Font.custom("PTSans-Regular", size: 14.0, relativeTo: .footnote)
+                } else {
+                    return Font.custom("PTSans-Regular", size: 14.0)
+                }
             }
         }
         

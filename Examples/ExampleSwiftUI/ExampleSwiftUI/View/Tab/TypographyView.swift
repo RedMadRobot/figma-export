@@ -14,15 +14,18 @@ struct TypographyView: View {
         TabStackedView(tabTitle: "Typography") {
             Text("Header")
                 .font(.header())
-                .foregroundColor(.textPrimary)
             Text("Body")
                 .font(.body())
-                .foregroundColor(.textPrimary)
             Text("Caption")
                 .font(.caption())
-                .foregroundColor(.textPrimary)
+            if #available(iOS 14.0, *) {
+                Text("Uppercased")
+                    .textCase(.uppercase)
+                    .font(.uppercased())
+            }
             Spacer()
         }
+        .foregroundColor(.textSecondary)
     }
 }
 
