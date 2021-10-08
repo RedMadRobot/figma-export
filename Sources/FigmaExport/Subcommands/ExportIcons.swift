@@ -15,7 +15,7 @@ extension FigmaExportCommand {
             abstract: "Exports icons from Figma",
             discussion: "Exports icons from Figma to Xcode / Android Studio project")
         
-        @Option(name: .shortAndLong, default: "figma-export.yaml",
+        @Option(name: .shortAndLong,
                 help: "An input YAML file with figma and platform properties.")
         var input: String
         

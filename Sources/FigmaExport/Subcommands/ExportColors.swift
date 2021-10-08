@@ -15,7 +15,7 @@ extension FigmaExportCommand {
             abstract: "Exports colors from Figma",
             discussion: "Exports light and dark color palette from Figma to Xcode / Android Studio project")
         
-        @Option(name: .shortAndLong, default: "figma-export.yaml", help: "An input YAML file with figma and platform properties.")
+        @Option(name: .shortAndLong, help: "An input YAML file with figma and platform properties.")
         var input: String
         
         func run() throws {
