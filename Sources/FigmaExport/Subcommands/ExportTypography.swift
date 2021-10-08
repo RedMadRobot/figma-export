@@ -21,7 +21,7 @@ extension FigmaExportCommand {
         func run() throws {
             let logger = Logger(label: "com.redmadrobot.figma-export")
             
-            let reader = ParamsReader(inputPath: input)
+            let reader = ParamsReader(inputPath: input.isEmpty ? "figma-export.yaml" : input)
             let params = try reader.read()
 
             guard let accessToken = ProcessInfo.processInfo.environment["FIGMA_PERSONAL_TOKEN"] else {
