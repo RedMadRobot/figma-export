@@ -14,7 +14,7 @@ on:
 jobs:
   test:
     name: Run tests
-    runs-on: macOS-latest
+    runs-on: macos-11
     steps:
       - name: Checkout
         uses: actions/checkout@v2
