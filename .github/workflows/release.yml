@@ -18,8 +18,8 @@ jobs:
 
       - name: Build
         run: |
-          swift build -c release
-          cp ./.build/x86_64-apple-macosx/release/figma-export ./Release/figma-export
+          swift build -c release --arch arm64 --arch x86_64
+          cp ./.build/apple/Products/Release/figma-export ./Release/figma-export
           zip -r figma-export.zip Release LICENSE
 
       - name: "Get upload_url"
