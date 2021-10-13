@@ -89,5 +89,6 @@ ios:
     generateLabels: true
     # Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
     labelsDirectory: "./Source/UIComponents/"
-
+    # Typography name style: camelCase or snake_case
+    nameStyle: camelCase
 """#
