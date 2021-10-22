@@ -111,6 +111,10 @@ struct Params: Decodable {
     struct Android: Decodable {
         struct Icons: Decodable {
             let output: String
+            let composePackageName: String?
+        }
+        struct Colors: Decodable {
+            let composePackageName: String?
         }
         struct Images: Decodable {
             enum Format: String, Decodable {
@@ -133,8 +137,12 @@ struct Params: Decodable {
         }
         struct Typography: Decodable {
             let nameStyle: NameStyle
+            let composePackageName: String?
         }
         let mainRes: URL
+        let resourcePackage: String
+        let mainSrc: URL?
+        let colors: Colors?
         let icons: Icons?
         let images: Images?
         let typography: Typography?

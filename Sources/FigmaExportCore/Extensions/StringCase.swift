@@ -60,6 +60,20 @@ public extension String {
         return results.map { $0.capitalized }
     }
     
+    /// Returns a camel case version of the string.
+    ///
+    /// Here's an example of transforming a string to camel case.
+    ///
+    ///     let event = "Keynote Event"
+    ///     print(event.lowerCamelCased())
+    ///     // Prints "KeynoteEvent"
+    ///
+    /// - Returns: A camel case copy of the string.
+    func camelCased() -> String {
+        let strings = lowercasedStrings()
+        return strings.joined()
+    }
+    
     /// Returns a lower camel case version of the string.
     ///
     /// Here's an example of transforming a string to lower camel case.

@@ -6,25 +6,27 @@ final class AndroidColorExporterTests: XCTestCase {
     
     // MARK: - Properties
     
-    private let outputDirectory = URL(string: "~/")!
+    private static let packageName = "test"
+    private static let resourcePackage = "resourceTest"
+    private let output = AndroidOutput(xmlOutputDirectory: URL(string: "~/")!, xmlResourcePackage: resourcePackage, srcDirectory: URL(string: "~/"), packageName: packageName)
     
     private let colorPair1 = AssetPair<Color>(
-        light: Color(name: "colorPair1", red: 119.0/255.0, green: 3.0/255.0, blue: 1.0, alpha: 0.5),
+        light: Color(name: "color_pair_1", red: 119.0/255.0, green: 3.0/255.0, blue: 1.0, alpha: 0.5),
         dark: nil
     )
     
     private let colorPair2 = AssetPair<Color>(
-        light: Color(name: "colorPair2", red: 1, green: 1, blue: 1, alpha: 1),
-        dark: Color(name: "colorPair2", red: 0, green: 0, blue: 0, alpha: 1)
+        light: Color(name: "color_pair_2", red: 1, green: 1, blue: 1, alpha: 1),
+        dark: Color(name: "color_pair_2", red: 0, green: 0, blue: 0, alpha: 1)
     )
     
     // MARK: - Setup
     
     func testExport() throws {
-        let exporter = AndroidColorExporter(outputDirectory: outputDirectory)
+        let exporter = AndroidColorExporter(output: output)
 
         let result = exporter.export(colorPairs: [colorPair1, colorPair2])
-        XCTAssertEqual(result.count, 2)
+        XCTAssertEqual(result.count, 3)
 
         XCTAssertEqual(result[0].destination.directory.lastPathComponent, "values")
         XCTAssertEqual(result[0].destination.file.absoluteString, "colors.xml")
@@ -41,20 +43,45 @@ final class AndroidColorExporterTests: XCTestCase {
         let referenceCodeLight = """
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
-            <color name="colorPair1">#807703FF</color>
-            <color name="colorPair2">#FFFFFF</color>
+            <color name="color_pair_1">#807703FF</color>
+            <color name="color_pair_2">#FFFFFF</color>
         </resources>
         """
         
         let referenceCodeDark = """
         <?xml version="1.0" encoding="utf-8"?>
         <resources>
-            <color name="colorPair1">#807703FF</color>
-            <color name="colorPair2">#000000</color>
+            <color name="color_pair_1">#807703FF</color>
+            <color name="color_pair_2">#000000</color>
         </resources>
         """
         
         XCTAssertEqual(generatedCodeLight, referenceCodeLight)
         XCTAssertEqual(generatedCodeDark, referenceCodeDark)
+        
+        XCTAssertEqual(result[2].destination.directory.lastPathComponent, AndroidColorExporterTests.packageName)
+        XCTAssertEqual(result[2].destination.file.absoluteString, "Colors.kt")
+        let generatedComposedCode = String(data: try XCTUnwrap(result[2].data), encoding: .utf8)
+        let referenceComposeCode = """
+        package \(AndroidColorExporterTests.packageName)
+        
+        import androidx.compose.runtime.Composable
+        import androidx.compose.runtime.ReadOnlyComposable
+        import androidx.compose.ui.graphics.Color
+        import androidx.compose.ui.res.colorResource
+        import \(AndroidColorExporterTests.resourcePackage).R
+        
+        object Colors
+        
+        @Composable
+        @ReadOnlyComposable
+        fun Colors.colorPair1(): Color = colorResource(id = R.color.color_pair_1)
+        
+        @Composable
+        @ReadOnlyComposable
+        fun Colors.colorPair2(): Color = colorResource(id = R.color.color_pair_2)
+        
+        """
+        XCTAssertEqual(generatedComposedCode, referenceComposeCode)
     }
 }

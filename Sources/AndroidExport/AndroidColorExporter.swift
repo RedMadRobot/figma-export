@@ -3,10 +3,10 @@ import FigmaExportCore
 
 final public class AndroidColorExporter {
 
-    private let outputDirectory: URL
+    private let output: AndroidOutput
 
-    public init(outputDirectory: URL) {
-        self.outputDirectory = outputDirectory
+    public init(output: AndroidOutput) {
+        self.output = output
     }
     
     public func export(colorPairs: [AssetPair<Color>]) -> [FileContents] {
@@ -19,19 +19,55 @@ final public class AndroidColorExporter {
             result.append(darkFile)
         }
         
+        if let packageName = output.packageName, let outputDirectory = output.composeOutputDirectory {
+            let composeFile = makeComposeColorsFile(colorPairs: colorPairs, outputDirectory: outputDirectory, package: packageName)
+            result.append(composeFile)
+        }
+        
         return result
     }
     
     private func makeColorsFile(colorPairs: [AssetPair<Color>], dark: Bool) -> FileContents {
         let contents = prepareColorsDotXMLContents(colorPairs, dark: dark)
         
-        let directoryURL = outputDirectory.appendingPathComponent(dark ? "values-night" : "values")
+        let directoryURL = output.xmlOutputDirectory.appendingPathComponent(dark ? "values-night" : "values")
         let fileURL = URL(string: "colors.xml")!
         
         return FileContents(
             destination: Destination(directory: directoryURL, file: fileURL),
             data: contents
         )
+    }
+    
+    private func makeComposeColorsFile(colorPairs: [AssetPair<Color>], outputDirectory: URL, package: String) -> FileContents {
+        let fileURL = URL(string: "Colors.kt")!
+        
+        let fileLines: [String] = colorPairs.map {
+            let colorFunctionName = $0.light.name.lowerCamelCased()
+            return """
+            @Composable
+            @ReadOnlyComposable
+            fun Colors.\(colorFunctionName)(): Color = colorResource(id = R.color.\($0.light.name))
+            """
+        }
+        let contents = """
+        package \(package)
+        
+        import androidx.compose.runtime.Composable
+        import androidx.compose.runtime.ReadOnlyComposable
+        import androidx.compose.ui.graphics.Color
+        import androidx.compose.ui.res.colorResource
+        import \(output.xmlResourcePackage).R
+
+        object Colors
+        
+        \(fileLines.joined(separator: "\n\n"))
+        
+        """
+        let data = contents.data(using: .utf8)!
+        
+        let destination = Destination(directory: outputDirectory, file: fileURL)
+        return FileContents(destination: destination, data: data)
     }
     
     private func prepareColorsDotXMLContents(_ colorPairs: [AssetPair<Color>], dark: Bool) -> Data {
