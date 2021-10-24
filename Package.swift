@@ -20,7 +20,7 @@ let package = Package(
             url: "https://github.com/stencilproject/Stencil.git",
             .revisionItem("a72441947467a9ed6c90941c02abc78aa330dcd3")
         ),
-        .package(url: "https://github.com/tuist/XcodeProj", from: "8.3.0")
+        .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.5.0"),
     ],
     targets: [
         
