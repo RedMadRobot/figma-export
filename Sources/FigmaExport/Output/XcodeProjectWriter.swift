@@ -58,8 +58,7 @@ final class XcodeProjectWriter {
                 groups = Array(groups.dropFirst())
             }
         }
-        
-        guard currentGroup?.file(named: url.lastPathComponent) == nil else { return }
+        guard currentGroup?.children.first(where: {$0.path == url.lastPathComponent}) == nil else { return }
         
         let newFile = try currentGroup?.addFile(
             at: Path(url.path),
