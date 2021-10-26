@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_primary">#FFFFFD</color>
+    <color name="background_secondary">#F4F5F7</color>
+    <color name="button">#7701FF</color>
+    <color name="button_ripple">#8A80FF</color>
+    <color name="text_primary">#FFFFFC</color>
+    <color name="text_secondary">#101828</color>
+    <color name="tint">#7700FF</color>
+</resources>

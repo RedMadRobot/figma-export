@@ -39,3 +39,14 @@ There is an example Android Studio project in `AndroidExample` directory which d
 * To export icons run: `figma-export icons`
 * To export images run: `figma-export images`
 * To export typography run: `figma-export typography`
+
+### Example Android Compose project
+
+There is an example Android Studio project in `AndroidComposeExample` directory which demostrates how to use `figma-export` configured for compose.
+
+You can find the generated code for compose in the package `com.redmadrobot.androidcomposeexample.ui.figmaexport`
+
+**How to export resources from figma to the project**
+* To export colors run: `figma-export colors`
+* To export icons run: `figma-export icons`
+* To export typography run: `figma-export typography`

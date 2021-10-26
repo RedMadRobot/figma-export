@@ -14,7 +14,7 @@ Command line utility to export colors, typography, icons and images from Figma t
 * icon — Figma's component with small black/colorized vector image
 * image — Figma's components with colorized image (Light/Dark)
 
-The utility supports Dark Mode and SwiftUI.
+The utility supports Dark Mode, SwiftUI and Compose.
 
 Why we've developed this utility:
 * Figma doesn't support exporting colors and images to Xcode / Android Studio. Manual export takes a long time.
@@ -201,13 +201,61 @@ Example of these files:
 ### Android
 
 Colors will be exported to `values/colors.xml` and `values-night/colors.xml` files.
+For `jetpack compose`, following code will be generated, if conifgured:
+```kotlin
+package com.redmadrobot.androidcomposeexample.ui.figmaexport
 
-Icons will be exported to `drawable` directory as vector xml files.
+import ...
+
+object Colors
+
+@Composable
+@ReadOnlyComposable
+fun Colors.backgroundPrimary(): Color = colorResource(id = R.color.background_primary)
+```
+
+Icons will be exported to `drawable` directory as vector xml files. For `jetpack compose`, following code will be generated, if conifgured:
+```kotlin
+package com.redmadrobot.androidcomposeexample.ui.figmaexport
+
+import ...
+
+object Icons
+
+@Composable
+fun Icons.Ic24DropdownDown(
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_24_dropdown_down),
+        contentDescription = contentDescription,
+        modifier = modifier,
+        tint = tint
+    )
+}
+```
 
 Vector images will be exported to `drawable` and `drawable-night` directories as vector `xml` files.
 Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` directories as `png` or `webp` files.
 
-Typography will be exported to `values/typography.xml`
+Typography will be exported to `values/typography.xml`. For `jetpack compose`, following code will be generated, if conifgured:
+```kotlin
+package com.redmadrobot.androidcomposeexample.ui.figmaexport
+
+import ...
+
+object Typography {
+
+    val body = TextStyle(
+        fontFamily = FontFamily(Font(R.font.ptsans_regular)),
+        fontSize = 16.0.sp,
+        letterSpacing = 0.0.sp,
+        lineHeight = 24.0.sp,
+    )
+}
+```
 
 ## Installation
 
@@ -278,6 +326,8 @@ Run `fastlane sync_colors` to run FigmaExport.
 
 In the `figma-export.yaml` file you must specify the following properties:
 - `android.mainRes`
+- `android.resourcePackage`
+- `android.mainSrc` if you want generate compose code
 - `android.icons.output` if you want export icons
 - `android.images.output` if you want export images
 
@@ -311,6 +361,11 @@ android {
   }
 }
 ```
+
+#### Compose
+For Typography, Colors and Icons you can enable code generation for the use with compose in your [config file](CONFIG.md):
+1. Configure `android.mainSrc`
+2. Configure `android.[typography|colors|icons].composePackageName`
 
 ### Arguments
 
