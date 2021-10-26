@@ -19,8 +19,8 @@ final public class AndroidColorExporter {
             result.append(darkFile)
         }
         
-        if let packageName = output.packageName, let outputDirectory = output.composeOutputDirectory {
-            let composeFile = makeComposeColorsFile(colorPairs: colorPairs, outputDirectory: outputDirectory, package: packageName)
+        if let packageName = output.packageName, let outputDirectory = output.composeOutputDirectory, let xmlResourcePackage = output.xmlResourcePackage {
+            let composeFile = makeComposeColorsFile(colorPairs: colorPairs, outputDirectory: outputDirectory, package: packageName, xmlResourcePackage: xmlResourcePackage)
             result.append(composeFile)
         }
         
@@ -39,7 +39,7 @@ final public class AndroidColorExporter {
         )
     }
     
-    private func makeComposeColorsFile(colorPairs: [AssetPair<Color>], outputDirectory: URL, package: String) -> FileContents {
+    private func makeComposeColorsFile(colorPairs: [AssetPair<Color>], outputDirectory: URL, package: String, xmlResourcePackage: String) -> FileContents {
         let fileURL = URL(string: "Colors.kt")!
         
         let fileLines: [String] = colorPairs.map {
@@ -57,7 +57,7 @@ final public class AndroidColorExporter {
         import androidx.compose.runtime.ReadOnlyComposable
         import androidx.compose.ui.graphics.Color
         import androidx.compose.ui.res.colorResource
-        import \(output.xmlResourcePackage).R
+        import \(xmlResourcePackage).R
 
         object Colors
         

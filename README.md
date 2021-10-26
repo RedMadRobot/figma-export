@@ -326,7 +326,7 @@ Run `fastlane sync_colors` to run FigmaExport.
 
 In the `figma-export.yaml` file you must specify the following properties:
 - `android.mainRes`
-- `android.resourcePackage`
+- `android.resourcePackage` if you want generate Jetpack Compose code
 - `android.mainSrc` if you want generate Jetpack Compose code
 - `android.icons.output` if you want export icons
 - `android.images.output` if you want export images

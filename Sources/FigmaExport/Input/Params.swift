@@ -140,7 +140,7 @@ struct Params: Decodable {
             let composePackageName: String?
         }
         let mainRes: URL
-        let resourcePackage: String
+        let resourcePackage: String?
         let mainSrc: URL?
         let colors: Colors?
         let icons: Icons?

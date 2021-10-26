@@ -152,19 +152,19 @@ ios:
 android:
   # Relative or absolute path to the `main/res` folder including it. The colors/icons/imags will be exported to this folder
   mainRes: "./main/res"
-  # The package name, where the android resource constant `R` is located.
+  # [optional] The package name, where the android resource constant `R` is located. Muste be provided to enable code generation for Jetpack Compose
   resourcePackage: "com.example"
-  # [optional] Relative or absolute path to the code source folder including it. The typography for jetpack compose will be exported to this folder
+  # [optional] Relative or absolute path to the code source folder including it. The typography for Jetpack Compose will be exported to this folder
   mainSrc: "./main/src/java"
   # Parameters for exporting colors
   colors:
-    # [optional] The package to export the compose color code to. Note: To export compose code, also `mainSrc` above must be set 
+    # [optional] The package to export the Jetpack Compose color code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
     composePackageName: "com.example"
   # Parameters for exporting icons
   icons:
     # Where to place icons relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export icons` command
     output: "figma-import-icons"
-    # [optional] The package to export the compose icon code to. Note: To export compose code, also `mainSrc` above must be set 
+    # [optional] The package to export the Jetpack Compose icon code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
     composePackageName: "com.example"
   # Parameters for exporting images
   images:
@@ -182,6 +182,6 @@ android:
   typography:
     # Typography name style: camelCase or snake_case
     nameStyle: camelCase
-    # [optional] The package to export the compose typography code to. Note: To export compose code, also `mainSrc` above must be set 
+    # [optional] The package to export the Jetpack Compose typography code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
     composePackageName: "com.example"
 ```

@@ -16,8 +16,8 @@ final public class AndroidTypographyExporter {
         files.append(makeFontsFile(textStyles: textStyles))
         
         // android compose typography object
-        if let composeOutputDirectory = output.composeOutputDirectory, let packageName = output.packageName {
-            files.append(makeComposeFontsFile(textStyles: textStyles, outputDirectory: composeOutputDirectory, package: packageName))
+        if let composeOutputDirectory = output.composeOutputDirectory, let packageName = output.packageName, let xmlResourcePackage = output.xmlResourcePackage {
+            files.append(makeComposeFontsFile(textStyles: textStyles, outputDirectory: composeOutputDirectory, package: packageName, xmlResourcePackage: xmlResourcePackage))
         }
         
         return files
@@ -34,7 +34,7 @@ final public class AndroidTypographyExporter {
         )
     }
     
-    private func makeComposeFontsFile(textStyles: [TextStyle], outputDirectory: URL, package: String) -> FileContents {
+    private func makeComposeFontsFile(textStyles: [TextStyle], outputDirectory: URL, package: String, xmlResourcePackage: String) -> FileContents {
         let fileURL = URL(string: "Typography.kt")!
         
         let fileLines: [String] = textStyles.map {
@@ -57,7 +57,7 @@ final public class AndroidTypographyExporter {
         import androidx.compose.ui.text.font.Font
         import androidx.compose.ui.text.font.FontFamily
         import androidx.compose.ui.unit.sp
-        import \(output.xmlResourcePackage).R
+        import \(xmlResourcePackage).R
 
         object Typography {
         

@@ -2,13 +2,13 @@ import Foundation
 
 public struct AndroidOutput {
     let xmlOutputDirectory: URL
-    let xmlResourcePackage: String
+    let xmlResourcePackage: String?
     let composeOutputDirectory: URL?
     let packageName: String?
 
     public init(
         xmlOutputDirectory: URL,
-        xmlResourcePackage: String,
+        xmlResourcePackage: String?,
         srcDirectory: URL?,
         packageName: String?
     ) {

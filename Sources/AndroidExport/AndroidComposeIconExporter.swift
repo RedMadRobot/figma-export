@@ -12,14 +12,14 @@ final public class AndroidComposeIconExporter {
     public func exportIcons(iconNames: [String]) throws -> [FileContents] {
         var files: [FileContents] = []
         
-        if let composeOutputDirectory = output.composeOutputDirectory, let packageName = output.packageName {
-            files.append(makeComposeIconsFile(iconNames: iconNames, outputDirectory: composeOutputDirectory, package: packageName))
+        if let composeOutputDirectory = output.composeOutputDirectory, let packageName = output.packageName, let xmlResourcePackage = output.xmlResourcePackage {
+            files.append(makeComposeIconsFile(iconNames: iconNames, outputDirectory: composeOutputDirectory, package: packageName, xmlResourcePackage: xmlResourcePackage))
         }
         
         return files
     }
     
-    private func makeComposeIconsFile(iconNames: [String], outputDirectory: URL, package: String) -> FileContents {
+    private func makeComposeIconsFile(iconNames: [String], outputDirectory: URL, package: String, xmlResourcePackage: String) -> FileContents {
         let fileURL = URL(string: "Icons.kt")!
         
         let fileLines: [String] = iconNames.map {
@@ -50,7 +50,7 @@ final public class AndroidComposeIconExporter {
         import androidx.compose.ui.Modifier
         import androidx.compose.ui.graphics.Color
         import androidx.compose.ui.res.painterResource
-        import \(output.xmlResourcePackage).R
+        import \(xmlResourcePackage).R
 
         object Icons
         
