@@ -14,7 +14,7 @@ Command line utility to export colors, typography, icons and images from Figma t
 * icon — Figma's component with small black/colorized vector image
 * image — Figma's components with colorized image (Light/Dark)
 
-The utility supports Dark Mode, SwiftUI and Compose.
+The utility supports Dark Mode, SwiftUI and Jetpack Compose.
 
 Why we've developed this utility:
 * Figma doesn't support exporting colors and images to Xcode / Android Studio. Manual export takes a long time.
@@ -201,7 +201,7 @@ Example of these files:
 ### Android
 
 Colors will be exported to `values/colors.xml` and `values-night/colors.xml` files.
-For `jetpack compose`, following code will be generated, if conifgured:
+For Jetpack Compose, following code will be generated, if configured:
 ```kotlin
 package com.redmadrobot.androidcomposeexample.ui.figmaexport
 
@@ -214,7 +214,7 @@ object Colors
 fun Colors.backgroundPrimary(): Color = colorResource(id = R.color.background_primary)
 ```
 
-Icons will be exported to `drawable` directory as vector xml files. For `jetpack compose`, following code will be generated, if conifgured:
+Icons will be exported to `drawable` directory as vector xml files. For Jetpack Compose, following code will be generated, if configured:
 ```kotlin
 package com.redmadrobot.androidcomposeexample.ui.figmaexport
 
@@ -240,7 +240,7 @@ fun Icons.Ic24DropdownDown(
 Vector images will be exported to `drawable` and `drawable-night` directories as vector `xml` files.
 Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` directories as `png` or `webp` files.
 
-Typography will be exported to `values/typography.xml`. For `jetpack compose`, following code will be generated, if conifgured:
+Typography will be exported to `values/typography.xml`. For Jetpack Compose, following code will be generated, if configured:
 ```kotlin
 package com.redmadrobot.androidcomposeexample.ui.figmaexport
 
@@ -327,7 +327,7 @@ Run `fastlane sync_colors` to run FigmaExport.
 In the `figma-export.yaml` file you must specify the following properties:
 - `android.mainRes`
 - `android.resourcePackage`
-- `android.mainSrc` if you want generate compose code
+- `android.mainSrc` if you want generate Jetpack Compose code
 - `android.icons.output` if you want export icons
 - `android.images.output` if you want export images
 
@@ -362,8 +362,8 @@ android {
 }
 ```
 
-#### Compose
-For Typography, Colors and Icons you can enable code generation for the use with compose in your [config file](CONFIG.md):
+#### Jetpack Compose
+For Typography, Colors and Icons you can enable code generation for the use with Jetpack Compose in your [config file](CONFIG.md):
 1. Configure `android.mainSrc`
 2. Configure `android.[typography|colors|icons].composePackageName`
 

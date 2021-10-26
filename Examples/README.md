@@ -40,9 +40,9 @@ There is an example Android Studio project in `AndroidExample` directory which d
 * To export images run: `figma-export images`
 * To export typography run: `figma-export typography`
 
-### Example Android Compose project
+### Example Android Jetpack Compose project
 
-There is an example Android Studio project in `AndroidComposeExample` directory which demostrates how to use `figma-export` configured for compose.
+There is an example Android Studio project in `AndroidComposeExample` directory which demostrates how to use `figma-export` configured for Jetpack Compose.
 
 You can find the generated code for compose in the package `com.redmadrobot.androidcomposeexample.ui.figmaexport`
 
