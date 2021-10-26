@@ -42,7 +42,7 @@ final class AndroidComposeIconExporterTests: XCTestCase {
         fun Icons.TestIcon1(
             contentDescription: String?,
             modifier: Modifier = Modifier,
-            tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+            tint: Color = Color.Unspecified
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.test_icon_1),
@@ -56,7 +56,7 @@ final class AndroidComposeIconExporterTests: XCTestCase {
         fun Icons.TestIcon2(
             contentDescription: String?,
             modifier: Modifier = Modifier,
-            tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+            tint: Color = Color.Unspecified
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.test_icon_2),

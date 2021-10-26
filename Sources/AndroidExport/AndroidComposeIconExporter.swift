@@ -29,7 +29,7 @@ final public class AndroidComposeIconExporter {
             fun Icons.\(functionName)(
                 contentDescription: String?,
                 modifier: Modifier = Modifier,
-                tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                tint: Color = Color.Unspecified
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.\($0)),
