@@ -98,8 +98,8 @@ extension FigmaExportCommand {
         }
 
         private func exportAndroidTextStyles(textStyles: [TextStyle], androidParams: Params.Android) throws {
-
-            let exporter = AndroidTypographyExporter(outputDirectory: androidParams.mainRes)
+            let output = AndroidOutput(xmlOutputDirectory: androidParams.mainRes, xmlResourcePackage: androidParams.resourcePackage, srcDirectory: androidParams.mainSrc, packageName: androidParams.typography?.composePackageName)
+            let exporter = AndroidTypographyExporter(output: output)
             let files = try exporter.exportFonts(textStyles: textStyles)
 
             let fileURL = androidParams.mainRes.appendingPathComponent("values/typography.xml")

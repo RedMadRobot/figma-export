@@ -1,0 +1,29 @@
+---
+figma:
+  lightFileId: MRVOEjTRatddzaMN7iYlAe
+  darkFileId: eLY5YHbCBNdFmMEVuWKnx5
+
+# [optional] Common export parameters
+common:
+  icons:
+    # Name of the Figma's frame where icons components are located
+    figmaFrameName: Icons
+
+# [optional] Android export parameters
+android:
+  # Relative or absolute path to the `main/res` folder including it. The colors/icons/imags will be exported to this folder
+  mainRes: ./app/src/main/res
+  resourcePackage: "com.redmadrobot.androidcomposeexample"
+  mainSrc: "./app/src/main/java"
+  colors:
+    composePackageName: "com.redmadrobot.androidcomposeexample.ui.figmaexport"
+  # Parameters for exporting icons
+  icons:
+    # Where to place icons relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export icons` command
+    output: "figma-export-icons"
+    composePackageName: "com.redmadrobot.androidcomposeexample.ui.figmaexport"
+  # Parameters for exporting typography
+  typography:
+    # Typography name style: camelCase or snake_case
+    nameStyle: camelCase
+    composePackageName: "com.redmadrobot.androidcomposeexample.ui.figmaexport"

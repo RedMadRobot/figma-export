@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AndroidComposeExample</string>
+    <string name="title_colors">Colors</string>
+    <string name="title_images">Images</string>
+    <string name="title_icons">Icons</string>
+    <string name="title_typography">Typography</string>
+    <string name="label_body">Body</string>
+    <string name="label_caption">Caption</string>
+    <string name="label_header">Header</string>
+    <string name="label_large_title">Large Title</string>
+</resources>
