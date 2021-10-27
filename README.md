@@ -478,4 +478,4 @@ If you have any issues with the FigmaExport or you want some new features feel f
 
 ## Authors
 
-Daniil Subbotin - d.subbotin@redmadrobot.com
+Daniil Subbotin - mail@subdan.ru
