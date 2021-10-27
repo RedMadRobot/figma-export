@@ -9,6 +9,7 @@ enum FigmaExportError: LocalizedError {
     case componentsNotFound
     case accessTokenNotFound
     case colorsAssetsFolderNotSpecified
+    case custom(errorString: String)
     
     var errorDescription: String? {
         switch self {
@@ -22,6 +23,8 @@ enum FigmaExportError: LocalizedError {
             return "Environment varibale FIGMA_PERSONAL_TOKEN not specified."
         case .colorsAssetsFolderNotSpecified:
             return "Option ios.colors.assetsFolder not specified in configuration file."
+        case .custom(let errorString):
+            return errorString
         }
     }
 }

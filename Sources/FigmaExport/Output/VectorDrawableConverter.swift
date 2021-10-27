@@ -24,7 +24,11 @@ final class VectorDrawableConverter {
         let outputString = String(decoding: outputData, as: UTF8.self)
         // Only log last line out standard output
         outputString.lastLine.flatMap { logger.info("\($0)") }
-
+        
+        if error.contains("Unable to locate a Java Runtime") {
+            throw FigmaExportError.custom(errorString: error)
+        }
+        
         if error.contains(Self.notSupportedWarning) {
             logger.warning("vd-tool reported unsupported xml tags. Executing vd-tool for each file...")
             let enumerator = FileManager.default.enumerator(at: inputDirectoryUrl, includingPropertiesForKeys: nil)
