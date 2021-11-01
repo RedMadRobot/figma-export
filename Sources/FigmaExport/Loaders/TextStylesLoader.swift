@@ -43,7 +43,7 @@ final class TextStylesLoader {
             
             return TextStyle(
                 name: style.name,
-                fontName: textStyle.fontPostScriptName,
+                fontName: textStyle.fontPostScriptName ?? textStyle.fontFamily ?? "",
                 fontSize: textStyle.fontSize,
                 fontStyle: DynamicTypeStyle(rawValue: style.description),
                 lineHeight: lineHeight,

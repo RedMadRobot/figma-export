@@ -23,7 +23,8 @@ public enum LineHeightUnit: String, Decodable {
 }
 
 public struct TypeStyle: Decodable {
-    public var fontPostScriptName: String
+    public var fontFamily: String?
+    public var fontPostScriptName: String?
     public var fontWeight: Double
     public var fontSize: Double
     public var lineHeightPx: Double
