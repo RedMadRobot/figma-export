@@ -32,7 +32,7 @@
         "package": "Stencil",
         "repositoryURL": "https://github.com/stencilproject/Stencil.git",
         "state": {
-          "branch": null,
+          "branch": "master",
           "revision": "a72441947467a9ed6c90941c02abc78aa330dcd3",
           "version": null
         }

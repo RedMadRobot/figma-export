@@ -16,10 +16,7 @@ let package = Package(
         .package(url: "https://github.com/jpsim/Yams.git", from: "4.0.0"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.4.0"),
         // TODO: Update to the release version when Stencil release 0.14.2
-        .package(
-            url: "https://github.com/stencilproject/Stencil.git",
-            .revisionItem("a72441947467a9ed6c90941c02abc78aa330dcd3")
-        ),
+        .package(url: "https://github.com/stencilproject/Stencil.git", .branch("master")),
         .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.5.0"),
     ],
     targets: [
