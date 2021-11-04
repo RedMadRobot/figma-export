@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/stencilproject/Stencil.git",
         "state": {
           "branch": null,
-          "revision": "a72441947467a9ed6c90941c02abc78aa330dcd3",
-          "version": null
+          "revision": "ccd9402682f4c07dac9561befd207c8156e80e20",
+          "version": "0.14.2"
         }
       },
       {
