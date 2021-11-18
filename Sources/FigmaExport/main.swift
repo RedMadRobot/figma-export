@@ -20,7 +20,7 @@ enum FigmaExportError: LocalizedError {
         case .componentsNotFound:
             return "Components not found in the Figma file. Have you published Components to the Library?"
         case .accessTokenNotFound:
-            return "Environment varibale FIGMA_PERSONAL_TOKEN not specified."
+            return "Environment variable FIGMA_PERSONAL_TOKEN not specified."
         case .colorsAssetsFolderNotSpecified:
             return "Option ios.colors.assetsFolder not specified in configuration file."
         case .custom(let errorString):
