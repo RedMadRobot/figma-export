@@ -1,6 +1,7 @@
 import XCTest
 import FigmaExportCore
 @testable import XcodeExport
+import CustomDump
 
 final class XcodeColorExporterTests: XCTestCase {
     
@@ -27,6 +28,8 @@ final class XcodeColorExporterTests: XCTestCase {
     private lazy var colorPair3 = AssetPair<Color>(
         light: color3,
         dark: nil)
+    
+    private let colorWithKeyword = AssetPair<Color>(light: Color(name: "class", platform: .ios, red: 1, green: 1, blue: 1, alpha: 1), dark: nil)
     
     // MARK: - Setup
     
@@ -74,7 +77,7 @@ final class XcodeColorExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
     
     func testExport_with_assets() {
@@ -103,7 +106,7 @@ final class XcodeColorExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExport_with_objc() {
@@ -137,7 +140,7 @@ final class XcodeColorExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
     
     func testExport_with_assets_in_separate_bundle() {
@@ -170,7 +173,7 @@ final class XcodeColorExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExport_with_assets_in_swift_package() {
@@ -203,7 +206,7 @@ final class XcodeColorExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
     
     func testExport_swiftui() {
@@ -232,7 +235,7 @@ final class XcodeColorExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
     
     func testExport_withProvidesNamespace() {
@@ -265,6 +268,32 @@ final class XcodeColorExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
+    }
+    
+    func testExportWhenNameIsSwiftKeyword() {
+        let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, colorSwiftURL: colorsFile)
+        let exporter = XcodeColorExporter(output: output)
+        
+        let result = exporter.export(colorPairs: [colorWithKeyword])
+        XCTAssertEqual(result.count, 1)
+        
+        let content = result[0].data
+        XCTAssertNotNil(content)
+        
+        let generatedCode = String(data: content!, encoding: .utf8)
+        let referenceCode = """
+        \(header)
+
+        import UIKit
+
+        public extension UIColor {
+            static var `class`: UIColor {
+                return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+            }
+        }
+
+        """
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 }

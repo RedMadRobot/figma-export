@@ -17,6 +17,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log.git", from: "1.4.0"),
         .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.14.2"),
         .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.5.0"),
+        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.2.1"),
     ],
     targets: [
         
@@ -65,7 +66,7 @@ let package = Package(
         ),
         .testTarget(
             name: "XcodeExportTests",
-            dependencies: ["XcodeExport"]
+            dependencies: ["XcodeExport", .product(name: "CustomDump", package: "swift-custom-dump")]
         ),
         .testTarget(
             name: "AndroidExportTests",

@@ -31,7 +31,7 @@ final public class XcodeIconsExporter: XcodeImagesExporterBase {
         }
 
         // Generate extensions
-        let imageNames = icons.map { $0.light.name }
+        let imageNames = icons.map { normalizeName($0.light.name) }
         let extensionFiles = try generateExtensions(names: imageNames, append: append)
 
         return [contentsFile] + imageAssetsFiles + extensionFiles
