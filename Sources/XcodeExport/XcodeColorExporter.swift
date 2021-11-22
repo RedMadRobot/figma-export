@@ -1,7 +1,7 @@
 import Foundation
 import FigmaExportCore
 
-final public class XcodeColorExporter {
+final public class XcodeColorExporter: XcodeExporterBase {
     
     private let output: XcodeColorsOutput
 
@@ -122,7 +122,7 @@ final public class XcodeColorExporter {
         let strings = colorPairs.map { colorPair -> String in
             let bundle = output.assetsInMainBundle ? "" : ", bundle: BundleProvider.bundle"
             let named = groupUsingNamespace ? "\"\(colorPair.light.originalName)\"" : "#function"
-            return "    static var \(colorPair.light.name): Color { Color(\(named)\(bundle)) }"
+            return "    static var \(normalizeName(colorPair.light.name)): Color { Color(\(named)\(bundle)) }"
         }
 
         return """
@@ -151,12 +151,12 @@ final public class XcodeColorExporter {
                 let bundle = output.assetsInMainBundle ? "" : ", in: BundleProvider.bundle, compatibleWith: nil"
                 let prefix = objcAttribute ? "@objc " : ""
                 let named = groupUsingNamespace ? "\"\(colorPair.light.originalName)\"" : "#function"
-                content = "    \(prefix)static var \(colorPair.light.name): UIColor { UIColor(named: \(named)\(bundle))! }"
+                content = "    \(prefix)static var \(normalizeName(colorPair.light.name)): UIColor { UIColor(named: \(named)\(bundle))! }"
             } else {
                 let lightComponents = colorPair.light.toRgbComponents()
                 if let darkComponents = colorPair.dark?.toRgbComponents() {
                     content = """
-                        \(objcAttribute ? "@objc " : "")static var \(colorPair.light.name): UIColor {
+                        \(objcAttribute ? "@objc " : "")static var \(normalizeName(colorPair.light.name)): UIColor {
                             if #available(iOS 13.0, *) {
                                 return UIColor { traitCollection -> UIColor in
                                     if traitCollection.userInterfaceStyle == .dark {
@@ -172,7 +172,7 @@ final public class XcodeColorExporter {
                     """
                 } else {
                     content = """
-                        \(objcAttribute ? "@objc " : "")static var \(colorPair.light.name): UIColor {
+                        \(objcAttribute ? "@objc " : "")static var \(normalizeName(colorPair.light.name)): UIColor {
                             return UIColor(red: \(lightComponents.red), green: \(lightComponents.green), blue: \(lightComponents.blue), alpha: \(lightComponents.alpha))
                         }
                     """

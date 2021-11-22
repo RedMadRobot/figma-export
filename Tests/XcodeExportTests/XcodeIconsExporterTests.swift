@@ -1,3 +1,4 @@
+import CustomDump
 import XCTest
 import Foundation
 import FigmaExportCore
@@ -11,6 +12,7 @@ final class XcodeIconsExporterTests: XCTestCase {
     private let image1Dark = Image(name: "image1", url: URL(string: "1_dark")!, format: "pdf")
     private let image2 = Image(name: "image2", url: URL(string: "2")!, format: "pdf")
     private let image2Dark = Image(name: "image2", url: URL(string: "2_dark")!, format: "pdf")
+    private let imageWithKeyword = Image(name: "class", url: URL(string: "2")!, format: "pdf")
 
     private let uiKitImageExtensionURL = FileManager.default
         .temporaryDirectory
@@ -52,7 +54,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportPair() throws {
@@ -89,7 +91,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportWithObjc() throws {
@@ -128,7 +130,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportPairWithObjc() throws {
@@ -170,7 +172,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportInSeparateBundle() throws {
@@ -208,7 +210,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportPairInSeparateBundle() throws {
@@ -249,7 +251,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportInSwiftPackage() throws {
@@ -287,7 +289,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportPairInSwiftPackage() throws {
@@ -328,7 +330,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportSwiftUI() throws {
@@ -362,7 +364,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportPairSwiftUI() throws {
@@ -399,7 +401,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportSwiftUIInSeparateBundle() throws {
@@ -437,7 +439,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testExportPairSwiftUIInSeparateBundle() throws {
@@ -478,7 +480,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testAppendAfterExport() throws {
@@ -525,7 +527,7 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
 
     func testAppendPairAfterExport() throws {
@@ -574,9 +576,32 @@ final class XcodeIconsExporterTests: XCTestCase {
         }
 
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
     }
+    
+    func testExportImageWithKeyword() throws {
+        let output = XcodeImagesOutput(assetsFolderURL: URL(string: "~/")!, assetsInMainBundle: true, uiKitImageExtensionURL: uiKitImageExtensionURL)
+        let exporter = XcodeIconsExporter(output: output)
+        let result = try exporter.export(
+            icons: [AssetPair(light: ImagePack(image: imageWithKeyword), dark: nil)],
+            append: false
+        )
 
+        let content = try XCTUnwrap(result.last?.data)
+        
+        let generatedCode = String(data: content, encoding: .utf8)
+        let referenceCode = """
+        \(header)
+
+        import UIKit
+
+        public extension UIImage {
+            static var `class`: UIImage { UIImage(named: #function)! }
+        }
+
+        """
+        XCTAssertNoDifference(generatedCode, referenceCode)
+    }
 }
 
 private extension XcodeIconsExporterTests {

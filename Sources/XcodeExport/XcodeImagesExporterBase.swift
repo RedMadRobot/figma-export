@@ -1,7 +1,7 @@
 import FigmaExportCore
 import Foundation
 
-public class XcodeImagesExporterBase {
+public class XcodeImagesExporterBase: XcodeExporterBase {
     
     let output: XcodeImagesOutput
     
