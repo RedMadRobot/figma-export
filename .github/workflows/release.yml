@@ -40,4 +40,4 @@ jobs:
       - name: Update Homebrew formulae
         run: gh workflow run bump-formula.yml --repo RedMadRobot/homebrew-formulae --field formula=figma-export --field version=${{ github.event.release.tag_name }}
         env:
-          COMMITTER_TOKEN: ${{ secrets.GH_PERSONAL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
