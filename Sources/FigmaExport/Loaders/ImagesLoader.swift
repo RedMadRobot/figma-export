@@ -100,7 +100,7 @@ final class ImagesLoader {
     private func loadImagesFromSingleFile(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
         let darkSuffix = params.common?.images?.darkModeSuffix ?? "_dark"
         switch (platform, params.android?.images?.format) {
-        case (.android, .png), (.android, .webp), (.ios, .none):
+        case (.android, .png), (.android, .webp), (.ios, _):
             let images = try loadPNGImages(
                 fileId: params.figma.lightFileId,
                 frameName: imagesFrameName,
@@ -127,7 +127,7 @@ final class ImagesLoader {
 
     private func loadImagesFromLightAndDarkFile(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
         switch (platform, params.android?.images?.format) {
-        case (.android, .png), (.android, .webp), (.ios, .none):
+        case (.android, .png), (.android, .webp), (.ios, _):
             let lightImages = try loadPNGImages(
                 fileId: params.figma.lightFileId,
                 frameName: imagesFrameName,
