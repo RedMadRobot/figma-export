@@ -82,6 +82,12 @@ extension FigmaExportCommand {
             logger.info("Writting files to Xcode project...")
             try fileWriter.write(files: localFiles)
 
+            guard params.ios?.xcassetsInSwiftPackage == false else {
+                checkForUpdate(logger: logger)
+                logger.info("Done!")
+                return
+            }
+            
             do {
                 let xcodeProject = try XcodeProjectWriter(xcodeProjPath: ios.xcodeprojPath, target: ios.target)
                 try localFiles.forEach { file in
