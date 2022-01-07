@@ -102,6 +102,12 @@ extension FigmaExportCommand {
             
             try fileWriter.write(files: files)
             
+            guard iosParams.xcassetsInSwiftPackage == false else {
+                checkForUpdate(logger: logger)
+                logger.info("Done!")
+                return
+            }
+            
             do {
                 let xcodeProject = try XcodeProjectWriter(xcodeProjPath: iosParams.xcodeprojPath, target: iosParams.target)
                 try files.forEach { file in
@@ -113,6 +119,8 @@ extension FigmaExportCommand {
             } catch {
                 logger.error("Unable to add some file references to Xcode project")
             }
+            
+            logger.info("Done!")
         }
 
         private func exportAndroidColors(colorPairs: [AssetPair<Color>], androidParams: Params.Android) throws {
