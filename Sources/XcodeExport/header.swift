@@ -1,5 +1,5 @@
 let header = """
-// swiftlint:disable all
+//  swiftlint:disable all
 //
 //  The code generated using FigmaExport — Command line utility to export
 //  colors, typography, icons and images from Figma to Xcode project.
