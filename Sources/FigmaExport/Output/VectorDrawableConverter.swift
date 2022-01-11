@@ -50,21 +50,27 @@ final class VectorDrawableConverter {
     }
 
     private func runVdTool(with arguments: [String], errorPipe: Pipe?, outputPipe: Pipe? = nil) throws {
+        var executableURLs = [
+            URL(fileURLWithPath: "/usr/local/bin/vd-tool"),
+            URL(fileURLWithPath: "/opt/homebrew/bin/vd-tool"),
+            URL(fileURLWithPath: "./vd-tool/bin/vd-tool")
+        ]
+        
         let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/local/bin/vd-tool")
         task.arguments = arguments
-
         task.standardOutput = outputPipe
         task.standardError = errorPipe
 
-        do {
-            try task.run()
-        } catch {
-            task.executableURL = URL(fileURLWithPath: "./vd-tool/bin/vd-tool")
-            try task.run()
-        }
-
-        task.waitUntilExit()
+        repeat {
+            task.executableURL = executableURLs.removeFirst()
+            do {
+                try task.run()
+                task.waitUntilExit()
+                return
+            } catch {
+                continue
+            }
+        } while !executableURLs.isEmpty
     }
 }
 
