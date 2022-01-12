@@ -19,14 +19,27 @@ final class WebpConverter {
     func convert(file url: URL) throws {
         let outputURL = url.deletingPathExtension().appendingPathExtension("webp")
         
+        var executableURLs = [
+            URL(fileURLWithPath: "/usr/local/bin/cwebp"),
+            URL(fileURLWithPath: "/opt/homebrew/bin/cwebp")
+        ]
+        
         let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/local/bin/cwebp")
         if case Encoding.lossless = encoding {
             task.arguments = ["-lossless", url.path, "-o", outputURL.path, "-short"]
         } else if case Encoding.lossy(let quality) = encoding {
             task.arguments = ["-q", String(quality), url.path, "-o", outputURL.path, "-short"]
         }
-        try task.run()
-        task.waitUntilExit()
+        
+        repeat {
+            task.executableURL = executableURLs.removeFirst()
+            do {
+                try task.run()
+                task.waitUntilExit()
+                return
+            } catch {
+                continue
+            }
+        } while !executableURLs.isEmpty
     }
 }
