@@ -59,6 +59,7 @@ android:
   resourcePackage: "com.example"
   # [optional] Relative or absolute path to the code source folder including it. The typography for Jetpack Compose will be exported to this folder
   mainSrc: "./main/src/java"
+  
   # Parameters for exporting colors
   colors:
     # [optional] The package to export the Jetpack Compose color code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 

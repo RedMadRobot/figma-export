@@ -1,0 +1,15 @@
+package {{package}}
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import {{xmlResourcePackage}}.R
+
+object Colors
+{% for color in colors %}
+
+@Composable
+@ReadOnlyComposable
+fun Colors.{{color.functionName}}(): Color = colorResource(id = R.color.{{color.name}})
+{% endfor %}

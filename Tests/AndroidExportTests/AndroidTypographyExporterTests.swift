@@ -8,7 +8,13 @@ final class AndroidTypographyExporterTests: XCTestCase {
     
     private static let packageName = "test"
     private static let resourcePackage = "resourceTest"
-    private let output = AndroidOutput(xmlOutputDirectory: URL(string: "~/")!, xmlResourcePackage: resourcePackage, srcDirectory: URL(string: "~/"), packageName: packageName)
+    private let output = AndroidOutput(
+        xmlOutputDirectory: URL(string: "~/")!,
+        xmlResourcePackage: resourcePackage,
+        srcDirectory: URL(string: "~/"),
+        packageName: packageName,
+        templatesPath: nil
+    )
     
     private let textStyle1 = TextStyle(name: "title", fontName: "Test-Font", fontSize: 20.0, fontStyle: nil, letterSpacing: 0.25)
     private let textStyle2 = TextStyle(name: "subtitle", platform: nil, fontName: "Test-Font", fontSize: 19.5, fontStyle: nil, lineHeight: 20.0, letterSpacing: 0, textCase: TextStyle.TextCase.original)

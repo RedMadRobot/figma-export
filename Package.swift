@@ -18,7 +18,7 @@ let package = Package(
         // Revert when PR https://github.com/stencilproject/Stencil/pull/287 will be merged
         .package(url: "https://github.com/subdan/Stencil.git", from: "0.14.5"),
         .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.5.0"),
-        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.2.1"),
+        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.3.0"),
     ],
     targets: [
         
@@ -55,7 +55,10 @@ let package = Package(
         // Exports resources to Android project
         .target(
             name: "AndroidExport",
-            dependencies: ["FigmaExportCore"]
+            dependencies: ["FigmaExportCore", "Stencil"],
+            resources: [
+                .copy("Resources/")
+            ]
         ),
         
         // MARK: - Tests
@@ -74,7 +77,7 @@ let package = Package(
         ),
         .testTarget(
             name: "AndroidExportTests",
-            dependencies: ["AndroidExport"]
+            dependencies: ["AndroidExport", .product(name: "CustomDump", package: "swift-custom-dump")]
         )
     ]
 )

@@ -148,6 +148,7 @@ struct Params: Decodable {
         let icons: Icons?
         let images: Images?
         let typography: Typography?
+        let templatesPath: URL?
     }
 
     let figma: Figma

@@ -202,7 +202,13 @@ extension FigmaExportCommand {
             }
             
             // 7. Create Compose extension if configured
-            let output = AndroidOutput(xmlOutputDirectory: android.mainRes, xmlResourcePackage: android.resourcePackage, srcDirectory: android.mainSrc, packageName: android.icons?.composePackageName)
+            let output = AndroidOutput(
+                xmlOutputDirectory: android.mainRes,
+                xmlResourcePackage: android.resourcePackage,
+                srcDirectory: android.mainSrc,
+                packageName: android.icons?.composePackageName,
+                templatesPath: android.templatesPath
+            )
             let composeExporter = AndroidComposeIconExporter(output: output)
             let composeIconNames = Set(localFiles.filter{ fileContents in
                 !fileContents.dark

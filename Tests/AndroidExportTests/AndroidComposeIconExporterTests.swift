@@ -8,7 +8,13 @@ final class AndroidComposeIconExporterTests: XCTestCase {
     
     private static let packageName = "test"
     private static let resourcePackage = "resourceTest"
-    private let output = AndroidOutput(xmlOutputDirectory: URL(string: "~/")!, xmlResourcePackage: resourcePackage, srcDirectory: URL(string: "~/"), packageName: packageName)
+    private let output = AndroidOutput(
+        xmlOutputDirectory: URL(string: "~/")!,
+        xmlResourcePackage: resourcePackage,
+        srcDirectory: URL(string: "~/"),
+        packageName: packageName,
+        templatesPath: nil
+    )
     
     private let iconName1 = "test_icon_1"
     private let iconName2 = "test_icon_2"
