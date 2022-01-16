@@ -102,6 +102,8 @@ struct Params: Decodable {
         let xcassetsInMainBundle: Bool
         let xcassetsInSwiftPackage: Bool?
         let addObjcAttribute: Bool?
+        let templatesPath: URL?
+
         let colors: Colors?
         let icons: Icons?
         let images: Images?

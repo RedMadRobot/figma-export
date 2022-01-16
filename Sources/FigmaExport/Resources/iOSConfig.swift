@@ -65,7 +65,7 @@ ios:
   xcassetsInSwiftPackage: false
   # [optional] Add @objc attribute to generated properties so that they are accessible in Objective-C. Defaults to false
   addObjcAttribute: false
-                            
+                         
   # [optional] Parameters for exporting colors
   colors:
     # How to export colors? Use .xcassets and UIColor extension (useColorAssets = true) or extension only (useColorAssets = false)

@@ -91,10 +91,12 @@ extension FigmaExportCommand {
                 addObjcAttribute: iosParams.addObjcAttribute,
                 colorSwiftURL: colorParams.colorSwift,
                 swiftuiColorSwiftURL: colorParams.swiftuiColorSwift,
-                groupUsingNamespace: colorParams.groupUsingNamespace)
+                groupUsingNamespace: colorParams.groupUsingNamespace,
+                templatesPath: iosParams.templatesPath
+            )
 
             let exporter = XcodeColorExporter(output: output)
-            let files = exporter.export(colorPairs: colorPairs)
+            let files = try exporter.export(colorPairs: colorPairs)
             
             if colorParams.useColorAssets, let url = colorsURL {
                 try? FileManager.default.removeItem(atPath: url.path)

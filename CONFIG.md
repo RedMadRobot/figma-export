@@ -75,7 +75,9 @@ ios:
   xcassetsInSwiftPackage: false
   # [optional] Add @objc attribute to generated properties so that they are accessible in Objective-C. Defaults to false
   addObjcAttribute: false
-
+  # [optional] Path to the Stencil templates used to generate code
+  templatesPath: "./Resources/Templates"
+  
   # [optional] Parameters for exporting colors
   colors:
     # How to export colors? Use .xcassets and UIColor extension (useColorAssets = true) or extension only (useColorAssets = false)
@@ -150,9 +152,9 @@ ios:
 
 # [optional] Android export parameters
 android:
-  # Relative or absolute path to the `main/res` folder including it. The colors/icons/imags will be exported to this folder
+  # Relative or absolute path to the `main/res` folder including it. The colors/icons/images will be exported to this folder
   mainRes: "./main/res"
-  # [optional] The package name, where the android resource constant `R` is located. Muste be provided to enable code generation for Jetpack Compose
+  # [optional] The package name, where the android resource constant `R` is located. Must be provided to enable code generation for Jetpack Compose
   resourcePackage: "com.example"
   # [optional] Relative or absolute path to the code source folder including it. The typography for Jetpack Compose will be exported to this folder
   mainSrc: "./main/src/java"

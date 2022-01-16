@@ -1,0 +1,42 @@
+{% include "header.stencil" %}
+
+import UIKit
+
+{% if assetsInSwiftPackage %}
+private class BundleProvider {
+    static let bundle = Bundle.module
+}
+
+{% elif not assetsInMainBundle %}
+private class BundleProvider {
+    static let bundle = Bundle(for: BundleProvider.self)
+}
+
+{% endif %}
+public extension UIColor {
+{% for color in colors %}
+{% if colorFromAssetCatalog %}
+{% if assetsInMainBundle %}
+    {% if addObjcPrefix %}@objc {% endif %}static var {{ color.name }}: UIColor { UIColor(named:{% if useNamespace %} "{{ color.originalName }}"{% else %} #function{% endif %})! }
+{% else %}
+    {% if addObjcPrefix %}@objc {% endif %}static var {{ color.name }}: UIColor { UIColor(named:{% if useNamespace %} "{{ color.originalName }}"{% else %} #function{% endif %}, in: BundleProvider.bundle, compatibleWith: nil)! }
+{% endif %}
+{% else %}
+{% if color.hasDarkVariant %}
+    {% if addObjcPrefix %}@objc {% endif %}static var {{ color.light.name }}: UIColor {
+        UIColor { traitCollection -> UIColor in
+            if traitCollection.userInterfaceStyle == .dark {
+                return UIColor(red: {{ color.dark.red }}, green: {{ color.dark.green }}, blue: {{ color.dark.blue }}, alpha: {{ color.dark.alpha }})
+            } else {
+                return UIColor(red: {{ color.light.red }}, green: {{ color.light.green }}, blue: {{ color.light.blue }}, alpha: {{ color.light.alpha }})
+            }
+        }
+    }
+{% else %}
+    {% if addObjcPrefix %}@objc {% endif %}static var {{ color.name }}: UIColor {
+        UIColor(red: {{ color.red }}, green: {{ color.green }}, blue: {{ color.blue }}, alpha: {{ color.alpha }})
+    }
+{% endif %}
+{% endif %}
+{% endfor %}
+}

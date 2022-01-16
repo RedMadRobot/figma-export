@@ -29,7 +29,10 @@ final class XcodeColorExporterTests: XCTestCase {
         light: color3,
         dark: nil)
     
-    private let colorWithKeyword = AssetPair<Color>(light: Color(name: "class", platform: .ios, red: 1, green: 1, blue: 1, alpha: 1), dark: nil)
+    private let colorWithKeyword = AssetPair<Color>(
+        light: Color(name: "class", platform: .ios, red: 1, green: 1, blue: 1, alpha: 1),
+        dark: nil
+    )
     
     // MARK: - Setup
     
@@ -41,49 +44,44 @@ final class XcodeColorExporterTests: XCTestCase {
     
     // MARK: - Tests
     
-    func testExport_without_assets() {
+    func testExport_without_assets() throws {
         let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         
-        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
         XCTAssertEqual(result.count, 1)
         
         let content = result[0].data
         XCTAssertNotNil(content)
-        
-        let generatedCode = String(data: content!, encoding: .utf8)
-        let referenceCode = """
+
+        try assertCodeEquals(content, """
         \(header)
 
         import UIKit
 
         public extension UIColor {
             static var colorPair1: UIColor {
-                if #available(iOS 13.0, *) {
-                    return UIColor { traitCollection -> UIColor in
-                        if traitCollection.userInterfaceStyle == .dark {
-                            return UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
-                        } else {
-                            return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
-                        }
+                UIColor { traitCollection -> UIColor in
+                    if traitCollection.userInterfaceStyle == .dark {
+                        return UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+                    } else {
+                        return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
                     }
-                } else {
-                    return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
                 }
             }
             static var colorPair2: UIColor {
-                return UIColor(red: 0.467, green: 0.012, blue: 1.000, alpha: 0.500)
+                UIColor(red: 0.467, green: 0.012, blue: 1.000, alpha: 0.500)
             }
         }
 
-        """
-        XCTAssertNoDifference(generatedCode, referenceCode)
+        """)
     }
     
-    func testExport_with_assets() {
+    func testExport_with_assets() throws {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
-        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
+
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
         
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -93,9 +91,8 @@ final class XcodeColorExporterTests: XCTestCase {
         
         let content = result[0].data
         XCTAssertNotNil(content)
-        
-        let generatedCode = String(data: content!, encoding: .utf8)
-        let referenceCode = """
+
+        try assertCodeEquals(content, """
         \(header)
 
         import UIKit
@@ -105,11 +102,10 @@ final class XcodeColorExporterTests: XCTestCase {
             static var colorPair2: UIColor { UIColor(named: #function)! }
         }
 
-        """
-        XCTAssertNoDifference(generatedCode, referenceCode)
+        """)
     }
 
-    func testExport_with_objc() {
+    func testExport_with_objc() throws {
         let output = XcodeColorsOutput(
             assetsColorsURL: colorsAssetCatalog,
             assetsInMainBundle: true,
@@ -117,7 +113,8 @@ final class XcodeColorExporterTests: XCTestCase {
             colorSwiftURL: colorsFile
         )
         let exporter = XcodeColorExporter(output: output)
-        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
+
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
 
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -128,8 +125,7 @@ final class XcodeColorExporterTests: XCTestCase {
         let content = result[0].data
         XCTAssertNotNil(content)
 
-        let generatedCode = String(data: content!, encoding: .utf8)
-        let referenceCode = """
+        try assertCodeEquals(content, """
         \(header)
 
         import UIKit
@@ -139,14 +135,14 @@ final class XcodeColorExporterTests: XCTestCase {
             @objc static var colorPair2: UIColor { UIColor(named: #function)! }
         }
 
-        """
-        XCTAssertNoDifference(generatedCode, referenceCode)
+        """)
     }
     
-    func testExport_with_assets_in_separate_bundle() {
+    func testExport_with_assets_in_separate_bundle() throws {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: false, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
-        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
+
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
         
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -156,9 +152,8 @@ final class XcodeColorExporterTests: XCTestCase {
         
         let content = result[0].data
         XCTAssertNotNil(content)
-        
-        let generatedCode = String(data: content!, encoding: .utf8)
-        let referenceCode = """
+
+        try assertCodeEquals(content, """
         \(header)
 
         import UIKit
@@ -172,14 +167,14 @@ final class XcodeColorExporterTests: XCTestCase {
             static var colorPair2: UIColor { UIColor(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
         }
 
-        """
-        XCTAssertNoDifference(generatedCode, referenceCode)
+        """)
     }
 
-    func testExport_with_assets_in_swift_package() {
+    func testExport_with_assets_in_swift_package() throws {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: false, assetsInSwiftPackage: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
-        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
+
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
 
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -190,8 +185,7 @@ final class XcodeColorExporterTests: XCTestCase {
         let content = result[0].data
         XCTAssertNotNil(content)
 
-        let generatedCode = String(data: content!, encoding: .utf8)
-        let referenceCode = """
+        try assertCodeEquals(content, """
         \(header)
 
         import UIKit
@@ -205,26 +199,24 @@ final class XcodeColorExporterTests: XCTestCase {
             static var colorPair2: UIColor { UIColor(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
         }
 
-        """
-        XCTAssertNoDifference(generatedCode, referenceCode)
+        """)
     }
-    
-    func testExport_swiftui() {
+
+    func testExport_swiftui() throws {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: true, colorSwiftURL: nil, swiftuiColorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
-        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
-        
+
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
         XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("Assets.xcassets/Colors/Contents.json"))
         XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("colorPair1.colorset/Contents.json"))
         XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("colorPair2.colorset/Contents.json"))
-        
+
         let content = result[0].data
-        XCTAssertNotNil(content)
-        
-        let generatedCode = String(data: content!, encoding: .utf8)
-        let referenceCode = """
+
+        try assertCodeEquals(content, """
         \(header)
 
         import SwiftUI
@@ -234,11 +226,51 @@ final class XcodeColorExporterTests: XCTestCase {
             static var colorPair2: Color { Color(#function) }
         }
 
-        """
-        XCTAssertNoDifference(generatedCode, referenceCode)
+        """)
+    }
+
+    func testExport_swiftui_and_assets_in_separate_bundle() throws {
+
+    }
+
+    func testExport_swiftui_and_assets_in_swift_package() throws {
+        let output = XcodeColorsOutput(
+            assetsColorsURL: colorsAssetCatalog,
+            assetsInMainBundle: false,
+            assetsInSwiftPackage: true,
+            colorSwiftURL: nil,
+            swiftuiColorSwiftURL: colorsFile
+        )
+        let exporter = XcodeColorExporter(output: output)
+
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+
+        XCTAssertEqual(result.count, 4)
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
+        XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("Assets.xcassets/Colors/Contents.json"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("colorPair1.colorset/Contents.json"))
+        XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("colorPair2.colorset/Contents.json"))
+
+        let content = result[0].data
+
+        try assertCodeEquals(content, """
+        \(header)
+
+        import SwiftUI
+
+        private class BundleProvider {
+            static let bundle = Bundle.module
+        }
+
+        public extension Color {
+            static var colorPair1: Color { Color(#function, in: BundleProvider.bundle) }
+            static var colorPair2: Color { Color(#function, in: BundleProvider.bundle) }
+        }
+
+        """)
     }
     
-    func testExport_withProvidesNamespace() {
+    func testExport_withProvidesNamespace() throws {
         let output = XcodeColorsOutput(
             assetsColorsURL: colorsAssetCatalog,
             assetsInMainBundle: true,
@@ -246,7 +278,8 @@ final class XcodeColorExporterTests: XCTestCase {
             groupUsingNamespace: true
         )
         let exporter = XcodeColorExporter(output: output)
-        let result = exporter.export(colorPairs: [colorPair3])
+
+        let result = try exporter.export(colorPairs: [colorPair3])
         
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -256,9 +289,8 @@ final class XcodeColorExporterTests: XCTestCase {
         
         let content = result[0].data
         XCTAssertNotNil(content)
-        
-        let generatedCode = String(data: content!, encoding: .utf8)
-        let referenceCode = """
+
+        try assertCodeEquals(content, """
         \(header)
 
         import UIKit
@@ -267,33 +299,36 @@ final class XcodeColorExporterTests: XCTestCase {
             static var backgroundPrimary: UIColor { UIColor(named: "background/primary")! }
         }
 
-        """
-        XCTAssertNoDifference(generatedCode, referenceCode)
+        """)
     }
     
-    func testExportWhenNameIsSwiftKeyword() {
+    func testExportWhenNameIsSwiftKeyword() throws {
         let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         
-        let result = exporter.export(colorPairs: [colorWithKeyword])
+        let result = try exporter.export(colorPairs: [colorWithKeyword])
+
         XCTAssertEqual(result.count, 1)
-        
         let content = result[0].data
         XCTAssertNotNil(content)
-        
-        let generatedCode = String(data: content!, encoding: .utf8)
-        let referenceCode = """
+
+        try assertCodeEquals(content, """
         \(header)
 
         import UIKit
 
         public extension UIColor {
             static var `class`: UIColor {
-                return UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+                UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
             }
         }
 
-        """
-        XCTAssertNoDifference(generatedCode, referenceCode)
+        """)
     }
+}
+
+fileprivate func assertCodeEquals(_ data: Data?, _ referenceCode: String) throws {
+    let data = try XCTUnwrap(data)
+    let generatedCode = String(data: data, encoding: .utf8)
+    XCTAssertNoDifference(generatedCode, referenceCode)
 }
