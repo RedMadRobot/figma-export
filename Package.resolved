@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/pointfreeco/swift-custom-dump",
         "state": {
           "branch": null,
-          "revision": "21f8fdbb3226e5e28a1a2fffac3e0f3deec34bf0",
-          "version": "0.2.1"
+          "revision": "51698ece74ecf31959d3fa81733f0a5363ef1b4e",
+          "version": "0.3.0"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/tuist/XcodeProj.git",
         "state": {
           "branch": null,
-          "revision": "64c4b956c1095dbba7a07107005342a25f1c5d6b",
-          "version": "8.5.0"
+          "revision": "c75c3acc25460195cfd203a04dde165395bf00e0",
+          "version": "8.7.1"
         }
       },
       {
