@@ -170,6 +170,8 @@ android:
   images:
     # Image file format: svg or png
     format: webp
+    # Where to place images relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export images` command
+    output: "figma-import-images"
     # Format options for webp format only
     # [optional] An array of asset scales that should be downloaded. The valid values are 1 (mdpi), 1.5 (hdpi), 2 (xhdpi), 3 (xxhdpi), 4 (xxxhdpi). The deafault value is [1, 1.5, 2, 3, 4].
     scales: [1, 2, 3]
