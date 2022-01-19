@@ -7,4 +7,6 @@ let header = """
 //
 //  Don’t edit this code manually to avoid runtime crashes
 //
+// swiftlint:disable all
+// swiftformat:disable all
 """

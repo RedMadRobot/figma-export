@@ -75,10 +75,10 @@ struct Params: Decodable {
         }
         
         struct Typography: Decodable {
-            let fontSwift: URL?
+            let stylesDirectory: URL?
             let swiftUIFontSwift: URL?
-            let generateLabels: Bool
-            let labelsDirectory: URL?
+            let generateComponents: Bool
+            let componentsDirectory: URL?
         }
         
         let xcodeprojPath: String

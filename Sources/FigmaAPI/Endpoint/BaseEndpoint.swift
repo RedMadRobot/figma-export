@@ -72,11 +72,12 @@ extension DecodingError: CustomNSError {
     }
 
     public var errorKey: String {
-        switch self {
-        case .keyNotFound(_, let context):
-            return context.codingPath[1].stringValue
-        default:
-            return ""
-        }
+        ""
+//        switch self {
+//        case .keyNotFound(_, let context):
+//            return context.codingPath[1].stringValue
+//        default:
+//            return ""
+//        }
     }
 }

@@ -48,12 +48,14 @@ extension FigmaExportCommand {
             
             var files: [FileContents] = []
             
-            // UIKit UIFont extension
-            if let fontExtensionURL = iosParams.typography.fontSwift {
-                files.append(contentsOf: try exporter.exportFonts(
-                    textStyles: textStyles,
-                    fontExtensionURL: fontExtensionURL
-                ))
+            // Styles
+            if let stylesDirectoryURL = iosParams.typography.stylesDirectory {
+                files.append(
+                    contentsOf: try exporter.exportStyles(
+                        textStyles,
+                        folderURL: stylesDirectoryURL
+                    )
+                )
             }
             
             // SwiftUI Font extension
@@ -64,14 +66,14 @@ extension FigmaExportCommand {
                 ))
             }
             
-            // UIKit Labels
-            if iosParams.typography.generateLabels, let labelsDirectory = iosParams.typography.labelsDirectory  {
-                // Label.swift
-                // LabelStyle.swift
-                files.append(contentsOf: try exporter.exportLabels(
-                    textStyles: textStyles,
-                    labelsDirectory: labelsDirectory
-                ))
+            // Components
+            if iosParams.typography.generateComponents,
+               let directory = iosParams.typography.componentsDirectory  {
+                files.append(
+                    contentsOf: try exporter.exportComponents(
+                        textStyles: textStyles, componentsDirectory: directory
+                    )
+                )
             }
             try fileWritter.write(files: files)
             
