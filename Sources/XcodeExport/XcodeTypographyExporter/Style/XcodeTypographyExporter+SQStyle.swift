@@ -15,7 +15,7 @@ extension XcodeTypographyExporter {
 
         let content = """
         \(header)
-        
+
         import UIKit
 
         protocol Style {
@@ -34,8 +34,10 @@ extension XcodeTypographyExporter {
 
         class SQStyle: NSObject {
 
-            var element: Style!
+            var element: Style?
             var font: UIFont?
+
+            var _textColor: UIColor?
 
             var lineHeight: CGFloat?
             var letterSpacing: CGFloat?
@@ -43,12 +45,21 @@ extension XcodeTypographyExporter {
             var strikethroughStyle: NSUnderlineStyle?
             var underlineStyle: NSUnderlineStyle?
 
+            var textAlignment: NSTextAlignment?
+            var lineBreakMode: NSLineBreakMode?
+
+            override init() {
+                super.init()
+            }
+
             init(element: Style) {
+                super.init()
+
                 self.element = element
             }
 
             func build() {
-                self.element.build()
+                self.element?.build()
             }
 
             func customFont(
@@ -63,7 +74,69 @@ extension XcodeTypographyExporter {
                 return font
             }
 
+
+            func convertStringToAttributed(
+                _ string: String,
+                defaultLineBreakMode: NSLineBreakMode? = nil,
+                defaultAlignment: NSTextAlignment? = nil
+            ) -> NSAttributedString {
+                self.convertStringToAttributed(
+                    NSAttributedString(string: string),
+                    defaultLineBreakMode: defaultLineBreakMode,
+                    defaultAlignment: defaultAlignment
+                )
+            }
+
+            func convertStringToAttributed(
+                _ string: NSAttributedString,
+                defaultLineBreakMode: NSLineBreakMode? = nil,
+                defaultAlignment: NSTextAlignment? = nil
+            ) -> NSAttributedString {
+                let paragraphStyle = NSMutableParagraphStyle()
+                if let lineHeight = self.lineHeight,
+                   let font = self.font {
+                    let lineHeightMultiple = ((100.0 * lineHeight) / font.lineHeight) / 100
+                    paragraphStyle.lineHeightMultiple = lineHeightMultiple
+                }
+
+                if let lineBreakMode = self.lineBreakMode ?? defaultLineBreakMode {
+                    paragraphStyle.lineBreakMode = lineBreakMode
+                }
+
+                if let alignment = self.textAlignment ?? defaultAlignment {
+                    paragraphStyle.alignment = alignment
+                }
+
+                let attributedString = NSMutableAttributedString(attributedString: string)
+
+                attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
+                                              value: paragraphStyle,
+                                              range: NSMakeRange(.zero, attributedString.length))
+
+                if let strikethroughStyle = self.strikethroughStyle {
+                    attributedString.addAttribute(NSAttributedString.Key.strikethroughStyle,
+                                                  value: strikethroughStyle.rawValue,
+                                                  range: NSMakeRange(.zero, attributedString.length))
+                }
+
+                if let underlineStyle = self.underlineStyle {
+                    attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
+                                                  value: underlineStyle.rawValue,
+                                                  range: NSMakeRange(.zero, attributedString.length))
+                }
+
+                if let letterSpacing = self.letterSpacing {
+                    attributedString.addAttribute(NSAttributedString.Key.kern,
+                                                  value: letterSpacing,
+                                                  range: NSMakeRange(.zero, attributedString.length))
+                }
+
+
+                return attributedString
+            }
+
         }
+
         """
 
         return try self.makeFileContents(

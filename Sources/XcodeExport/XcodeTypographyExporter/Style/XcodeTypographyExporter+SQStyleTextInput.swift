@@ -23,14 +23,14 @@ extension XcodeTypographyExporter {
 
         class \(String.textInputStyleName): SQStyle {
 
-            var _textColor: UIColor?
             var _placeholderColor: UIColor?
             var _cursorColor: UIColor?
-            var textAlignment: NSTextAlignment?
 
             \(stringsLabel.joined(separator: "\n\n"))
 
             \(self.alignments(forStyle: .textInputStyleName))
+
+            \(self.lineBreaks(forStyle: .textInputStyleName))
 
             \(self.strikethroughTypes(forStyle: .textInputStyleName))
 

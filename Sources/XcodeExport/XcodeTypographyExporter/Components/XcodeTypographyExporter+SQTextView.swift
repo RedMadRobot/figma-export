@@ -62,45 +62,18 @@ extension XcodeTypographyExporter {
             private func updateAttributedText() {
                 if self.isEditable { return }
 
-                let paragraphStyle = NSMutableParagraphStyle()
-                if let lineHeight = self.style.lineHeight,
-                   let font = self.style.font {
-                    let lineHeightMultiple = ((100.0 * lineHeight) / font.lineHeight) / 100
-                    paragraphStyle.lineHeightMultiple = lineHeightMultiple
-                }
-                paragraphStyle.alignment = self.style.textAlignment ?? self.textAlignment
-
-                let attributedString: NSMutableAttributedString
-                if let labelAttributedText = self.attributedText {
-                    attributedString = NSMutableAttributedString(attributedString: labelAttributedText)
+                let attributedString: NSAttributedString
+                if let textViewAttributedString = self.attributedText {
+                    attributedString = textViewAttributedString
                 } else {
-                    attributedString = NSMutableAttributedString(string: self.text ?? "")
+                    attributedString = NSAttributedString(string: self.text ?? "")
                 }
 
-                attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
-                                              value: paragraphStyle,
-                                              range: NSMakeRange(.zero, attributedString.length))
-
-                if let strikethroughStyle = self.style.strikethroughStyle {
-                    attributedString.addAttribute(NSAttributedString.Key.strikethroughStyle,
-                                                  value: strikethroughStyle.rawValue,
-                                                  range: NSMakeRange(.zero, attributedString.length))
-                }
-
-                if let underlineStyle = self.style.underlineStyle {
-                    attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
-                                                  value: underlineStyle.rawValue,
-                                                  range: NSMakeRange(.zero, attributedString.length))
-                }
-
-                if let letterSpacing = self.style.letterSpacing {
-                    attributedString.addAttribute(NSAttributedString.Key.kern,
-                                                  value: letterSpacing,
-                                                  range: NSMakeRange(.zero, attributedString.length))
-                }
-
-                self.attributedText = attributedString
-                invalidateIntrinsicContentSize()
+                self.attributedText = self.style.convertStringToAttributed(
+                    attributedString,
+                    defaultAlignment: self.textAlignment
+                )
+                self.invalidateIntrinsicContentSize()
             }
 
         }

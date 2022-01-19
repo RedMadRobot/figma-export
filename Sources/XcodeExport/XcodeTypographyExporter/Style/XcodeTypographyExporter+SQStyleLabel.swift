@@ -23,10 +23,6 @@ extension XcodeTypographyExporter {
 
         class \(String.labelStyleName): SQStyle {
 
-            var _textColor: UIColor?
-            var textAlignment: NSTextAlignment?
-            var lineBreakMode: NSLineBreakMode?
-
             \(stringsLabel.joined(separator: "\n\n"))
 
             \(self.alignments(forStyle: .labelStyleName))

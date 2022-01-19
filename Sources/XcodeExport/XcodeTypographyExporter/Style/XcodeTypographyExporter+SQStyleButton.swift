@@ -31,6 +31,10 @@ extension XcodeTypographyExporter {
 
             \(stringsButton.joined(separator: "\n\n"))
 
+            \(self.alignments(forStyle: .buttonStyleName))
+
+            \(self.lineBreaks(forStyle: .buttonStyleName))
+
             \(self.strikethroughTypes(forStyle: .buttonStyleName))
 
             \(self.underlineTypes(forStyle: .buttonStyleName))
