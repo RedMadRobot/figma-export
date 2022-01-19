@@ -90,13 +90,13 @@ ios:
 
   # Parameters for exporting typography
   typography:
-    # [optional] Absolute or relative path to swift file where to export UIKit fonts (UIFont extension).
-    fontSwift: "./Source/UIComponents/UIFont+extension.swift"
+    # [optional] Absolute or relative path to styles folder.
+    stylesDirectory: "./Source/UIKit/Styles"
     # [optional] Absolute or relative path to swift file where to export SwiftUI fonts (Font extension).
     swiftUIFontSwift: "./Source/View/Common/Font+extension.swift"
-    # Should FigmaExport generate UILabel for each text style (font)? E.g. HeaderLabel, BodyLabel, CaptionLabel
-    generateLabels: true
-    # Relative or absolute path to directory where to place UILabel for each text style (font) (Requred if generateLabels = true)
-    labelsDirectory: "./Source/UIComponents/"
+    # Should FigmaExport generate components for styling
+    generateComponents: true
+    # Relative or absolute path to directory where to place component files: labels, buttons, etc. (Requred if generateLabels = true)
+    componentsDirectory: "./Source/UIKit/Components"
 
 """#
