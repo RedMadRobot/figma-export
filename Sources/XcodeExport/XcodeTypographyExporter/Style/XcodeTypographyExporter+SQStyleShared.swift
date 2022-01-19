@@ -11,54 +11,54 @@ extension XcodeTypographyExporter {
 
     func alignments(forStyle style: String) -> String {
         """
-        @objc lazy var centrerAlignment: \(style) = {
-            self.textAlignment = .center
-            return self
-        }()
+            @objc lazy var centrerAlignment: \(style) = {
+                self.textAlignment = .center
+                return self
+            }()
 
-        @objc lazy var leftAlignment: \(style) = {
-            self.textAlignment = .left
-            return self
-        }()
+            @objc lazy var leftAlignment: \(style) = {
+                self.textAlignment = .left
+                return self
+            }()
 
-        @objc lazy var rightAlignment: \(style) = {
-            self.textAlignment = .right
-            return self
-        }()
+            @objc lazy var rightAlignment: \(style) = {
+                self.textAlignment = .right
+                return self
+            }()
         """
     }
 
     func lineBreaks(forStyle style: String) -> String {
         """
-        @objc lazy var lineBreakModeByWordWrapping: \(style) = {
-            self.lineBreakMode = .byWordWrapping
-            return self
-        }()
+            @objc lazy var lineBreakModeByWordWrapping: \(style) = {
+                self.lineBreakMode = .byWordWrapping
+                return self
+            }()
 
-        @objc lazy var lineBreakModeByCharWrapping: \(style) = {
-            self.lineBreakMode = .byCharWrapping
-            return self
-        }()
+            @objc lazy var lineBreakModeByCharWrapping: \(style) = {
+                self.lineBreakMode = .byCharWrapping
+                return self
+            }()
 
-        @objc lazy var lineBreakModeByClipping: \(style) = {
-            self.lineBreakMode = .byClipping
-            return self
-        }()
+            @objc lazy var lineBreakModeByClipping: \(style) = {
+                self.lineBreakMode = .byClipping
+                return self
+            }()
 
-        @objc lazy var lineBreakModeByTruncatingHead: \(style) = {
-            self.lineBreakMode = .byTruncatingHead
-            return self
-        }()
+            @objc lazy var lineBreakModeByTruncatingHead: \(style) = {
+                self.lineBreakMode = .byTruncatingHead
+                return self
+            }()
 
-        @objc lazy var lineBreakModeByTruncatingTail: \(style) = {
-            self.lineBreakMode = .byTruncatingTail
-            return self
-        }()
+            @objc lazy var lineBreakModeByTruncatingTail: \(style) = {
+                self.lineBreakMode = .byTruncatingTail
+                return self
+            }()
 
-        @objc lazy var lineBreakModeByTruncatingMiddle: \(style) = {
-            self.lineBreakMode = .byTruncatingMiddle
-            return self
-        }()
+            @objc lazy var lineBreakModeByTruncatingMiddle: \(style) = {
+                self.lineBreakMode = .byTruncatingMiddle
+                return self
+            }()
         """
     }
 
