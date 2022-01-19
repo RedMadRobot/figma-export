@@ -23,7 +23,7 @@ extension XcodeTypographyExporter {
 
         class \(String.attributedStringStyleName): SQStyle {
 
-            \(stringsLabel.joined(separator: "\n\n"))
+            \(stringsLabel.joined(separator: "\n\n    "))
 
             \(self.alignments(forStyle: .attributedStringStyleName))
 

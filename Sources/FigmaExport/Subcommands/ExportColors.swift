@@ -95,7 +95,10 @@ extension FigmaExportCommand {
             try fileWritter.write(files: files)
             
             do {
-                let xcodeProject = try XcodeProjectWritter(xcodeProjPath: iosParams.xcodeprojPath, target: iosParams.target)
+                let xcodeProject = try XcodeProjectWritter(
+                    xcodeProjPath: iosParams.xcodeprojPath,
+                    target: iosParams.target
+                )
                 try files.forEach { file in
                     if file.destination.file.pathExtension == "swift" {
                         try xcodeProject.addFileReferenceToXcodeProj(file.destination.url)

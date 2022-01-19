@@ -72,11 +72,11 @@ final public class XcodeTypographyExporter {
             "self.letterSpacing = \(textStyle.letterSpacing)"
         ]
         if let lineHeight = textStyle.lineHeight {
-            params.append("    self.lineHeight = \(lineHeight)")
+            params.append("self.lineHeight = \(lineHeight)")
         }
         return """
-            @objc lazy var \(textStyle.name): \(type) = {
-                \(params.joined(separator: "\n"))
+        @objc lazy var \(textStyle.name): \(type) = {
+                \(params.joined(separator: "\n        "))
                 return self
             }()
         """
