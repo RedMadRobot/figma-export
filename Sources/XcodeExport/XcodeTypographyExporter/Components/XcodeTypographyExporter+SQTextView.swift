@@ -11,25 +11,32 @@ import Stencil
 
 extension XcodeTypographyExporter {
 
-    func createSQLabel(folderURL: URL) throws -> FileContents {
+    func createSQTextView(folderURL: URL) throws -> FileContents {
         let content = """
         \(header)
 
         import UIKit
 
-        @IBDesignable class SQLabel: UILabel, UIStyle {
+        @IBDesignable class SQTextView: UITextView, UIStyle {
 
-            typealias Element = SQStyleLabel
+            typealias Element = SQStyleTextInput
 
-            private var _style: SQStyleLabel?
+            private var _style: SQStyleTextInput?
 
-            var style: SQStyleLabel {
+            var style: SQStyleTextInput {
                 if let style = self._style {
                     return style
                 }
-                let style = SQStyleLabel(element: self)
+                let style = SQStyleTextInput(element: self)
                 self._style = style
                 return style
+            }
+
+            @IBInspectable var styleFont: String = "" {
+                didSet {
+                    self.style.safeValue(forKey: self.styleFont)
+                    self.updateAttributedText()
+                }
             }
 
             override var text: String? {
@@ -40,31 +47,27 @@ extension XcodeTypographyExporter {
                 }
             }
 
-            @IBInspectable var styleFont: String = "" {
-                didSet {
-                    self.style.safeValue(forKey: self.styleFont)
-                }
-            }
-
             func build() {
-                self.font = self._style?.font
-                self.textColor = self._style?._textColor
+                self.font = self.style.font
+                self.textColor = self.style._textColor
+                self.tintColor = self.style._cursorColor
+
                 self.updateAttributedText()
             }
 
             func resetStyle() {
-                self._style = SQStyleLabel(element: self)
+                self._style = SQStyleTextInput(element: self)
             }
 
             private func updateAttributedText() {
+                if self.isEditable { return }
+
                 let paragraphStyle = NSMutableParagraphStyle()
                 if let lineHeight = self.style.lineHeight,
                    let font = self.style.font {
                     let lineHeightMultiple = ((100.0 * lineHeight) / font.lineHeight) / 100
                     paragraphStyle.lineHeightMultiple = lineHeightMultiple
                 }
-
-                paragraphStyle.lineBreakMode = self.style.lineBreakMode ?? self.lineBreakMode
                 paragraphStyle.alignment = self.style.textAlignment ?? self.textAlignment
 
                 let attributedString: NSMutableAttributedString
@@ -99,6 +102,7 @@ extension XcodeTypographyExporter {
                 self.attributedText = attributedString
                 invalidateIntrinsicContentSize()
             }
+
         }
 
         """
@@ -106,7 +110,9 @@ extension XcodeTypographyExporter {
         return try self.makeFileContents(
             data: content,
             directoryURL: folderURL,
-            fileName: "SQLabel.swift"
+            fileName: "SQTextView.swift"
         )
     }
 }
+
+

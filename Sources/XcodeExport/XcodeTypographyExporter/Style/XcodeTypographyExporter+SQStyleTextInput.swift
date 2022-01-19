@@ -11,34 +11,43 @@ import Stencil
 
 extension XcodeTypographyExporter {
 
-    func createSQStyleLabel(textStyles: [TextStyle], folderURL: URL) throws -> FileContents {
+    func createSQStyleTextInput(textStyles: [TextStyle], folderURL: URL) throws -> FileContents {
         let stringsLabel: [String] = textStyles.map {
-            self.convertStyle(fromTextStyle: $0, type: .labelStyleName)
+            self.convertStyle(fromTextStyle: $0, type: .textInputStyleName)
         }
-        
+
         let content = """
         \(header)
 
         import UIKit
 
-        class \(String.labelStyleName): SQStyle {
+        class \(String.textInputStyleName): SQStyle {
 
             var _textColor: UIColor?
+            var _placeholderColor: UIColor?
+            var _cursorColor: UIColor?
             var textAlignment: NSTextAlignment?
-            var lineBreakMode: NSLineBreakMode?
 
             \(stringsLabel.joined(separator: "\n\n"))
 
-            \(self.alignments(forStyle: .labelStyleName))
+            \(self.alignments(forStyle: .textInputStyleName))
 
-            \(self.lineBreaks(forStyle: .labelStyleName))
+            \(self.strikethroughTypes(forStyle: .textInputStyleName))
 
-            \(self.strikethroughTypes(forStyle: .labelStyleName))
+            \(self.underlineTypes(forStyle: .textInputStyleName))
 
-            \(self.underlineTypes(forStyle: .labelStyleName))
-
-            @objc lazy var textColor = { (color: UIColor?) -> \(String.labelStyleName) in
+            @objc lazy var textColor = { (color: UIColor?) -> \(String.textInputStyleName) in
                 self._textColor = color
+                return self
+            }
+
+            @objc lazy var placeholderColor = { (color: UIColor?) -> \(String.textInputStyleName) in
+                self._placeholderColor = color
+                return self
+            }
+
+            @objc lazy var cursorColor = { (color: UIColor?) -> \(String.textInputStyleName) in
+                self._cursorColor = color
                 return self
             }
 
@@ -58,7 +67,8 @@ extension XcodeTypographyExporter {
         return try self.makeFileContents(
             data: content,
             directoryURL: folderURL,
-            fileName: "SQStyleLabel.swift"
+            fileName: "SQStyleTextInput.swift"
         )
     }
 }
+
