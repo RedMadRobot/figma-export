@@ -11,4 +11,6 @@ extension String {
 
     static let labelStyleName = "SQStyleLabel"
     static let buttonStyleName = "SQStyleButton"
+    static let textInputStyleName = "SQStyleTextInput"
+    static let attributedStringStyleName = "SQStyleAttributedString"
 }

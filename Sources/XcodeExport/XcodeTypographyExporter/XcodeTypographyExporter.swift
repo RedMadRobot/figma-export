@@ -10,12 +10,14 @@ final public class XcodeTypographyExporter {
         return [
             try self.createSQStyle(folderURL: folderURL),
             try self.createSQStyleLabel(textStyles: textStyles, folderURL: folderURL),
-            try self.createSQStyleButton(textStyles: textStyles, folderURL: folderURL)
+            try self.createSQStyleButton(textStyles: textStyles, folderURL: folderURL),
+            try self.createSQStyleTextInput(textStyles: textStyles, folderURL: folderURL),
+            try self.createSQStyleAttributedString(textStyles: textStyles, folderURL: folderURL)
         ]
     }
 
     public func exportComponents(textStyles: [TextStyle], componentsDirectory: URL) throws -> [FileContents] {
-        let dict = textStyles.map { style -> [String: Any] in
+        let _ = textStyles.map { style -> [String: Any] in
             let type: String = style.name
             return [
                 "className": style.name.first!.uppercased() + style.name.dropFirst(),
@@ -30,7 +32,8 @@ final public class XcodeTypographyExporter {
         
         return [
             try self.createSQLabel(folderURL: componentsDirectory),
-            try self.createSQButton(folderURL: componentsDirectory)
+            try self.createSQButton(folderURL: componentsDirectory),
+            try self.createSQTextView(folderURL: componentsDirectory)
         ]
     }
 
@@ -69,11 +72,11 @@ final public class XcodeTypographyExporter {
             "self.letterSpacing = \(textStyle.letterSpacing)"
         ]
         if let lineHeight = textStyle.lineHeight {
-            params.append("self.lineHeight = \(lineHeight)")
+            params.append("    self.lineHeight = \(lineHeight)")
         }
         return """
             @objc lazy var \(textStyle.name): \(type) = {
-                \(params.joined(separator: "\n         "))
+                \(params.joined(separator: "\n"))
                 return self
             }()
         """

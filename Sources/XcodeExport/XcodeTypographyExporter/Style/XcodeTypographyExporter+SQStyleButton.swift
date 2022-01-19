@@ -29,7 +29,11 @@ extension XcodeTypographyExporter {
             private var borderColors = [UIControl.State: UIColor]()
             private var borderWidths = [UIControl.State: CGFloat]()
 
-            \(stringsButton.joined(separator: "\n"))
+            \(stringsButton.joined(separator: "\n\n"))
+
+            \(self.alignments(forStyle: .buttonStyleName))
+
+            \(self.lineBreaks(forStyle: .buttonStyleName))
 
             \(self.strikethroughTypes(forStyle: .buttonStyleName))
 

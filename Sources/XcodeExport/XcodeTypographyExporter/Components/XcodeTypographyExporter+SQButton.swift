@@ -90,44 +90,17 @@ extension XcodeTypographyExporter {
             }
 
             private func updateAttributedText() {
-                let paragraphStyle = NSMutableParagraphStyle()
-                if let lineHeight = self.style.lineHeight,
-                   let font = self.style.font {
-                    let lineHeightMultiple = ((100.0 * lineHeight) / font.lineHeight) / 100
-                    paragraphStyle.lineHeightMultiple = lineHeightMultiple
-                }
-
-                let attributedString: NSMutableAttributedString
-                if let labelAttributedText = self.titleLabel?.attributedText {
-                    attributedString = NSMutableAttributedString(attributedString: labelAttributedText)
+                let attributedString: NSAttributedString
+                if let buttonAttributedText = self.titleLabel?.attributedText {
+                    attributedString = buttonAttributedText
                 } else {
-                    attributedString = NSMutableAttributedString(string: self.titleLabel?.text ?? "")
+                    attributedString = NSAttributedString(string: self.titleLabel?.text ?? "")
                 }
 
-                attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
-                                              value: paragraphStyle,
-                                              range: NSMakeRange(.zero, attributedString.length))
-
-                if let strikethroughStyle = self.style.strikethroughStyle {
-                    attributedString.addAttribute(NSAttributedString.Key.strikethroughStyle,
-                                                  value: strikethroughStyle.rawValue,
-                                                  range: NSMakeRange(.zero, attributedString.length))
-                }
-
-                if let underlineStyle = self.style.underlineStyle {
-                    attributedString.addAttribute(NSAttributedString.Key.underlineStyle,
-                                                  value: underlineStyle.rawValue,
-                                                  range: NSMakeRange(.zero, attributedString.length))
-                }
-
-                if let letterSpacing = self.style.letterSpacing {
-                    attributedString.addAttribute(NSAttributedString.Key.kern,
-                                                  value: letterSpacing,
-                                                  range: NSMakeRange(.zero, attributedString.length))
-                }
-
-                self.titleLabel?.attributedText = attributedString
-                invalidateIntrinsicContentSize()
+                self.titleLabel?.attributedText = self.style.convertStringToAttributed(
+                    attributedString
+                )
+                self.invalidateIntrinsicContentSize()
             }
 
         }
