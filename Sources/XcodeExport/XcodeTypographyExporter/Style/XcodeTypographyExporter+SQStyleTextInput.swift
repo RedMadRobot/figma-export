@@ -26,7 +26,7 @@ extension XcodeTypographyExporter {
             var _placeholderColor: UIColor?
             var _cursorColor: UIColor?
 
-            \(stringsLabel.joined(separator: "\n\n"))
+            \(stringsLabel.joined(separator: "\n\n    "))
 
             \(self.alignments(forStyle: .textInputStyleName))
 
