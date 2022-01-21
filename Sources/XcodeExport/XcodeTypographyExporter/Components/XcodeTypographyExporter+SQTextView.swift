@@ -19,15 +19,15 @@ extension XcodeTypographyExporter {
 
         @IBDesignable class SQTextView: UITextView, UIStyle {
 
-            typealias Element = SQStyleTextInput
+            typealias Element = \(String.textInputStyleName)
 
-            private var _style: SQStyleTextInput?
+            private var _style: Element?
 
-            var style: SQStyleTextInput {
+            var style: Element {
                 if let style = self._style {
                     return style
                 }
-                let style = SQStyleTextInput(element: self)
+                let style = Element(element: self)
                 self._style = style
                 return style
             }
@@ -41,9 +41,7 @@ extension XcodeTypographyExporter {
 
             override var text: String? {
                 didSet {
-                    if self._style != nil {
-                        self.updateAttributedText()
-                    }
+                    self.updateAttributedText()
                 }
             }
 
@@ -56,7 +54,7 @@ extension XcodeTypographyExporter {
             }
 
             func resetStyle() {
-                self._style = SQStyleTextInput(element: self)
+                self._style = Element(element: self)
             }
 
             private func updateAttributedText() {

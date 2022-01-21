@@ -28,6 +28,8 @@ ios:
   xcodeprojPath: "./Example.xcodeproj"
   # Xcode Target containing resources and corresponding swift code
   target: "UIComponents"
+  # Optional, for project main group name
+  # xcodeprojMainGroupName: "Project"
   # Absolute or relative path to the Assets.xcassets directory
   xcassetsPath: "./Resources/Assets.xcassets"
   # Is Assets.xcassets located in the main bundle?

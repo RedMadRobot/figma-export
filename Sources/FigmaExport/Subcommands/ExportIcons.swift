@@ -95,6 +95,7 @@ extension FigmaExportCommand {
             do {
                 let xcodeProject = try XcodeProjectWritter(
                     xcodeProjPath: ios.xcodeprojPath,
+                    xcodeprojMainGroupName: ios.xcodeprojMainGroupName,
                     target: ios.target
                 )
                 try localFiles.forEach { file in

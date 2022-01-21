@@ -23,10 +23,16 @@ extension XcodeTypographyExporter {
 
         class \(String.textInputStyleName): SQStyle {
 
-            var _placeholderColor: UIColor?
             var _cursorColor: UIColor?
+            var _textInsets: UIEdgeInsets = .zero
 
-            \(stringsLabel.joined(separator: "\n\n"))
+            private var textColors = [UIControl.State: UIColor]()
+            private var borderColors = [UIControl.State: UIColor]()
+            private var borderWidths = [UIControl.State: CGFloat]()
+
+            var _placeholderStyle: \(String.attributedStringStyleName)?
+
+        \(stringsLabel.joined(separator: "\n\n    "))
 
             \(self.alignments(forStyle: .textInputStyleName))
 
@@ -41,14 +47,53 @@ extension XcodeTypographyExporter {
                 return self
             }
 
-            @objc lazy var placeholderColor = { (color: UIColor?) -> \(String.textInputStyleName) in
-                self._placeholderColor = color
+            @objc lazy var placeholderStyle = { (style: \(String.attributedStringStyleName) -> \(String.textInputStyleName) in
+                self._placeholderStyle = style
                 return self
             }
 
             @objc lazy var cursorColor = { (color: UIColor?) -> \(String.textInputStyleName) in
                 self._cursorColor = color
                 return self
+            }
+
+            @objc lazy var textInsets = { (insets: UIEdgeInsets) -> \(String.textInputStyleName) in
+                self._textInsets = insets
+                return self
+            }
+
+            @discardableResult
+            func textColor(_ color: UIColor?, forState state: UIControl.State = .normal) -> Self {
+                if let textColor = color {
+                    self.textColors[state] = textColor
+                }
+                return self
+            }
+
+            func textColor(forState state: UIControl.State = .normal) -> UIColor? {
+                self.textColors[state] ?? self.textColors[.normal]
+            }
+
+            @discardableResult
+            func borderColor(_ color: UIColor?, forState state: UIControl.State = .normal) -> Self {
+                if let borderColor = color {
+                    self.borderColors[state] = borderColor
+                }
+                return self
+            }
+
+            func borderColor(forState state: UIControl.State = .normal) -> UIColor? {
+                self.borderColors[state] ?? self.borderColors[.normal]
+            }
+
+            @discardableResult
+            func borderWidth(_ width: CGFloat, forState state: UIControl.State = .normal) -> Self {
+                self.borderWidths[state] = width
+                return self
+            }
+
+            func borerWidth(forState state: UIControl.State = .normal) -> CGFloat {
+                (self.borderWidths[state] ?? self.borderWidths[.normal]) ?? .zero
             }
 
             func safeValue(forKey key: String) {

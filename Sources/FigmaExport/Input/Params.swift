@@ -82,6 +82,7 @@ struct Params: Decodable {
         }
         
         let xcodeprojPath: String
+        let xcodeprojMainGroupName: String?
         let target: String
         let xcassetsPathImages: URL
         let xcassetsPathColors: URL

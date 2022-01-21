@@ -33,6 +33,7 @@ final public class XcodeTypographyExporter {
         return [
             try self.createSQLabel(folderURL: componentsDirectory),
             try self.createSQButton(folderURL: componentsDirectory),
+            try self.createSQTextField(folderURL: componentsDirectory),
             try self.createSQTextView(folderURL: componentsDirectory)
         ]
     }
@@ -75,7 +76,7 @@ final public class XcodeTypographyExporter {
             params.append("self.lineHeight = \(lineHeight)")
         }
         return """
-        @objc lazy var \(textStyle.name): \(type) = {
+            @objc lazy var \(textStyle.name): \(type) = {
                 \(params.joined(separator: "\n        "))
                 return self
             }()
