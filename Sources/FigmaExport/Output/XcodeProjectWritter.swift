@@ -16,16 +16,21 @@ enum XcodeProjectWritterError: LocalizedError {
 final class XcodeProjectWritter {
     
     let xcodeprojPath: Path
-    let rootPath = Path("./")
+    let rootPath: Path
     let xcodeproj: XcodeProj
     let pbxproj: PBXProj
     let myTarget: PBXTarget
     let project: PBXProject
     
-    init(xcodeProjPath: String, target: String) throws {
-        xcodeprojPath = Path(xcodeProjPath)
+    init(xcodeProjPath: String, xcodeprojMainGroupName: String?, target: String) throws {
+        xcodeprojPath = Path(xcodeProjPath).absolute()
         xcodeproj = try XcodeProj(path: xcodeprojPath)
         pbxproj = xcodeproj.pbxproj
+        if let groupName = xcodeprojMainGroupName {
+            rootPath = Path("./\(groupName)")
+        } else {
+            rootPath = Path("./")
+        }
         if let target = pbxproj.targets(named: target).first {
             myTarget = target
         } else {
@@ -45,7 +50,7 @@ final class XcodeProjectWritter {
         while currentGroup != nil {
             if groups.isEmpty { break }
             let group = currentGroup?.children.first(where: { group -> Bool in
-                group.path == groups.first
+                group.path == groups.first || group.name == groups.first
             })
             if let group = group {
                 prevGroup = currentGroup
@@ -60,7 +65,7 @@ final class XcodeProjectWritter {
         }
         
         guard currentGroup?.file(named: url.lastPathComponent) == nil else { return }
-        
+
         let newFile = try currentGroup?.addFile(
             at: Path(url.path),
             sourceTree: .group,

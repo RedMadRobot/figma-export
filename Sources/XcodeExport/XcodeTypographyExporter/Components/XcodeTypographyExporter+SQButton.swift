@@ -19,15 +19,15 @@ extension XcodeTypographyExporter {
 
         @IBDesignable class SQButton: UIButton, UIStyle {
 
-            typealias Element = SQStyleButton
+            typealias Element = \(String.buttonStyleName)
 
-            private var _style: SQStyleButton?
+            internal var _style: Element?
 
-            var style: SQStyleButton {
+            var style: Element {
                 if let style = self._style {
                     return style
                 }
-                let style = SQStyleButton(element: self)
+                let style = Element(element: self)
                 self._style = style
                 return style
             }
@@ -77,7 +77,7 @@ extension XcodeTypographyExporter {
             }
 
             func resetStyle() {
-                self._style = SQStyleButton(element: self)
+                self._style = Element(element: self)
             }
 
             func updateTintColor() {
@@ -104,6 +104,7 @@ extension XcodeTypographyExporter {
             }
 
         }
+
 
         extension UIImage {
 

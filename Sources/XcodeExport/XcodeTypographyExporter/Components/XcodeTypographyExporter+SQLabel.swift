@@ -19,41 +19,40 @@ extension XcodeTypographyExporter {
 
         @IBDesignable class SQLabel: UILabel, UIStyle {
 
-            typealias Element = SQStyleLabel
+            typealias Element = \(String.labelStyleName)
 
-            private var _style: SQStyleLabel?
+            private var _style: Element?
 
-            var style: SQStyleLabel {
+            var style: Element {
                 if let style = self._style {
                     return style
                 }
-                let style = SQStyleLabel(element: self)
+                let style = Element(element: self)
                 self._style = style
                 return style
             }
 
             override var text: String? {
                 didSet {
-                    if self._style != nil {
-                        self.updateAttributedText()
-                    }
+                    self.updateAttributedText()
                 }
             }
 
             @IBInspectable var styleFont: String = "" {
                 didSet {
                     self.style.safeValue(forKey: self.styleFont)
+                    self.updateAttributedText()
                 }
             }
 
             func build() {
-                self.font = self._style?.font
-                self.textColor = self._style?._textColor
+                self.font = self.style?.font
+                self.textColor = self.style?._textColor
                 self.updateAttributedText()
             }
 
             func resetStyle() {
-                self._style = SQStyleLabel(element: self)
+                self._style = Element(element: self)
             }
 
             private func updateAttributedText() {
