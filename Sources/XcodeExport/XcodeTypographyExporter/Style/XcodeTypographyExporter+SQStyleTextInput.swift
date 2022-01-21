@@ -32,7 +32,7 @@ extension XcodeTypographyExporter {
 
             var _placeholderStyle: \(String.attributedStringStyleName)?
 
-        \(stringsLabel.joined(separator: "\n\n    "))
+            \(stringsLabel.joined(separator: "\n\n    "))
 
             \(self.alignments(forStyle: .textInputStyleName))
 
@@ -47,7 +47,7 @@ extension XcodeTypographyExporter {
                 return self
             }
 
-            @objc lazy var placeholderStyle = { (style: \(String.attributedStringStyleName) -> \(String.textInputStyleName) in
+            @objc lazy var placeholderStyle = { (style: \(String.attributedStringStyleName)) -> \(String.textInputStyleName) in
                 self._placeholderStyle = style
                 return self
             }
