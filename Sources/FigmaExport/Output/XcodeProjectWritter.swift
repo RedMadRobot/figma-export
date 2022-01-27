@@ -70,8 +70,9 @@ final class XcodeProjectWritter {
             at: Path(url.path),
             sourceTree: .group,
             sourceRoot: rootPath,
-            override: false,
-            validatePresence: true)
+            override: true,
+            validatePresence: true
+        )
         newFile?.fileEncoding = 4 // UTF-8
         newFile?.name = url.lastPathComponent
         
