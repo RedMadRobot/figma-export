@@ -60,6 +60,15 @@ extension XcodeTypographyExporter {
                 }
             }
 
+            override func setTitle(_ title: String?, for state: UIControl.State) {
+                super.setTitle(title, for: state)
+
+                self.setAttributedTitle(
+                    self.style.convertStringToAttributed(title ?? ""),
+                    for: state
+                )
+            }
+
             func build() {
                 let controlStates: [UIControl.State] = [.normal, .highlighted, .selected, .disabled]
 
