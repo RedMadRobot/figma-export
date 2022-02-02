@@ -45,7 +45,7 @@ let package = Package(
         // Exports resources to Xcode project
         .target(
             name: "XcodeExport",
-            dependencies: ["FigmaExportCore", "Stencil"]
+            dependencies: ["FigmaExportCore", .product(name: "Stencil", package: "Stencil")]
         ),
 
         // Exports resources to Android project

@@ -176,4 +176,23 @@ final class AssetsProcessorTests: XCTestCase {
         
         XCTAssertThrowsError(try processor.process(light: lights, dark: darks).get())
     }
+    
+    func testProcess() throws {
+        let images = [
+            ImagePack(image: Image(name: "icons / 24 / arrow back", url: URL(string: "/")!, format: "png"), platform: .android)
+        ]
+        
+        let processor = ImagesProcessor(
+            platform: .android,
+            nameValidateRegexp: #"^icons _ (\d\d) _ ([A-Za-z0-9 /_-]+)$"#,
+            nameReplaceRegexp: #"n2_icon_$2_$1"#,
+            nameStyle: .snakeCase
+        )
+        
+        let result = processor.process(assets: images)
+        
+        let extracted = try result.get()
+        
+        XCTAssertEqual(extracted[0].name, "n2_icon_arrow_back_24")
+    }
 }
