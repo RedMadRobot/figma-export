@@ -102,7 +102,9 @@ public extension String {
     ///
     /// - Returns: A snake case copy of the string.
     func snakeCased() -> String {
-        if self.isSnakeCase { return self }
-        return lowercasedStrings().map{ $0.lowercased() }.joined(separator: "_")
+        guard !self.isSnakeCase else { return self }
+        let result = self.split(separator: " ").joined(separator: "_")
+        guard !result.isSnakeCase else { return result }
+        return result.lowercasedStrings().map{ $0.lowercased() }.joined(separator: "_")
     }
 }
