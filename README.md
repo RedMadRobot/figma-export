@@ -405,8 +405,8 @@ Default Stencil templates for iOS located here: `./Sources/XcodeExport/Resources
 Custom Stencil templates must have the following names:
 - UIColor+extension.swift.stencil for UIKit colors
 - Color+extension.swift.stencil for SwiftUI colors
-
-> ⚠️ Only iOS color templates supported right now.
+- UIImage+extension.swift.stencil for UIKit images
+- Image+extension.swift.stencil for SwiftUI images
 
 ##### Android
 
@@ -416,8 +416,6 @@ Defaul Stencil templates for Android located here: `./Sources/AndroidExport/Reso
 Custom Stencil templates must have the following names:
 - colors.xml.swift
 - Colors.kt.stencil
-
-> ⚠️ Only Android color templates supported right now.
 
 ### Exporting Typography
 

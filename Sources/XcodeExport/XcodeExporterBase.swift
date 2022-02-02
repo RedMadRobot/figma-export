@@ -1,3 +1,8 @@
+import FigmaExportCore
+import Foundation
+import Stencil
+import PathKit
+
 public class XcodeExporterBase {
     
     private let declarationKeywords = ["associatedtype", "class", "deinit", "enum", "extension", "fileprivate", "func", "import", "init", "inout", "internal", "let", "open", "operator", "private", "precedencegroup", "protocol", "public", "rethrows", "static", "struct", "subscript", "typealias", "var"]
@@ -17,5 +22,27 @@ public class XcodeExporterBase {
         } else {
             return name
         }
+    }
+    
+    func makeEnvironment(templatesPath: URL?, trimBehavior: TrimBehavior) -> Environment {
+        let loader: FileSystemLoader
+        if let templateURL = templatesPath {
+            loader = FileSystemLoader(paths: [Path(templateURL.path)])
+        } else {
+            loader = FileSystemLoader(paths: [Path(Bundle.module.resourcePath! + "/Resources")])
+        }
+        var environment = Environment(loader: loader)
+        environment.trimBehavior = trimBehavior    
+        return environment
+    }
+    
+    func makeFileContents(for string: String, url: URL) throws -> FileContents? {
+        let fileURL = URL(string: url.lastPathComponent)!
+        let directoryURL = url.deletingLastPathComponent()
+
+        return FileContents(
+            destination: Destination(directory: directoryURL, file: fileURL),
+            data: string.data(using: .utf8)!
+        )
     }
 }

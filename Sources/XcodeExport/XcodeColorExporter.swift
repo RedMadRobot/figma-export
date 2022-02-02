@@ -64,7 +64,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
             "colors": colors,
         ]
 
-        let env = makeEnvironment(trimBehavior: .smart)
+        let env = makeEnvironment(templatesPath: output.templatesPath, trimBehavior: .smart)
         return try env.renderTemplate(name: "Color+extension.swift.stencil", context: context)
     }
 
@@ -116,30 +116,11 @@ final public class XcodeColorExporter: XcodeExporterBase {
             "colors": colors,
         ]
         
-        let env = makeEnvironment(trimBehavior: TrimBehavior(leading: .none, trailing: .whitespaceAndOneNewLine))
-        return try env.renderTemplate(name: "UIColor+extension.swift.stencil", context: context)
-    }
-    
-    private func makeEnvironment(trimBehavior: TrimBehavior) -> Environment {
-        let loader: FileSystemLoader
-        if let templateURL = output.templatesPath {
-            loader = FileSystemLoader(paths: [Path(templateURL.path)])
-        } else {
-            loader = FileSystemLoader(paths: [Path(Bundle.module.resourcePath! + "/Resources")])
-        }
-        var environment = Environment(loader: loader)
-        environment.trimBehavior = trimBehavior
-        return environment
-    }
-
-    private func makeFileContents(for string: String, url: URL) throws -> FileContents? {
-        let fileURL = URL(string: url.lastPathComponent)!
-        let directoryURL = url.deletingLastPathComponent()
-
-        return FileContents(
-            destination: Destination(directory: directoryURL, file: fileURL),
-            data: string.data(using: .utf8)!
+        let env = makeEnvironment(
+            templatesPath: output.templatesPath,
+            trimBehavior: TrimBehavior(leading: .none, trailing: .whitespaceAndOneNewLine)
         )
+        return try env.renderTemplate(name: "UIColor+extension.swift.stencil", context: context)
     }
 
     private func makeXcodeEmptyFileContents(directoryURL: URL) -> FileContents {
