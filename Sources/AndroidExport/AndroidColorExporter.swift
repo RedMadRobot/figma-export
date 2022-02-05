@@ -3,12 +3,13 @@ import FigmaExportCore
 import Stencil
 import PathKit
 
-final public class AndroidColorExporter {
+final public class AndroidColorExporter: AndroidExporter {
 
     private let output: AndroidOutput
 
     public init(output: AndroidOutput) {
         self.output = output
+        super.init(templatesPath: output.templatesPath)
     }
     
     public func export(colorPairs: [AssetPair<Color>]) throws -> [FileContents] {
@@ -93,18 +94,6 @@ final public class AndroidColorExporter {
         
         let destination = Destination(directory: outputDirectory, file: fileURL)
         return FileContents(destination: destination, data: string.data(using: .utf8)!)
-    }
-    
-    private func makeEnvironment(trimBehavior: TrimBehavior) -> Environment {
-        let loader: FileSystemLoader
-        if let templateURL = output.templatesPath {
-            loader = FileSystemLoader(paths: [Path(templateURL.path)])
-        } else {
-            loader = FileSystemLoader(paths: [Path(Bundle.module.resourcePath! + "/Resources")])
-        }
-        var environment = Environment(loader: loader)
-        environment.trimBehavior = trimBehavior
-        return environment
     }
 }
 

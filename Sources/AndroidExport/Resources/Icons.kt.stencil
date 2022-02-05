@@ -1,0 +1,27 @@
+package {{package}}
+
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import {{xmlResourcePackage}}.R
+
+object Icons
+{% for icon in icons %}
+@Composable
+fun Icons.{{ icon.functionName }}(
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.{{ icon.name }}),
+        contentDescription = contentDescription,
+        modifier = modifier,
+        tint = tint
+    )
+}
+{% endfor %}

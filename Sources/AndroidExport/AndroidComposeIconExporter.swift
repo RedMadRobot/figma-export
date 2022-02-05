@@ -1,65 +1,43 @@
 import Foundation
 import FigmaExportCore
+import Stencil
 
-final public class AndroidComposeIconExporter {
+final public class AndroidComposeIconExporter: AndroidExporter {
 
     private let output: AndroidOutput
 
     public init(output: AndroidOutput) {
         self.output = output
+        super.init(templatesPath: output.templatesPath)
     }
 
-    public func exportIcons(iconNames: [String]) throws -> [FileContents] {
-        var files: [FileContents] = []
-        
-        if let composeOutputDirectory = output.composeOutputDirectory, let packageName = output.packageName, let xmlResourcePackage = output.xmlResourcePackage {
-            files.append(makeComposeIconsFile(iconNames: iconNames, outputDirectory: composeOutputDirectory, package: packageName, xmlResourcePackage: xmlResourcePackage))
+    public func exportIcons(iconNames: [String]) throws -> FileContents? {
+        guard
+            let outputDirectory = output.composeOutputDirectory,
+            let packageName = output.packageName,
+            let package = output.xmlResourcePackage
+        else {
+            return nil
         }
-        
-        return files
+        let fileURL = URL(string: "Icons.kt")!
+        let contents = try makeComposeIconsContents(iconNames, package: packageName, xmlResourcePackage: package)
+        return try makeFileContents(for: contents, directory: outputDirectory, file: fileURL)
     }
     
-    private func makeComposeIconsFile(iconNames: [String], outputDirectory: URL, package: String, xmlResourcePackage: String) -> FileContents {
-        let fileURL = URL(string: "Icons.kt")!
-        
-        let fileLines: [String] = iconNames.map {
-            let functionName = $0.camelCased()
-            return """
-            @Composable
-            fun Icons.\(functionName)(
-                contentDescription: String?,
-                modifier: Modifier = Modifier,
-                tint: Color = Color.Unspecified
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.\($0)),
-                    contentDescription = contentDescription,
-                    modifier = modifier,
-                    tint = tint
-                )
-            }
-            """
+    private func makeComposeIconsContents(
+        _ iconNames: [String],
+        package: String,
+        xmlResourcePackage: String
+    ) throws -> String {
+        let icons: [[String: String]] = iconNames.map {
+            ["name": $0, "functionName": $0.camelCased()]
         }
-        let contents = """
-        package \(package)
-        
-        import androidx.compose.material.Icon
-        import androidx.compose.material.LocalContentAlpha
-        import androidx.compose.material.LocalContentColor
-        import androidx.compose.runtime.Composable
-        import androidx.compose.ui.Modifier
-        import androidx.compose.ui.graphics.Color
-        import androidx.compose.ui.res.painterResource
-        import \(xmlResourcePackage).R
-
-        object Icons
-        
-        \(fileLines.joined(separator: "\n\n"))
-        
-        """
-        let data = contents.data(using: .utf8)!
-        
-        let destination = Destination(directory: outputDirectory, file: fileURL)
-        return FileContents(destination: destination, data: data)
+        let context: [String: Any] = [
+            "package": package,
+            "xmlResourcePackage": xmlResourcePackage,
+            "icons": icons
+        ]
+        let env = makeEnvironment(trimBehavior: .none)
+        return try env.renderTemplate(name: "Icons.kt.stencil", context: context)
     }
 }

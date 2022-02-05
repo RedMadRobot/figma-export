@@ -1,6 +1,7 @@
 import XCTest
 import AndroidExport
 import FigmaExportCore
+import CustomDump
 
 final class AndroidComposeIconExporterTests: XCTestCase {
     
@@ -24,12 +25,11 @@ final class AndroidComposeIconExporterTests: XCTestCase {
     func testExport() throws {
         let exporter = AndroidComposeIconExporter(output: output)
 
-        let result = try exporter.exportIcons(iconNames: [iconName1, iconName2])
-        XCTAssertEqual(result.count, 1)
+        let result = try XCTUnwrap(exporter.exportIcons(iconNames: [iconName1, iconName2]))
         
-        XCTAssertEqual(result[0].destination.directory.lastPathComponent, AndroidComposeIconExporterTests.packageName)
-        XCTAssertEqual(result[0].destination.file.absoluteString, "Icons.kt")
-        let generatedComposedCode = String(data: try XCTUnwrap(result[0].data), encoding: .utf8)
+        XCTAssertEqual(result.destination.directory.lastPathComponent, AndroidComposeIconExporterTests.packageName)
+        XCTAssertEqual(result.destination.file.absoluteString, "Icons.kt")
+        let generatedComposedCode = String(data: try XCTUnwrap(result.data), encoding: .utf8)
         let referenceComposeCode = """
         package \(AndroidComposeIconExporterTests.packageName)
         
@@ -73,6 +73,6 @@ final class AndroidComposeIconExporterTests: XCTestCase {
         }
         
         """
-        XCTAssertEqual(generatedComposedCode, referenceComposeCode)
+        XCTAssertNoDifference(generatedComposedCode, referenceComposeCode)
     }
 }
