@@ -47,10 +47,7 @@ final public class AndroidColorExporter: AndroidExporter {
         let directoryURL = output.xmlOutputDirectory.appendingPathComponent(dark ? "values-night" : "values")
         let fileURL = URL(string: "colors.xml")!
         
-        return FileContents(
-            destination: Destination(directory: directoryURL, file: fileURL),
-            data: contents.data(using: .utf8)!
-        )
+        return try makeFileContents(for: contents, directory: directoryURL, file: fileURL)
     }
     
     private func makeColorsContents(_ colorPairs: [AssetPair<Color>], dark: Bool) throws -> String {
@@ -74,8 +71,6 @@ final public class AndroidColorExporter: AndroidExporter {
         xmlResourcePackage: String,
         outputDirectory: URL
     ) throws -> FileContents {
-        let fileURL = URL(string: "Colors.kt")!
-
         let colors: [[String: String]] = colorPairs.map {
             [
                 "functionName": $0.light.name.lowerCamelCased(),
@@ -92,8 +87,8 @@ final public class AndroidColorExporter: AndroidExporter {
         let env = makeEnvironment(trimBehavior: .smart)
         let string = try env.renderTemplate(name: "Colors.kt.stencil", context: context)
         
-        let destination = Destination(directory: outputDirectory, file: fileURL)
-        return FileContents(destination: destination, data: string.data(using: .utf8)!)
+        let fileURL = URL(string: "Colors.kt")!
+        return try makeFileContents(for: string, directory: outputDirectory, file: fileURL)
     }
 }
 

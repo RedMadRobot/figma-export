@@ -23,7 +23,7 @@ public class AndroidExporter {
         return environment
     }
     
-    func makeFileContents(for string: String, directory: URL, file: URL) throws -> FileContents? {
+    func makeFileContents(for string: String, directory: URL, file: URL) throws -> FileContents {
         FileContents(
             destination: Destination(directory: directory, file: file),
             data: string.data(using: .utf8)!

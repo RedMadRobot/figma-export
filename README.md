@@ -414,8 +414,11 @@ If you want to modify structure of the generated `.xml`, `.kt` files you should 
 
 Defaul Stencil templates for Android located here: `./Sources/AndroidExport/Resources`
 Custom Stencil templates must have the following names:
-- colors.xml.swift
+- colors.xml
 - Colors.kt.stencil
+- Icons.kt.stencil
+- typography.xml
+- Typography.kt
 
 ### Exporting Typography
 

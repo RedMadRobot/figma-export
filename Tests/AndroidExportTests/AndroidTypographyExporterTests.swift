@@ -1,6 +1,7 @@
 import XCTest
 import AndroidExport
 import FigmaExportCore
+import CustomDump
 
 final class AndroidTypographyExporterTests: XCTestCase {
     
@@ -48,7 +49,7 @@ final class AndroidTypographyExporterTests: XCTestCase {
             </style>
         </resources>
         """
-        XCTAssertEqual(generatedCode, referenceCode)
+        XCTAssertNoDifference(generatedCode, referenceCode)
         
         XCTAssertEqual(result[1].destination.directory.lastPathComponent, AndroidTypographyExporterTests.packageName)
         XCTAssertEqual(result[1].destination.file.absoluteString, "Typography.kt")
@@ -78,6 +79,6 @@ final class AndroidTypographyExporterTests: XCTestCase {
         }
         
         """
-        XCTAssertEqual(generatedComposedCode, referenceComposeCode)
+        XCTAssertNoDifference(generatedComposedCode, referenceComposeCode)
     }
 }
