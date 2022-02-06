@@ -402,18 +402,18 @@ It will generate config file in the current directory.
 If you want to modify structure of the generated `*.swift` files you should specify a directory (`ios.templatesPath`) where Stencil templates are located. If `ios.templatesPath` not specified default templates will be used.
 
 Default Stencil templates for iOS located here: `./Sources/XcodeExport/Resources`
-Custom Stencil templates must have the following names:
+Custom Stencil templates for colors and images must have the following names:
 - UIColor+extension.swift.stencil for UIKit colors
 - Color+extension.swift.stencil for SwiftUI colors
 - UIImage+extension.swift.stencil for UIKit images
 - Image+extension.swift.stencil for SwiftUI images
 
-Typography templates:
-- Label.swift,
-- LabelStyle.swift,
-- LabelStyle+extension.swift
-- UIFont+extension.swift
-- Font+extension.swift
+Custom Stencil templates for typography must have the following names:
+- Label.swift.stencil,
+- LabelStyle.swift.stencil,
+- LabelStyle+extension.swift.stencil,
+- UIFont+extension.swift.stencil
+- Font+extension.swift.stencil.stencil
 
 ##### Android
 
@@ -421,11 +421,11 @@ If you want to modify structure of the generated `.xml`, `.kt` files you should 
 
 Defaul Stencil templates for Android located here: `./Sources/AndroidExport/Resources`
 Custom Stencil templates must have the following names:
-- colors.xml
+- colors.xml.stencil
 - Colors.kt.stencil
 - Icons.kt.stencil
-- typography.xml
-- Typography.kt
+- typography.xml.stencil
+- Typography.kt.stencil
 
 ### Exporting Typography
 
