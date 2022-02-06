@@ -15,13 +15,13 @@ final public class XcodeColorExporter: XcodeExporterBase {
         var files: [FileContents] = []
 
         // UIKit UIColor extension
-        if let fileContents = try makeUIColorExtensionFileContents(for: colorPairs) {
-            files.append(fileContents)
+        if let url = output.colorSwiftURL {
+            files.append(try makeUIColorExtensionFileContents(for: colorPairs, file: url))
         }
 
         // SwiftUI Color extension
-        if let fileContents = try makeColorExtensionFileContents(for: colorPairs) {
-            files.append(fileContents)
+        if let url = output.swiftuiColorSwiftURL {
+            files.append(try makeColorExtensionFileContents(for: colorPairs, file: url))
         }
 
         guard let assetCatalogURL = output.assetsColorsURL else { return files }
@@ -35,18 +35,14 @@ final public class XcodeColorExporter: XcodeExporterBase {
         return files
     }
 
-    private func makeUIColorExtensionFileContents(for colorPairs: [AssetPair<Color>]) throws -> FileContents? {
-        guard let colorSwiftURL = output.colorSwiftURL else { return nil }
-
+    private func makeUIColorExtensionFileContents(for colorPairs: [AssetPair<Color>], file: URL) throws -> FileContents {
         let contents = try makeUIColorExtensionContents(colorPairs)
-        return try makeFileContents(for: contents, url: colorSwiftURL)
+        return try makeFileContents(for: contents, url: file)
     }
 
-    private func makeColorExtensionFileContents(for colorPairs: [AssetPair<Color>]) throws -> FileContents? {
-        guard let swiftuiColorSwiftURL = output.swiftuiColorSwiftURL else { return nil }
-
+    private func makeColorExtensionFileContents(for colorPairs: [AssetPair<Color>], file: URL) throws -> FileContents {
         let contents = try makeColorExtensionContents(colorPairs)
-        return try makeFileContents(for: contents, url: swiftuiColorSwiftURL)
+        return try makeFileContents(for: contents, url: file)
     }
 
     private func makeColorExtensionContents(_ colorPairs: [AssetPair<Color>]) throws -> String {

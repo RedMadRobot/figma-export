@@ -25,21 +25,19 @@ public class XcodeImagesExporterBase: XcodeExporterBase {
         var files = [FileContents]()
         
         // SwiftUI extension for Image
-        if let url = output.swiftUIImageExtensionURL,
-           let contents = try makeSwiftUIExtension(for: names, append: append, extensionFileURL: url) {
-            files.append(contents)
+        if let url = output.swiftUIImageExtensionURL {
+            files.append(try makeSwiftUIExtension(for: names, append: append, extensionFileURL: url))
         }
         
         // UIKit extension for UIImage
-        if let url = output.uiKitImageExtensionURL,
-           let contents = try makeUIKitExtension(for: names, append: append, extensionFileURL: url) {
-            files.append(contents)
+        if let url = output.uiKitImageExtensionURL {
+            files.append(try makeUIKitExtension(for: names, append: append, extensionFileURL: url))
         }
         
         return files
     }
     
-    private func makeSwiftUIExtension(for names: [String], append: Bool, extensionFileURL url: URL) throws -> FileContents? {
+    private func makeSwiftUIExtension(for names: [String], append: Bool, extensionFileURL url: URL) throws -> FileContents {
         let contents: String
         if append {
             let partialContents = try makeExtensionContents(names: names, templateName: "Image+extension.swift.stencil.include")
@@ -51,7 +49,7 @@ public class XcodeImagesExporterBase: XcodeExporterBase {
         return try makeFileContents(for: contents, url: url)
     }
     
-    private func makeUIKitExtension(for names: [String], append: Bool, extensionFileURL url: URL) throws -> FileContents? {
+    private func makeUIKitExtension(for names: [String], append: Bool, extensionFileURL url: URL) throws -> FileContents {
         let contents: String
         
         if append {
