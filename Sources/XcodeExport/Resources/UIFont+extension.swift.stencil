@@ -1,0 +1,28 @@
+{% include "header.stencil" %}
+import UIKit
+
+public extension UIFont {
+{% for textStyle in textStyles %}
+    {% if addObjcPrefix %}@objc {% endif %}static func {{ textStyle.name }}() -> UIFont {
+        customFont("{{ textStyle.fontName }}", size: {{ textStyle.fontSize }}{% if textStyle.supportsDynamicType %}, textStyle: .{{ textStyle.type }}, scaled: true{% endif %})
+    }
+{% endfor %}
+    private static func customFont(
+        _ name: String,
+        size: CGFloat,
+        textStyle: UIFont.TextStyle? = nil,
+        scaled: Bool = false) -> UIFont {
+
+        guard let font = UIFont(name: name, size: size) else {
+            print("Warning: Font \(name) not found.")
+            return UIFont.systemFont(ofSize: size, weight: .regular)
+        }
+        
+        if scaled, let textStyle = textStyle {
+            let metrics = UIFontMetrics(forTextStyle: textStyle)
+            return metrics.scaledFont(for: font)
+        } else {
+            return font
+        }
+    }
+}

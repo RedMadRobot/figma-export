@@ -408,6 +408,13 @@ Custom Stencil templates must have the following names:
 - UIImage+extension.swift.stencil for UIKit images
 - Image+extension.swift.stencil for SwiftUI images
 
+Typography templates:
+- Label.swift,
+- LabelStyle.swift,
+- LabelStyle+extension.swift
+- UIFont+extension.swift
+- Font+extension.swift
+
 ##### Android
 
 If you want to modify structure of the generated `.xml`, `.kt` files you should specify a directory (`android.templatesPath`) where Stencil templates are located. If `android.templatesPath` not specified default templates will be used.

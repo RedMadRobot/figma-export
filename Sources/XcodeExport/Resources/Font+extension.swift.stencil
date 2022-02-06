@@ -1,0 +1,16 @@
+{% include "header.stencil" %}
+import SwiftUI
+
+public extension Font {
+{% for textStyle in textStyles %}{% if textStyle.supportsDynamicType %}
+    static func {{ textStyle.name }}() -> Font {
+        if #available(iOS 14.0, *) {
+            return Font.custom("{{ textStyle.fontName }}", size: {{ textStyle.fontSize }}, relativeTo: .{{ textStyle.type }})
+        } else {
+            return Font.custom("{{ textStyle.fontName }}", size: {{ textStyle.fontSize }})
+        }
+    }{% else %}
+    static func {{ textStyle.name }}() -> Font {
+        Font.custom("{{ textStyle.fontName }}", size: {{ textStyle.fontSize }})
+    }{% endif %}{% endfor %}
+}

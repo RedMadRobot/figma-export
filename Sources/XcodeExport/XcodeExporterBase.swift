@@ -36,12 +36,19 @@ public class XcodeExporterBase {
         return environment
     }
     
-    func makeFileContents(for string: String, url: URL) throws -> FileContents? {
+    func makeFileContents(for string: String, url: URL) throws -> FileContents {
         let fileURL = URL(string: url.lastPathComponent)!
         let directoryURL = url.deletingLastPathComponent()
 
         return FileContents(
             destination: Destination(directory: directoryURL, file: fileURL),
+            data: string.data(using: .utf8)!
+        )
+    }
+    
+    func makeFileContents(for string: String, directory: URL, file: URL) throws -> FileContents {
+        FileContents(
+            destination: Destination(directory: directory, file: file),
             data: string.data(using: .utf8)!
         )
     }

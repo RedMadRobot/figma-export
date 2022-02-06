@@ -1,0 +1,79 @@
+{% include "header.stencil" %}
+import UIKit
+
+public class Label: UILabel {
+
+    var style: LabelStyle? { nil }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            updateText()
+        }
+    }
+
+    public convenience init(text: String?, textColor: UIColor) {
+        self.init()
+        self.text = text
+        self.textColor = textColor
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+        updateText()
+    }
+
+    private func commonInit() {
+        font = style?.font
+        adjustsFontForContentSizeCategory = true
+    }
+
+    private func updateText() {
+        text = super.text
+    }
+
+    public override var text: String? {
+        get {
+            guard style?.attributes != nil else {
+                return super.text
+            }
+
+            return attributedText?.string
+        }
+        set {
+            guard let style = style else {
+                super.text = newValue
+                return
+            }
+
+            guard let newText = newValue else {
+                attributedText = nil
+                super.text = nil
+                return
+            }
+
+            attributedText = style.attributedString(from: newText, alignment: textAlignment, lineBreakMode: lineBreakMode)
+        }
+    }
+}
+{% for style in styles %}
+public final class {{ style.className }}Label: Label {
+
+    override var style: LabelStyle? {
+        {% if separateStyles %}.{{ style.varName }}(){% else %}LabelStyle(
+            font: UIFont.{{ style.varName }}(){% if style.supportsDynamicType %},
+            fontMetrics: UIFontMetrics(forTextStyle: .{{ style.type }}){% endif %}{% if style.lineHeight != 0 %},
+            lineHeight: {{ style.lineHeight }}{% endif %}{% if style.tracking != 0 %},
+            tracking: {{ style.tracking }}{% endif %}{% if style.textCase != "original" %},
+            textCase: .{{ style.textCase }}{% endif %}
+        ){% endif %}
+    }
+}
+{% endfor %}

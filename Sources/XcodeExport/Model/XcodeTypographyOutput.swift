@@ -4,6 +4,7 @@ public struct XcodeTypographyOutput {
     let urls: URLs
     let generateLabels: Bool
     let addObjcAttribute: Bool
+    let templatesPath: URL?
     
     public struct FontURLs {
         let fontExtensionURL: URL?
@@ -46,10 +47,12 @@ public struct XcodeTypographyOutput {
     public init(
         urls: URLs,
         generateLabels: Bool? = false,
-        addObjcAttribute: Bool? = false
+        addObjcAttribute: Bool? = false,
+        templatesPath: URL? = nil
     ) {
         self.urls = urls
         self.generateLabels = generateLabels ?? false
         self.addObjcAttribute = addObjcAttribute ?? false
+        self.templatesPath = templatesPath
     }
 }
