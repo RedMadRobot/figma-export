@@ -16,7 +16,10 @@ public class AndroidExporter {
         if let templateURL = templatesPath {
             loader = FileSystemLoader(paths: [Path(templateURL.path)])
         } else {
-            loader = FileSystemLoader(paths: [Path(Bundle.module.resourcePath! + "/Resources")])
+            loader = FileSystemLoader(paths: [
+                Path(Bundle.module.resourcePath! + "/Resources"),
+                Path(Bundle.module.resourcePath!)
+            ])
         }
         var environment = Environment(loader: loader)
         environment.trimBehavior = trimBehavior
