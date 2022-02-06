@@ -14,12 +14,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Select Xcode version
-        run: sudo xcode-select --switch /Applications/Xcode_13.0.app
+        run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app
 
       - name: Build
         run: |
           swift build -c release --arch arm64 --arch x86_64
           cp ./.build/apple/Products/Release/figma-export ./Release/figma-export
+          cp -r ./.build/apple/Products/Release/figma-export_AndroidExport.bundle ./Release/figma-export_AndroidExport.bundle
+          cp -r ./.build/apple/Products/Release/figma-export_XcodeExport.bundle ./Release/figma-export_XcodeExport.bundle
           zip -r figma-export.zip Release LICENSE
 
       - name: "Upload assets to a release"

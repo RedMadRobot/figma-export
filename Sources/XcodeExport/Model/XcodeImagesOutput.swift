@@ -12,6 +12,7 @@ public struct XcodeImagesOutput {
     let renderModeDefaultSuffix: String?
     let renderModeOriginalSuffix: String?
     let renderModeTemplateSuffix: String?
+    let templatesPath: URL?
     
     let uiKitImageExtensionURL: URL?
     let swiftUIImageExtensionURL: URL?
@@ -33,8 +34,9 @@ public struct XcodeImagesOutput {
         renderMode: XcodeRenderMode? = nil,
         renderModeDefaultSuffix: String? = nil,
         renderModeOriginalSuffix: String? = nil,
-        renderModeTemplateSuffix: String? = nil) {
-        
+        renderModeTemplateSuffix: String? = nil,
+        templatesPath: URL? = nil
+    ) {
         self.assetsFolderURL = assetsFolderURL
         self.assetsInMainBundle = assetsInMainBundle
         self.assetsInSwiftPackage = assetsInSwiftPackage ?? false
@@ -46,5 +48,6 @@ public struct XcodeImagesOutput {
         self.renderModeDefaultSuffix = renderModeDefaultSuffix
         self.renderModeOriginalSuffix = renderModeOriginalSuffix
         self.renderModeTemplateSuffix = renderModeTemplateSuffix
+        self.templatesPath = templatesPath
     }
 }

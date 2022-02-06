@@ -1,0 +1,17 @@
+package {{package}}
+
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.sp
+import {{xmlResourcePackage}}.R
+
+object Typography {
+{% for textStyle in textStyles %}
+    val {{ textStyle.name }} = TextStyle(
+        fontFamily = FontFamily(Font(R.font.{{ textStyle.fontFamily }})),
+        fontSize = {{ textStyle.fontSize }}.sp,
+        letterSpacing = {{ textStyle.letterSpacing }}.sp,{% if textStyle.lineHeight %}
+        lineHeight = {{ textStyle.lineHeight }}.sp,{% endif %}
+    ){% endfor %}
+}

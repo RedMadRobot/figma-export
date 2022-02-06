@@ -91,10 +91,12 @@ extension FigmaExportCommand {
                 addObjcAttribute: iosParams.addObjcAttribute,
                 colorSwiftURL: colorParams.colorSwift,
                 swiftuiColorSwiftURL: colorParams.swiftuiColorSwift,
-                groupUsingNamespace: colorParams.groupUsingNamespace)
+                groupUsingNamespace: colorParams.groupUsingNamespace,
+                templatesPath: iosParams.templatesPath
+            )
 
             let exporter = XcodeColorExporter(output: output)
-            let files = exporter.export(colorPairs: colorPairs)
+            let files = try exporter.export(colorPairs: colorPairs)
             
             if colorParams.useColorAssets, let url = colorsURL {
                 try? FileManager.default.removeItem(atPath: url.path)
@@ -120,9 +122,15 @@ extension FigmaExportCommand {
         }
 
         private func exportAndroidColors(colorPairs: [AssetPair<Color>], androidParams: Params.Android) throws {
-            let output = AndroidOutput(xmlOutputDirectory: androidParams.mainRes, xmlResourcePackage: androidParams.resourcePackage, srcDirectory: androidParams.mainSrc, packageName: androidParams.colors?.composePackageName)
+            let output = AndroidOutput(
+                xmlOutputDirectory: androidParams.mainRes,
+                xmlResourcePackage: androidParams.resourcePackage,
+                srcDirectory: androidParams.mainSrc,
+                packageName: androidParams.colors?.composePackageName,
+                templatesPath: androidParams.templatesPath
+            )
             let exporter = AndroidColorExporter(output: output)
-            let files = exporter.export(colorPairs: colorPairs)
+            let files = try exporter.export(colorPairs: colorPairs)
             
             let lightColorsFileURL = androidParams.mainRes.appendingPathComponent("values/colors.xml")
             let darkColorsFileURL = androidParams.mainRes.appendingPathComponent("values-night/colors.xml")

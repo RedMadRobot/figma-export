@@ -1,0 +1,18 @@
+{% include "header.stencil" %}
+
+import SwiftUI
+
+{% if assetsInSwiftPackage %}
+private class BundleProvider {
+    static let bundle = Bundle.module
+}
+
+{% elif not assetsInMainBundle %}
+private class BundleProvider {
+    static let bundle = Bundle(for: BundleProvider.self)
+}
+
+{% endif %}
+public extension Image {
+{% include "Image+extension.swift.stencil.include" %}
+}

@@ -62,13 +62,13 @@ Table of Contents:
 
 #### Colors
 
-When your execute `figma-export colors` command `figma-export` exports colors from Figma directly to your Xcode project to the Assets.xcassets folder.
+When your execute `figma-export colors` command, `figma-export` exports colors from Figma directly to your Xcode project to the Assets.xcassets folder.
 
-Figma light | Figma dark | Xcode
------------- | ------------- | -------------
-<img src="images/figma_colors.png" width="229"/> | <img src="images/figma_colors_dark.png" width="229"/> | <img src="images/xcode.png" width="500"/>
+| Figma light                                      | Figma dark                                            | Xcode                                     |
+|--------------------------------------------------|-------------------------------------------------------|-------------------------------------------|
+| <img src="images/figma_colors.png" width="229"/> | <img src="images/figma_colors_dark.png" width="229"/> | <img src="images/xcode.png" width="500"/> |
 
-Additionally the following Swift file will be created to use colors from the code.
+Additionally, the following Swift file will be created to use colors from the code.
 
 ```swift
  import UIKit
@@ -126,7 +126,7 @@ Icons will be exported as PDF or SVG files with `Template Image` render mode.
 
 <img src="images/icons.png" width="500"/>
 
-Additionally the following Swift file will be created to use icons from the code.
+Additionally, the following Swift file will be created to use icons from the code.
 
 ```swift
 import UIKit
@@ -166,7 +166,7 @@ Images will be exported as PNG files the same way.
 
 <img src="images/images.png" width="500"/>
 
-Additionally the following Swift file will be created to use images from the code.
+Additionally, the following Swift file will be created to use images from the code.
 
 ```swift
 import UIKit
@@ -268,7 +268,7 @@ object Typography {
  ```FIGMA_PERSONAL_TOKEN=value```
 
 ### Manual
-[Download](https://github.com/RedMadRobot/figma-export/releases) latest release and read [Usage](#usage)
+[Download](https://github.com/RedMadRobot/figma-export/releases) the latest release and read [Usage](#usage)
 
 ### Homebrew
 ```
@@ -326,10 +326,10 @@ Run `fastlane sync_colors` to run FigmaExport.
 
 In the `figma-export.yaml` file you must specify the following properties:
 - `android.mainRes`
-- `android.resourcePackage` if you want generate Jetpack Compose code
-- `android.mainSrc` if you want generate Jetpack Compose code
-- `android.icons.output` if you want export icons
-- `android.images.output` if you want export images
+- `android.resourcePackage` if you want to generate Jetpack Compose code
+- `android.mainSrc` if you want to generate Jetpack Compose code
+- `android.icons.output` if you want to export icons
+- `android.images.output` if you want to export images
 
 When you execute `figma-export icons` command, FigmaExport clears the `{android.mainRes}/{android.icons.output}` directory before exporting all the icons.
 
@@ -347,7 +347,7 @@ main/
       drawable-night/
 ```
 
-Before first running `figma-export` you must add path to these directories in the the app‘s `build.gradle` file.
+Before first running `figma-export` you must add path to these directories in the app‘s `build.gradle` file.
 
 ```
 ...
@@ -387,7 +387,7 @@ All available configuration options described in the [CONFIG.md](CONFIG.md) file
 
 Example of `figma-export.yaml` file for iOS project — [Examples/Example/figma-export.yaml](./Examples/Example/figma-export.yaml)
 
-Example of `figma-export.yaml` file for Android project — [Examples/AndroidExample/figma-export.yaml](./Examples/AndroidExample/figma-export.yaml)
+Example of `figma-export.yaml` file for Android project — [Examples/AndroidExample/figma-export.yaml](./Examples/AndroidExample/figma-export.yaml)
 
 Generate `figma-export.yaml` config file using one of the following command:
 ```
@@ -396,6 +396,37 @@ figma-export init --platform ios
 ```
 It will generate config file in the current directory.
 
+#### Custom templates
+
+##### iOS
+If you want to modify structure of the generated `*.swift` files you should specify a directory (`ios.templatesPath`) where Stencil templates are located. If `ios.templatesPath` not specified default templates will be used.
+
+Default Stencil templates for iOS located here: `./Sources/XcodeExport/Resources`
+Custom Stencil templates for colors and images must have the following names:
+- UIColor+extension.swift.stencil for UIKit colors
+- Color+extension.swift.stencil for SwiftUI colors
+- UIImage+extension.swift.stencil for UIKit images
+- Image+extension.swift.stencil for SwiftUI images
+
+Custom Stencil templates for typography must have the following names:
+- Label.swift.stencil,
+- LabelStyle.swift.stencil,
+- LabelStyle+extension.swift.stencil,
+- UIFont+extension.swift.stencil
+- Font+extension.swift.stencil.stencil
+
+##### Android
+
+If you want to modify structure of the generated `.xml`, `.kt` files you should specify a directory (`android.templatesPath`) where Stencil templates are located. If `android.templatesPath` not specified default templates will be used.
+
+Defaul Stencil templates for Android located here: `./Sources/AndroidExport/Resources`
+Custom Stencil templates must have the following names:
+- colors.xml.stencil
+- Colors.kt.stencil
+- Icons.kt.stencil
+- typography.xml.stencil
+- Typography.kt.stencil
+
 ### Exporting Typography
 
 #### iOS
@@ -403,7 +434,7 @@ It will generate config file in the current directory.
 2. Run `figma-export typography` to export text styles
 3. Use generated fonts and labels in your code. E.g. `button.titleLabel?.font = UIFont.body()`, `let label = HeaderLabel()`.
 
-### Android
+#### Android
 1. Place font file under the `res` directory of your module
 2. Run `figma-export typography` to export text styles
 3. Create a top level style as a parent for the generated styles. For example: 
@@ -415,26 +446,26 @@ It will generate config file in the current directory.
 
 ## Design requirements
 
-If a color, icon or image is unique for iOS or Android platform, it should contains "ios" or "android" word in the description field in the properties. If a color, icon or image is used only by the designer and it should not be exported, the word "none" should be specified in the description field.
+If a color, icon or image is unique for iOS or Android platform, it should contains "ios" or "android" word in the description field in the properties. If a color, icon or image is used only by the designer, and it should not be exported, the word "none" should be specified in the description field.
 
 **Styles and Components must be published to a Team Library.**
 
 For `figma-export colors`
 
-By default, if you support dark mode your figma project must contains two files. One should contains a dark color palette, and the another light color palette. If you would like to specify light and dark colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode colors by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the colors section.
+By default, if you support dark mode your Figma project must contains two files. One should contains a dark color palette, and the another light color palette. If you would like to specify light and dark colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode colors by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the colors section.
 
 The light color palette may contain more colors than the dark color palette. If a light-only color is present, it will be considered as universal color for the iOS color palette. Names of the dark colors must match the light colors.
 
 Example
 
-File | Styles
------------- | -------------
-<img src="images/dark.png" width="352" /> | <img src="images/dark_c.png" width="200" />
-<img src="images/light.png" width="352" /> | <img src="images/light_c.png" width="200" />
+| File                                       | Styles                                       |
+|--------------------------------------------|----------------------------------------------|
+| <img src="images/dark.png" width="352" />  | <img src="images/dark_c.png" width="200" />  |
+| <img src="images/light.png" width="352" /> | <img src="images/light_c.png" width="200" /> |
 
 For `figma-export icons`
 
-By default your Figma file should contains a frame with `Icons` name which contains components for each icon. You may change a frame name in a [CONFIG.md](CONFIG.md) file by setting `common.icons.figmaFrameName` property.
+By default, your Figma file should contains a frame with `Icons` name which contains components for each icon. You may change a frame name in a [CONFIG.md](CONFIG.md) file by setting `common.icons.figmaFrameName` property.
 If you support dark mode and want separate icons for dark mode, Figma project must contains two files. One should contains a dark icons, and another light icons. If you would like to have light and dark icons in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode icons by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the icons section.
 
 For `figma-export images`
@@ -462,7 +493,7 @@ Advice: Font in Tab Bar and standard Navigation Bar must not support Dynamic Typ
 
 ## Example project
 
-Example iOS projects, Android project and example Figma files see in the [Examples folder](./Examples)
+Example iOS projects, Android projects and example Figma files see in the [Examples folder](./Examples)
 
 ## Contributing
 

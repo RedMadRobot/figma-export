@@ -1,93 +1,99 @@
 import Foundation
 import FigmaExportCore
+import Stencil
+import PathKit
 
-final public class AndroidColorExporter {
+final public class AndroidColorExporter: AndroidExporter {
 
     private let output: AndroidOutput
 
     public init(output: AndroidOutput) {
         self.output = output
+        super.init(templatesPath: output.templatesPath)
     }
     
-    public func export(colorPairs: [AssetPair<Color>]) -> [FileContents] {
-        
-        let lightFile = makeColorsFile(colorPairs: colorPairs, dark: false)
+    public func export(colorPairs: [AssetPair<Color>]) throws -> [FileContents] {
+
+        // values/colors.xml
+        let lightFile = try makeColorsFileContents(colorPairs: colorPairs, dark: false)
         var result = [lightFile]
-            
+
+        // values-night/colors.xml
         if colorPairs.contains(where: { $0.dark != nil }) {
-            let darkFile = makeColorsFile(colorPairs: colorPairs, dark: true)
+            let darkFile = try makeColorsFileContents(colorPairs: colorPairs, dark: true)
             result.append(darkFile)
         }
-        
-        if let packageName = output.packageName, let outputDirectory = output.composeOutputDirectory, let xmlResourcePackage = output.xmlResourcePackage {
-            let composeFile = makeComposeColorsFile(colorPairs: colorPairs, outputDirectory: outputDirectory, package: packageName, xmlResourcePackage: xmlResourcePackage)
+
+        // Colors.kt
+        if let packageName = output.packageName,
+           let outputDirectory = output.composeOutputDirectory,
+           let xmlResourcePackage = output.xmlResourcePackage {
+
+            let composeFile = try makeComposeColorsFileContents(
+                colorPairs: colorPairs,
+                package: packageName,
+                xmlResourcePackage: xmlResourcePackage,
+                outputDirectory: outputDirectory
+            )
             result.append(composeFile)
         }
         
         return result
     }
     
-    private func makeColorsFile(colorPairs: [AssetPair<Color>], dark: Bool) -> FileContents {
-        let contents = prepareColorsDotXMLContents(colorPairs, dark: dark)
+    private func makeColorsFileContents(colorPairs: [AssetPair<Color>], dark: Bool) throws -> FileContents {
+        let contents = try makeColorsContents(colorPairs, dark: dark)
         
         let directoryURL = output.xmlOutputDirectory.appendingPathComponent(dark ? "values-night" : "values")
         let fileURL = URL(string: "colors.xml")!
         
-        return FileContents(
-            destination: Destination(directory: directoryURL, file: fileURL),
-            data: contents
-        )
+        return try makeFileContents(for: contents, directory: directoryURL, file: fileURL)
     }
     
-    private func makeComposeColorsFile(colorPairs: [AssetPair<Color>], outputDirectory: URL, package: String, xmlResourcePackage: String) -> FileContents {
-        let fileURL = URL(string: "Colors.kt")!
-        
-        let fileLines: [String] = colorPairs.map {
-            let colorFunctionName = $0.light.name.lowerCamelCased()
-            return """
-            @Composable
-            @ReadOnlyComposable
-            fun Colors.\(colorFunctionName)(): Color = colorResource(id = R.color.\($0.light.name))
-            """
+    private func makeColorsContents(_ colorPairs: [AssetPair<Color>], dark: Bool) throws -> String {
+        let colors: [[String: String]] = colorPairs.map { colorPair in
+            [
+                "name": colorPair.light.name,
+                "hex": (dark && colorPair.dark != nil) ? colorPair.dark!.hex : colorPair.light.hex
+            ]
         }
-        let contents = """
-        package \(package)
+        let context: [String: Any] = [
+            "colors": colors
+        ]
         
-        import androidx.compose.runtime.Composable
-        import androidx.compose.runtime.ReadOnlyComposable
-        import androidx.compose.ui.graphics.Color
-        import androidx.compose.ui.res.colorResource
-        import \(xmlResourcePackage).R
+        let env = makeEnvironment(trimBehavior: .smart)
+        return try env.renderTemplate(name: "colors.xml.stencil", context: context)
+    }
+    
+    private func makeComposeColorsFileContents(
+        colorPairs: [AssetPair<Color>],
+        package: String,
+        xmlResourcePackage: String,
+        outputDirectory: URL
+    ) throws -> FileContents {
+        let colors: [[String: String]] = colorPairs.map {
+            [
+                "functionName": $0.light.name.lowerCamelCased(),
+                "name": $0.light.name
+            ]
+        }
 
-        object Colors
+        let context: [String: Any] = [
+            "package": package,
+            "xmlResourcePackage": xmlResourcePackage,
+            "colors": colors
+        ]
+
+        let env = makeEnvironment(trimBehavior: .smart)
+        let string = try env.renderTemplate(name: "Colors.kt.stencil", context: context)
         
-        \(fileLines.joined(separator: "\n\n"))
-        
-        """
-        let data = contents.data(using: .utf8)!
-        
-        let destination = Destination(directory: outputDirectory, file: fileURL)
-        return FileContents(destination: destination, data: data)
-    }
-    
-    private func prepareColorsDotXMLContents(_ colorPairs: [AssetPair<Color>], dark: Bool) -> Data {
-        let resources = XMLElement(name: "resources")
-        let xml = XMLDocument(rootElement: resources)
-        xml.version = "1.0"
-        xml.characterEncoding = "utf-8"
-        
-        colorPairs.forEach { colorPair in
-            let hex = (dark && colorPair.dark != nil) ? colorPair.dark!.hex : colorPair.light.hex
-            let colorNode = XMLElement(name: "color", stringValue: hex)
-            colorNode.addAttribute(XMLNode.attribute(withName: "name", stringValue: colorPair.light.name) as! XMLNode)
-            resources.addChild(colorNode)
-        }
-        
-        return xml.xmlData(options: .nodePrettyPrint)
+        let fileURL = URL(string: "Colors.kt")!
+        return try makeFileContents(for: string, directory: outputDirectory, file: fileURL)
     }
 }
 
 private extension Color {
+
     func doubleToHex(_ double: Double) -> String {
         String(format: "%02X", arguments: [Int((double * 255).rounded())])
     }

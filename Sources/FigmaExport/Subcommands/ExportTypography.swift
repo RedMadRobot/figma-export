@@ -73,7 +73,8 @@ extension FigmaExportCommand {
             return XcodeTypographyOutput(
                 urls: urls,
                 generateLabels: iosParams.typography?.generateLabels,
-                addObjcAttribute: iosParams.addObjcAttribute
+                addObjcAttribute: iosParams.addObjcAttribute,
+                templatesPath: iosParams.templatesPath
             )
         }
         
@@ -100,7 +101,13 @@ extension FigmaExportCommand {
         }
 
         private func exportAndroidTextStyles(textStyles: [TextStyle], androidParams: Params.Android) throws {
-            let output = AndroidOutput(xmlOutputDirectory: androidParams.mainRes, xmlResourcePackage: androidParams.resourcePackage, srcDirectory: androidParams.mainSrc, packageName: androidParams.typography?.composePackageName)
+            let output = AndroidOutput(
+                xmlOutputDirectory: androidParams.mainRes,
+                xmlResourcePackage: androidParams.resourcePackage,
+                srcDirectory: androidParams.mainSrc,
+                packageName: androidParams.typography?.composePackageName,
+                templatesPath: androidParams.templatesPath
+            )
             let exporter = AndroidTypographyExporter(output: output)
             let files = try exporter.exportFonts(textStyles: textStyles)
 

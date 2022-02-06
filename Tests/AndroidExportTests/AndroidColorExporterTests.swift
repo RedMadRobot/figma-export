@@ -1,6 +1,7 @@
 import XCTest
 import AndroidExport
 import FigmaExportCore
+import CustomDump
 
 final class AndroidColorExporterTests: XCTestCase {
     
@@ -8,7 +9,13 @@ final class AndroidColorExporterTests: XCTestCase {
     
     private static let packageName = "test"
     private static let resourcePackage = "resourceTest"
-    private let output = AndroidOutput(xmlOutputDirectory: URL(string: "~/")!, xmlResourcePackage: resourcePackage, srcDirectory: URL(string: "~/"), packageName: packageName)
+    private let output = AndroidOutput(
+        xmlOutputDirectory: URL(string: "~/")!,
+        xmlResourcePackage: resourcePackage,
+        srcDirectory: URL(string: "~/"),
+        packageName: packageName,
+        templatesPath: nil
+    )
     
     private let colorPair1 = AssetPair<Color>(
         light: Color(name: "color_pair_1", red: 119.0/255.0, green: 3.0/255.0, blue: 1.0, alpha: 0.5),
@@ -25,7 +32,7 @@ final class AndroidColorExporterTests: XCTestCase {
     func testExport() throws {
         let exporter = AndroidColorExporter(output: output)
 
-        let result = exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
         XCTAssertEqual(result.count, 3)
 
         XCTAssertEqual(result[0].destination.directory.lastPathComponent, "values")
@@ -55,9 +62,9 @@ final class AndroidColorExporterTests: XCTestCase {
             <color name="color_pair_2">#000000</color>
         </resources>
         """
-        
-        XCTAssertEqual(generatedCodeLight, referenceCodeLight)
-        XCTAssertEqual(generatedCodeDark, referenceCodeDark)
+
+        XCTAssertNoDifference(generatedCodeLight, referenceCodeLight)
+        XCTAssertNoDifference(generatedCodeDark, referenceCodeDark)
         
         XCTAssertEqual(result[2].destination.directory.lastPathComponent, AndroidColorExporterTests.packageName)
         XCTAssertEqual(result[2].destination.file.absoluteString, "Colors.kt")
@@ -80,8 +87,8 @@ final class AndroidColorExporterTests: XCTestCase {
         @Composable
         @ReadOnlyComposable
         fun Colors.colorPair2(): Color = colorResource(id = R.color.color_pair_2)
-        
+
         """
-        XCTAssertEqual(generatedComposedCode, referenceComposeCode)
+        XCTAssertNoDifference(generatedComposedCode, referenceComposeCode)
     }
 }

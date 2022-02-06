@@ -15,9 +15,10 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.0"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "4.0.0"),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.4.0"),
-        .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.14.2"),
+        // Revert when PR https://github.com/stencilproject/Stencil/pull/287 will be merged
+        .package(url: "https://github.com/subdan/Stencil.git", from: "0.14.5"),
         .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.5.0"),
-        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.2.1"),
+        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.3.0"),
     ],
     targets: [
         
@@ -45,13 +46,19 @@ let package = Package(
         // Exports resources to Xcode project
         .target(
             name: "XcodeExport",
-            dependencies: ["FigmaExportCore", .product(name: "Stencil", package: "Stencil")]
+            dependencies: ["FigmaExportCore", .product(name: "Stencil", package: "Stencil")],
+			resources: [
+              	.copy("Resources/")
+	        ]
         ),
 
         // Exports resources to Android project
         .target(
             name: "AndroidExport",
-            dependencies: ["FigmaExportCore"]
+            dependencies: ["FigmaExportCore", "Stencil"],
+            resources: [
+                .copy("Resources/")
+            ]
         ),
         
         // MARK: - Tests
@@ -70,7 +77,7 @@ let package = Package(
         ),
         .testTarget(
             name: "AndroidExportTests",
-            dependencies: ["AndroidExport"]
+            dependencies: ["AndroidExport", .product(name: "CustomDump", package: "swift-custom-dump")]
         )
     ]
 )

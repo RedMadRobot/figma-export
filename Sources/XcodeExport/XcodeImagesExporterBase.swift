@@ -3,6 +3,14 @@ import Foundation
 
 public class XcodeImagesExporterBase: XcodeExporterBase {
     
+    enum Error: LocalizedError {
+        case templateDoesNotSupportAppending
+        
+        var errorDescription: String? {
+            "Custom templates doesn’t supported when \"append\" property is equal to true. Use default templates or change \"append\" property to false"
+        }
+    }
+    
     let output: XcodeImagesOutput
     
     public init(output: XcodeImagesOutput) {
@@ -10,53 +18,62 @@ public class XcodeImagesExporterBase: XcodeExporterBase {
     }
     
     func generateExtensions(names: [String], append: Bool) throws -> [FileContents] {
+        if output.templatesPath != nil && append == true {
+            throw Error.templateDoesNotSupportAppending
+        }
+                
         var files = [FileContents]()
         
-        // SwiftUI extension Image {
+        // SwiftUI extension for Image
         if let url = output.swiftUIImageExtensionURL {
-            let contents: String
-            
-            if append {
-                let strings = names.map { name -> String in
-                    if output.assetsInMainBundle {
-                        return "    static var \(name): Image { Image(#function) }"
-                    } else {
-                        return "    static var \(name): Image { Image(#function, bundle: BundleProvider.bundle) }"
-                    }
-                }
-                let string = strings.joined(separator: "\n") + "\n}\n"
-                contents = try appendContent(string: string, to: url)
-            }
-            else {
-                contents = makeSwiftUIExtension(assetNames: names)
-            }
-            
-            files.append(makeFileContents(string: contents, url: url))
+            files.append(try makeSwiftUIExtension(for: names, append: append, extensionFileURL: url))
         }
         
-        // UIKit extension UIImage {
+        // UIKit extension for UIImage
         if let url = output.uiKitImageExtensionURL {
-            let contents: String
-            let addObjcAttribute = output.addObjcAttribute
-            
-            if append {
-                let strings = names.map { name -> String in
-                    if output.assetsInMainBundle {
-                        return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function)! }"
-                    } else {
-                        return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
-                    }
-                }
-                let string = strings.joined(separator: "\n") + "\n}\n"
-                contents = try appendContent(string: string, to: url)
-            } else {
-                contents = makeUIKitExtension(assetNames: names)
-            }
-            
-            files.append(makeFileContents(string: contents, url: url))
+            files.append(try makeUIKitExtension(for: names, append: append, extensionFileURL: url))
         }
         
         return files
+    }
+    
+    private func makeSwiftUIExtension(for names: [String], append: Bool, extensionFileURL url: URL) throws -> FileContents {
+        let contents: String
+        if append {
+            let partialContents = try makeExtensionContents(names: names, templateName: "Image+extension.swift.stencil.include")
+            contents = try appendContent(string: partialContents, to: url)
+        }
+        else {
+            contents = try makeExtensionContents(names: names, templateName: "Image+extension.swift.stencil")
+        }
+        return try makeFileContents(for: contents, url: url)
+    }
+    
+    private func makeUIKitExtension(for names: [String], append: Bool, extensionFileURL url: URL) throws -> FileContents {
+        let contents: String
+        
+        if append {
+            let partialContents = try makeExtensionContents(names: names, templateName: "UIImage+extension.swift.stencil.include")
+            contents = try appendContent(string: partialContents, to: url)
+        } else {
+            contents = try makeExtensionContents(names: names, templateName: "UIImage+extension.swift.stencil")
+        }
+        
+        return try makeFileContents(for: contents, url: url)
+    }
+    
+    private func makeExtensionContents(names: [String], templateName: String) throws -> String {
+        let context: [String: Any] = [
+            "addObjcPrefix": output.addObjcAttribute,
+            "assetsInSwiftPackage": output.assetsInSwiftPackage,
+            "assetsInMainBundle": output.assetsInMainBundle,
+            "images": names.map { ["name": $0] },
+        ]
+        let env = makeEnvironment(
+            templatesPath: output.templatesPath,
+            trimBehavior: .init(leading: .none, trailing: .whitespaceAndOneNewLine)
+        )
+        return try env.renderTemplate(name: templateName, context: context)
     }
     
     private func appendContent(string: String, to fileURL: URL) throws -> String {
@@ -64,7 +81,7 @@ public class XcodeImagesExporterBase: XcodeExporterBase {
             contentsOf: URL(fileURLWithPath: fileURL.path),
             encoding: .utf8
         )
-
+        let string = string + "}\n"
         if let index = existingContents.lastIndex(of: "}") {
             existingContents.replaceSubrange(
                 index..<existingContents.endIndex,
@@ -72,59 +89,5 @@ public class XcodeImagesExporterBase: XcodeExporterBase {
             )
         }
         return existingContents
-    }
-    
-    private func makeFileContents(string: String, url: URL) -> FileContents {
-        let data = string.data(using: .utf8)!
-        let fileURL = URL(string: url.lastPathComponent)!
-        let directoryURL = url.deletingLastPathComponent()
-        
-        return FileContents(
-            destination: Destination(directory: directoryURL, file: fileURL),
-            data: data
-        )
-    }
-    
-    private func makeSwiftUIExtension(assetNames: [String]) -> String {
-        let images = assetNames.map { name -> String in
-            if output.assetsInMainBundle {
-                return "    static var \(name): Image { Image(#function) }"
-            } else {
-                return "    static var \(name): Image { Image(#function, bundle: BundleProvider.bundle) }"
-            }
-        }
-        
-        return """
-        \(header)
-
-        import SwiftUI
-        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider))
-        public extension Image {
-        \(images.joined(separator: "\n"))
-        }
-
-        """
-    }
-    
-    private func makeUIKitExtension(assetNames: [String]) -> String {
-        let addObjcAttribute = output.addObjcAttribute
-        let images = assetNames.map { name -> String in
-            if output.assetsInMainBundle {
-                return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function)! }"
-            } else {
-                return "    \(addObjcAttribute ? "@objc ": "")static var \(name): UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }"
-            }
-        }
-        
-        return """
-        \(header)
-
-        import UIKit
-        \(output.assetsInMainBundle ? "" : (output.assetsInSwiftPackage ? bundleProviderSwiftPackage : bundleProvider))
-        public extension UIImage {
-        \(images.joined(separator: "\n"))
-        }
-
-        """
     }
 }

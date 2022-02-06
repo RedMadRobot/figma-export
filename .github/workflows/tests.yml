@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Select Xcode version
-        run: sudo xcode-select --switch /Applications/Xcode_13.0.app
+        run: sudo xcode-select --switch /Applications/Xcode_13.2.1.app
       - name: Build and test
         run: swift test --enable-code-coverage --disable-automatic-resolution
         shell: bash
