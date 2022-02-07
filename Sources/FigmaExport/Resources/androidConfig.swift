@@ -12,7 +12,7 @@ figma:
 common:
   # [optional]
   colors:
-    # [optional] RegExp pattern for color name validation before exporting
+    # [optional] RegExp pattern for color name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
     nameValidateRegexp: '^[a-zA-Z_]+$' # RegExp pattern for: background, background_primary, widget_primary_background
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'color_$1'
@@ -24,7 +24,7 @@ common:
   icons:
     # [optional] Name of the Figma's frame where icons components are located
     figmaFrameName: Icons
-    # [optional] RegExp pattern for icon name validation before exporting
+    # [optional] RegExp pattern for icon name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
     nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'icon_$2_$1'
@@ -36,7 +36,7 @@ common:
   images:
     # [optional]Name of the Figma's frame where image components are located
     figmaFrameName: Illustrations
-    # [optional] RegExp pattern for image name validation before exporting
+    # [optional] RegExp pattern for image name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
     nameValidateRegexp: '^(img)_([a-z0-9_]+)$' # RegExp pattern for: img_image_name
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'image_$2'
@@ -46,7 +46,7 @@ common:
     darkModeSuffix: '_dark'
   # [optional]
   typography:
-    # [optional] RegExp pattern for text style name validation before exporting
+    # [optional] RegExp pattern for text style name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
     nameValidateRegexp: '^[a-zA-Z0-9_]+$' # RegExp pattern for: h1_regular, h1_medium
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'font_$1'
