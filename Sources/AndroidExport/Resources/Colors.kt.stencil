@@ -8,7 +8,6 @@ import {{xmlResourcePackage}}.R
 
 object Colors
 {% for color in colors %}
-
 @Composable
 @ReadOnlyComposable
 fun Colors.{{color.functionName}}(): Color = colorResource(id = R.color.{{color.name}})

@@ -56,7 +56,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
                 "type": $0.fontStyle?.textStyleName ?? ""
             ]
         }
-        let env = makeEnvironment(templatesPath: output.templatesPath, trimBehavior: .none)
+        let env = makeEnvironment(templatesPath: output.templatesPath)
         let contents = try env.renderTemplate(name: "UIFont+extension.swift.stencil", context: [
             "textStyles": textStyles,
             "addObjcPrefix": output.addObjcAttribute
@@ -74,7 +74,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
                 "type": $0.fontStyle?.textStyleName ?? ""
             ]
         }
-        let env = makeEnvironment(templatesPath: output.templatesPath, trimBehavior: .none)
+        let env = makeEnvironment(templatesPath: output.templatesPath)
         let contents = try env.renderTemplate(name: "Font+extension.swift.stencil", context: [
             "textStyles": textStyles,
         ])
@@ -94,7 +94,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
                 "lineHeight": style.lineHeight ?? 0,
                 "textCase": style.textCase.rawValue
             ]}
-        let env = makeEnvironment(templatesPath: output.templatesPath, trimBehavior: .none)
+        let env = makeEnvironment(templatesPath: output.templatesPath)
         let contents = try env.renderTemplate(name: "LabelStyle+extension.swift.stencil", context: ["styles": dict])
         
         let labelStylesSwiftExtension = try makeFileContents(for: contents, url: labelStyleExtensionURL)
@@ -114,7 +114,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
                 "lineHeight": style.lineHeight ?? 0,
                 "textCase": style.textCase.rawValue
             ]}
-        let env = makeEnvironment(templatesPath: output.templatesPath, trimBehavior: .none)
+        let env = makeEnvironment(templatesPath: output.templatesPath)
         let contents = try env.renderTemplate(name: "Label.swift.stencil", context: [
             "styles": dict,
             "separateStyles": separateStyles
@@ -123,7 +123,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
     }
     
     private func makeLabelStyle(labelsDirectory: URL) throws -> FileContents {
-        let env = makeEnvironment(templatesPath: output.templatesPath, trimBehavior: .none)
+        let env = makeEnvironment(templatesPath: output.templatesPath)
         let labelStyleSwiftContents = try env.renderTemplate(name: "LabelStyle.swift.stencil")
         return try makeFileContents(for: labelStyleSwiftContents, directory: labelsDirectory, file: URL(string: "LabelStyle.swift")!)
     }

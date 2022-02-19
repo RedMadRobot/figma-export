@@ -24,7 +24,7 @@ public class XcodeExporterBase {
         }
     }
     
-    func makeEnvironment(templatesPath: URL?, trimBehavior: TrimBehavior) -> Environment {
+    func makeEnvironment(templatesPath: URL?) -> Environment {
         let loader: FileSystemLoader
         if let templateURL = templatesPath {
             loader = FileSystemLoader(paths: [Path(templateURL.path)])
@@ -34,9 +34,7 @@ public class XcodeExporterBase {
                 Path(Bundle.module.resourcePath!)
             ])
         }
-        var environment = Environment(loader: loader)
-        environment.trimBehavior = trimBehavior    
-        return environment
+        return Environment(loader: loader)
     }
     
     func makeFileContents(for string: String, url: URL) throws -> FileContents {
