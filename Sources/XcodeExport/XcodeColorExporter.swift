@@ -60,7 +60,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
             "colors": colors,
         ]
 
-        let env = makeEnvironment(templatesPath: output.templatesPath, trimBehavior: .smart)
+        let env = makeEnvironment(templatesPath: output.templatesPath)
         return try env.renderTemplate(name: "Color+extension.swift.stencil", context: context)
     }
 
@@ -112,10 +112,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
             "colors": colors,
         ]
         
-        let env = makeEnvironment(
-            templatesPath: output.templatesPath,
-            trimBehavior: TrimBehavior(leading: .none, trailing: .whitespaceAndOneNewLine)
-        )
+        let env = makeEnvironment(templatesPath: output.templatesPath)
         return try env.renderTemplate(name: "UIColor+extension.swift.stencil", context: context)
     }
 

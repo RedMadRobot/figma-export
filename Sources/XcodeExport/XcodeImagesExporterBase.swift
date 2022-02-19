@@ -69,10 +69,7 @@ public class XcodeImagesExporterBase: XcodeExporterBase {
             "assetsInMainBundle": output.assetsInMainBundle,
             "images": names.map { ["name": $0] },
         ]
-        let env = makeEnvironment(
-            templatesPath: output.templatesPath,
-            trimBehavior: .init(leading: .none, trailing: .whitespaceAndOneNewLine)
-        )
+        let env = makeEnvironment(templatesPath: output.templatesPath)
         return try env.renderTemplate(name: templateName, context: context)
     }
     
@@ -81,10 +78,12 @@ public class XcodeImagesExporterBase: XcodeExporterBase {
             contentsOf: URL(fileURLWithPath: fileURL.path),
             encoding: .utf8
         )
-        let string = string + "}\n"
-        if let index = existingContents.lastIndex(of: "}") {
+        let string = string + "\n}\n"
+        
+        if let index = existingContents.dropLast(2).lastIndex(of: "}") {
+            let newIndex = existingContents.index(after: index)
             existingContents.replaceSubrange(
-                index..<existingContents.endIndex,
+                newIndex..<existingContents.endIndex,
                 with: string
             )
         }

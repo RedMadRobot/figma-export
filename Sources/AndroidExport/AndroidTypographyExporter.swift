@@ -50,7 +50,7 @@ final public class AndroidTypographyExporter: AndroidExporter {
         let context: [String: Any] = [
             "textStyles": fonts
         ]
-        let env = makeEnvironment(trimBehavior: .smart)
+        let env = makeEnvironment()
         let contents = try env.renderTemplate(name: "typography.xml.stencil", context: context)
         
         let directoryURL = output.xmlOutputDirectory.appendingPathComponent("values")
@@ -81,7 +81,7 @@ final public class AndroidTypographyExporter: AndroidExporter {
             "package": package,
             "xmlResourcePackage": xmlResourcePackage
         ]
-        let env = makeEnvironment(trimBehavior: .none)
+        let env = makeEnvironment()
         let contents = try env.renderTemplate(name: "Typography.kt.stencil", context: context)
         
         let fileURL = URL(string: "Typography.kt")!

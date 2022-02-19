@@ -229,10 +229,6 @@ final class XcodeColorExporterTests: XCTestCase {
         """)
     }
 
-    func testExport_swiftui_and_assets_in_separate_bundle() throws {
-
-    }
-
     func testExport_swiftui_and_assets_in_swift_package() throws {
         let output = XcodeColorsOutput(
             assetsColorsURL: colorsAssetCatalog,

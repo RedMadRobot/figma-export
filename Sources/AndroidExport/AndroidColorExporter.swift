@@ -61,7 +61,7 @@ final public class AndroidColorExporter: AndroidExporter {
             "colors": colors
         ]
         
-        let env = makeEnvironment(trimBehavior: .smart)
+        let env = makeEnvironment()
         return try env.renderTemplate(name: "colors.xml.stencil", context: context)
     }
     
@@ -84,7 +84,7 @@ final public class AndroidColorExporter: AndroidExporter {
             "colors": colors
         ]
 
-        let env = makeEnvironment(trimBehavior: .smart)
+        let env = makeEnvironment()
         let string = try env.renderTemplate(name: "Colors.kt.stencil", context: context)
         
         let fileURL = URL(string: "Colors.kt")!

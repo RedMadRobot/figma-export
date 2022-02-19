@@ -1,7 +1,2 @@
 {% for image in images %}
-{% if assetsInMainBundle %}
-    {% if addObjcPrefix %}@objc {% endif %}static var {{ image.name }}: UIImage { UIImage(named: #function)! }
-{% else %}
-    {% if addObjcPrefix %}@objc {% endif %}static var {{ image.name }}: UIImage { UIImage(named: #function, in: BundleProvider.bundle, compatibleWith: nil)! }
-{% endif %}
-{% endfor %}
+    {% if addObjcPrefix %}@objc {% endif %}static var {{ image.name }}: UIImage { UIImage(named: #function{% if not assetsInMainBundle %}, in: BundleProvider.bundle, compatibleWith: nil{% endif %})! }{% endfor %}

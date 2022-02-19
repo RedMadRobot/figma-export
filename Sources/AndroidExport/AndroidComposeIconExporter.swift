@@ -37,7 +37,7 @@ final public class AndroidComposeIconExporter: AndroidExporter {
             "xmlResourcePackage": xmlResourcePackage,
             "icons": icons
         ]
-        let env = makeEnvironment(trimBehavior: .none)
+        let env = makeEnvironment()
         return try env.renderTemplate(name: "Icons.kt.stencil", context: context)
     }
 }
