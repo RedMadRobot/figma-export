@@ -259,8 +259,8 @@ final class XcodeColorExporterTests: XCTestCase {
         }
 
         public extension Color {
-            static var colorPair1: Color { Color(#function, in: BundleProvider.bundle) }
-            static var colorPair2: Color { Color(#function, in: BundleProvider.bundle) }
+            static var colorPair1: Color { Color(#function, bundle: BundleProvider.bundle) }
+            static var colorPair2: Color { Color(#function, bundle: BundleProvider.bundle) }
         }
 
         """)

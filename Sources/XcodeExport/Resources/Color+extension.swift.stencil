@@ -11,5 +11,5 @@ private class BundleProvider {
 
 {% endif %}
 public extension Color {{ "{" }}{% for color in colors %}
-    static var {{ color.name }}: Color { Color({% if useNamespace %}"{{ color.originalName }}"{% else %}#function{% endif %}{% if not assetsInMainBundle %}, in: BundleProvider.bundle{% endif %}) }{% endfor %}
+    static var {{ color.name }}: Color { Color({% if useNamespace %}"{{ color.originalName }}"{% else %}#function{% endif %}{% if not assetsInMainBundle %}, bundle: BundleProvider.bundle{% endif %}) }{% endfor %}
 }
