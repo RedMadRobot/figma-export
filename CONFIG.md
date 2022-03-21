@@ -15,6 +15,10 @@ figma:
   lightFileId: shPilWnVdJfo10YF12345
   # [optional] Identifier of the file containing dark color palette and dark images.
   darkFileId: KfF6DnJTWHGZzC912345
+  # [optional] Identifier of the file containing light high contrast color palette.
+  lightHighContrastFileId: KfF6DnJTWHGZzC912345
+  # [optional] Identifier of the file containing dark high contrast color palette.
+  darkHighContrastFileId: KfF6DnJTWHGZzC912345
   # [optional] Figma API request timeout. The default value of this property is 30 (seconds). If you have a lot of resources to export set this value to 60 or more to give Figma API more time to prepare resources for exporting.
   # timeout: 30
 
@@ -30,6 +34,10 @@ common:
     useSingleFile: true
     # [optional] If useSingleFile is true, customize the suffix to denote a dark mode color. Defaults to '_dark'
     darkModeSuffix: '_dark'
+    # [optional] If useSingleFile is true, customize the suffix to denote a light high contrast color. Defaults to '_lightHC'
+    lightHCModeSuffix: '_lightHC'
+    # [optional] If useSingleFile is true, customize the suffix to denote a dark high contrast color. Defaults to '_darkHC'
+    darkHCModeSuffix: '_darkHC'
   # [optional]
   icons:
     # [optional] Name of the Figma's frame where icons components are located
