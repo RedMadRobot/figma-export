@@ -13,26 +13,38 @@ final class ColorsLoader {
         self.figmaParams = figmaParams
         self.colorParams = colorParams
     }
-    
-    func load() throws -> (light: [Color], dark: [Color]?) {
-        if let useSingleFile = colorParams?.useSingleFile, useSingleFile {
-            return try loadColorsFromSingleFile()
-        } else {
+
+    func load() throws -> (light: [Color], dark: [Color]?, lightHC: [Color]?, darkHC: [Color]?) {
+        guard let useSingleFile = colorParams?.useSingleFile, useSingleFile else {
             return try loadColorsFromLightAndDarkFile()
         }
+        return try loadColorsFromSingleFile()
     }
 
-    private func loadColorsFromLightAndDarkFile() throws -> (light: [Color], dark: [Color]?) {
+    private func loadColorsFromLightAndDarkFile() throws -> (light: [Color],
+                                                             dark: [Color]?,
+                                                             lightHC: [Color]?,
+                                                             darkHC: [Color]?) {
         let lightColors = try loadColors(fileId: figmaParams.lightFileId)
         let darkColors = try figmaParams.darkFileId.map { try loadColors(fileId: $0) }
-        return (lightColors, darkColors)
+        let lightHighContrastColors = try figmaParams.lightHighContrastFileId.map { try loadColors(fileId: $0) }
+        let darkHighContrastColors = try figmaParams.darkHighContrastFileId.map { try loadColors(fileId: $0) }
+        return (lightColors, darkColors, lightHighContrastColors, darkHighContrastColors)
     }
 
-    private func loadColorsFromSingleFile() throws -> (light: [Color], dark: [Color]?) {
+    private func loadColorsFromSingleFile() throws -> (light: [Color],
+                                                       dark: [Color]?,
+                                                       lightHC: [Color]?,
+                                                       darkHC: [Color]?) {
         let colors = try loadColors(fileId: figmaParams.lightFileId)
         let darkSuffix = colorParams?.darkModeSuffix ?? "_dark"
+        let lightHCSuffix = colorParams?.lightHCModeSuffix ?? "_lightHC"
+        let darkHCSuffix = colorParams?.darkHCModeSuffix ?? "_darkHC"
+
         let lightColors = colors
             .filter { !$0.name.hasSuffix(darkSuffix) }
+            .filter { !$0.name.hasSuffix(lightHCSuffix) }
+            .filter { !$0.name.hasSuffix(darkHCSuffix) }
         let darkColors = colors
             .filter { $0.name.hasSuffix(darkSuffix) }
             .map { color -> Color in
@@ -40,7 +52,21 @@ final class ColorsLoader {
                 newColor.name = String(color.name.dropLast(darkSuffix.count))
                 return newColor
             }
-        return (lightColors, darkColors)
+        let lightHCColors = colors
+            .filter { $0.name.hasSuffix(lightHCSuffix) }
+            .map { color -> Color in
+                var newColor = color
+                newColor.name = String(color.name.dropLast(lightHCSuffix.count))
+                return newColor
+            }
+        let darkHCColors = colors
+            .filter { $0.name.hasSuffix(darkHCSuffix) }
+            .map { color -> Color in
+                var newColor = color
+                newColor.name = String(color.name.dropLast(darkHCSuffix.count))
+                return newColor
+            }
+        return (lightColors, darkColors, lightHCColors, darkHCColors)
     }
     
     private func loadColors(fileId: String) throws -> [Color] {
