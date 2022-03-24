@@ -139,7 +139,7 @@ public extension AssetsProcessable {
         }
 
         // Return failure
-        guard !errors.all.isEmpty else { return .failure(errors) }
+        guard errors.all.isEmpty else { return .failure(errors) }
         // Warning checks
         var warning: AssetsValidatorWarning?
         // LightAssetNotFoundInDarkPalette
@@ -184,7 +184,7 @@ public extension AssetsProcessable {
         }
 
         // Return failure
-        guard !errors.all.isEmpty else { return .failure(errors) }
+        guard errors.all.isEmpty else { return .failure(errors) }
         // Warning checks
         var warning: AssetsValidatorWarning?
         // LightAssetNotFoundInDarkPalette
