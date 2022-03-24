@@ -51,6 +51,7 @@ Table of Contents:
 * Export images to Xcode / Android Studio project
 * Export text styles to Xcode / Android Studio project
 * Supports Dark Mode
+* Supports High contrast colors for Xcode
 * Supports SwiftUI and UIKit
 * Supports Objective-C
 
@@ -454,7 +455,11 @@ For `figma-export colors`
 
 By default, if you support dark mode your Figma project must contains two files. One should contains a dark color palette, and the another light color palette. If you would like to specify light and dark colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode colors by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the colors section.
 
-The light color palette may contain more colors than the dark color palette. If a light-only color is present, it will be considered as universal color for the iOS color palette. Names of the dark colors must match the light colors.
+If you support hight contrast mode without dark mode your Figma project must contains two files. One should contains a hight contrast color palette, and the another light color palette. If you would like to specify light and hight contrast colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote hight contrast mode colors by adding a suffix like `_lightHC`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the colors section.
+
+If you support hight contrast mode with dark mode your Figma project must contains four files. Should be like this: light, dark, hight contrast light, hight contrast dark. If you would like to specify colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote hight contrast mode colors by adding a suffix like `_lightHC` for light and `_darkHC` for dark hight contrast colors. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the colors section.
+
+The light color palette may contain more colors than the dark or hight light color palette wherein the dark color palette may contain more colors than the hight dark color palette. If a light-only color is present, it will be considered as universal color for the iOS color palette. Names of the dark, hight light and hight dark colors must match the light colors.
 
 Example
 
