@@ -21,10 +21,10 @@ public extension AssetNameProcessable {
     
     func normalizeName(_ name: String, style: NameStyle) -> String {
         switch style {
-            case .camelCase:
-                return name.lowerCamelCased()
-            case .snakeCase:
-                return name.snakeCased()
+        case .camelCase:
+            return name.lowerCamelCased()
+        case .snakeCase:
+            return name.snakeCased()
         }
     }
 }
@@ -204,10 +204,10 @@ public extension ColorsProcessor {
                 errors.all.append(AssetsValidatorError.badName(name: asset.name))
             }
             switch assetSet.insert(asset) {
-                case (true, _):
-                    break // ok
-                case (false, let oldMember): // already exists
-                    errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
+            case (true, _):
+                break // ok
+            case (false, let oldMember): // already exists
+                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
             }
         }
         return assetSet
@@ -312,10 +312,10 @@ public extension AssetsProcessable {
             }
 
             switch set.insert(asset) {
-                case (true, _):
-                    break // ok
-                case (false, let oldMember): // already exists
-                    errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
+            case (true, _):
+                break // ok
+            case (false, let oldMember): // already exists
+                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
             }
         }
 
@@ -355,10 +355,10 @@ public extension AssetsProcessable {
             }
 
             switch lightSet.insert(asset) {
-                case (true, _):
-                    break // ok
-                case (false, let oldMember): // already exists
-                    errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
+            case (true, _):
+                break // ok
+            case (false, let oldMember): // already exists
+                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
             }
         }
 
@@ -391,20 +391,20 @@ public extension AssetsProcessable {
             }
 
             switch lightSet.insert(asset) {
-                case (true, _):
-                    break // ok
-                case (false, let oldMember): // already exists
-                    errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
+            case (true, _):
+                break // ok
+            case (false, let oldMember): // already exists
+                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
             }
         }
 
         var darkSet: Set<AssetType> = []
         dark.forEach { asset in
             switch darkSet.insert(asset) {
-                case (true, _):
-                    break // ok
-                case (false, let oldMember): // already exists
-                    errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
+            case (true, _):
+                break // ok
+            case (false, let oldMember): // already exists
+                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
             }
         }
 
@@ -459,26 +459,26 @@ public extension AssetsProcessable {
         lightSet: Set<AssetType>,
         darkSet: Set<AssetType>) -> [AssetPair<Self.AssetType>] {
 
-            let lightAssets = lightSet
-                .filter { $0.platform == platform || $0.platform == nil }
-                .sorted { $0.name < $1.name }
+        let lightAssets = lightSet
+            .filter { $0.platform == platform || $0.platform == nil }
+            .sorted { $0.name < $1.name }
 
-            // After validations, only those dark assets in the light asset set are allowed
-            // However the dark array may be smaller than the light array
-            // Create a same size array of dark assets so we can zip in the next step
-            let darkAssetMap: [String: AssetType] = darkSet.reduce(into: [:]) { $0[$1.name] = $1 }
-            let darkAssets = lightAssets.map { lightAsset in darkAssetMap[lightAsset.name] }
+        // After validations, only those dark assets in the light asset set are allowed
+        // However the dark array may be smaller than the light array
+        // Create a same size array of dark assets so we can zip in the next step
+        let darkAssetMap: [String: AssetType] = darkSet.reduce(into: [:]) { $0[$1.name] = $1 }
+        let darkAssets = lightAssets.map { lightAsset in darkAssetMap[lightAsset.name] }
 
-            let zipResult = zip(lightAssets, darkAssets)
+        let zipResult = zip(lightAssets, darkAssets)
 
-            return zipResult
-                .map { lightAsset, darkAsset in
-                    AssetPair(
-                        light: processedAssetName(lightAsset),
-                        dark: darkAsset.map { processedAssetName($0) }
-                    )
-                }
-        }
+        return zipResult
+            .map { lightAsset, darkAsset in
+                AssetPair(
+                    light: processedAssetName(lightAsset),
+                    dark: darkAsset.map { processedAssetName($0) }
+                )
+            }
+    }
 
     /// Runs the name replacement and name validation regexps, and name styles, if they are defined
     /// - Returns:
