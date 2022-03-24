@@ -10,7 +10,7 @@ public enum AssetsValidatorWarning: LocalizedError {
             case .lightAssetsNotFoundInDarkPalette(let lights):
                 warning = "The following assets will be considered universal because they are not found in the dark palette: \(lights.joined(separator: ", "))"
             case .lightHCAssetsNotFoundInDarkHCPalette(let lightsHC):
-                warning = "The following assets will be considered universal because they are not found in the dark palette: \(lightsHC.joined(separator: ", "))"
+                warning = "The following assets will be considered universal because they are not found in the dark high contrast palette: \(lightsHC.joined(separator: ", "))"
         }
         return "⚠️ \(warning)"
     }
