@@ -47,28 +47,21 @@ final class ColorsLoader {
                 !$0.name.hasSuffix(lightHCSuffix) &&
                 !$0.name.hasSuffix(darkHCSuffix)
             }
-        let darkColors = colors
-            .filter { $0.name.hasSuffix(darkSuffix) }
-            .map { color -> Color in
-                var newColor = color
-                newColor.name = String(color.name.dropLast(darkSuffix.count))
-                return newColor
-            }
-        let lightHCColors = colors
-            .filter { $0.name.hasSuffix(lightHCSuffix) }
-            .map { color -> Color in
-                var newColor = color
-                newColor.name = String(color.name.dropLast(lightHCSuffix.count))
-                return newColor
-            }
-        let darkHCColors = colors
-            .filter { $0.name.hasSuffix(darkHCSuffix) }
-            .map { color -> Color in
-                var newColor = color
-                newColor.name = String(color.name.dropLast(darkHCSuffix.count))
-                return newColor
-            }
+        let darkColors = filteredColors(colors, suffix: darkSuffix)
+        let lightHCColors = filteredColors(colors, suffix: lightHCSuffix)
+        let darkHCColors = filteredColors(colors, suffix: darkHCSuffix)
         return (lightColors, darkColors, lightHCColors, darkHCColors)
+    }
+
+    private func filteredColors(_ colors: [Color], suffix: String) -> [Color] {
+        let filteredColors = colors
+            .filter { $0.name.hasSuffix(suffix) }
+            .map { color -> Color in
+                var newColor = color
+                newColor.name = String(color.name.dropLast(suffix.count))
+                return newColor
+            }
+        return filteredColors
     }
     
     private func loadColors(fileId: String) throws -> [Color] {
