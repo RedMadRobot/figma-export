@@ -42,9 +42,11 @@ final class ColorsLoader {
         let darkHCSuffix = colorParams?.darkHCModeSuffix ?? "_darkHC"
 
         let lightColors = colors
-            .filter { !$0.name.hasSuffix(darkSuffix) }
-            .filter { !$0.name.hasSuffix(lightHCSuffix) }
-            .filter { !$0.name.hasSuffix(darkHCSuffix) }
+            .filter {
+                !$0.name.hasSuffix(darkSuffix) &&
+                !$0.name.hasSuffix(lightHCSuffix) &&
+                !$0.name.hasSuffix(darkHCSuffix)
+            }
         let darkColors = colors
             .filter { $0.name.hasSuffix(darkSuffix) }
             .map { color -> Color in
