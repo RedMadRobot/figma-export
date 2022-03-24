@@ -95,17 +95,11 @@ public extension AssetsProcessable {
                  lightHC: [AssetType]? = nil,
                  darkHC: [AssetType]? = nil) -> ProcessingPairResult {
         if let dark = dark {
-            guard let lightHC = lightHC, let darkHC = darkHC else {
-                return validateAndMakePairs(light: normalizeAssetName(assets: light), dark: normalizeAssetName(assets: dark))
-            }
-            return validateAndMakePairs(light: light, dark: dark, lightHighContrast: lightHC, darkHighContrast: darkHC)
+            return validateAndMakePairs(light: light, dark: dark, lightHighContrast: lightHC ?? [], darkHighContrast: darkHC ?? [])
         } else {
-            guard let lightHC = lightHC else {
-                return validateAndMakePairs(light: normalizeAssetName(assets: light))
-            }
             return validateAndMakePairs(
                 light: normalizeAssetName(assets: light),
-                lightHighContrast: normalizeAssetName(assets: lightHC)
+                lightHighContrast: normalizeAssetName(assets: lightHC ?? [])
             )
         }
     }
@@ -119,6 +113,10 @@ public extension AssetsProcessable {
                                       lightHighContrast: [AssetType]) -> ProcessingPairResult {
         // Error checks
         var errors = ErrorGroup()
+        // CountMismatch
+        if light.count < lightHighContrast.count {
+            errors.all.append(AssetsValidatorError.countMismatchLightHighContrastColors(light: light.count, lightHC: lightHighContrast.count))
+        }
         // FoundDuplicate
         let lightSet: Set<AssetType> = foundDuplicate(assets: light, errors: &errors)
         let lightHCSet: Set<AssetType> = foundDuplicate(assets: lightHighContrast, errors: &errors)
@@ -142,9 +140,11 @@ public extension AssetsProcessable {
         guard errors.all.isEmpty else { return .failure(errors) }
         // Warning checks
         var warning: AssetsValidatorWarning?
-        // LightAssetNotFoundInDarkPalette
-        let lightElements = lightSet.subtracting(lightHCSet)
-        if !lightElements.isEmpty { warning = .lightAssetsNotFoundInDarkPalette(assets: lightElements.map { $0.name }) }
+        // LightAssetNotFoundInLightHCPalette
+        if !lightHCSet.isEmpty {
+            let lightElements = lightSet.subtracting(lightHCSet)
+            if !lightElements.isEmpty { warning = .lightHCAssetsNotFoundInLightPalette(assets: lightElements.map { $0.name }) }
+        }
 
         let pairs = makeSortedLightAssetPairs(lightSet: lightSet, lightHCSet: lightHCSet)
         return .success(pairs, warning: warning)
@@ -159,6 +159,12 @@ public extension AssetsProcessable {
         // CountMismatch
         if light.count < dark.count {
             errors.all.append(AssetsValidatorError.countMismatch(light: light.count, dark: dark.count))
+        }
+        if light.count < lightHighContrast.count {
+            errors.all.append(AssetsValidatorError.countMismatchLightHighContrastColors(light: light.count, lightHC: lightHighContrast.count))
+        }
+        if dark.count < darkHighContrast.count {
+            errors.all.append(AssetsValidatorError.countMismatchDarkHighContrastColors(dark: dark.count, darkHC: darkHighContrast.count))
         }
         // FoundDuplicate
         let lightSet: Set<AssetType> = foundDuplicate(assets: light, errors: &errors)
@@ -190,9 +196,16 @@ public extension AssetsProcessable {
         // LightAssetNotFoundInDarkPalette
         let lightElements = lightSet.subtracting(darkSet)
         if !lightElements.isEmpty { warning = .lightAssetsNotFoundInDarkPalette(assets: lightElements.map { $0.name }) }
-        // LightHCAssetNotFoundInDarkHCPalette
-        let lightHCElements = lightHCSet.subtracting(darkHCSet)
-        if !lightHCElements.isEmpty { warning = .lightHCAssetsNotFoundInDarkHCPalette(assets: lightHCElements.map { $0.name }) }
+        // LightAssetNotFoundInLightHCPalette
+        if !lightHCSet.isEmpty {
+            let lightHCElements = lightSet.subtracting(lightHCSet)
+            if !lightHCElements.isEmpty { warning = .lightHCAssetsNotFoundInLightPalette(assets: lightHCElements.map { $0.name }) }
+        }
+        // DarkAssetNotFoundInDarkHCPalette
+        if !darkHCSet.isEmpty {
+            let darkHCElements = darkSet.subtracting(darkHCSet)
+            if !darkHCElements.isEmpty { warning = .darkHCAssetsNotFoundInDarkPalette(assets: darkHCElements.map { $0.name }) }
+        }
 
         let pairs = makeSortedAssetPairs(lightSet: lightSet, darkSet: darkSet, lightHCSet: lightHCSet, darkHCSet: darkHCSet)
         return .success(pairs, warning: warning)
@@ -206,6 +219,9 @@ public extension AssetsProcessable {
             .filter { $0.platform == platform || $0.platform == nil }
             .sorted { $0.name < $1.name }
 
+        // After validations, only those dark assets in the light asset set are allowed
+        // However the dark array may be smaller than the light array
+        // Create a same size array of dark assets so we can zip in the next step
         let darkAssetMap: [String: AssetType] = darkSet.reduce(into: [:]) { $0[$1.name] = $1 }
         let darkAssets = lightAssets.map { darkAsset in darkAssetMap[darkAsset.name] }
         let lightHCAssetMap: [String: AssetType] = lightHCSet.reduce(into: [:]) { $0[$1.name] = $1 }
@@ -213,32 +229,15 @@ public extension AssetsProcessable {
         let darkHCAssetMap: [String: AssetType] = darkHCSet.reduce(into: [:]) { $0[$1.name] = $1 }
         let darkHCAssets = lightAssets.map { darkHCAsset in darkHCAssetMap[darkHCAsset.name] }
 
-        var resultArray: [AssetPair<Self.AssetType>] = []
+        let zipResult = zip(lightAssets, darkAssets, lightHCAssets, darkHCAssets)
 
-        let zipDark = zip(lightAssets, darkAssets)
-        resultArray = zipDark.map { lightAssets, darkAssets in
-            AssetPair(light: processedAssetName(lightAssets),
-                      dark: darkAssets.map { processedAssetName($0) }
-            )
-        }
-
-        let zipLightHC = zip(lightAssets, lightHCAssets)
-        _ = resultArray.map { oldAsset in
-            var newAsset = oldAsset
-            _ = zipLightHC.map { lightAssets, lightHCAssets in
-                newAsset.setLightHC(lightHCAssets)
+        return zipResult
+            .map { lightAsset, darkAsset, lightHCAsset, darkHCAsset in
+                AssetPair(light: processedAssetName(lightAsset),
+                          dark: darkAsset.map { processedAssetName($0) },
+                          lightHC: lightHCAsset.map { processedAssetName($0) },
+                          darkHC: darkHCAsset.map { processedAssetName($0) })
             }
-        }
-
-        let zipDarkHC = zip(lightAssets, darkHCAssets)
-        _ = resultArray.map { oldAsset in
-            var newAsset = oldAsset
-            _ = zipDarkHC.map { lightAssets, darkHCAssets in
-                newAsset.setDarkHC(darkHCAssets)
-            }
-        }
-
-        return resultArray
     }
 
     private func makeSortedLightAssetPairs(lightSet: Set<AssetType>,
@@ -327,99 +326,6 @@ public extension AssetsProcessable {
         }
         
         return result
-    }
-
-    private func validateAndMakePairs(light: [AssetType]) -> ProcessingPairResult {
-        var errors = ErrorGroup()
-        // foundDuplicate
-        let lightSet = foundDuplicate(assets: light, errors: &errors)
-
-        if !errors.all.isEmpty { return .failure(errors) }
-
-        let pairs = makeSortedAssetPairs(lightSet: lightSet)
-        return .success(pairs)
-    }
-
-    private func validateAndMakePairs(light: [AssetType], dark: [AssetType]) -> ProcessingPairResult {
-
-        // Error checks
-
-        var errors = ErrorGroup()
-
-        // 1. countMismatch
-        if light.count < dark.count {
-            errors.all.append(AssetsValidatorError.countMismatch(light: light.count, dark: dark.count))
-        }
-
-        // 2. foundDuplicate
-        let lightSet = foundDuplicate(assets: light, errors: &errors)
-        let darkSet = foundDuplicate(assets: dark, errors: &errors)
-
-        // 3. darkAssetNotFoundInLightPalette
-        checkSubtracting(firstAsset: lightSet, secondAsset: darkSet, errors: &errors)
-
-        // 4. descriptionMismatch
-        lightSet.forEach { asset in
-            if
-                let platform = asset.platform,
-                let dark = darkSet.first(where: { $0.name == asset.name }),
-                dark.platform != platform {
-                
-                let error = AssetsValidatorError.descriptionMismatch(
-                    assetName: asset.name,
-                    light: platform.rawValue,
-                    dark: dark.platform?.rawValue ?? "")
-                
-                errors.all.append(error)
-            }
-        }
-
-        if !errors.all.isEmpty { return .failure(errors) }
-
-        // Warning checks
-
-        var warning: AssetsValidatorWarning?
-
-        // 1. lightAssetNotFoundInDarkPalette
-        let lightElements = lightSet.subtracting(darkSet)
-        if !lightElements.isEmpty {
-            warning = .lightAssetsNotFoundInDarkPalette(assets: lightElements.map { $0.name })
-        }
-
-        let pairs = makeSortedAssetPairs(lightSet: lightSet, darkSet: darkSet)
-        return .success(pairs, warning: warning)
-    }
-    
-    private func makeSortedAssetPairs(lightSet: Set<AssetType>) -> [AssetPair<Self.AssetType>] {
-        return lightSet
-            .sorted { $0.name < $1.name }
-            .filter { $0.platform == nil || $0.platform == platform }
-            .map { AssetPair(light: processedAssetName($0), dark: nil) }
-    }
-
-    private func makeSortedAssetPairs(
-        lightSet: Set<AssetType>,
-        darkSet: Set<AssetType>) -> [AssetPair<Self.AssetType>] {
-
-        let lightAssets = lightSet
-            .filter { $0.platform == platform || $0.platform == nil }
-            .sorted { $0.name < $1.name }
-
-        // After validations, only those dark assets in the light asset set are allowed
-        // However the dark array may be smaller than the light array
-        // Create a same size array of dark assets so we can zip in the next step
-        let darkAssetMap: [String: AssetType] = darkSet.reduce(into: [:]) { $0[$1.name] = $1 }
-        let darkAssets = lightAssets.map { lightAsset in darkAssetMap[lightAsset.name] }
-
-        let zipResult = zip(lightAssets, darkAssets)
-
-        return zipResult
-            .map { lightAsset, darkAsset in
-                AssetPair(
-                    light: processedAssetName(lightAsset),
-                    dark: darkAsset.map { processedAssetName($0) }
-                )
-            }
     }
 
     /// Runs the name replacement and name validation regexps, and name styles, if they are defined
