@@ -36,7 +36,7 @@ public protocol AssetsProcessable: AssetNameProcessable {
     
     var platform: Platform { get }
     
-    func process(light: [AssetType], dark: [AssetType]?) -> ProcessingPairResult
+    func process(light: [AssetType], dark: [AssetType]?, lightHC: [AssetType]?, darkHC: [AssetType]?) -> ProcessingPairResult
     func process(assets: [AssetType]) -> ProcessingResult
 }
 
@@ -88,8 +88,12 @@ public struct ImagesProcessor: AssetsProcessable {
     }
 }
 
-public extension ColorsProcessor {
-    func process(light: [AssetType], dark: [AssetType]?, lightHC: [AssetType]?, darkHC: [AssetType]?) -> ProcessingPairResult {
+public extension AssetsProcessable {
+
+    func process(light: [AssetType],
+                 dark: [AssetType]?,
+                 lightHC: [AssetType]? = nil,
+                 darkHC: [AssetType]? = nil) -> ProcessingPairResult {
         if let dark = dark {
             guard let lightHC = lightHC, let darkHC = darkHC else {
                 return validateAndMakePairs(light: normalizeAssetName(assets: light), dark: normalizeAssetName(assets: dark))
@@ -106,6 +110,11 @@ public extension ColorsProcessor {
         }
     }
 
+    func process(assets: [AssetType]) -> ProcessingResult {
+        let assets = normalizeAssetName(assets: assets)
+        return validateAndProcess(assets: assets)
+    }
+
     private func validateAndMakePairs(light: [AssetType],
                                       lightHighContrast: [AssetType]) -> ProcessingPairResult {
         // Error checks
@@ -114,7 +123,6 @@ public extension ColorsProcessor {
         let lightSet: Set<AssetType> = foundDuplicate(assets: light, errors: &errors)
         let lightHCSet: Set<AssetType> = foundDuplicate(assets: lightHighContrast, errors: &errors)
         // AssetNotFoundInLightPalette
-        checkSubtracting(firstAsset: lightSet, secondAsset: lightHCSet, errors: &errors)
         checkSubtracting(firstAsset: lightSet, secondAsset: lightHCSet, errors: &errors)
 
         // DescriptionMismatch
@@ -190,29 +198,6 @@ public extension ColorsProcessor {
         return .success(pairs, warning: warning)
     }
 
-    private func checkSubtracting(firstAsset: Set<AssetType>, secondAsset: Set<AssetType>, errors: inout ErrorGroup) {
-        let elements = secondAsset.subtracting(firstAsset)
-        if !elements.isEmpty {
-            errors.all.append(AssetsValidatorError.darkAssetsNotFoundInLightPalette(assets: elements.map { $0.name }))
-        }
-    }
-
-    private func foundDuplicate(assets: [AssetType], errors: inout ErrorGroup) -> Set<AssetType> {
-        var assetSet: Set<AssetType> = []
-        assets.forEach { asset in
-            if !isNameValid(asset.name) {
-                errors.all.append(AssetsValidatorError.badName(name: asset.name))
-            }
-            switch assetSet.insert(asset) {
-            case (true, _):
-                break // ok
-            case (false, let oldMember): // already exists
-                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
-            }
-        }
-        return assetSet
-    }
-
     private func makeSortedAssetPairs(lightSet: Set<AssetType>,
                                       darkSet: Set<AssetType>,
                                       lightHCSet: Set<AssetType>,
@@ -277,26 +262,28 @@ public extension ColorsProcessor {
                 )
             }
     }
-}
 
-public extension AssetsProcessable {
-
-    func process(light: [AssetType], dark: [AssetType]?) -> ProcessingPairResult {
-        if let dark = dark {
-            return validateAndMakePairs(
-                light: normalizeAssetName(assets: light),
-                dark: normalizeAssetName(assets: dark)
-            )
-        } else {
-            return validateAndMakePairs(
-                light: normalizeAssetName(assets: light)
-            )
+    private func checkSubtracting(firstAsset: Set<AssetType>, secondAsset: Set<AssetType>, errors: inout ErrorGroup) {
+        let elements = secondAsset.subtracting(firstAsset)
+        if !elements.isEmpty {
+            errors.all.append(AssetsValidatorError.darkAssetsNotFoundInLightPalette(assets: elements.map { $0.name }))
         }
     }
-    
-    func process(assets: [AssetType]) -> ProcessingResult {
-        let assets = normalizeAssetName(assets: assets)
-        return validateAndProcess(assets: assets)
+
+    private func foundDuplicate(assets: [AssetType], errors: inout ErrorGroup) -> Set<AssetType> {
+        var assetSet: Set<AssetType> = []
+        assets.forEach { asset in
+            if !isNameValid(asset.name) {
+                errors.all.append(AssetsValidatorError.badName(name: asset.name))
+            }
+            switch assetSet.insert(asset) {
+            case (true, _):
+                break // ok
+            case (false, let oldMember): // already exists
+                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
+            }
+        }
+        return assetSet
     }
     
     private func validateAndProcess(assets: [AssetType]) -> ProcessingResult {
@@ -342,35 +329,18 @@ public extension AssetsProcessable {
         return result
     }
 
-    func validateAndMakePairs(light: [AssetType]) -> ProcessingPairResult {
+    private func validateAndMakePairs(light: [AssetType]) -> ProcessingPairResult {
         var errors = ErrorGroup()
-
         // foundDuplicate
-        var lightSet: Set<AssetType> = []
-        light.forEach { asset in
+        let lightSet = foundDuplicate(assets: light, errors: &errors)
 
-            // badName
-            if !isNameValid(asset.name) {
-                errors.all.append(AssetsValidatorError.badName(name: asset.name))
-            }
-
-            switch lightSet.insert(asset) {
-            case (true, _):
-                break // ok
-            case (false, let oldMember): // already exists
-                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
-            }
-        }
-
-        if !errors.all.isEmpty {
-            return .failure(errors)
-        }
+        if !errors.all.isEmpty { return .failure(errors) }
 
         let pairs = makeSortedAssetPairs(lightSet: lightSet)
         return .success(pairs)
     }
 
-    func validateAndMakePairs(light: [AssetType], dark: [AssetType]) -> ProcessingPairResult {
+    private func validateAndMakePairs(light: [AssetType], dark: [AssetType]) -> ProcessingPairResult {
 
         // Error checks
 
@@ -382,37 +352,11 @@ public extension AssetsProcessable {
         }
 
         // 2. foundDuplicate
-        var lightSet: Set<AssetType> = []
-        light.forEach { asset in
-
-            // badName
-            if !isNameValid(asset.name) {
-                errors.all.append(AssetsValidatorError.badName(name: asset.name))
-            }
-
-            switch lightSet.insert(asset) {
-            case (true, _):
-                break // ok
-            case (false, let oldMember): // already exists
-                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
-            }
-        }
-
-        var darkSet: Set<AssetType> = []
-        dark.forEach { asset in
-            switch darkSet.insert(asset) {
-            case (true, _):
-                break // ok
-            case (false, let oldMember): // already exists
-                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
-            }
-        }
+        let lightSet = foundDuplicate(assets: light, errors: &errors)
+        let darkSet = foundDuplicate(assets: dark, errors: &errors)
 
         // 3. darkAssetNotFoundInLightPalette
-        let darkElements = darkSet.subtracting(lightSet)
-        if !darkElements.isEmpty {
-            errors.all.append(AssetsValidatorError.darkAssetsNotFoundInLightPalette(assets: darkElements.map { $0.name }))
-        }
+        checkSubtracting(firstAsset: lightSet, secondAsset: darkSet, errors: &errors)
 
         // 4. descriptionMismatch
         lightSet.forEach { asset in
@@ -430,9 +374,7 @@ public extension AssetsProcessable {
             }
         }
 
-        if !errors.all.isEmpty {
-            return .failure(errors)
-        }
+        if !errors.all.isEmpty { return .failure(errors) }
 
         // Warning checks
 
@@ -483,7 +425,7 @@ public extension AssetsProcessable {
     /// Runs the name replacement and name validation regexps, and name styles, if they are defined
     /// - Returns:
     ///   - `AssetType` with a processed name
-    func processedAssetName(_ asset: AssetType) -> AssetType {
+    private func processedAssetName(_ asset: AssetType) -> AssetType {
         var newAsset = asset
 
         if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
@@ -498,7 +440,7 @@ public extension AssetsProcessable {
     }
     
     /// Normalizes asset name by replacing "/" with "_" and by removing duplication (e.g. "color/color" becomes "color"
-    func normalizeAssetName(assets: [AssetType]) -> [AssetType] {
+    private func normalizeAssetName(assets: [AssetType]) -> [AssetType] {
         assets.map { asset -> AssetType in
             
             var renamedAsset = asset
