@@ -1,4 +1,7 @@
 import Foundation
+#if os(Linux)
+import FoundationNetworking
+#endif
 
 public struct NodesEndpoint: BaseEndpoint {
     public typealias Content = [NodeId: Node]

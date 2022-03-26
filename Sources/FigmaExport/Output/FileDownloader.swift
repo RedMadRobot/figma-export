@@ -1,6 +1,9 @@
 import Foundation
 import FigmaExportCore
 import Logging
+#if os(Linux)
+import FoundationNetworking
+#endif
 
 final class FileDownloader {
 

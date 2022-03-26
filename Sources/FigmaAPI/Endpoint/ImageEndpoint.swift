@@ -1,4 +1,7 @@
 import Foundation
+#if os(Linux)
+import FoundationNetworking
+#endif
 
 public class FormatParams: Encodable {
     /// A number between 0.01 and 4, the image scaling factor
