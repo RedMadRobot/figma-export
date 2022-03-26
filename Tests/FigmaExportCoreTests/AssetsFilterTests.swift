@@ -21,6 +21,7 @@ final class AssetsFilterTests: XCTestCase {
         XCTAssertFalse(filter.match(name: "ic/16/edit"))
     }
 
+    #if !os(Linux)
     func testMatchWithAsterisk() {
         let filter = AssetsFilter(filter: "ic/24/*")
 
@@ -30,4 +31,5 @@ final class AssetsFilterTests: XCTestCase {
         XCTAssertFalse(filter.match(name: "ic/16/call"))
         XCTAssertFalse(filter.match(name: "img/24/edit"))
     }
+    #endif
 }
