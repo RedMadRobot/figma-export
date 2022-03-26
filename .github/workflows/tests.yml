@@ -13,7 +13,7 @@ on:
 
 jobs:
   test:
-    name: Run tests
+    name: Run tests on macOS
     runs-on: macos-12
     steps:
       - name: Checkout
@@ -23,3 +23,13 @@ jobs:
       - name: Build and test
         run: swift test --enable-code-coverage --disable-automatic-resolution
         shell: bash
+  test-linux:
+    name: Run tests on Linux
+    runs-on: ubuntu-20.04
+    container:
+      image: swift:5.6-focal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build and test
+        run: swift test --disable-automatic-resolution
