@@ -738,7 +738,7 @@ private extension XcodeIconsExporterTests {
         try FileManager.default.createDirectory(atPath: directoryURL.path, withIntermediateDirectories: true, attributes: [:])
         let fileURL = URL(fileURLWithPath: file.destination.url.path)
 
-        try content.write(to: fileURL, options: .atomicWrite)
+        try content.write(to: fileURL, options: .atomic)
     }
 
 }

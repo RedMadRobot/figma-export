@@ -16,7 +16,7 @@ final class FileWriter {
             
             let fileURL = URL(fileURLWithPath: file.destination.url.path)
             if let data = file.data {
-                try data.write(to: fileURL, options: .atomicWrite)
+                try data.write(to: fileURL, options: .atomic)
             } else if let localFileURL = file.dataFile {
                 _ = try fileManager.replaceItemAt(fileURL, withItemAt: localFileURL)
             } else {
