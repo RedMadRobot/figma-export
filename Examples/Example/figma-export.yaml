@@ -8,7 +8,7 @@ common:
   # [optional]
   colors:
     # [optional] RegExp pattern for color name validation before exporting. Use to validate color name in Figma file
-    nameValidateRegexp: '^[a-zA-Z_]+$' # RegExp pattern for: background, background_primary, widget_primary_background
+    nameValidateRegexp: '^([a-zA-Z_]+)$' # RegExp pattern for: background, background_primary, widget_primary_background
   # [optional]
   icons:
     # [optional] RegExp pattern for icon name validation before exporting. Use to validate icon name in Figma file
@@ -32,7 +32,7 @@ ios:
   # Parameters for exporting colors
   colors:
     # Should be generate color assets instead of pure swift code
-    useColorAssets: True
+    useColorAssets: true
     # Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
     # Color name style: camelCase or snake_case
