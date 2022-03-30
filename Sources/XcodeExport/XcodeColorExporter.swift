@@ -163,7 +163,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
             if let darkColor = colorPair.dark {
                 colors.append(
                     XcodeAssetContents.ColorData(
-                        appearances: [XcodeAssetContents.Appearance(appearance: "luminosity", value: "dark")],
+                        appearances: [.dark],
                         color: XcodeAssetContents.ColorInfo(
                             components: darkColor.toHexComponents()
                         )
@@ -173,7 +173,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
             if let lightHCColor = colorPair.lightHC {
                 colors.append(
                     XcodeAssetContents.ColorData(
-                        appearances: [XcodeAssetContents.Appearance(appearance: "contrast", value: "high")],
+                        appearances: [.highContrast],
                         color: XcodeAssetContents.ColorInfo(
                             components: lightHCColor.toHexComponents()
                         )
@@ -183,7 +183,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
             if let darkHCColor = colorPair.darkHC {
                 colors.append(
                     XcodeAssetContents.ColorData(
-                        appearances: [XcodeAssetContents.Appearance(appearance: "contrast", value: "high")],
+                        appearances: [.dark, .highContrast],
                         color: XcodeAssetContents.ColorInfo(
                             components: darkHCColor.toHexComponents()
                         )

@@ -87,3 +87,8 @@ struct XcodeAssetContents: Encodable {
         self.properties = properties
     }
 }
+
+extension XcodeAssetContents.Appearance {
+    static var dark = Self(appearance: "luminosity", value: "dark")
+    static var highContrast = Self(appearance: "contrast", value: "high")
+}
