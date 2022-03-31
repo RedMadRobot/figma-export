@@ -158,7 +158,7 @@ extension Image {
     func makeXcodeAssetContentsImageData(scale: Scale, appearance: Appearance? = nil) -> XcodeAssetContents.ImageData {
         let filename = makeFileURL(scale: scale, appearance: appearance).absoluteString
         let xcodeIdiom = idiom.flatMap { XcodeAssetIdiom(rawValue: $0) } ?? .universal
-        let appearances = appearance.flatMap { $0 == .dark ? [.dark] : nil }
+        let appearances = appearance.flatMap { $0 == .dark ? [XcodeAssetContents.Appearance.dark] : nil }
         let scaleString = scale.string
 
         return XcodeAssetContents.ImageData(
