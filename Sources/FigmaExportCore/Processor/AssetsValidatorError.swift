@@ -6,7 +6,7 @@ enum AssetsValidatorError: LocalizedError {
     case countMismatchLightHighContrastColors(light: Int, lightHC: Int)
     case countMismatchDarkHighContrastColors(dark: Int, darkHC: Int)
     case foundDuplicate(assetName: String)
-    case darkAssetsNotFoundInLightPalette(assets: [String])
+    case secondAssetsNotFoundInFirstPalette(assets: [String], firstAssetsName: String, secondAssetsName: String)
     case descriptionMismatch(assetName: String, light: String, dark: String)
 
     var errorDescription: String? {
@@ -20,8 +20,8 @@ enum AssetsValidatorError: LocalizedError {
             error = "The number of assets doesn’t match. Light color palette contains \(light), and light high contrast color palette \(lightHC)."
         case .countMismatchDarkHighContrastColors(let dark, let darkHC):
             error = "The number of assets doesn’t match. Dark color palette contains \(dark), and dark high contrast color palette \(darkHC)."
-        case .darkAssetsNotFoundInLightPalette(let darks):
-            error = "Light theme doesn’t contains following assets: \(darks.joined(separator: ", ")), which exists in dark theme. Add these assets to light theme and publish to the Team Library."
+        case .secondAssetsNotFoundInFirstPalette(let secondAsset, let firstAssetsName, let secondAssetsName):
+            error = "\(firstAssetsName) theme doesn’t contains following assets: \(secondAsset.joined(separator: ", ")), which exists in \(secondAssetsName.lowercased()) theme. Add these assets to \(firstAssetsName.lowercased()) theme and publish to the Team Library."
         case .foundDuplicate(let assetName):
             error = "Found duplicates of asset with name \(assetName). Remove duplicates."
         case .descriptionMismatch(let assetName, let light, let dark):

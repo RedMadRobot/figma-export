@@ -130,7 +130,11 @@ public extension AssetsProcessable {
         let lightSet: Set<AssetType> = foundDuplicate(assets: light, errors: &errors, isLightAssetSet: true)
         let lightHCSet: Set<AssetType> = foundDuplicate(assets: lightHighContrast, errors: &errors)
         // AssetNotFoundInLightPalette
-        checkSubtracting(firstAsset: lightSet, secondAsset: lightHCSet, errors: &errors)
+        checkSubtracting(firstAssetSet: lightSet,
+                         firstAssetName: "Light",
+                         secondAssetSet: lightHCSet,
+                         secondAssetName: "Light high contrast",
+                         errors: &errors)
         // DescriptionMismatch
         lightSet.forEach { asset in
             if let platform = asset.platform,
@@ -178,10 +182,21 @@ public extension AssetsProcessable {
         let lightHCSet: Set<AssetType> = foundDuplicate(assets: lightHC, errors: &errors)
         let darkHCSet: Set<AssetType> = foundDuplicate(assets: darkHC, errors: &errors)
         // AssetNotFoundInLightPalette
-        checkSubtracting(firstAsset: lightSet, secondAsset: darkSet, errors: &errors)
-        checkSubtracting(firstAsset: lightSet, secondAsset: lightHCSet, errors: &errors)
-        checkSubtracting(firstAsset: darkSet, secondAsset: darkHCSet, errors: &errors)
-
+        checkSubtracting(firstAssetSet: lightSet,
+                         firstAssetName: "Light",
+                         secondAssetSet: darkSet,
+                         secondAssetName: "Dark",
+                         errors: &errors)
+        checkSubtracting(firstAssetSet: lightSet,
+                         firstAssetName: "Light",
+                         secondAssetSet: lightHCSet,
+                         secondAssetName: "Light high contrast",
+                         errors: &errors)
+        checkSubtracting(firstAssetSet: darkSet,
+                         firstAssetName: "Dark",
+                         secondAssetSet: darkHCSet,
+                         secondAssetName: "Dark high contrast",
+                         errors: &errors)
         // DescriptionMismatch
         lightSet.forEach { asset in
             if let platform = asset.platform,
@@ -264,10 +279,15 @@ public extension AssetsProcessable {
             }
     }
 
-    private func checkSubtracting(firstAsset: Set<AssetType>, secondAsset: Set<AssetType>, errors: inout ErrorGroup) {
-        let elements = secondAsset.subtracting(firstAsset)
+    private func checkSubtracting(firstAssetSet: Set<AssetType>,
+                                  firstAssetName: String,
+                                  secondAssetSet: Set<AssetType>,
+                                  secondAssetName: String,
+                                  errors: inout ErrorGroup) {
+        let elements = secondAssetSet.subtracting(firstAssetSet)
         if !elements.isEmpty {
-            errors.all.append(AssetsValidatorError.darkAssetsNotFoundInLightPalette(assets: elements.map { $0.name }))
+            errors.all.append(AssetsValidatorError.secondAssetsNotFoundInFirstPalette(
+                assets: elements.map { $0.name }, firstAssetsName: firstAssetName, secondAssetsName: secondAssetName))
         }
     }
     
