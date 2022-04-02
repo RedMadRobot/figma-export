@@ -8,6 +8,8 @@ struct Params: Decodable {
     struct Figma: Decodable {
         let lightFileId: String
         let darkFileId: String?
+        let lightHighContrastFileId: String?
+        let darkHighContrastFileId: String?
         let timeout: TimeInterval?
     }
 
@@ -17,6 +19,8 @@ struct Params: Decodable {
             let nameReplaceRegexp: String?
             let useSingleFile: Bool?
             let darkModeSuffix: String?
+            let lightHCModeSuffix: String?
+            let darkHCModeSuffix: String?
         }
 
         struct Icons: Decodable {

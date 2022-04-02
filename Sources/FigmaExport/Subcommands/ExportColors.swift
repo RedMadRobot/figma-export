@@ -34,7 +34,10 @@ extension FigmaExportCommand {
                     nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
                     nameStyle: options.params.ios?.colors?.nameStyle
                 )
-                let colorPairs = processor.process(light: colors.light, dark: colors.dark)
+                let colorPairs = processor.process(light: colors.light,
+                                                   dark: colors.dark,
+                                                   lightHC: colors.lightHC,
+                                                   darkHC: colors.darkHC)
                 if let warning = colorPairs.warning?.errorDescription {
                     logger.warning("\(warning)")
                 }
@@ -68,7 +71,7 @@ extension FigmaExportCommand {
                 logger.info("Done!")
             }
         }
-        
+
         private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS) throws {
             guard let colorParams = iosParams.colors else {
                 logger.error("Nothing to do. Add ios.colors parameters to the config file.")
@@ -97,7 +100,7 @@ extension FigmaExportCommand {
 
             let exporter = XcodeColorExporter(output: output)
             let files = try exporter.export(colorPairs: colorPairs)
-            
+
             if colorParams.useColorAssets, let url = colorsURL {
                 try? FileManager.default.removeItem(atPath: url.path)
             }

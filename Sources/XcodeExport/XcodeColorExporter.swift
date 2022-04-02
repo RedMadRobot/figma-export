@@ -124,7 +124,8 @@ final public class XcodeColorExporter: XcodeExporterBase {
         )
     }
 
-    private func makeAssets(for colorPairs: [AssetPair<Color>], assetCatalogURL: URL) throws -> [FileContents] {
+    private func makeAssets(for colorPairs: [AssetPair<Color>],
+                            assetCatalogURL: URL) throws -> [FileContents] {
         try colorPairs.flatMap { colorPair -> [FileContents] in
             var files = [FileContents]()
 
@@ -155,15 +156,37 @@ final public class XcodeColorExporter: XcodeExporterBase {
                 XcodeAssetContents.ColorData(
                     appearances: nil,
                     color: XcodeAssetContents.ColorInfo(
-                        components: colorPair.light.toHexComponents())
+                        components: colorPair.light.toHexComponents()
+                    )
                 )
             ]
             if let darkColor = colorPair.dark {
                 colors.append(
                     XcodeAssetContents.ColorData(
-                        appearances: [XcodeAssetContents.DarkAppearance()],
+                        appearances: [.dark],
                         color: XcodeAssetContents.ColorInfo(
-                            components: darkColor.toHexComponents())
+                            components: darkColor.toHexComponents()
+                        )
+                    )
+                )
+            }
+            if let lightHCColor = colorPair.lightHC {
+                colors.append(
+                    XcodeAssetContents.ColorData(
+                        appearances: [.highContrast],
+                        color: XcodeAssetContents.ColorInfo(
+                            components: lightHCColor.toHexComponents()
+                        )
+                    )
+                )
+            }
+            if let darkHCColor = colorPair.darkHC {
+                colors.append(
+                    XcodeAssetContents.ColorData(
+                        appearances: [.dark, .highContrast],
+                        color: XcodeAssetContents.ColorInfo(
+                            components: darkHCColor.toHexComponents()
+                        )
                     )
                 )
             }

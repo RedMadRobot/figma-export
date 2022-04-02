@@ -176,6 +176,151 @@ final class AssetsProcessorTests: XCTestCase {
         
         XCTAssertThrowsError(try processor.process(light: lights, dark: darks).get())
     }
+
+    // Light count can exceed lightHC count
+    func testProcessWithUniversalAsset3() throws {
+        let lights = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let lightHC = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let processor = ColorsProcessor(
+            platform: .ios,
+            nameValidateRegexp: nil,
+            nameReplaceRegexp: nil,
+            nameStyle: .camelCase
+        )
+        let colors = try processor.process(light: lights, dark: nil, lightHC: lightHC).get()
+
+        XCTAssertEqual(
+            [colors.compactMap { $0.light.name }, colors.compactMap { $0.lightHC?.name }],
+            [["primaryLink", "primaryText"], ["primaryText"]]
+        )
+    }
+
+    // LightHC count cannot exceed light count
+    func testProcessWithUniversalAsset4() throws {
+        let lights = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let lightHC = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryIcon", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let processor = ColorsProcessor(
+            platform: .ios,
+            nameValidateRegexp: nil,
+            nameReplaceRegexp: nil,
+            nameStyle: .camelCase
+        )
+
+        XCTAssertThrowsError(try processor.process(light: lights, dark: nil, lightHC: lightHC).get())
+    }
+
+    // LightHC count cannot exceed light count
+    func testProcessWithUniversalAsset5() throws {
+        let lights = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let darks = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let lightsHC = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryIcon", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let processor = ColorsProcessor(
+            platform: .ios,
+            nameValidateRegexp: nil,
+            nameReplaceRegexp: nil,
+            nameStyle: .camelCase
+        )
+
+        XCTAssertThrowsError(try processor.process(light: lights, dark: darks, lightHC: lightsHC).get())
+    }
+
+    // DarkHC count cannot exceed lightHC count
+    func testProcessWithUniversalAsset6() throws {
+        let lights = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let darks = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let lightsHC = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let darksHC = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryIcon", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let processor = ColorsProcessor(
+            platform: .ios,
+            nameValidateRegexp: nil,
+            nameReplaceRegexp: nil,
+            nameStyle: .camelCase
+        )
+
+        XCTAssertThrowsError(try processor.process(light: lights, dark: darks, lightHC: lightsHC, darkHC: darksHC).get())
+    }
+
+    // Light count can exceed dark, lightHC and darkHC count
+    func testProcessWithUniversalAsset7() throws {
+        let lights = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryIcon", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let darks = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let lightHC = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0),
+            Color(name: "primaryLink", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let darkHC = [
+            Color(name: "primaryText", platform: .ios, red: 0, green: 0, blue: 0, alpha: 0)
+        ]
+
+        let processor = ColorsProcessor(
+            platform: .ios,
+            nameValidateRegexp: nil,
+            nameReplaceRegexp: nil,
+            nameStyle: .camelCase
+        )
+        let colors = try processor.process(light: lights, dark: darks, lightHC: lightHC, darkHC: darkHC).get()
+
+        XCTAssertEqual(
+            [colors.compactMap { $0.light.name }, colors.compactMap { $0.dark?.name }, colors.compactMap { $0.lightHC?.name }, colors.compactMap { $0.darkHC?.name }],
+            [["primaryIcon", "primaryLink", "primaryText"], ["primaryLink", "primaryText"], ["primaryLink", "primaryText"], ["primaryText"]]
+        )
+    }
     
     func testProcess() throws {
         let images = [

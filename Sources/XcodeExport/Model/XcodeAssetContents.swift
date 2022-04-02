@@ -15,9 +15,9 @@ struct XcodeAssetContents: Encodable {
         let version = 1
         let author = "xcode"
     }
-    struct DarkAppearance: Encodable {
-        let appearance = "luminosity"
-        let value = "dark"
+    struct Appearance: Encodable {
+        let appearance: String
+        let value: String
     }
     struct Components: Encodable {
         var red: String
@@ -35,13 +35,13 @@ struct XcodeAssetContents: Encodable {
     }
     struct ColorData: Encodable {
         let idiom = "universal"
-        var appearances: [DarkAppearance]?
+        var appearances: [Appearance]?
         var color: ColorInfo
     }
     struct ImageData: Encodable {
         let idiom: XcodeAssetIdiom
         var scale: String?
-        var appearances: [DarkAppearance]?
+        var appearances: [Appearance]?
         let filename: String
     }
     
@@ -86,4 +86,9 @@ struct XcodeAssetContents: Encodable {
         self.images = images
         self.properties = properties
     }
+}
+
+extension XcodeAssetContents.Appearance {
+    static var dark = Self(appearance: "luminosity", value: "dark")
+    static var highContrast = Self(appearance: "contrast", value: "high")
 }
