@@ -26,24 +26,50 @@ final class ColorsLoader {
         guard !styles.isEmpty else {
             throw FigmaExportError.stylesNotFound
         }
-        
-        var sortedStyle = styles.filter { !$0.name.uppercased().contains("gradient".uppercased()) }
-        sortedStyle = sortedStyle.filter { !$0.description.uppercased().contains("un use".uppercased()) }
-        
+
+        let sortedStyle = styles.filter { !$0.description.uppercased().contains("un use".uppercased()) }
+
         let nodes = try loadNodes(fileId: fileId, nodeIds: sortedStyle.map { $0.nodeId } )
         return nodesAndStylesToColors(nodes: nodes, styles: styles)
     }
     
     /// Соотносит массив Style и Node чтобы получит массив Color
     private func nodesAndStylesToColors(nodes: [NodeId: Node], styles: [Style]) -> [Color] {
-        return styles.compactMap { style -> Color? in
-            guard let node = nodes[style.nodeId] else { return nil}
-            guard let fill = node.document.fills.first else { return nil }
-            let alpha: Double = fill.opacity ?? fill.color.a
-            let platform = Platform(rawValue: style.description)
+        return styles.flatMap { style -> [Color] in
+            guard let node = nodes[style.nodeId] else { return [] }
+            guard let fill = node.document.fills.first else { return [] }
             
-            return Color(name: style.name, platform: platform,
-                         red: fill.color.r, green: fill.color.g, blue: fill.color.b, alpha: alpha)
+            let name = style.name
+            let platform = Platform(rawValue: style.description)
+            if let color = fill.color {
+                let alpha: Double = fill.opacity ?? color.a
+
+                return [
+                    Color(
+                        name: name,
+                        platform: platform,
+                        red: color.r,
+                        green: color.g,
+                        blue: color.b,
+                        alpha: alpha
+                    )
+                ]
+            } else if let gradientStops = fill.gradientStops {
+                return gradientStops.compactMap {
+                    let color = $0.color
+                    let alpha: Double = color.a
+
+                    return Color(
+                        name: "\(name) \($0.position)",
+                        platform: platform,
+                        red: color.r,
+                        green: color.g,
+                        blue: color.b,
+                        alpha: alpha
+                    )
+                }
+            }
+            return []
         }
     }
     

@@ -139,7 +139,11 @@ final class ImagesLoader {
         let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
         
         return imageIdToImagePath.map { (imageId, imagePath) -> Image in
-            let name = imagesDict[imageId]!.name
+            var name = imagesDict[imageId]!.name
+            if let stateGroupName = imagesDict[imageId]!.containingFrame.containingStateGroup?.name {
+                name = "\(stateGroupName) \(name)"
+            }
+            name = name.components(separatedBy: .init(charactersIn: "-_=")).joined(separator: " ")
             return Image(
                 name: name,
                 url: URL(string: imagePath)!,

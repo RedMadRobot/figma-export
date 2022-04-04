@@ -41,12 +41,18 @@ public struct Document: Decodable {
 public struct Paint: Decodable {
     public let type: String
     public let opacity: Double?
-    public let color: PaintColor
+    public let color: PaintColor?
+    public let gradientStops: [GradientStop]?
 }
 
 public struct PaintColor: Decodable {
     /// Channel value, between 0 and 1
     public let r, g, b, a: Double
+}
+
+public struct GradientStop: Decodable {
+    public let color: PaintColor
+    public let position: Int
 }
 
 extension Document {
