@@ -21,6 +21,10 @@ struct Params: Decodable {
             let darkModeSuffix: String?
             let lightHCModeSuffix: String?
             let darkHCModeSuffix: String?
+            let lightModeFolder: String?
+            let darkModeFolder: String?
+            let lightHCModeFolder: String?
+            let darkHCModeFolder: String?
         }
 
         struct Icons: Decodable {

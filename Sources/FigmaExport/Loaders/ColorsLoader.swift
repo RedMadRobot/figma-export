@@ -18,6 +18,13 @@ final class ColorsLoader {
         guard let useSingleFile = colorParams?.useSingleFile, useSingleFile else {
             return try loadColorsFromLightAndDarkFile()
         }
+        if let lightFolder = colorParams?.lightModeFolder, let darkFolder = colorParams?.darkModeFolder {
+            return try loadColorsFromSingleFileFolder(
+                light: lightFolder,
+                dark: darkFolder,
+                lightHC: colorParams?.lightHCModeFolder,
+                darkHC: colorParams?.darkHCModeFolder)
+        }
         return try loadColorsFromSingleFile()
     }
 
@@ -30,6 +37,32 @@ final class ColorsLoader {
         let lightHighContrastColors = try figmaParams.lightHighContrastFileId.map { try loadColors(fileId: $0) }
         let darkHighContrastColors = try figmaParams.darkHighContrastFileId.map { try loadColors(fileId: $0) }
         return (lightColors, darkColors, lightHighContrastColors, darkHighContrastColors)
+    }
+
+    private func loadColorsFromSingleFileFolder(light: String,
+                                                dark: String,
+                                                lightHC: String?,
+                                                darkHC: String?) throws -> (light: [Color],
+                                                                            dark: [Color]?,
+                                                                            lightHC: [Color]?,
+                                                                            darkHC: [Color]?) {
+        let colors = try loadColors(fileId: figmaParams.lightFileId)
+
+        let lightColors = filterColors(colors, folderName: light)
+        let darkColors = filterColors(colors, folderName: dark)
+        let lightHCColors = filterColors(colors, folderName: lightHC ?? "LightHC")
+        let darkHCColors = filterColors(colors, folderName: darkHC ?? "DarkHC")
+        return (lightColors, darkColors, lightHCColors, darkHCColors)
+    }
+
+    private func filterColors(_ colors: [Color], folderName: String) -> [Color] {
+        colors
+            .filter { $0.name.hasPrefix(folderName + "/") }
+            .map { color -> Color in
+                var newColor = color
+                newColor.name = String(color.name.split(separator: "/").last ?? "")
+                return newColor
+            }
     }
 
     private func loadColorsFromSingleFile() throws -> (light: [Color],
@@ -82,8 +115,12 @@ final class ColorsLoader {
             guard let fill = node.document.fills.first?.asSolid else { return nil }
             let alpha: Double = fill.opacity ?? fill.color.a
             let platform = Platform(rawValue: style.description)
-            
-            return Color(name: style.name, platform: platform,
+
+            let name = style.name.replacingOccurrences(of: "\\s?\\([\\w\\s]*\\)",
+                                                       with: "",
+                                                       options: .regularExpression)
+
+            return Color(name: name, platform: platform,
                          red: fill.color.r, green: fill.color.g, blue: fill.color.b, alpha: alpha)
         }
     }
