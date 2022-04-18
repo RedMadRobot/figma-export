@@ -130,24 +130,11 @@ final public class XcodeColorExporter: XcodeExporterBase {
             var files = [FileContents]()
 
             var name = colorPair.light.name
-            var assetsColorsURL = assetCatalogURL
+            let assetsColorsURL = assetCatalogURL
 
             if output.groupUsingNamespace,
                let lastName = colorPair.light.originalName.split(separator: "/").last {
                 name = String(lastName)
-
-                colorPair.light.originalName.split(separator: "/")
-                    .dropLast()
-                    .map { String($0) }
-                    .forEach {
-                        assetsColorsURL.appendPathComponent($0, isDirectory: true)
-
-                        let contentsJson = XcodeFolderNamespaceContents()
-                        files.append(FileContents(
-                            destination: Destination(directory: assetsColorsURL, file: contentsJson.fileURL),
-                            data: contentsJson.data
-                        ))
-                    }
             }
 
             let dirURL = assetsColorsURL.appendingPathComponent("\(name).colorset")
