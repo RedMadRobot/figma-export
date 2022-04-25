@@ -1,5 +1,6 @@
 import FigmaAPI
 import FigmaExportCore
+import Logging
 
 /// Loads colors from Figma
 final class ColorsLoader {
@@ -7,11 +8,13 @@ final class ColorsLoader {
     private let client: Client
     private let figmaParams: Params.Figma
     private let colorParams: Params.Common.Colors?
+    private let logger: Logger
 
-    init(client: Client, figmaParams: Params.Figma, colorParams: Params.Common.Colors?) {
+    init(client: Client, figmaParams: Params.Figma, colorParams: Params.Common.Colors?, logger: Logger) {
         self.client = client
         self.figmaParams = figmaParams
         self.colorParams = colorParams
+        self.logger = logger
     }
 
     func load() throws -> (light: [Color], dark: [Color]?, lightHC: [Color]?, darkHC: [Color]?) {
@@ -32,10 +35,16 @@ final class ColorsLoader {
                                                              dark: [Color]?,
                                                              lightHC: [Color]?,
                                                              darkHC: [Color]?) {
-        let lightColors = try loadColors(fileId: figmaParams.lightFileId)
-        let darkColors = try figmaParams.darkFileId.map { try loadColors(fileId: $0) }
-        let lightHighContrastColors = try figmaParams.lightHighContrastFileId.map { try loadColors(fileId: $0) }
-        let darkHighContrastColors = try figmaParams.darkHighContrastFileId.map { try loadColors(fileId: $0) }
+        let lightColors = try loadColors(fileId: figmaParams.lightFileId, ignoreRegex: colorParams?.nameIgnoreExpression)
+        let darkColors = try figmaParams
+            .darkFileId
+            .map { try loadColors(fileId: $0, ignoreRegex: colorParams?.nameIgnoreExpression) }
+        let lightHighContrastColors = try figmaParams
+            .lightHighContrastFileId
+            .map { try loadColors(fileId: $0, ignoreRegex: colorParams?.nameIgnoreExpression) }
+        let darkHighContrastColors = try figmaParams
+            .darkHighContrastFileId
+            .map { try loadColors(fileId: $0, ignoreRegex: colorParams?.nameIgnoreExpression) }
         return (lightColors, darkColors, lightHighContrastColors, darkHighContrastColors)
     }
 
@@ -46,7 +55,7 @@ final class ColorsLoader {
                                                                             dark: [Color]?,
                                                                             lightHC: [Color]?,
                                                                             darkHC: [Color]?) {
-        let colors = try loadColors(fileId: figmaParams.lightFileId)
+        let colors = try loadColors(fileId: figmaParams.lightFileId, ignoreRegex: colorParams?.nameIgnoreExpression)
 
         let lightColors = filterColors(colors, folderName: light)
         let darkColors = filterColors(colors, folderName: dark)
@@ -69,7 +78,7 @@ final class ColorsLoader {
                                                        dark: [Color]?,
                                                        lightHC: [Color]?,
                                                        darkHC: [Color]?) {
-        let colors = try loadColors(fileId: figmaParams.lightFileId)
+        let colors = try loadColors(fileId: figmaParams.lightFileId, ignoreRegex: colorParams?.nameIgnoreExpression)
         let darkSuffix = colorParams?.darkModeSuffix ?? "_dark"
         let lightHCSuffix = colorParams?.lightHCModeSuffix ?? "_lightHC"
         let darkHCSuffix = colorParams?.darkHCModeSuffix ?? "_darkHC"
@@ -97,7 +106,7 @@ final class ColorsLoader {
         return filteredColors
     }
     
-    private func loadColors(fileId: String) throws -> [Color] {
+    private func loadColors(fileId: String, ignoreRegex: String?) throws -> [Color] {
         let styles = try loadStyles(fileId: fileId)
         
         guard !styles.isEmpty else {
@@ -105,18 +114,18 @@ final class ColorsLoader {
         }
         
         let nodes = try loadNodes(fileId: fileId, nodeIds: styles.map { $0.nodeId } )
-        return nodesAndStylesToColors(nodes: nodes, styles: styles)
+        return nodesAndStylesToColors(nodes: nodes, styles: styles, ignoreRegex: ignoreRegex)
     }
     
     /// Соотносит массив Style и Node чтобы получит массив Color
-    private func nodesAndStylesToColors(nodes: [NodeId: Node], styles: [Style]) -> [Color] {
+    private func nodesAndStylesToColors(nodes: [NodeId: Node], styles: [Style], ignoreRegex: String?) -> [Color] {
         return styles.compactMap { style -> Color? in
             guard let node = nodes[style.nodeId] else { return nil }
             guard let fill = node.document.fills.first?.asSolid else { return nil }
             let alpha: Double = fill.opacity ?? fill.color.a
             let platform = Platform(rawValue: style.description)
 
-            let name = style.name.replacingOccurrences(of: "\\s?\\([\\w\\s]*\\)",
+            let name = style.name.replacingOccurrences(of: ignoreRegex ?? "",
                                                        with: "",
                                                        options: .regularExpression)
 

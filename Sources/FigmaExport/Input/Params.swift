@@ -25,6 +25,7 @@ struct Params: Decodable {
             let darkModeFolder: String?
             let lightHCModeFolder: String?
             let darkHCModeFolder: String?
+            let nameIgnoreExpression: String?
         }
 
         struct Icons: Decodable {
