@@ -8,13 +8,11 @@ final class ColorsLoader {
     private let client: Client
     private let figmaParams: Params.Figma
     private let colorParams: Params.Common.Colors?
-    private let logger: Logger
 
-    init(client: Client, figmaParams: Params.Figma, colorParams: Params.Common.Colors?, logger: Logger) {
+    init(client: Client, figmaParams: Params.Figma, colorParams: Params.Common.Colors?) {
         self.client = client
         self.figmaParams = figmaParams
         self.colorParams = colorParams
-        self.logger = logger
     }
 
     func load() throws -> (light: [Color], dark: [Color]?, lightHC: [Color]?, darkHC: [Color]?) {
