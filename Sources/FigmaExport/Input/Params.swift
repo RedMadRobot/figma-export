@@ -67,6 +67,7 @@ struct Params: Decodable {
             let assetsFolder: String?
             let nameStyle: NameStyle
             let groupUsingNamespace: Bool?
+            let usingDarkModeFolder: Bool?
 
             let colorSwift: URL?
             let swiftuiColorSwift: URL?

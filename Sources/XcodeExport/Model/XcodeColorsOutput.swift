@@ -11,6 +11,7 @@ public struct XcodeColorsOutput {
     public let swiftuiColorSwiftURL: URL?
     public let groupUsingNamespace: Bool
     public let templatesPath: URL?
+    public let usingDarkModeFolder: Bool
     
     public init(
         assetsColorsURL: URL?,
@@ -20,7 +21,8 @@ public struct XcodeColorsOutput {
         colorSwiftURL: URL? = nil,
         swiftuiColorSwiftURL: URL? = nil,
         groupUsingNamespace: Bool? = nil,
-        templatesPath: URL? = nil
+        templatesPath: URL? = nil,
+        usingDarkModeFolder: Bool? = false
     ) {
         self.assetsColorsURL = assetsColorsURL
         self.assetsInMainBundle = assetsInMainBundle
@@ -30,5 +32,6 @@ public struct XcodeColorsOutput {
         self.swiftuiColorSwiftURL = swiftuiColorSwiftURL
         self.groupUsingNamespace = groupUsingNamespace ?? false
         self.templatesPath = templatesPath
+        self.usingDarkModeFolder = usingDarkModeFolder ?? false
     }
 }

@@ -95,7 +95,8 @@ extension FigmaExportCommand {
                 colorSwiftURL: colorParams.colorSwift,
                 swiftuiColorSwiftURL: colorParams.swiftuiColorSwift,
                 groupUsingNamespace: colorParams.groupUsingNamespace,
-                templatesPath: iosParams.templatesPath
+                templatesPath: iosParams.templatesPath,
+                usingDarkModeFolder: iosParams.colors?.usingDarkModeFolder
             )
 
             let exporter = XcodeColorExporter(output: output)
