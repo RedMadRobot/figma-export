@@ -14,29 +14,30 @@ final class ColorsLoader {
         self.colorParams = colorParams
     }
 
-    func load() throws -> (light: [Color], dark: [Color]?, lightHC: [Color]?, darkHC: [Color]?) {
+    func load(filter: String?) throws -> (light: [Color], dark: [Color]?, lightHC: [Color]?, darkHC: [Color]?) {
         guard let useSingleFile = colorParams?.useSingleFile, useSingleFile else {
-            return try loadColorsFromLightAndDarkFile()
+            return try loadColorsFromLightAndDarkFile(filter: filter)
         }
-        return try loadColorsFromSingleFile()
+        return try loadColorsFromSingleFile(filter: filter)
     }
 
-    private func loadColorsFromLightAndDarkFile() throws -> (light: [Color],
-                                                             dark: [Color]?,
-                                                             lightHC: [Color]?,
-                                                             darkHC: [Color]?) {
-        let lightColors = try loadColors(fileId: figmaParams.lightFileId)
-        let darkColors = try figmaParams.darkFileId.map { try loadColors(fileId: $0) }
-        let lightHighContrastColors = try figmaParams.lightHighContrastFileId.map { try loadColors(fileId: $0) }
-        let darkHighContrastColors = try figmaParams.darkHighContrastFileId.map { try loadColors(fileId: $0) }
+    private func loadColorsFromLightAndDarkFile(filter: String?) throws -> (light: [Color],
+                                                                            dark: [Color]?,
+                                                                            lightHC: [Color]?,
+                                                                            darkHC: [Color]?) {
+        let lightColors = try loadColors(fileId: figmaParams.lightFileId, filter: filter)
+        let darkColors = try figmaParams.darkFileId.map { try loadColors(fileId: $0, filter: filter) }
+        let lightHighContrastColors = try figmaParams.lightHighContrastFileId.map { try loadColors(fileId: $0, filter: filter) }
+        let darkHighContrastColors = try figmaParams.darkHighContrastFileId.map { try loadColors(fileId: $0, filter: filter) }
         return (lightColors, darkColors, lightHighContrastColors, darkHighContrastColors)
     }
 
-    private func loadColorsFromSingleFile() throws -> (light: [Color],
-                                                       dark: [Color]?,
-                                                       lightHC: [Color]?,
-                                                       darkHC: [Color]?) {
-        let colors = try loadColors(fileId: figmaParams.lightFileId)
+    private func loadColorsFromSingleFile(filter: String?) throws -> (light: [Color],
+                                                                      dark: [Color]?,
+                                                                      lightHC: [Color]?,
+                                                                      darkHC: [Color]?) {
+        let colors = try loadColors(fileId: figmaParams.lightFileId, filter: filter)
+        
         let darkSuffix = colorParams?.darkModeSuffix ?? "_dark"
         let lightHCSuffix = colorParams?.lightHCModeSuffix ?? "_lightHC"
         let darkHCSuffix = colorParams?.darkHCModeSuffix ?? "_darkHC"
@@ -64,8 +65,15 @@ final class ColorsLoader {
         return filteredColors
     }
     
-    private func loadColors(fileId: String) throws -> [Color] {
-        let styles = try loadStyles(fileId: fileId)
+    private func loadColors(fileId: String, filter: String?) throws -> [Color] {
+        var styles = try loadStyles(fileId: fileId)
+        
+        if let filter = filter {
+            let assetsFilter = AssetsFilter(filter: filter)
+            styles = styles.filter { style -> Bool in
+                assetsFilter.match(name: style.name)
+            }
+        }
         
         guard !styles.isEmpty else {
             throw FigmaExportError.stylesNotFound

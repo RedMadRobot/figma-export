@@ -370,7 +370,7 @@ For Typography, Colors and Icons you can enable code generation for the use with
 
 ### Arguments
 
-If you want to export specific icons/images you can list their names in the last argument like this:
+If you want to export specific colors/icons/images you can list their names in the last argument like this:
 
 `./figma-export icons "ic/24/edit"` — Exports only one icon.
 
@@ -378,7 +378,9 @@ If you want to export specific icons/images you can list their names in the last
 
 `./figma-export icons "ic/24/videoplayer/*"` — Exports all icons which names starts with `ic/24/videoplayer/`
 
-`./figma-export icons` — Exports all the icons.
+`./figma-export colors "common/*"` — Exports all the colors which names starts with `common`
+
+`./figma-export colors` — Exports all the colors.
 
 Argument `-i` or `-input` specifies path to FigmaExport configuration file `figma-export.yaml`.
 
