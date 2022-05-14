@@ -13,7 +13,8 @@ final class XcodeIconsExporterTests: XCTestCase {
     private let image2 = Image(name: "image2", url: URL(string: "2")!, format: "pdf")
     private let image2Dark = Image(name: "image2", url: URL(string: "2_dark")!, format: "pdf")
     private let imageWithKeyword = Image(name: "class", url: URL(string: "2")!, format: "pdf")
-
+    private let tabBarIcon = Image(name: "ic24TabBarHome", url: URL(string: "1")!, format: "pdf")
+    
     private let uiKitImageExtensionURL = FileManager.default
         .temporaryDirectory
         .appendingPathComponent("UIImage+extension.swift")
@@ -599,6 +600,94 @@ final class XcodeIconsExporterTests: XCTestCase {
             static var `class`: UIImage { UIImage(named: #function)! }
         }
 
+        """
+        XCTAssertNoDifference(generatedCode, referenceCode)
+    }
+    
+    func testExport_preservesVectorRepresentation() throws {
+        let output = XcodeImagesOutput(
+            assetsFolderURL: URL(string: "~/")!,
+            assetsInMainBundle: true,
+            preservesVectorRepresentation: ["ic24TabBar*"],
+            uiKitImageExtensionURL: uiKitImageExtensionURL
+        )
+        let exporter = XcodeIconsExporter(output: output)
+        let result = try exporter.export(
+            icons: [AssetPair(light: ImagePack(image: tabBarIcon), dark: nil)],
+            append: false
+        )
+
+        XCTAssertEqual(result.count, 4)
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
+        XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("ic24TabBarHome.imageset/Contents.json"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("ic24TabBarHome.imageset/ic24TabBarHome.pdf"))
+        XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
+
+        let content = result[1].data
+        XCTAssertNotNil(content)
+
+        let generatedCode = String(data: content!, encoding: .utf8)
+        let referenceCode = """
+        {
+          "images" : [
+            {
+              "idiom" : "universal",
+              "filename" : "ic24TabBarHome.pdf"
+            }
+          ],
+          "info" : {
+            "version" : 1,
+            "author" : "xcode"
+          },
+          "properties" : {
+            "template-rendering-intent" : "template",
+            "preserves-vector-representation" : true
+          }
+        }
+        """
+        XCTAssertNoDifference(generatedCode, referenceCode)
+    }
+    
+    func testExport_preservesVectorRepresentation2() throws {
+        let output = XcodeImagesOutput(
+            assetsFolderURL: URL(string: "~/")!,
+            assetsInMainBundle: true,
+            preservesVectorRepresentation: ["*"],
+            uiKitImageExtensionURL: uiKitImageExtensionURL
+        )
+        let exporter = XcodeIconsExporter(output: output)
+        let result = try exporter.export(
+            icons: [AssetPair(light: ImagePack(image: tabBarIcon), dark: nil)],
+            append: false
+        )
+
+        XCTAssertEqual(result.count, 4)
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Contents.json"))
+        XCTAssertTrue(result[1].destination.url.absoluteString.hasSuffix("ic24TabBarHome.imageset/Contents.json"))
+        XCTAssertTrue(result[2].destination.url.absoluteString.hasSuffix("ic24TabBarHome.imageset/ic24TabBarHome.pdf"))
+        XCTAssertTrue(result[3].destination.url.absoluteString.hasSuffix("UIImage+extension.swift"))
+
+        let content = result[1].data
+        XCTAssertNotNil(content)
+
+        let generatedCode = String(data: content!, encoding: .utf8)
+        let referenceCode = """
+        {
+          "images" : [
+            {
+              "idiom" : "universal",
+              "filename" : "ic24TabBarHome.pdf"
+            }
+          ],
+          "info" : {
+            "version" : 1,
+            "author" : "xcode"
+          },
+          "properties" : {
+            "template-rendering-intent" : "template",
+            "preserves-vector-representation" : true
+          }
+        }
         """
         XCTAssertNoDifference(generatedCode, referenceCode)
     }

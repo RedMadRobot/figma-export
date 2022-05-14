@@ -10,6 +10,10 @@ public struct AssetsFilter {
             .map { $0.trimmingCharacters(in: .whitespaces) }
     }
     
+    public init(filters: [String]) {
+        self.filters = filters
+    }
+    
     /// Returns true if name matches with filter
     /// - Parameters:
     ///   - name: Name of the asset
