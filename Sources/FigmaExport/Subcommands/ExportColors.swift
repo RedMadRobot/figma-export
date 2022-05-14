@@ -17,6 +17,13 @@ extension FigmaExportCommand {
         @OptionGroup
         var options: FigmaExportOptions
         
+        @Argument(help: """
+        [Optional] Name of the colors to export. For example \"background/default\" \
+        to export single color, \"background/default, background/secondary\" to export several colors and \
+        \"background/*\" to export all colors from the folder.
+        """)
+        var filter: String?
+        
         func run() throws {
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
@@ -24,7 +31,7 @@ extension FigmaExportCommand {
 
             logger.info("Fetching colors. Please wait...")
             let loader = ColorsLoader(client: client, figmaParams: options.params.figma, colorParams: options.params.common?.colors)
-            let colors = try loader.load()
+            let colors = try loader.load(filter: filter)
 
             if let ios = options.params.ios {
                 logger.info("Processing colors...")
