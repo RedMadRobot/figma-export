@@ -2,13 +2,16 @@
 
 The UI-Kit of the example project in Figma:
 
-[FigmaExport Example File [Light]](https://www.figma.com/file/MRVOEjTRatddzaMN7iYlAe/FigmaExport-Example-File-Light)
+[FigmaExport Example File [Light]](https://www.figma.com/file/yk9zOE5Rf8X6KWBfXQXrhS/FigmaExport-Example-File-%5BLight%5D)
 
-<a href="https://www.figma.com/file/MRVOEjTRatddzaMN7iYlAe/FigmaExport-Example-File-Light"><img src="../images/figma_l.png" width="600" /></a>
+<a href="https://www.figma.com/file/yk9zOE5Rf8X6KWBfXQXrhS/FigmaExport-Example-File-%5BLight%5D"><img src="../images/figma_l.png" width="600" /></a>
 
-[FigmaExport Example File [Dark]](https://www.figma.com/file/eLY5YHbCBNdFmMEVuWKnx5/FigmaExport-Example-File-Dark)
+[FigmaExport Example File [Dark]](https://www.figma.com/file/x2oLS8TNqGSrugXMqe3XpV/FigmaExport-Example-File-%5BDark%5D)
 
-<a href="https://www.figma.com/file/eLY5YHbCBNdFmMEVuWKnx5/FigmaExport-Example-File-Dark"><img src="../images/figma_d.png" width="600" /></a>
+<a href="https://www.figma.com/file/x2oLS8TNqGSrugXMqe3XpV/FigmaExport-Example-File-%5BDark%5D"><img src="../images/figma_d.png" width="600" /></a>
+
+Note that these files use free Figma plan therefore exporting icons and images doesn't work. To be able to export image components Figma File must be located in the Team that have Professional or Organisation Figma plan.
+
 ### Example iOS project
 
 There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories which demostrates how to use figma-export with UIKit and SwiftUI.
@@ -24,8 +27,6 @@ There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories w
 
 **How to export resources from figma**
 * To export colors run: `bundle exec fastlane export_colors`
-* To export icons run: `bundle exec fastlane export_icons`
-* To export images run: `bundle exec fastlane export_images`
 * To export typography run: `bundle exec fastlane export_typography`
 
 ### Example Android project
@@ -36,8 +37,6 @@ There is an example Android Studio project in `AndroidExample` directory which d
 
 **How to export resources from figma to the project**
 * To export colors run: `figma-export colors`
-* To export icons run: `figma-export icons`
-* To export images run: `figma-export images`
 * To export typography run: `figma-export typography`
 
 ### Example Android Jetpack Compose project
@@ -48,5 +47,4 @@ You can find the generated code for compose in the package `com.redmadrobot.andr
 
 **How to export resources from figma to the project**
 * To export colors run: `figma-export colors`
-* To export icons run: `figma-export icons`
 * To export typography run: `figma-export typography`
