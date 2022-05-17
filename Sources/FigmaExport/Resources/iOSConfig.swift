@@ -13,7 +13,7 @@ common:
   # [optional]
   colors:
     # [optional] RegExp pattern for color name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
-    nameValidateRegexp: '^([a-zA-Z_])+$' # RegExp pattern for: background, background_primary, widget_primary_background
+    nameValidateRegexp: '^([a-zA-Z_]+)$' # RegExp pattern for: background, background_primary, widget_primary_background
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'color_$1'
     # [optional] Extract light and dark mode colors from the lightFileId specified in the figma params. Defaults to false
