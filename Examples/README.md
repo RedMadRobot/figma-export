@@ -2,15 +2,13 @@
 
 The UI-Kit of the example project in Figma:
 
-> :warning: Note that these files use free Figma plan therefore exporting icons and images doesn't work. To be able to export image components Figma File must be located in the Team that have Professional or Organisation Figma plan.
+[FigmaExport Example File [Light]](https://www.figma.com/file/G85iqgmYDrE5WrjDmiAZ6G/FigmaExport-Example-File-%5BLight%5D)
 
-[FigmaExport Example File [Light]](https://www.figma.com/file/yk9zOE5Rf8X6KWBfXQXrhS/FigmaExport-Example-File-%5BLight%5D)
+<a href="https://www.figma.com/file/G85iqgmYDrE5WrjDmiAZ6G/FigmaExport-Example-File-%5BLight%5D"><img src="../images/figma_l.png" width="600" /></a>
 
-<a href="https://www.figma.com/file/yk9zOE5Rf8X6KWBfXQXrhS/FigmaExport-Example-File-%5BLight%5D"><img src="../images/figma_l.png" width="600" /></a>
+[FigmaExport Example File [Dark]](https://www.figma.com/file/3xUDq03vQwF1tAFBK6A9Tf/FigmaExport-Example-File-%5BDark%5D)
 
-[FigmaExport Example File [Dark]](https://www.figma.com/file/x2oLS8TNqGSrugXMqe3XpV/FigmaExport-Example-File-%5BDark%5D)
-
-<a href="https://www.figma.com/file/x2oLS8TNqGSrugXMqe3XpV/FigmaExport-Example-File-%5BDark%5D"><img src="../images/figma_d.png" width="600" /></a>
+<a href="https://www.figma.com/file/3xUDq03vQwF1tAFBK6A9Tf/FigmaExport-Example-File-%5BDark%5D"><img src="../images/figma_d.png" width="600" /></a>
 
 ### Example iOS project
 
