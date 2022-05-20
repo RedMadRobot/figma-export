@@ -52,13 +52,15 @@ extension XcodeTypographyExporter {
             override func convertStringToAttributed(
                 _ string: NSAttributedString,
                 defaultLineBreakMode: NSLineBreakMode? = nil,
-                defaultAlignment: NSTextAlignment? = nil
+                defaultAlignment: NSTextAlignment? = nil,
+                isDefaultLineHeight: Bool = false
             ) -> NSAttributedString {
                 let attributedString = NSMutableAttributedString(
                     attributedString: super.convertStringToAttributed(
                         string,
                         defaultLineBreakMode: defaultLineBreakMode,
-                        defaultAlignment: defaultAlignment
+                        defaultAlignment: defaultAlignment,
+                        isDefaultLineHeight: isDefaultLineHeight
                     )
                 )
 

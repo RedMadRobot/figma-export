@@ -90,10 +90,12 @@ extension XcodeTypographyExporter {
             func convertStringToAttributed(
                 _ string: NSAttributedString,
                 defaultLineBreakMode: NSLineBreakMode? = nil,
-                defaultAlignment: NSTextAlignment? = nil
+                defaultAlignment: NSTextAlignment? = nil,
+                isDefaultLineHeight: Bool = false
             ) -> NSAttributedString {
                 let paragraphStyle = NSMutableParagraphStyle()
-                if let lineHeight = self.lineHeight,
+                if !isDefaultLineHeight,
+                   let lineHeight = self.lineHeight,
                    let font = self.font {
                     let lineHeightMultiple = ((100.0 * lineHeight) / font.lineHeight) / 100
                     paragraphStyle.lineHeightMultiple = lineHeightMultiple
@@ -134,9 +136,7 @@ extension XcodeTypographyExporter {
 
                 return attributedString
             }
-
         }
-
         """
 
         return try self.makeFileContents(

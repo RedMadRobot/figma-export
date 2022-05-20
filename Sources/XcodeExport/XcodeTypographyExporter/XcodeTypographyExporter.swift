@@ -76,7 +76,7 @@ final public class XcodeTypographyExporter {
             params.append("self.lineHeight = \(lineHeight)")
         }
         return """
-            @objc lazy var \(textStyle.name): \(type) = {
+        @objc lazy var \(textStyle.name): \(type) = {
                 \(params.joined(separator: "\n        "))
                 return self
             }()

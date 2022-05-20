@@ -11,7 +11,7 @@ extension XcodeTypographyExporter {
 
     func alignments(forStyle style: String) -> String {
         """
-        @objc lazy var centrerAlignment: \(style) = {
+            @objc lazy var centrerAlignment: \(style) = {
                 self.textAlignment = .center
                 return self
             }()
@@ -30,7 +30,7 @@ extension XcodeTypographyExporter {
 
     func lineBreaks(forStyle style: String) -> String {
         """
-        @objc lazy var lineBreakModeByWordWrapping: \(style) = {
+            @objc lazy var lineBreakModeByWordWrapping: \(style) = {
                 self.lineBreakMode = .byWordWrapping
                 return self
             }()
@@ -64,7 +64,7 @@ extension XcodeTypographyExporter {
 
     func strikethroughTypes(forStyle style: String) -> String {
         """
-        @objc lazy var strikethroughStyleSingle: \(style) = {
+            @objc lazy var strikethroughStyleSingle: \(style) = {
                 self.strikethroughStyle = .single
                 return self
             }()
@@ -108,7 +108,7 @@ extension XcodeTypographyExporter {
 
     func underlineTypes(forStyle style: String) -> String {
         """
-        @objc lazy var underlineStyleSingle: \(style) = {
+            @objc lazy var underlineStyleSingle: \(style) = {
                 self.underlineStyle = .single
                 return self
             }()

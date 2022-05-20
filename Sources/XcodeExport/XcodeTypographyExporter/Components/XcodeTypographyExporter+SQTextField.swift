@@ -96,14 +96,6 @@ extension XcodeTypographyExporter {
 
             internal func updateText() {
                 self.defaultTextAttributes = [ : ]
-                let paragraphStyle = NSMutableParagraphStyle()
-                if let lineHeight = self.style.lineHeight,
-                   let font = self.style.font{
-                    let lineHeightMultiple = ((100.0 * lineHeight) / font.lineHeight) / 100
-                    paragraphStyle.lineHeightMultiple = lineHeightMultiple
-                }
-
-                self.defaultTextAttributes[.paragraphStyle] = paragraphStyle
 
                 if let strikethroughStyle = self.style.strikethroughStyle {
                     self.defaultTextAttributes[.strikethroughStyle] = strikethroughStyle
@@ -136,8 +128,10 @@ extension XcodeTypographyExporter {
                     attributedString = NSAttributedString(string: self.placeholder ?? "")
                 }
 
-                self.attributedPlaceholder = self.style._placeholderStyle?.convertStringToAttributed(
-                    attributedString
+                self.attributedPlaceholder = self.style._placeholderStyle?
+                    .convertStringToAttributed(
+                    attributedString,
+                    isDefaultLineHeight: true
                 )
             }
         }

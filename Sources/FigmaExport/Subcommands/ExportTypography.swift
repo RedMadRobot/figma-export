@@ -89,8 +89,8 @@ extension FigmaExportCommand {
                     }
                 }
                 try xcodeProject.save()
-            } catch {
-                logger.error("Unable to add some file references to Xcode project")
+            } catch (let error) {
+                print(error)
             }
         }
     }
