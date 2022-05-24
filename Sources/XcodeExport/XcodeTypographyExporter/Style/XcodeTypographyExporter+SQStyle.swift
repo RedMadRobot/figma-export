@@ -93,12 +93,21 @@ extension XcodeTypographyExporter {
                 defaultAlignment: NSTextAlignment? = nil,
                 isDefaultLineHeight: Bool = false
             ) -> NSAttributedString {
+
                 let paragraphStyle = NSMutableParagraphStyle()
+                let attributedString = NSMutableAttributedString(attributedString: string)
+
                 if !isDefaultLineHeight,
                    let lineHeight = self.lineHeight,
                    let font = self.font {
-                    let lineHeightMultiple = ((100.0 * lineHeight) / font.lineHeight) / 100
-                    paragraphStyle.lineHeightMultiple = lineHeightMultiple
+                    paragraphStyle.minimumLineHeight = lineHeight
+                    paragraphStyle.maximumLineHeight = lineHeight
+
+                    let adjustment = lineHeight > font.lineHeight ? 2.0 : 1.0
+                    let baselineOffset = (lineHeight - font.lineHeight) / 2.0 / adjustment
+
+                    attributedString.addAttribute(.baselineOffset, value: baselineOffset,
+                                                  range: NSMakeRange(.zero, attributedString.length))
                 }
 
                 if let lineBreakMode = self.lineBreakMode ?? defaultLineBreakMode {
@@ -108,8 +117,6 @@ extension XcodeTypographyExporter {
                 if let alignment = self.textAlignment ?? defaultAlignment {
                     paragraphStyle.alignment = alignment
                 }
-
-                let attributedString = NSMutableAttributedString(attributedString: string)
 
                 attributedString.addAttribute(NSAttributedString.Key.paragraphStyle,
                                               value: paragraphStyle,
