@@ -105,6 +105,7 @@ struct Params: Decodable {
         let xcassetsPath: URL
         let xcassetsInMainBundle: Bool
         let xcassetsInSwiftPackage: Bool?
+        let resourceBundleNames: [String]
         let addObjcAttribute: Bool?
         let templatesPath: URL?
 

@@ -55,6 +55,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
 
         let context: [String: Any] = [
             "assetsInSwiftPackage": output.assetsInSwiftPackage,
+            "resourceBundleNames": output.resourceBundleNames,
             "assetsInMainBundle": output.assetsInMainBundle,
             "useNamespace": output.groupUsingNamespace,
             "colors": colors,
@@ -105,6 +106,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
 
         let context: [String: Any] = [
             "assetsInSwiftPackage": output.assetsInSwiftPackage,
+            "resourceBundleNames": output.resourceBundleNames,
             "addObjcPrefix": output.addObjcAttribute,
             "colorFromAssetCatalog": useAssets,
             "assetsInMainBundle": output.assetsInMainBundle,

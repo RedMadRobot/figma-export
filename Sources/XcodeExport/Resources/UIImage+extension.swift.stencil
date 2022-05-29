@@ -1,13 +1,51 @@
 {% include "header.stencil" %}
 import UIKit
-{% if assetsInSwiftPackage %}
+{% if assetsInSwiftPackage and resourceBundleNames %}
+private class BundleProvider {
+    static let bundle = Bundle._module
+}
+{% elif assetsInSwiftPackage and not resourceBundleNames %}
 private class BundleProvider {
     static let bundle = Bundle.module
 }
-{% elif not assetsInMainBundle %}
+{% elif not assetsInSwiftPackage and not resourceBundleNames %}
 private class BundleProvider {
     static let bundle = Bundle(for: BundleProvider.self)
 }
 {% endif %}
 public extension UIImage {{ "{" }}{% include "UIImage+extension.swift.stencil.include" %}
 }
+{% if resourceBundleNames %}
+private extension Foundation.Bundle {
+    private class BundleFinder {}
+
+    // Returns the resource bundle associated with the current Swift module.
+    static var _module: Bundle = {
+        let bundleNames = {{ resourceBundleNames }}
+
+        let candidates = [
+            // Bundle should be present here when the package is linked into an App.
+            Bundle.main.resourceURL,
+            // Bundle should be present here when the package is linked into a framework.
+            Bundle(for: BundleFinder.self).resourceURL,
+            // Bundle should be present here when the package is used in UI Tests.
+            Bundle(for: BundleFinder.self).resourceURL?.deletingLastPathComponent(),
+            // For command-line tools.
+            Bundle.main.bundleURL,
+            // Bundle should be present here when running previews from a different package (this is the path to "…/Debug-iphonesimulator/").
+            Bundle(for: BundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent(),
+            Bundle(for: BundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent()
+        ]
+
+        for candidate in candidates {
+            for bundleName in bundleNames {
+                let bundlePathiOS = candidate?.appendingPathComponent(bundleName + ".bundle")
+                if let bundle = bundlePathiOS.flatMap(Bundle.init(url:)) {
+                    return bundle
+                }
+            }
+        }
+        fatalError("unable to find bundle named \(bundleNames)")
+    }()
+}
+{% endif %}
