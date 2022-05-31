@@ -104,13 +104,14 @@ final class ImagesLoader {
             frameName: iconsFrameName,
             params: formatParams,
             filter: filter
-        )
+        ).map { updateRenderMode($0) }
         let darkIcons = params.figma.darkFileId.flatMap {
             try? _loadImages(
                 fileId: $0,
                 frameName: iconsFrameName,
                 params: formatParams,
-                filter: filter)
+                filter: filter
+            ).map { updateRenderMode($0) }
         }
         return (lightIcons, darkIcons)
     }
