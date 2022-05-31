@@ -46,6 +46,7 @@ public struct Image: Asset {
 
 public struct ImagePack: Asset {
     public var images: [Image]
+    public var renderMode = XcodeRenderMode.template
     public var name: String {
         didSet {
             images = images.map { image -> Image in
