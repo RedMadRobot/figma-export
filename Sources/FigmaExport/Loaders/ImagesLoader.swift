@@ -52,7 +52,8 @@ final class ImagesLoader {
         )
         let darkSuffix = params.common?.icons?.darkModeSuffix ?? "_dark"
         let lightIcons = icons
-            .filter { !$0.name.hasSuffix(darkSuffix) }
+            .filter { !$0.name.hasSuffix(darkSuffix)}
+            .map { updateRenderMode($0) }
         let darkIcons = icons
             .filter { $0.name.hasSuffix(darkSuffix) }
             .map { icon -> ImagePack in
@@ -60,7 +61,32 @@ final class ImagesLoader {
                 newIcon.name = String(icon.name.dropLast(darkSuffix.count))
                 return newIcon
             }
+            .map { updateRenderMode($0) }
         return (lightIcons, darkIcons)
+    }
+
+    private func updateRenderMode(_ icon: ImagePack) -> ImagePack {
+        // Filtering at suffixes
+        var renderMode = params.ios?.icons?.renderMode ?? .template
+        let defaultSuffix = renderMode == .template ? params.ios?.icons?.renderModeDefaultSuffix : nil
+        let originalSuffix = renderMode == .template ? params.ios?.icons?.renderModeOriginalSuffix : nil
+        let templateSuffix = renderMode != .template ? params.ios?.icons?.renderModeTemplateSuffix : nil
+        var suffix: String?
+
+        if let defaultSuffix = defaultSuffix, icon.name.hasSuffix(defaultSuffix) {
+            renderMode = .default
+            suffix = defaultSuffix
+        } else if let originalSuffix = originalSuffix, icon.name.hasSuffix(originalSuffix) {
+            renderMode = .original
+            suffix = originalSuffix
+        } else if let templateSuffix = templateSuffix, icon.name.hasSuffix(templateSuffix) {
+            renderMode = .template
+            suffix = templateSuffix
+        }
+        var newIcon = icon
+        newIcon.name = String(icon.name.dropLast(suffix?.count ?? 0))
+        newIcon.renderMode = renderMode
+        return newIcon
     }
 
     private func loadIconsFromLightAndDarkFile(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
@@ -110,6 +136,11 @@ final class ImagesLoader {
                 .filter { !$0.name.hasSuffix(darkSuffix) }
             let darkImages = images
                 .filter { $0.name.hasSuffix(darkSuffix) }
+                .map { image -> ImagePack in
+                    var newImage = image
+                    newImage.name = String(image.name.dropLast(darkSuffix.count))
+                    return newImage
+                }
             return (lightImages, darkImages)
         default:
             let pack = try _loadImages(
@@ -121,6 +152,11 @@ final class ImagesLoader {
                 .filter { !$0.name.hasSuffix(darkSuffix) }
             let darkPack = pack
                 .filter { $0.name.hasSuffix(darkSuffix) }
+                .map { image -> ImagePack in
+                    var newImage = image
+                    newImage.name = String(image.name.dropLast(darkSuffix.count))
+                    return newImage
+                }
             return (lightPack, darkPack)
         }
     }
