@@ -59,7 +59,7 @@ public class PNGParams: FormatParams {
 
 public struct ImageEndpoint: BaseEndpoint {
     
-    public typealias Content = [NodeId: ImagePath]
+    public typealias Content = [NodeId: ImagePath?]
 
     private let nodeIds: String
     private let fileId: String
@@ -71,7 +71,7 @@ public struct ImageEndpoint: BaseEndpoint {
         self.params = params
     }
 
-    func content(from root: ImageResponse) -> [NodeId: ImagePath] {
+    func content(from root: ImageResponse) -> [NodeId: ImagePath?] {
         return root.images
     }
 
@@ -89,7 +89,7 @@ public struct ImageEndpoint: BaseEndpoint {
 }
 
 public struct ImageResponse: Decodable {
-    public let images: [NodeId: ImagePath]
+    public let images: [NodeId: ImagePath?]
 }
 
 public typealias ImagePath = String

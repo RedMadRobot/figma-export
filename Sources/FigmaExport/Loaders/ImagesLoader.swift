@@ -186,16 +186,20 @@ final class ImagesLoader {
         params: FormatParams,
         filter: String? = nil
     ) throws -> [ImagePack] {
-        let imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
+        var imagesDict = try fetchImageComponents(fileId: fileId, frameName: frameName, filter: filter)
 
         guard !imagesDict.isEmpty else {
             throw FigmaExportError.componentsNotFound
         }
-
-        let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
         
         logger.info("Fetching vector images...")
-        let imageIdToImagePath = try loadImages(fileId: fileId, nodeIds: imagesIds, params: params)
+        let imageIdToImagePath = try loadImages(fileId: fileId, imagesDict: imagesDict, params: params)
+        
+        // Remove components for which image file could not be fetched
+        let badNodeIds = Set(imagesDict.keys).symmetricDifference(Set(imageIdToImagePath.keys))
+        badNodeIds.forEach { nodeId in
+            imagesDict.removeValue(forKey: nodeId)
+        }
 
         // Group images by name
         let groups = Dictionary(grouping: imagesDict) { $1.name.parseNameAndIdiom(platform: platform).name }
@@ -221,13 +225,12 @@ final class ImagesLoader {
             throw FigmaExportError.componentsNotFound
         }
 
-        let imagesIds: [NodeId] = imagesDict.keys.map { $0 }
         let scales = getScales(platform: platform)
 
         var images: [Double: [NodeId: ImagePath]] = [:]
         for scale in scales {
             logger.info("Fetching PNG images for scale \(scale)...")
-            images[scale] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: scale))
+            images[scale] = try loadImages(fileId: fileId, imagesDict: imagesDict, params: PNGParams(scale: scale))
         }
 
         // Group images by name
@@ -272,12 +275,25 @@ final class ImagesLoader {
         return try client.request(endpoint)
     }
 
-    private func loadImages(fileId: String, nodeIds: [NodeId], params: FormatParams) throws -> [NodeId: ImagePath] {
+    private func loadImages(fileId: String, imagesDict: [NodeId: Component], params: FormatParams) throws -> [NodeId: ImagePath] {
         let batchSize = 100
+        
+        let nodeIds: [NodeId] = imagesDict.keys.map { $0 }
+        
         let keysWithValues: [(NodeId, ImagePath)] = try nodeIds.chunked(into: batchSize)
             .map { ImageEndpoint(fileId: fileId, nodeIds: $0, params: params) }
             .map { try client.request($0) }
-            .flatMap { $0.map { ($0, $1) } }
+            .flatMap { dict in
+                dict.compactMap { nodeId, imagePath in
+                    if let imagePath = imagePath {
+                        return (nodeId, imagePath)
+                    } else {
+                        let componentName = imagesDict[nodeId]?.name ?? ""
+                        logger.error("Unable to get image for node with id = \(nodeId). Please check that component \(componentName) in the Figma file is not empty. Skipping this file...")
+                        return nil
+                    }
+                }
+            }
         return Dictionary(uniqueKeysWithValues: keysWithValues)
     }
 }
