@@ -49,6 +49,10 @@ final class XcodeIconsExporterTests: XCTestCase {
 
         import UIKit
 
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
         public extension UIImage {
             static var image1: UIImage { UIImage(named: #function)! }
             static var image2: UIImage { UIImage(named: #function)! }
@@ -85,6 +89,10 @@ final class XcodeIconsExporterTests: XCTestCase {
         \(header)
 
         import UIKit
+
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
 
         public extension UIImage {
             static var image1: UIImage { UIImage(named: #function)! }
@@ -124,6 +132,10 @@ final class XcodeIconsExporterTests: XCTestCase {
         \(header)
 
         import UIKit
+
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
 
         public extension UIImage {
             @objc static var image1: UIImage { UIImage(named: #function)! }
@@ -166,6 +178,10 @@ final class XcodeIconsExporterTests: XCTestCase {
         \(header)
 
         import UIKit
+
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
 
         public extension UIImage {
             @objc static var image1: UIImage { UIImage(named: #function)! }
@@ -359,6 +375,10 @@ final class XcodeIconsExporterTests: XCTestCase {
 
         import SwiftUI
 
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
         public extension Image {
             static var image1: Image { Image(#function) }
             static var image2: Image { Image(#function) }
@@ -395,6 +415,10 @@ final class XcodeIconsExporterTests: XCTestCase {
         \(header)
 
         import SwiftUI
+
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
 
         public extension Image {
             static var image1: Image { Image(#function) }
@@ -522,6 +546,10 @@ final class XcodeIconsExporterTests: XCTestCase {
 
         import UIKit
 
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
         public extension UIImage {
             static var image1: UIImage { UIImage(named: #function)! }
             static var image2: UIImage { UIImage(named: #function)! }
@@ -571,6 +599,10 @@ final class XcodeIconsExporterTests: XCTestCase {
 
         import UIKit
 
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
         public extension UIImage {
             static var image1: UIImage { UIImage(named: #function)! }
             static var image2: UIImage { UIImage(named: #function)! }
@@ -595,6 +627,10 @@ final class XcodeIconsExporterTests: XCTestCase {
         \(header)
 
         import UIKit
+
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
 
         public extension UIImage {
             static var `class`: UIImage { UIImage(named: #function)! }
