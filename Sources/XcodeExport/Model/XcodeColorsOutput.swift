@@ -6,7 +6,7 @@ public struct XcodeColorsOutput {
     public let assetsColorsURL: URL?
     public let assetsInMainBundle: Bool
     public let assetsInSwiftPackage: Bool
-    public let resourceBundleNames: [String]
+    public let resourceBundleNames: [String]?
     public let addObjcAttribute: Bool
     public let colorSwiftURL: URL?
     public let swiftuiColorSwiftURL: URL?
@@ -17,7 +17,7 @@ public struct XcodeColorsOutput {
         assetsColorsURL: URL?,
         assetsInMainBundle: Bool,
         assetsInSwiftPackage: Bool? = false,
-        resourceBundleNames: [String] = [],
+        resourceBundleNames: [String]? = nil,
         addObjcAttribute: Bool? = false,
         colorSwiftURL: URL? = nil,
         swiftuiColorSwiftURL: URL? = nil,

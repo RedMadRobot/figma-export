@@ -66,7 +66,7 @@ public class XcodeImagesExporterBase: XcodeExporterBase {
         let context: [String: Any] = [
             "addObjcPrefix": output.addObjcAttribute,
             "assetsInSwiftPackage": output.assetsInSwiftPackage,
-            "resourceBundleNames": output.resourceBundleNames,
+            "resourceBundleNames": output.resourceBundleNames ?? [],
             "assetsInMainBundle": output.assetsInMainBundle,
             "images": names.map { ["name": $0] },
         ]

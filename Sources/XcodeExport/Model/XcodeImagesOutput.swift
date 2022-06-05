@@ -6,7 +6,7 @@ public struct XcodeImagesOutput {
     let assetsFolderURL: URL
     let assetsInMainBundle: Bool
     let assetsInSwiftPackage: Bool
-    let resourceBundleNames: [String]
+    let resourceBundleNames: [String]?
     let addObjcAttribute: Bool
     let preservesVectorRepresentation: [String]?
     let renderMode: XcodeRenderMode?
@@ -28,7 +28,7 @@ public struct XcodeImagesOutput {
         assetsFolderURL: URL,
         assetsInMainBundle: Bool,
         assetsInSwiftPackage: Bool? = false,
-        resourceBundleNames: [String] = [],
+        resourceBundleNames: [String]? = nil,
         addObjcAttribute: Bool? = false,
         preservesVectorRepresentation: [String]? = nil,
         uiKitImageExtensionURL: URL? = nil,
