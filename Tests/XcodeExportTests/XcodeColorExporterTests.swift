@@ -59,6 +59,10 @@ final class XcodeColorExporterTests: XCTestCase {
 
         import UIKit
 
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
         public extension UIColor {
             static var colorPair1: UIColor {
                 UIColor { traitCollection -> UIColor in
@@ -97,6 +101,10 @@ final class XcodeColorExporterTests: XCTestCase {
 
         import UIKit
 
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
         public extension UIColor {
             static var colorPair1: UIColor { UIColor(named: #function)! }
             static var colorPair2: UIColor { UIColor(named: #function)! }
@@ -129,6 +137,10 @@ final class XcodeColorExporterTests: XCTestCase {
         \(header)
 
         import UIKit
+
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
 
         public extension UIColor {
             @objc static var colorPair1: UIColor { UIColor(named: #function)! }
@@ -221,6 +233,10 @@ final class XcodeColorExporterTests: XCTestCase {
 
         import SwiftUI
 
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
         public extension Color {
             static var colorPair1: Color { Color(#function) }
             static var colorPair2: Color { Color(#function) }
@@ -291,6 +307,10 @@ final class XcodeColorExporterTests: XCTestCase {
 
         import UIKit
 
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
         public extension UIColor {
             static var backgroundPrimary: UIColor { UIColor(named: "background/primary")! }
         }
@@ -312,6 +332,10 @@ final class XcodeColorExporterTests: XCTestCase {
         \(header)
 
         import UIKit
+
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
 
         public extension UIColor {
             static var `class`: UIColor {

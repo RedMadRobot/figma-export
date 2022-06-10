@@ -1,0 +1,41 @@
+{% if resourceBundleNames %}
+private extension Foundation.Bundle {
+    private class BundleFinder {}
+
+    /// Returns the resource bundle associated with the current Swift module.
+    static var _module: Bundle = {
+        let bundleNames = {{ resourceBundleNames }}
+
+        let candidates: [URL?] = {
+            var candidates = [
+                // Bundle should be present here when the package is linked into an App.
+                Bundle.main.resourceURL,
+                // Bundle should be present here when the package is linked into a framework.
+                Bundle(for: BundleFinder.self).resourceURL,
+                // For command-line tools.
+                Bundle.main.bundleURL,
+            ]
+#if DEBUG
+            candidates.append(contentsOf: [
+                // Bundle should be present here when the package is used in UI Tests.
+                Bundle(for: BundleFinder.self).resourceURL?.deletingLastPathComponent(),
+                // Bundle should be present here when running previews from a different package (this is the path to "…/Debug-iphonesimulator/").
+                Bundle(for: BundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent(),
+                Bundle(for: BundleFinder.self).resourceURL?.deletingLastPathComponent().deletingLastPathComponent(),
+            ])
+#endif
+            return candidates
+        }()
+
+        for candidate in candidates {
+            for bundleName in bundleNames {
+                let bundlePathiOS = candidate?.appendingPathComponent(bundleName + ".bundle")
+                if let bundle = bundlePathiOS.flatMap(Bundle.init(url:)) {
+                    return bundle
+                }
+            }
+        }
+        fatalError("unable to find bundle named \(bundleNames)")
+    }()
+}
+{% endif %}

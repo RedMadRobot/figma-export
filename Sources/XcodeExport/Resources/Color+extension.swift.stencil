@@ -1,15 +1,19 @@
 {% include "header.stencil" %}
 import SwiftUI
-{% if assetsInSwiftPackage %}
+{% if assetsInSwiftPackage and resourceBundleNames %}
+private class BundleProvider {
+    static let bundle = Bundle._module
+}
+{% elif assetsInSwiftPackage and not resourceBundleNames %}
 private class BundleProvider {
     static let bundle = Bundle.module
 }
-{% elif not assetsInMainBundle %}
+{% elif not assetsInSwiftPackage and not resourceBundleNames %}
 private class BundleProvider {
     static let bundle = Bundle(for: BundleProvider.self)
 }
-
 {% endif %}
 public extension Color {{ "{" }}{% for color in colors %}
     static var {{ color.name }}: Color { Color({% if useNamespace %}"{{ color.originalName }}"{% else %}#function{% endif %}{% if not assetsInMainBundle %}, bundle: BundleProvider.bundle{% endif %}) }{% endfor %}
 }
+{% include "Bundle+extension.swift.stencil.include" %}

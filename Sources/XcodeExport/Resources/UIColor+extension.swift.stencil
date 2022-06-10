@@ -1,10 +1,14 @@
 {% include "header.stencil" %}
 import UIKit
-{% if assetsInSwiftPackage %}
+{% if assetsInSwiftPackage and resourceBundleNames %}
+private class BundleProvider {
+    static let bundle = Bundle._module
+}
+{% elif assetsInSwiftPackage and not resourceBundleNames %}
 private class BundleProvider {
     static let bundle = Bundle.module
 }
-{% elif not assetsInMainBundle %}
+{% elif not assetsInSwiftPackage and not resourceBundleNames %}
 private class BundleProvider {
     static let bundle = Bundle(for: BundleProvider.self)
 }
@@ -25,3 +29,4 @@ public extension UIColor {{ "{" }}{% for color in colors %}{% if colorFromAssetC
         UIColor(red: {{ color.red }}, green: {{ color.green }}, blue: {{ color.blue }}, alpha: {{ color.alpha }})
     }{% endif %}{% endif %}{% endfor %}
 }
+{% include "Bundle+extension.swift.stencil.include" %}
