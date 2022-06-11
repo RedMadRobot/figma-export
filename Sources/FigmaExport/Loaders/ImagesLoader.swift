@@ -229,6 +229,21 @@ final class ImagesLoader {
             throw FigmaExportError.componentsNotFound
         }
         
+        // Component name must not be empty
+        imagesDict = imagesDict.filter { (key: NodeId, component: Component) in
+            if component.name.trimmingCharacters(in: .whitespaces).isEmpty {
+                logger.warning("""
+                Found a component with empty name.
+                Page name: \(component.containingFrame.pageName)
+                Frame: \(component.containingFrame.name ?? "nil")
+                Description: \(component.description ?? "nil")
+                The component wont be exported. Fix component name in the Figma file and try again.
+                """)
+                return false
+            }
+            return true
+        }
+        
         logger.info("Fetching vector images...")
         let imageIdToImagePath = try loadImages(fileId: fileId, imagesDict: imagesDict, params: params)
         
