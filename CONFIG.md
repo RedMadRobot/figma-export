@@ -38,6 +38,7 @@ common:
     lightHCModeSuffix: '_lightHC'
     # [optional] If useSingleFile is true, customize the suffix to denote a dark high contrast color. Defaults to '_darkHC'
     darkHCModeSuffix: '_darkHC'
+    
   # [optional]
   icons:
     # [optional] Name of the Figma's frame where icons components are located
@@ -50,6 +51,7 @@ common:
     useSingleFile: true
     # [optional] If useSingleFile is true, customize the suffix to denote a dark mode icons. Defaults to '_dark'
     darkModeSuffix: '_dark'
+    
   # [optional]
   images:
     # [optional]Name of the Figma's frame where image components are located
@@ -62,8 +64,22 @@ common:
     useSingleFile: true
     # [optional] If useSingleFile is true, customize the suffix to denote a dark mode icons. Defaults to '_dark'
     darkModeSuffix: '_dark'
+    
   # [optional]
   typography:
+    # [optional] RegExp pattern for text style name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
+    nameValidateRegexp: '^[a-zA-Z0-9_]+$' # RegExp pattern for: h1_regular, h1_medium
+    # [optional] RegExp pattern for replacing. Supports only $n
+    nameReplaceRegexp: 'font_$1'
+    
+  # [optional]
+  spacings:
+    # [optional] Frame name containing spacings
+    figmaFrameName: 'Spacings'
+    # [optional] Containing state name for vertical spacings
+    figmaVerticalStateName: 'Vertical'
+    # [optional] Containing state name for horizontal spacings
+    figmaHorizontalStateName: 'Horizontal'
     # [optional] RegExp pattern for text style name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
     nameValidateRegexp: '^[a-zA-Z0-9_]+$' # RegExp pattern for: h1_regular, h1_medium
     # [optional] RegExp pattern for replacing. Supports only $n
@@ -157,6 +173,13 @@ ios:
     labelsDirectory: "./Source/UIComponents/"
     # Typography name style: camelCase or snake_case
     nameStyle: camelCase
+    
+  # [optional] Parameters for exporting spacings
+  spacings:
+    # Relative or absolute path to directory where to place generated Spacings.swift file
+    spacingsSwift: "./Source/UIComponents/"
+    # Spacing name style: camelCase or snake_case
+    nameStyle: camelCase
 
 # [optional] Android export parameters
 android:
@@ -173,12 +196,14 @@ android:
   colors:
     # [optional] The package to export the Jetpack Compose color code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
     composePackageName: "com.example"
+    
   # Parameters for exporting icons
   icons:
     # Where to place icons relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export icons` command
     output: "figma-import-icons"
     # [optional] The package to export the Jetpack Compose icon code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
     composePackageName: "com.example"
+    
   # Parameters for exporting images
   images:
     # Image file format: svg or png
@@ -193,9 +218,17 @@ android:
       encoding: lossy
       # Encoding quality in percents. Only for lossy encoding.
       quality: 90
+      
   # Parameters for exporting typography
   typography:
     # Typography name style: camelCase or snake_case
+    nameStyle: camelCase
+    # [optional] The package to export the Jetpack Compose typography code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
+    composePackageName: "com.example"
+    
+  # Parameters for exporting spacings
+  spacings:
+    # Spacings name style: camelCase or snake_case
     nameStyle: camelCase
     # [optional] The package to export the Jetpack Compose typography code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
     composePackageName: "com.example"

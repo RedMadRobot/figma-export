@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>{% for spacing in spacings %}
+    <dimen name="{{ spacing.name }}">{{ spacing.size }}dp</dimen>{% endfor %}
+</resources>

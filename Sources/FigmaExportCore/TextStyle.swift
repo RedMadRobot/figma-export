@@ -64,9 +64,10 @@ public struct TextStyle: Asset {
         fontStyle: DynamicTypeStyle?,
         lineHeight: Double? = nil,
         letterSpacing: Double,
-        textCase: TextCase = .original) {
-        
+        textCase: TextCase = .original
+    ) {
         self.name = name
+        self.platform = platform
         self.fontName = fontName
         self.fontSize = fontSize
         self.fontStyle = fontStyle

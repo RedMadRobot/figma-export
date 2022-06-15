@@ -1,0 +1,6 @@
+{% include "header.stencil" %}
+import Foundation
+
+public struct Spacings {{ "{" }}{% for spacing in spacings %}
+    {% if addObjcPrefix %}@objc {% endif %}static let {{ spacing.name }}: Double = {{ spacing.size }}{% endfor %}
+}
