@@ -6,17 +6,19 @@ final class TextStylesLoader {
     
     private let client: Client
     private let params: Params.Figma
+    private let typoParams: Params.Common.Typography?
 
-    init(client: Client, params: Params.Figma) {
+    init(client: Client, params: Params.Figma, typoParams: Params.Common.Typography?) {
         self.client = client
         self.params = params
+        self.typoParams = typoParams
     }
     
     func load() throws -> [TextStyle] {
-        return try loadTextStyles(fileId: params.lightFileId)
+        return try loadTextStyles(fileId: params.lightFileId, ignoreRegex: typoParams?.nameIgnoreExpression)
     }
     
-    private func loadTextStyles(fileId: String) throws -> [TextStyle] {
+    private func loadTextStyles(fileId: String, ignoreRegex: String?) throws -> [TextStyle] {
         let styles = try loadStyles(fileId: fileId)
 
         guard !styles.isEmpty else {
@@ -40,9 +42,13 @@ final class TextStylesLoader {
             default:
                 textCase = .original
             }
-            
+
+            let name = style.name.replacingOccurrences(of: ignoreRegex ?? "",
+                                                       with: "",
+                                                       options: .regularExpression)
+
             return TextStyle(
-                name: style.name,
+                name: name,
                 fontName: textStyle.fontPostScriptName ?? textStyle.fontFamily ?? "",
                 fontSize: textStyle.fontSize,
                 fontStyle: DynamicTypeStyle(rawValue: style.description),
