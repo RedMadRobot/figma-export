@@ -48,6 +48,7 @@ struct Params: Decodable {
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
             let nameIgnoreExpression: String?
+            let ignoreFolder: Bool?
         }
 
         let colors: Colors?

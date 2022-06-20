@@ -15,10 +15,13 @@ final class TextStylesLoader {
     }
     
     func load() throws -> [TextStyle] {
-        return try loadTextStyles(fileId: params.lightFileId, ignoreRegex: typoParams?.nameIgnoreExpression)
+        return try loadTextStyles(
+            fileId: params.lightFileId,
+            ignoreFolder: typoParams?.ignoreFolder ?? false,
+            ignoreRegex: typoParams?.nameIgnoreExpression)
     }
     
-    private func loadTextStyles(fileId: String, ignoreRegex: String?) throws -> [TextStyle] {
+    private func loadTextStyles(fileId: String, ignoreFolder: Bool, ignoreRegex: String?) throws -> [TextStyle] {
         let styles = try loadStyles(fileId: fileId)
 
         guard !styles.isEmpty else {
@@ -43,9 +46,16 @@ final class TextStylesLoader {
                 textCase = .original
             }
 
-            let name = style.name.replacingOccurrences(of: ignoreRegex ?? "",
-                                                       with: "",
-                                                       options: .regularExpression)
+            var name = style.name
+
+            if name.isEmpty == false {
+                name = name.replacingOccurrences(of: ignoreRegex ?? "",
+                                                 with: "",
+                                                 options: .regularExpression)
+                if ignoreFolder {
+                    name = String(name.split(separator: "/").last!)
+                }
+            }
 
             return TextStyle(
                 name: name,
