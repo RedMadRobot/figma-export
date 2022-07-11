@@ -23,7 +23,7 @@ extension FigmaExportCommand {
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export typography.")
 
             logger.info("Fetching text styles. Please wait...")
-            let loader = TextStylesLoader(client: client, params: options.params.figma)
+            let loader = TextStylesLoader(client: client, params: options.params)
             let textStyles = try loader.load()
             
             if let ios = options.params.ios,

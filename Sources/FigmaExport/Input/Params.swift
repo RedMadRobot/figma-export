@@ -42,6 +42,7 @@ struct Params: Decodable {
         struct Typography: Decodable {
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
+            let weightToNameMapping: [String: String]?
         }
 
         let colors: Colors?

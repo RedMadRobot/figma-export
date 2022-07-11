@@ -5,15 +5,15 @@ import FigmaExportCore
 final class TextStylesLoader {
     
     private let client: Client
-    private let params: Params.Figma
+    private let params: Params
 
-    init(client: Client, params: Params.Figma) {
+    init(client: Client, params: Params) {
         self.client = client
         self.params = params
     }
     
     func load() throws -> [TextStyle] {
-        return try loadTextStyles(fileId: params.lightFileId)
+        return try loadTextStyles(fileId: params.figma.lightFileId)
     }
     
     private func loadTextStyles(fileId: String) throws -> [TextStyle] {
@@ -43,7 +43,7 @@ final class TextStylesLoader {
             
             return TextStyle(
                 name: style.name,
-                fontName: textStyle.fontPostScriptName ?? textStyle.fontFamily ?? "",
+                fontName: createFontName(typeStyle: textStyle),
                 fontSize: textStyle.fontSize,
                 fontStyle: DynamicTypeStyle(rawValue: style.description),
                 lineHeight: lineHeight,
@@ -62,5 +62,12 @@ final class TextStylesLoader {
     private func loadNodes(fileId: String, nodeIds: [String]) throws -> [NodeId: Node] {
         let endpoint = NodesEndpoint(fileId: fileId, nodeIds: nodeIds)
         return try client.request(endpoint)
+    }
+
+    private func createFontName(typeStyle: TypeStyle) -> String {
+        if let psName = typeStyle.fontPostScriptName { return psName }
+        guard let fontFamily = typeStyle.fontFamily else { return "" }
+        guard let fontWeightName = params.common?.typography?.weightToNameMapping?[String(typeStyle.fontWeight)] else { return fontFamily }
+        return "\(fontFamily)-\(fontWeightName)"
     }
 }
