@@ -263,7 +263,8 @@ final class ImagesLoader {
                     return nil
                 }
                 let (name, idiom) = component.name.parseNameAndIdiom(platform: platform)
-                return Image(name: name, scale: .all, idiom: idiom, url: url, format: params.format)
+                let isRTL = component.useRTL()
+                return Image(name: name, scale: .all, idiom: idiom, url: url, format: params.format, isRTL: isRTL)
             }
             return ImagePack(name: packName, images: packImages, platform: platform)
         }
@@ -389,6 +390,22 @@ extension Component {
         
         if (description.contains("ios") && platform == .ios) ||
             (description.contains("android") && platform == .android) {
+            return true
+        }
+        
+        return false
+    }
+    
+    public func useRTL() -> Bool {
+        guard let description = description, !description.isEmpty else { return false }
+        
+        let keywords = ["RTL", "rtl", "Rtl"]
+        let hasNotKeywords = keywords.allSatisfy { !description.contains($0) }
+        if hasNotKeywords { return false }        
+        
+        if (description.contains("RTL") ||
+            description.contains("rtl") ||
+            description.contains("Rtl"))  {
             return true
         }
         
