@@ -21,16 +21,26 @@ public struct Image: Asset {
     public let format: String
     public let url: URL
     public let idiom: String?
+    public let isRTL: Bool
 
     public var platform: Platform?
 
-    public init(name: String, scale: Scale = .all, platform: Platform? = nil, idiom: String? = nil, url: URL, format: String) {
+    public init(
+        name: String,
+        scale: Scale = .all,
+        platform: Platform? = nil,
+        idiom: String? = nil,
+        url: URL,
+        format: String,
+        isRTL: Bool = false
+    ) {
         self.name = name
         self.scale = scale
         self.platform = platform
         self.url = url
         self.idiom = idiom
         self.format = format
+        self.isRTL = isRTL
     }
 
     // MARK: Hashable
