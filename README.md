@@ -54,6 +54,7 @@ Table of Contents:
 * Supports High contrast colors for Xcode
 * Supports SwiftUI and UIKit
 * Supports Objective-C
+* Supports RTL (only iOS)
 
 > Exporting icons and images works only for Professional/Organisation Figma plan because FigmaExport use *Shareable team libraries*.
 
@@ -450,6 +451,8 @@ Custom Stencil templates must have the following names:
 ## Design requirements
 
 If a color, icon or image is unique for iOS or Android platform, it should contains "ios" or "android" word in the description field in the properties. If a color, icon or image is used only by the designer, and it should not be exported, the word "none" should be specified in the description field.
+
+If an icon supports RTL (iOS only), it should contains "rtl" word in the description field in the properties.
 
 **Styles and Components must be published to a Team Library.**
 

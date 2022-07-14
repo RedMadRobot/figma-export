@@ -102,7 +102,7 @@ extension ImagePack {
     }
 
     func makeXcodeAssetContentsImageData(appearance: Appearance? = nil) -> [XcodeAssetContents.ImageData] {
-        images.map { $0.makeXcodeAssetContentsImageData(scale: $0.scale, appearance: appearance) }
+        images.map { $0.makeXcodeAssetContentsImageData(scale: $0.scale, appearance: appearance, isRTL: $0.isRTL) }
     }
 
 }
@@ -155,17 +155,18 @@ extension Image {
         return FileContents(destination: destination, sourceURL: url)
     }
 
-    func makeXcodeAssetContentsImageData(scale: Scale, appearance: Appearance? = nil) -> XcodeAssetContents.ImageData {
+    func makeXcodeAssetContentsImageData(scale: Scale, appearance: Appearance? = nil, isRTL: Bool) -> XcodeAssetContents.ImageData {
         let filename = makeFileURL(scale: scale, appearance: appearance).absoluteString
         let xcodeIdiom = idiom.flatMap { XcodeAssetIdiom(rawValue: $0) } ?? .universal
         let appearances = appearance.flatMap { $0 == .dark ? [XcodeAssetContents.Appearance.dark] : nil }
         let scaleString = scale.string
 
         return XcodeAssetContents.ImageData(
-            idiom: xcodeIdiom,
-            scale: scaleString,
             appearances: appearances,
-            filename: filename
+            filename: filename,
+            idiom: xcodeIdiom,
+            isRTL: isRTL,
+            scale: scaleString
         )
     }
 

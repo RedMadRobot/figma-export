@@ -12,8 +12,8 @@ enum XcodeAssetIdiom: String, Encodable {
 
 struct XcodeAssetContents: Encodable {
     struct Info: Encodable {
-        let version = 1
         let author = "xcode"
+        let version = 1
     }
     struct Appearance: Encodable {
         let appearance: String
@@ -34,15 +34,37 @@ struct XcodeAssetContents: Encodable {
         let components: Components
     }
     struct ColorData: Encodable {
-        let idiom = "universal"
         var appearances: [Appearance]?
         var color: ColorInfo
+        let idiom = "universal"
     }
     struct ImageData: Encodable {
-        let idiom: XcodeAssetIdiom
-        var scale: String?
         var appearances: [Appearance]?
         let filename: String
+        let idiom: XcodeAssetIdiom
+        let languageDirection: String?
+        var scale: String?
+        
+        enum CodingKeys: String, CodingKey {
+            case appearances
+            case filename
+            case idiom
+            case languageDirection = "language-direction"
+            case scale
+        }
+        
+        init(appearances: [Appearance]?,
+              filename: String,
+              idiom: XcodeAssetIdiom,
+              isRTL: Bool,
+              scale: String?
+        ) {
+            self.appearances = appearances
+            self.filename = filename
+            self.idiom = idiom
+            self.languageDirection = isRTL ? "left-to-right" : nil
+            self.scale = scale
+        }
     }
     
     struct Properties: Encodable {

@@ -263,7 +263,8 @@ final class ImagesLoader {
                     return nil
                 }
                 let (name, idiom) = component.name.parseNameAndIdiom(platform: platform)
-                return Image(name: name, scale: .all, idiom: idiom, url: url, format: params.format)
+                let isRTL = component.useRTL()
+                return Image(name: name, scale: .all, idiom: idiom, url: url, format: params.format, isRTL: isRTL)
             }
             return ImagePack(name: packName, images: packImages, platform: platform)
         }
@@ -393,5 +394,10 @@ extension Component {
         }
         
         return false
+    }
+    
+    public func useRTL() -> Bool {
+        guard let description = description, !description.isEmpty else { return false }        
+        return description.localizedCaseInsensitiveContains("rtl")
     }
 }
