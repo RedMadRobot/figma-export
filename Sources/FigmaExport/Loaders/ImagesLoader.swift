@@ -397,18 +397,7 @@ extension Component {
     }
     
     public func useRTL() -> Bool {
-        guard let description = description, !description.isEmpty else { return false }
-        
-        let keywords = ["RTL", "rtl", "Rtl"]
-        let hasNotKeywords = keywords.allSatisfy { !description.contains($0) }
-        if hasNotKeywords { return false }        
-        
-        if (description.contains("RTL") ||
-            description.contains("rtl") ||
-            description.contains("Rtl"))  {
-            return true
-        }
-        
-        return false
+        guard let description = description, !description.isEmpty else { return false }        
+        return description.localizedCaseInsensitiveContains("rtl")
     }
 }
