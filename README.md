@@ -452,7 +452,7 @@ Custom Stencil templates must have the following names:
 
 If a color, icon or image is unique for iOS or Android platform, it should contains "ios" or "android" word in the description field in the properties. If a color, icon or image is used only by the designer, and it should not be exported, the word "none" should be specified in the description field.
 
-If a icon is support RTL (iOS only), it should contains "rtl" word in the description field in the properties.
+If an icon supports RTL (iOS only), it should contains "rtl" word in the description field in the properties.
 
 **Styles and Components must be published to a Team Library.**
 
