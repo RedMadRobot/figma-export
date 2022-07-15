@@ -144,12 +144,12 @@ extension FigmaExportCommand {
                 let lightFiles = asset.light.images.map { image -> FileContents in
                     let fileURL = URL(string: "\(image.name).svg")!
                     let dest = Destination(directory: tempDirectoryLightURL, file: fileURL)
-                    return FileContents(destination: dest, sourceURL: image.url)
+                    return FileContents(destination: dest, sourceURL: image.url, isRTL: image.isRTL)
                 }
                 let darkFiles = asset.dark?.images.map { image -> FileContents in
                     let fileURL = URL(string: "\(image.name).svg")!
                     let dest = Destination(directory: tempDirectoryDarkURL, file: fileURL)
-                    return FileContents(destination: dest, sourceURL: image.url, dark: true)
+                    return FileContents(destination: dest, sourceURL: image.url, dark: true, isRTL: image.isRTL)
                 } ?? []
                 return lightFiles + darkFiles
             }
@@ -182,6 +182,7 @@ extension FigmaExportCommand {
             
             // 6. Move XML files to main/res/drawable/
             localFiles = localFiles.map { fileContents -> FileContents in
+                let directory = fileContents.dark ? darkDirectory : lightDirectory
                 
                 let source = fileContents.destination.url
                     .deletingPathExtension()
@@ -190,8 +191,9 @@ extension FigmaExportCommand {
                 let fileURL = fileContents.destination.file
                     .deletingPathExtension()
                     .appendingPathExtension("xml")
-
-                let directory = fileContents.dark ? darkDirectory : lightDirectory
+                
+                rewriteXMLFile(from: source, fileContents: fileContents)
+                
                 return FileContents(
                     destination: Destination(directory: directory, file: fileURL),
                     dataFile: source
@@ -225,5 +227,20 @@ extension FigmaExportCommand {
             
             logger.info("Done!")
         }
+    }
+}
+
+private extension FigmaExportCommand.ExportIcons {
+    private func rewriteXMLFile(from source: URL, fileContents: FileContents) {
+        guard fileContents.isRTL else { return }
+        let sourceXML = try? XMLDocument(contentsOf: source, options: [.documentTidyXML])
+        try? sourceXML?.nodes(forXPath: "//vector").forEach { node in
+            guard let buttonElement = node as? XMLElement else { return }
+            let attribute: XMLNode = XMLNode.attribute(withName: "android:autoMirrored",
+                                                       stringValue: "\(fileContents.isRTL)") as? XMLNode
+            ?? XMLNode()
+            buttonElement.addAttribute(attribute)
+        }
+        try? FigmaExportCommand.fileWriter.write(xmlFile: sourceXML, directory: source)
     }
 }
