@@ -7,6 +7,7 @@ final class StringCaseTests: XCTestCase {
         XCTAssertTrue("snake".isSnakeCase)
         XCTAssertTrue("snake_case".isSnakeCase)
         XCTAssertTrue("snake_case_example".isSnakeCase)
+        XCTAssertFalse("NOTSNAKECASE".isSnakeCase)
         XCTAssertFalse("not_a_SNAKECASE_String".isSnakeCase)
         XCTAssertFalse("notSnakeCase".isSnakeCase)
         XCTAssertFalse("AlsoNotSnakeCase".isSnakeCase)
@@ -16,6 +17,7 @@ final class StringCaseTests: XCTestCase {
         XCTAssertEqual("snakeCased".snakeCased(), "snake_cased")
         XCTAssertEqual("snake Cased_String".snakeCased(), "snake_cased_string")
         XCTAssertEqual("_this is*  not-Very%difficult".snakeCased(), "this_is_not_very_difficult")
+        XCTAssertEqual("snakeCASE".snakeCased(), "snake_case")
     }
     
     func testLowerCamelCase() throws {
