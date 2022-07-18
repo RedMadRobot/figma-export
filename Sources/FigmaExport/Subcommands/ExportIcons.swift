@@ -235,11 +235,11 @@ private extension FigmaExportCommand.ExportIcons {
         guard fileContents.isRTL else { return }
         let sourceXML = try? XMLDocument(contentsOf: source, options: [.documentTidyXML])
         try? sourceXML?.nodes(forXPath: "//vector").forEach { node in
-            guard let buttonElement = node as? XMLElement else { return }
+            guard let element = node as? XMLElement else { return }
             let attribute: XMLNode = XMLNode.attribute(withName: "android:autoMirrored",
                                                        stringValue: "\(fileContents.isRTL)") as? XMLNode
             ?? XMLNode()
-            buttonElement.addAttribute(attribute)
+            element.addAttribute(attribute)
         }
         try? FigmaExportCommand.fileWriter.write(xmlFile: sourceXML, directory: source)
     }
