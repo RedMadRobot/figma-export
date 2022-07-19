@@ -232,15 +232,21 @@ extension FigmaExportCommand {
 
 private extension FigmaExportCommand.ExportIcons {
     private func rewriteXMLFile(from source: URL, fileContents: FileContents) {
-        guard fileContents.isRTL else { return }
-        let sourceXML = try? XMLDocument(contentsOf: source, options: [.documentTidyXML])
-        try? sourceXML?.nodes(forXPath: "//vector").forEach { node in
-            guard let element = node as? XMLElement else { return }
-            let attribute: XMLNode = XMLNode.attribute(withName: "android:autoMirrored",
-                                                       stringValue: "\(fileContents.isRTL)") as? XMLNode
-            ?? XMLNode()
-            element.addAttribute(attribute)
+        guard fileContents.isRTL,
+              let attribute = XMLNode.attribute(withName: "android:autoMirrored", stringValue: "\(fileContents.isRTL)") as? XMLNode
+        else { return }
+        if let sourceXML = try? XMLDocument(contentsOf: source, options: .documentTidyXML) {
+            try? sourceXML.nodes(forXPath: "//vector").forEach { node in
+                guard let element = node as? XMLElement else { return }
+                element.addAttribute(attribute)
+            }
+
+            do {
+                FigmaExportCommand.logger.info("Add autoMirrored property for xml file...")
+                try FigmaExportCommand.fileWriter.write(xmlFile: sourceXML, directory: source)
+            } catch {
+                FigmaExportCommand.logger.info("Rewrite XMLFile - \(sourceXML) is faild")
+            }
         }
-        try? FigmaExportCommand.fileWriter.write(xmlFile: sourceXML, directory: source)
     }
 }
