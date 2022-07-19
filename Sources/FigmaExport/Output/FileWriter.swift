@@ -25,12 +25,9 @@ final class FileWriter {
         }
     }
     
-    func write(xmlFile: XMLDocument?, directory: URL) throws {
+    func write(xmlFile: XMLDocument, directory: URL) throws {
         let fileURL = URL(fileURLWithPath: directory.path)
-        if let data = xmlFile?.xmlData(options: [.nodePrettyPrint, .nodeCompactEmptyElement]) {
-            try data.write(to: fileURL, options: .atomicWrite)
-        } else {
-            fatalError("FileContents.data is nil. Use FileDownloader to download contents of the file.")
-        }
+        let options: XMLNode.Options = [.nodePrettyPrint, .nodeCompactEmptyElement]
+        try xmlFile.xmlData(options: options).write(to: fileURL, options: .atomic)
     }
 }
