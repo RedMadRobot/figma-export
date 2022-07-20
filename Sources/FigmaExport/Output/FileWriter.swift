@@ -24,4 +24,10 @@ final class FileWriter {
             }
         }
     }
+    
+    func write(xmlFile: XMLDocument, directory: URL) throws {
+        let fileURL = URL(fileURLWithPath: directory.path)
+        let options: XMLNode.Options = [.nodePrettyPrint, .nodeCompactEmptyElement]
+        try xmlFile.xmlData(options: options).write(to: fileURL, options: .atomic)
+    }
 }

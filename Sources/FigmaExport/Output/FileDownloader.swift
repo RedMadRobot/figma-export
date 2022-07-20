@@ -42,7 +42,8 @@ final class FileDownloader {
                     destination: file.destination,
                     dataFile: fileURL,
                     scale: file.scale,
-                    dark: file.dark
+                    dark: file.dark,
+                    isRTL: file.isRTL
                 )
                 newFiles.append(newFile)
                 downloaded += 1
