@@ -242,10 +242,10 @@ private extension FigmaExportCommand.ExportIcons {
             }
 
             do {
-                FigmaExportCommand.logger.info("Add autoMirrored property for xml file...")
+                FigmaExportCommand.logger.info("Adding autoMirrored property for xml file...")
                 try FigmaExportCommand.fileWriter.write(xmlFile: sourceXML, directory: source)
             } catch {
-                FigmaExportCommand.logger.info("Rewrite XMLFile - \(sourceXML) is faild")
+                FigmaExportCommand.logger.info("Rewrite XMLFile - \(sourceXML) failed")
             }
         }
     }
