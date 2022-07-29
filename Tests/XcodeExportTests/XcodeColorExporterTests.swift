@@ -48,7 +48,7 @@ final class XcodeColorExporterTests: XCTestCase {
         let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         
-        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2], targetName: "")
         XCTAssertEqual(result.count, 1)
         
         let content = result[0].data
@@ -81,7 +81,7 @@ final class XcodeColorExporterTests: XCTestCase {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
 
-        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2], targetName: "")
         
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -114,7 +114,7 @@ final class XcodeColorExporterTests: XCTestCase {
         )
         let exporter = XcodeColorExporter(output: output)
 
-        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2], targetName: "")
 
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -142,7 +142,7 @@ final class XcodeColorExporterTests: XCTestCase {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: false, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
 
-        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2], targetName: "")
         
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -174,7 +174,7 @@ final class XcodeColorExporterTests: XCTestCase {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: false, assetsInSwiftPackage: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
 
-        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2], targetName: "")
 
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -206,7 +206,7 @@ final class XcodeColorExporterTests: XCTestCase {
         let output = XcodeColorsOutput(assetsColorsURL: colorsAssetCatalog, assetsInMainBundle: true, colorSwiftURL: nil, swiftuiColorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
 
-        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2], targetName: "")
 
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -239,7 +239,7 @@ final class XcodeColorExporterTests: XCTestCase {
         )
         let exporter = XcodeColorExporter(output: output)
 
-        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2], targetName: "")
 
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -275,7 +275,7 @@ final class XcodeColorExporterTests: XCTestCase {
         )
         let exporter = XcodeColorExporter(output: output)
 
-        let result = try exporter.export(colorPairs: [colorPair3])
+        let result = try exporter.export(colorPairs: [colorPair3], targetName: "")
         
         XCTAssertEqual(result.count, 4)
         XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
@@ -302,7 +302,7 @@ final class XcodeColorExporterTests: XCTestCase {
         let output = XcodeColorsOutput(assetsColorsURL: nil, assetsInMainBundle: true, colorSwiftURL: colorsFile)
         let exporter = XcodeColorExporter(output: output)
         
-        let result = try exporter.export(colorPairs: [colorWithKeyword])
+        let result = try exporter.export(colorPairs: [colorWithKeyword], targetName: "")
 
         XCTAssertEqual(result.count, 1)
         let content = result[0].data

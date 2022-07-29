@@ -100,7 +100,7 @@ extension FigmaExportCommand {
             )
 
             let exporter = XcodeColorExporter(output: output)
-            let files = try exporter.export(colorPairs: colorPairs)
+            let files = try exporter.export(colorPairs: colorPairs, targetName: iosParams.target)
 
             if colorParams.useColorAssets, let url = colorsURL {
                 try? FileManager.default.removeItem(atPath: url.path)

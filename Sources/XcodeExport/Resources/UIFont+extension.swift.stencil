@@ -14,6 +14,10 @@ public extension UIFont {
         scaled: Bool = false) -> UIFont {
 
         guard let font = UIFont(name: name, size: size) else {
+            if let weight = name.split(separator: "-").last {
+                return UIFont.systemFont(ofSize: size,
+                                         weight: FontWeight(str: String(weight))?.ui ?? .regular)
+            }
             print("Warning: Font \(name) not found.")
             return UIFont.systemFont(ofSize: size, weight: .regular)
         }
@@ -24,5 +28,43 @@ public extension UIFont {
         } else {
             return font
         }
+    }
+
+    enum FontWeight: String {
+        case ultraLight
+        case thin
+        case light
+        case regular
+        case medium
+        case semibold
+        case bold
+        case heavy
+        case black
+
+        var ui: UIFont.Weight {
+            switch self {
+            case .ultraLight: return .ultraLight
+            case .thin: return .thin
+            case .light: return .light
+            case .regular: return .regular
+            case .medium: return .medium
+            case .semibold: return .semibold
+            case .bold: return .bold
+            case .heavy: return .heavy
+            case .black: return .black
+            }
+        }
+
+        init?(str: String) {
+            self.init(rawValue: str.lowercased())
+        }
+    }
+
+    static let allSets: [String: UIFont] = [{% for textStyle in textStyles %}
+        "{{ textStyle.name }}": .{{ textStyle.name }}(),{% endfor %}
+    ]
+
+    static func getFont(str: String) -> UIFont? {
+        Self.allSets[str]
     }
 }

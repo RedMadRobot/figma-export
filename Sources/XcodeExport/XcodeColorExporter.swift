@@ -11,12 +11,12 @@ final public class XcodeColorExporter: XcodeExporterBase {
         self.output = output
     }
 
-    public func export(colorPairs: [AssetPair<Color>]) throws -> [FileContents] {
+    public func export(colorPairs: [AssetPair<Color>], targetName: String) throws -> [FileContents] {
         var files: [FileContents] = []
 
         // UIKit UIColor extension
         if let url = output.colorSwiftURL {
-            files.append(try makeUIColorExtensionFileContents(for: colorPairs, file: url))
+            files.append(try makeUIColorExtensionFileContents(for: colorPairs, file: url, targetName: targetName))
         }
 
         // SwiftUI Color extension
@@ -30,13 +30,13 @@ final public class XcodeColorExporter: XcodeExporterBase {
         files.append(makeXcodeEmptyFileContents(directoryURL: assetCatalogURL))
 
         // Assets.xcassets/Colors/***.colorset/Contents.json
-        files.append(contentsOf: try makeAssets(for: colorPairs, assetCatalogURL: assetCatalogURL))
+        files.append(contentsOf: try makeAssets(for: colorPairs, assetCatalogURL: assetCatalogURL, targetName: targetName))
 
         return files
     }
 
-    private func makeUIColorExtensionFileContents(for colorPairs: [AssetPair<Color>], file: URL) throws -> FileContents {
-        let contents = try makeUIColorExtensionContents(colorPairs)
+    private func makeUIColorExtensionFileContents(for colorPairs: [AssetPair<Color>], file: URL, targetName: String) throws -> FileContents {
+        let contents = try makeUIColorExtensionContents(colorPairs, targetName: targetName)
         return try makeFileContents(for: contents, url: file)
     }
 
@@ -64,7 +64,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
         return try env.renderTemplate(name: "Color+extension.swift.stencil", context: context)
     }
 
-    private func makeUIColorExtensionContents(_ colorPairs: [AssetPair<Color>]) throws -> String {
+    private func makeUIColorExtensionContents(_ colorPairs: [AssetPair<Color>], targetName: String) throws -> String {
         let useAssets = output.assetsColorsURL != nil
         let colors: [[String: Any]] = colorPairs.map { colorPair in
             let name = normalizeName(colorPair.light.name)
@@ -72,6 +72,7 @@ final public class XcodeColorExporter: XcodeExporterBase {
             var obj: [String: Any] = [:]
             obj["name"] = name
             obj["originalName"] = colorPair.light.originalName
+            obj["targetName"] = targetName
 
             if !useAssets {
                 let lightComponents = colorPair.light.toRgbComponents()
@@ -125,16 +126,17 @@ final public class XcodeColorExporter: XcodeExporterBase {
     }
 
     private func makeAssets(for colorPairs: [AssetPair<Color>],
-                            assetCatalogURL: URL) throws -> [FileContents] {
+                            assetCatalogURL: URL,
+                            targetName: String) throws -> [FileContents] {
         try colorPairs.flatMap { colorPair -> [FileContents] in
             var files = [FileContents]()
 
-            var name = colorPair.light.name
+            var name = targetName + "_" + colorPair.light.name
             var assetsColorsURL = assetCatalogURL
 
             if output.groupUsingNamespace,
                let lastName = colorPair.light.originalName.split(separator: "/").last {
-                name = String(lastName)
+                name = targetName + "_" + String(lastName)
 
                 if output.usingDarkModeFolder == false {
                     colorPair.light.originalName.split(separator: "/")
