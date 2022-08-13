@@ -237,7 +237,7 @@ final class XcodeColorExporterTests: XCTestCase {
             static let bundle = Bundle(for: BundleProvider.self)
         }
 
-        public extension Color {
+        public extension ShapeStyle where Self == Color {
             static var colorPair1: Color { Color(#function) }
             static var colorPair2: Color { Color(#function) }
         }
@@ -274,7 +274,7 @@ final class XcodeColorExporterTests: XCTestCase {
             static let bundle = Bundle.module
         }
 
-        public extension Color {
+        public extension ShapeStyle where Self == Color {
             static var colorPair1: Color { Color(#function, bundle: BundleProvider.bundle) }
             static var colorPair2: Color { Color(#function, bundle: BundleProvider.bundle) }
         }
