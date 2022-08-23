@@ -59,14 +59,6 @@ extension FigmaExportCommand {
                 )
             }
             
-            // SwiftUI Font extension
-            if let swiftUIFontExtensionURL = iosParams.typography.swiftUIFontSwift {
-                files.append(contentsOf: try exporter.exportFonts(
-                    textStyles: textStyles,
-                    swiftUIFontExtensionURL: swiftUIFontExtensionURL
-                ))
-            }
-            
             // Components
             if iosParams.typography.generateComponents,
                let directory = iosParams.typography.componentsDirectory  {

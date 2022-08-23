@@ -5,6 +5,9 @@
 //  Created by Ivan Mikhailovskii on 23.08.2022.
 //
 
+import Foundation
+import FigmaExportCore
+
 struct DefaultSQTextView {
 
     static func configure(folderURL: URL) throws -> FileContents {
@@ -79,5 +82,5 @@ struct DefaultSQTextView {
             directoryURL: folderURL,
             fileName: "SQTextView.swift"
         )
+    }
 }
-
