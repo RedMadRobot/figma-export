@@ -1,17 +1,16 @@
 //
-//  File.swift
+//  DefaultSQTextField.swift
 //  
 //
-//  Created by Semen Kologrivov on 21.01.2022.
+//  Created by Ivan Mikhailovskii on 23.08.2022.
 //
 
 import Foundation
 import FigmaExportCore
-import Stencil
 
-extension XcodeTypographyExporter {
+struct DefaultSQTextField {
 
-    func createSQTextField(folderURL: URL) throws -> FileContents {
+    static func configure(folderURL: URL) throws -> FileContents {
         let content = """
         \(header)
 
@@ -138,13 +137,11 @@ extension XcodeTypographyExporter {
 
         """
 
-        return try self.makeFileContents(
+        return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
             fileName: "SQTextField.swift"
         )
     }
 }
-
-
 

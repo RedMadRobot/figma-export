@@ -1,15 +1,64 @@
 //
-//  File.swift
+//  DefaultSQStyleLabel.swift
 //  
 //
-//  Created by Semen Kologrivov on 19.01.2022.
+//  Created by Ivan Mikhailovskii on 23.08.2022.
 //
 
 import Foundation
+import FigmaExportCore
 
-extension XcodeTypographyExporter {
+struct DefaultSQStyleLabel {
 
-    func alignments(forStyle style: String) -> String {
+    static func configure(textStyles: [TextStyle], folderURL: URL) throws -> FileContents {
+
+        let stringsLabel: [String] = textStyles.map {
+            self.convertStyle(fromTextStyle: $0, type: .labelStyleName)
+        }
+
+        let content = """
+        \(header)
+
+        import UIKit
+
+        class \(String.labelStyleName): SQStyle {
+
+            \(stringsLabel.joined(separator: "\n\n    "))
+
+            \(self.alignments(forStyle: .labelStyleName))
+
+            \(self.lineBreaks(forStyle: .labelStyleName))
+
+            \(self.strikethroughTypes(forStyle: .labelStyleName))
+
+            \(self.underlineTypes(forStyle: .labelStyleName))
+
+            @objc lazy var textColor = { (color: UIColor?) -> \(String.labelStyleName) in
+                self._textColor = color
+                return self
+            }
+
+            func safeValue(forKey key: String) {
+                let copy = Mirror(reflecting: self)
+                for child in copy.children.makeIterator() {
+                    if String(describing: child.label) == "Optional(\\"$__lazy_storage_$_\\(key)\\")" {
+                        self.value(forKey: key)
+                        return
+                    }
+                }
+                fatalError("not font style: \\(key)")
+            }
+        }
+        """
+
+        return try XcodeTypographyExporter.makeFileContents(
+            data: content,
+            directoryURL: folderURL,
+            fileName: "SQStyle.swift"
+        )
+    }
+
+    private static func alignments(forStyle style: String) -> String {
         """
             @objc lazy var centrerAlignment: \(style) = {
                 self.textAlignment = .center
@@ -28,7 +77,7 @@ extension XcodeTypographyExporter {
         """
     }
 
-    func lineBreaks(forStyle style: String) -> String {
+    private static func lineBreaks(forStyle style: String) -> String {
         """
             @objc lazy var lineBreakModeByWordWrapping: \(style) = {
                 self.lineBreakMode = .byWordWrapping
@@ -62,7 +111,7 @@ extension XcodeTypographyExporter {
         """
     }
 
-    func strikethroughTypes(forStyle style: String) -> String {
+    private static func strikethroughTypes(forStyle style: String) -> String {
         """
             @objc lazy var strikethroughStyleSingle: \(style) = {
                 self.strikethroughStyle = .single
@@ -106,7 +155,7 @@ extension XcodeTypographyExporter {
         """
     }
 
-    func underlineTypes(forStyle style: String) -> String {
+    private static func underlineTypes(forStyle style: String) -> String {
         """
             @objc lazy var underlineStyleSingle: \(style) = {
                 self.underlineStyle = .single
@@ -150,4 +199,19 @@ extension XcodeTypographyExporter {
         """
     }
 
+    static func convertStyle(fromTextStyle textStyle: TextStyle, type: String) -> String {
+        var params: [String] = [
+            "self.font = self.customFont(\"\(textStyle.fontName)\", size: \(textStyle.fontSize))",
+            "self.letterSpacing = \(textStyle.letterSpacing)"
+        ]
+        if let lineHeight = textStyle.lineHeight {
+            params.append("self.lineHeight = \(lineHeight)")
+        }
+        return """
+            @objc lazy var \(textStyle.name): \(type) = {
+                \(params.joined(separator: "\n        "))
+                return self
+            }()
+        """
+    }
 }
