@@ -37,13 +37,6 @@ struct DefaultSQLabel {
                 }
             }
 
-            @IBInspectable var styleFont: String = "" {
-                didSet {
-                    self.style.safeValue(forKey: self.styleFont)
-                    self.updateAttributedText()
-                }
-            }
-
             func build() {
                 self.font = self.style.font
                 self.textColor = self.style._textColor

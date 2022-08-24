@@ -34,7 +34,7 @@ struct Version1SQStyleButton {
             }
 
             @discardableResult
-            func font(_ style: SQFontStyle) -> Self {
+            func textStyle(_ style: SQFontStyle) -> Self {
                 let fontStyle = style.fontStyle
 
                 self.font = fontStyle.font

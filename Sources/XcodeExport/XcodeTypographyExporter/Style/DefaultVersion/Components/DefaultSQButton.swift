@@ -52,13 +52,6 @@ struct DefaultSQButton {
                 }
             }
 
-            @IBInspectable var styleFont: String = "" {
-                didSet {
-                    self.style.safeValue(forKey: self.styleFont)
-                    self.updateAttributedText()
-                }
-            }
-
             override func setTitle(_ title: String?, for state: UIControl.State) {
                 super.setTitle(title, for: state)
 

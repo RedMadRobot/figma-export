@@ -31,13 +31,6 @@ struct DefaultSQTextView {
                 return style
             }
 
-            @IBInspectable var styleFont: String = "" {
-                didSet {
-                    self.style.safeValue(forKey: self.styleFont)
-                    self.updateAttributedText()
-                }
-            }
-
             override var text: String? {
                 didSet {
                     self.updateAttributedText()

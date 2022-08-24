@@ -31,13 +31,6 @@ struct DefaultSQTextField {
                 return style
             }
 
-            @IBInspectable var styleFont: String = "" {
-                didSet {
-                    self.style.safeValue(forKey: self.styleFont)
-                    self.updateText()
-                }
-            }
-
             override open var isEnabled: Bool {
                 didSet {
                     self.updateText()

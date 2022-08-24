@@ -22,7 +22,7 @@ struct Version1SQStyleLabel {
         class \(String.labelStyleName): SQStyle {
 
             @discardableResult
-            func font(_ style: SQFontStyle) -> Self {
+            func textStyle(_ style: SQFontStyle) -> Self {
                 let fontStyle = style.fontStyle
 
                 self.font = fontStyle.font

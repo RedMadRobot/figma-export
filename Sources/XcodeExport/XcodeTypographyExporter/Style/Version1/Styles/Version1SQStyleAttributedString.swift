@@ -22,7 +22,7 @@ struct Version1SQStyleAttributedString {
         class \(String.attributedStringStyleName): SQStyle {
 
             @discardableResult
-            func font(_ style: FontStyle) -> Self {
+            func textStyle(_ style: SQFontStyle) -> Self {
                 let fontStyle = style.fontStyle
 
                 self.font = fontStyle.font

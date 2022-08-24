@@ -59,7 +59,7 @@ struct Version1SQFontStyle {
 
     private static func createFontStyle(_ textStyle: TextStyle) -> String {
         """
-                case \(textStyle.name):
+                case .\(textStyle.name):
                     return FontStyle(
                         font: self.customFont("\(textStyle.fontName)", size: \(textStyle.fontSize)),
                         letterSpacing: \(textStyle.letterSpacing),
