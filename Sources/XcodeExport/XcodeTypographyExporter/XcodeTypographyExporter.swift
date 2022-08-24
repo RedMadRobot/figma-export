@@ -10,6 +10,9 @@ final public class XcodeTypographyExporter {
         _ textStyles: [TextStyle], folderURL: URL, version: Int?) throws -> [FileContents] {
 
         switch version {
+        case 1:
+            return try Version1.configureStyles(textStyles, folderURL: folderURL)
+
         default:
             return try DefaultVersion.configureStyles(textStyles, folderURL: folderURL)
         }
@@ -19,6 +22,9 @@ final public class XcodeTypographyExporter {
         textStyles: [TextStyle], componentsDirectory: URL, version: Int?) throws -> [FileContents] {
 
         switch version {
+        case 1:
+            return try Version1.configureComponents(textStyles, folderURL: componentsDirectory)
+
         default:
             return try DefaultVersion.configureComponents(textStyles, folderURL: componentsDirectory)
         }

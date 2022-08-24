@@ -84,7 +84,7 @@ struct DefaultSQStyleAttributedString {
         return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
-            fileName: "SQStyle.swift"
+            fileName: String.attributedStringStyleName + ".swift"
         )
     }
 

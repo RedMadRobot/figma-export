@@ -54,7 +54,7 @@ extension FigmaExportCommand {
                     contentsOf: try exporter.exportStyles(
                         textStyles,
                         folderURL: stylesDirectoryURL,
-                        version: iosParams.typography.version
+                        version: iosParams.typography.typographyVersion
                     )
                 )
             }
@@ -66,7 +66,7 @@ extension FigmaExportCommand {
                     contentsOf: try exporter.exportComponents(
                         textStyles: textStyles,
                         componentsDirectory: directory,
-                        version: iosParams.typography.version
+                        version: iosParams.typography.typographyVersion
                     )
                 )
             }

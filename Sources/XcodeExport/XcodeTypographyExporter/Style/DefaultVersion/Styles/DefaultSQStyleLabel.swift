@@ -54,7 +54,7 @@ struct DefaultSQStyleLabel {
         return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
-            fileName: "SQStyle.swift"
+            fileName: String.labelStyleName + ".swift"
         )
     }
 

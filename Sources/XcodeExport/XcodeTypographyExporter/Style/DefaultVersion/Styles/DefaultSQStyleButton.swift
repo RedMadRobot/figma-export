@@ -120,7 +120,7 @@ struct DefaultSQStyleButton {
         return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
-            fileName: "SQStyle.swift"
+            fileName: String.buttonStyleName + ".swift"
         )
     }
 

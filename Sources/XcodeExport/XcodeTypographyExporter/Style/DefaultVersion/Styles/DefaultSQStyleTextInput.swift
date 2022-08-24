@@ -112,7 +112,7 @@ struct DefaultSQStyleTextInput {
         return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
-            fileName: "SQStyleTextInput.swift"
+            fileName: String.textInputStyleName + ".swift"
         )
     }
     

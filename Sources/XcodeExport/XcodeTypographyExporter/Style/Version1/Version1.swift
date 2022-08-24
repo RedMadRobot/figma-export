@@ -1,8 +1,8 @@
 //
-//  DefaultVersion.swift
+//  Version1.swift
 //  
 //
-//  Created by Ivan Mikhailovskii on 23.08.2022.
+//  Created by Ivan Mikhailovskii on 24.08.2022.
 //
 
 import Foundation
@@ -10,15 +10,16 @@ import FigmaExportCore
 
 extension XcodeTypographyExporter {
 
-    struct DefaultVersion {
+    struct Version1 {
 
         static func configureStyles(_ textStyles: [TextStyle], folderURL: URL) throws -> [FileContents] {
             return [
                 try DefaultSQStyle.configure(folderURL: folderURL),
-                try DefaultSQStyleLabel.configure(textStyles: textStyles, folderURL: folderURL),
-                try DefaultSQStyleButton.configure(textStyles: textStyles, folderURL: folderURL),
-                try DefaultSQStyleAttributedString.configure(textStyles: textStyles, folderURL: folderURL),
-                try DefaultSQStyleTextInput.configure(textStyles: textStyles, folderURL: folderURL)
+                try Version1SQFontStyle.configure(textStyles: textStyles, folderURL: folderURL),
+                try Version1SQStyleLabel.configure(folderURL: folderURL),
+                try Version1SQStyleButton.configure(folderURL: folderURL),
+                try Version1SQStyleAttributedString.configure(folderURL: folderURL),
+                try Version1SQStyleTextInput.configure(folderURL: folderURL)
             ]
         }
 
