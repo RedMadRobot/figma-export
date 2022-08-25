@@ -21,6 +21,8 @@ struct Version1SQStyleAttributedString {
 
         class \(String.attributedStringStyleName): SQStyle {
 
+            var _textColor: UIColor?
+
             @discardableResult
             func textColor(_ color: UIColor?) -> Self {
                 self._textColor = color

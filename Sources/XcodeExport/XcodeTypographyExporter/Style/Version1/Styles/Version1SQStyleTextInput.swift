@@ -23,6 +23,7 @@ struct Version1SQStyleTextInput {
 
             var _cursorColor: UIColor?
             var _textInsets: UIEdgeInsets = .zero
+            var _textColor: UIColor?
 
             private var textColors = [UIControl.State: UIColor]()
             private var borderColors = [UIControl.State: UIColor]()

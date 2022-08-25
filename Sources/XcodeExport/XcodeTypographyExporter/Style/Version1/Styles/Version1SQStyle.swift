@@ -35,8 +35,6 @@ struct Version1SQStyle {
             var element: Style?
             var font: UIFont?
 
-            var _textColor: UIColor?
-
             var lineHeight: CGFloat?
             var letterSpacing: CGFloat?
 

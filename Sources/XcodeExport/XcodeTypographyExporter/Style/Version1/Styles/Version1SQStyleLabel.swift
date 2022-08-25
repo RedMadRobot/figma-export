@@ -21,6 +21,8 @@ struct Version1SQStyleLabel {
 
         class \(String.labelStyleName): SQStyle {
 
+            var _textColor: UIColor?
+
             @discardableResult
             func textColor(_ color: UIColor?) -> Self {
                 self._textColor = color
