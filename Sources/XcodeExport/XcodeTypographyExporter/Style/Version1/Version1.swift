@@ -14,7 +14,7 @@ extension XcodeTypographyExporter {
 
         static func configureStyles(_ textStyles: [TextStyle], folderURL: URL) throws -> [FileContents] {
             return [
-                try DefaultSQStyle.configure(folderURL: folderURL),
+                try Version1SQStyle.configure(folderURL: folderURL),
                 try Version1SQFontStyle.configure(textStyles: textStyles, folderURL: folderURL),
                 try Version1SQStyleLabel.configure(folderURL: folderURL),
                 try Version1SQStyleButton.configure(folderURL: folderURL),
