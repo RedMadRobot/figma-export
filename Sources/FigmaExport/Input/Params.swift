@@ -75,6 +75,7 @@ struct Params: Decodable {
         }
         
         struct Typography: Decodable {
+            let typographyVersion: Int?
             let stylesDirectory: URL?
             let swiftUIFontSwift: URL?
             let generateComponents: Bool

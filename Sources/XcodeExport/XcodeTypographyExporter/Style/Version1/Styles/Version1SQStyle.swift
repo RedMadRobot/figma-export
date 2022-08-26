@@ -1,18 +1,16 @@
 //
-//  File.swift
+//  Version1SQStyle.swift
 //  
 //
-//  Created by Semen Kologrivov on 19.01.2022.
+//  Created by Ivan Mikhailovskii on 25.08.2022.
 //
 
 import Foundation
 import FigmaExportCore
-import Stencil
 
-extension XcodeTypographyExporter {
+struct Version1SQStyle {
 
-    func createSQStyle(folderURL: URL) throws -> FileContents {
-
+    static func configure(folderURL: URL) throws -> FileContents {
         let content = """
         \(header)
 
@@ -37,8 +35,6 @@ extension XcodeTypographyExporter {
             var element: Style?
             var font: UIFont?
 
-            var _textColor: UIColor?
-
             var lineHeight: CGFloat?
             var letterSpacing: CGFloat?
 
@@ -62,18 +58,40 @@ extension XcodeTypographyExporter {
                 self.element?.build()
             }
 
-            func customFont(
-                _ name: String,
-                size: CGFloat
-            ) -> UIFont {
+            @discardableResult
+            func textStyle(_ style: SQFontStyle) -> Self {
+                let fontStyle = style.fontStyle
 
-                guard let font = UIFont(name: name, size: size) else {
-                    return UIFont.systemFont(ofSize: size, weight: .regular)
-                }
+                self.font = fontStyle.font
+                self.letterSpacing = fontStyle.letterSpacing
+                self.lineHeight = fontStyle.lineHeight
 
-                return font
+                return self
             }
 
+            @discardableResult
+            func alignment(_ alignment: NSTextAlignment) -> Self {
+                self.textAlignment = alignment
+                return self
+            }
+
+            @discardableResult
+            func lineBreakMode(_ lineBreakMode: NSLineBreakMode) -> Self {
+                self.lineBreakMode = lineBreakMode
+                return self
+            }
+
+            @discardableResult
+            func strikethroughStyle(_ strikethroughStyle: NSUnderlineStyle) -> Self {
+                self.strikethroughStyle = strikethroughStyle
+                return self
+            }
+
+            @discardableResult
+            func underlineStyle(_ underlineStyle: NSUnderlineStyle) -> Self {
+                self.underlineStyle = underlineStyle
+                return self
+            }
 
             func convertStringToAttributed(
                 _ string: String,
@@ -146,10 +164,11 @@ extension XcodeTypographyExporter {
         }
         """
 
-        return try self.makeFileContents(
+        return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
             fileName: "SQStyle.swift"
         )
     }
 }
+

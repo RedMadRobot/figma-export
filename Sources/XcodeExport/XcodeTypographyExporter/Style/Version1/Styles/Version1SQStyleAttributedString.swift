@@ -1,20 +1,18 @@
 //
-//  File.swift
+//  Version1SQStyleAttributedString.swift
 //  
 //
-//  Created by Semen Kologrivov on 19.01.2022.
+//  Created by Ivan Mikhailovskii on 24.08.2022.
 //
 
 import Foundation
 import FigmaExportCore
-import Stencil
 
-extension XcodeTypographyExporter {
+struct Version1SQStyleAttributedString {
 
-    func createSQStyleAttributedString(textStyles: [TextStyle], folderURL: URL) throws -> FileContents {
-        let stringsLabel: [String] = textStyles.map {
-            self.convertStyle(fromTextStyle: $0, type: .attributedStringStyleName)
-        }
+    static func configure(
+        folderURL: URL
+    ) throws -> FileContents {
 
         let content = """
         \(header)
@@ -23,30 +21,12 @@ extension XcodeTypographyExporter {
 
         class \(String.attributedStringStyleName): SQStyle {
 
-        \(stringsLabel.joined(separator: "\n\n"))
+            var _textColor: UIColor?
 
-            \(self.alignments(forStyle: .attributedStringStyleName))
-
-            \(self.lineBreaks(forStyle: .attributedStringStyleName))
-
-            \(self.strikethroughTypes(forStyle: .attributedStringStyleName))
-
-            \(self.underlineTypes(forStyle: .attributedStringStyleName))
-
-            @objc lazy var textColor = { (color: UIColor?) -> \(String.attributedStringStyleName) in
+            @discardableResult
+            func textColor(_ color: UIColor?) -> Self {
                 self._textColor = color
                 return self
-            }
-
-            func safeValue(forKey key: String) {
-                let copy = Mirror(reflecting: self)
-                for child in copy.children.makeIterator() {
-                    if String(describing: child.label) == "Optional(\\"$__lazy_storage_$_\\(key)\\")" {
-                        self.value(forKey: key)
-                        return
-                    }
-                }
-                fatalError("not font style: \\(key)")
             }
 
             override func convertStringToAttributed(
@@ -79,13 +59,13 @@ extension XcodeTypographyExporter {
                 return attributedString
             }
         }
+
         """
 
-        return try self.makeFileContents(
+        return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
-            fileName: "SQStyleAttributedString.swift"
+            fileName: String.attributedStringStyleName + ".swift"
         )
     }
 }
-

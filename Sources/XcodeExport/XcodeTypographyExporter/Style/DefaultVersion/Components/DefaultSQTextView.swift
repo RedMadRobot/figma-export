@@ -1,17 +1,16 @@
 //
-//  File.swift
+//  DefaultSQTextView.swift
 //  
 //
-//  Created by Semen Kologrivov on 19.01.2022.
+//  Created by Ivan Mikhailovskii on 23.08.2022.
 //
 
 import Foundation
 import FigmaExportCore
-import Stencil
 
-extension XcodeTypographyExporter {
+struct DefaultSQTextView {
 
-    func createSQTextView(folderURL: URL) throws -> FileContents {
+    static func configure(folderURL: URL) throws -> FileContents {
         let content = """
         \(header)
 
@@ -30,13 +29,6 @@ extension XcodeTypographyExporter {
                 let style = Element(element: self)
                 self._style = style
                 return style
-            }
-
-            @IBInspectable var styleFont: String = "" {
-                didSet {
-                    self.style.safeValue(forKey: self.styleFont)
-                    self.updateAttributedText()
-                }
             }
 
             override var text: String? {
@@ -78,12 +70,10 @@ extension XcodeTypographyExporter {
 
         """
 
-        return try self.makeFileContents(
+        return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
             fileName: "SQTextView.swift"
         )
     }
 }
-
-

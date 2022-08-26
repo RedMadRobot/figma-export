@@ -1,20 +1,18 @@
 //
-//  File.swift
+//  Version1SQStyleButton.swift
 //  
 //
-//  Created by Semen Kologrivov on 19.01.2022.
+//  Created by Ivan Mikhailovskii on 24.08.2022.
 //
 
 import Foundation
 import FigmaExportCore
-import Stencil
 
-extension XcodeTypographyExporter {
+struct Version1SQStyleButton {
 
-    func createSQStyleButton(textStyles: [TextStyle], folderURL: URL) throws -> FileContents {
-        let stringsButton: [String] = textStyles.map {
-            self.convertStyle(fromTextStyle: $0, type: .buttonStyleName)
-        }
+    static func configure(
+        folderURL: URL
+    ) throws -> FileContents {
 
         let content = """
         \(header)
@@ -28,16 +26,6 @@ extension XcodeTypographyExporter {
             private var tintColors = [UIControl.State: UIColor]()
             private var borderColors = [UIControl.State: UIColor]()
             private var borderWidths = [UIControl.State: CGFloat]()
-
-            \(stringsButton.joined(separator: "\n\n    "))
-
-            \(self.alignments(forStyle: .buttonStyleName))
-
-            \(self.lineBreaks(forStyle: .buttonStyleName))
-
-            \(self.strikethroughTypes(forStyle: .buttonStyleName))
-
-            \(self.underlineTypes(forStyle: .buttonStyleName))
 
             @discardableResult
             func textColor(_ color: UIColor?, forState state: UIControl.State = .normal) -> Self {
@@ -97,16 +85,6 @@ extension XcodeTypographyExporter {
                 (self.borderWidths[state] ?? self.borderWidths[.normal]) ?? .zero
             }
 
-            func safeValue(forKey key: String) {
-                let copy = Mirror(reflecting: self)
-                for child in copy.children.makeIterator() {
-                    if String(describing: child.label) == "Optional(\\"$__lazy_storage_$_\\(key)\\")" {
-                        self.value(forKey: key)
-                        return
-                    }
-                }
-                fatalError("not font style: \\(key)")
-            }
         }
 
         extension UIControl.State: Hashable {
@@ -117,10 +95,10 @@ extension XcodeTypographyExporter {
         }
         """
 
-        return try self.makeFileContents(
+        return try XcodeTypographyExporter.makeFileContents(
             data: content,
             directoryURL: folderURL,
-            fileName: "SQStyleButton.swift"
+            fileName: String.buttonStyleName + ".swift"
         )
     }
 }

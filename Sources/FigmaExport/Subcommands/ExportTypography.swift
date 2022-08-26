@@ -53,17 +53,10 @@ extension FigmaExportCommand {
                 files.append(
                     contentsOf: try exporter.exportStyles(
                         textStyles,
-                        folderURL: stylesDirectoryURL
+                        folderURL: stylesDirectoryURL,
+                        version: iosParams.typography.typographyVersion
                     )
                 )
-            }
-            
-            // SwiftUI Font extension
-            if let swiftUIFontExtensionURL = iosParams.typography.swiftUIFontSwift {
-                files.append(contentsOf: try exporter.exportFonts(
-                    textStyles: textStyles,
-                    swiftUIFontExtensionURL: swiftUIFontExtensionURL
-                ))
             }
             
             // Components
@@ -71,7 +64,9 @@ extension FigmaExportCommand {
                let directory = iosParams.typography.componentsDirectory  {
                 files.append(
                     contentsOf: try exporter.exportComponents(
-                        textStyles: textStyles, componentsDirectory: directory
+                        textStyles: textStyles,
+                        componentsDirectory: directory,
+                        version: iosParams.typography.typographyVersion
                     )
                 )
             }

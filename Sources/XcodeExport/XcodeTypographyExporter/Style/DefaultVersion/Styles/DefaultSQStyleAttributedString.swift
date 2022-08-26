@@ -1,15 +1,94 @@
 //
-//  File.swift
+//  DefaultSQStyleAttributedString.swift
 //  
 //
-//  Created by Semen Kologrivov on 19.01.2022.
+//  Created by Ivan Mikhailovskii on 23.08.2022.
 //
 
 import Foundation
+import FigmaExportCore
 
-extension XcodeTypographyExporter {
+struct DefaultSQStyleAttributedString {
 
-    func alignments(forStyle style: String) -> String {
+    static func configure(textStyles: [TextStyle], folderURL: URL) throws -> FileContents {
+
+        let stringsLabel: [String] = textStyles.map {
+            self.convertStyle(fromTextStyle: $0, type: .attributedStringStyleName)
+        }
+
+        let content = """
+        \(header)
+
+        import UIKit
+
+        class \(String.attributedStringStyleName): SQStyle {
+
+        \(stringsLabel.joined(separator: "\n\n"))
+
+            \(self.alignments(forStyle: .attributedStringStyleName))
+
+            \(self.lineBreaks(forStyle: .attributedStringStyleName))
+
+            \(self.strikethroughTypes(forStyle: .attributedStringStyleName))
+
+            \(self.underlineTypes(forStyle: .attributedStringStyleName))
+
+            @objc lazy var textColor = { (color: UIColor?) -> \(String.attributedStringStyleName) in
+                self._textColor = color
+                return self
+            }
+
+            func safeValue(forKey key: String) {
+                let copy = Mirror(reflecting: self)
+                for child in copy.children.makeIterator() {
+                    if String(describing: child.label) == "Optional(\\"$__lazy_storage_$_\\(key)\\")" {
+                        self.value(forKey: key)
+                        return
+                    }
+                }
+                fatalError("not font style: \\(key)")
+            }
+
+            override func convertStringToAttributed(
+                _ string: NSAttributedString,
+                defaultLineBreakMode: NSLineBreakMode? = nil,
+                defaultAlignment: NSTextAlignment? = nil,
+                isDefaultLineHeight: Bool = false
+            ) -> NSAttributedString {
+                let attributedString = NSMutableAttributedString(
+                    attributedString: super.convertStringToAttributed(
+                        string,
+                        defaultLineBreakMode: defaultLineBreakMode,
+                        defaultAlignment: defaultAlignment,
+                        isDefaultLineHeight: isDefaultLineHeight
+                    )
+                )
+
+                if let font = self.font {
+                    attributedString.addAttribute(NSAttributedString.Key.font,
+                                                  value: font,
+                                                  range: NSMakeRange(.zero, attributedString.length))
+                }
+
+                if let color = self._textColor {
+                    attributedString.addAttribute(NSAttributedString.Key.foregroundColor,
+                                                  value: color,
+                                                  range: NSMakeRange(.zero, attributedString.length))
+                }
+
+                return attributedString
+            }
+        }
+        """
+
+        return try XcodeTypographyExporter.makeFileContents(
+            data: content,
+            directoryURL: folderURL,
+            fileName: String.attributedStringStyleName + ".swift"
+        )
+    }
+
+    private static func alignments(forStyle style: String) -> String {
         """
             @objc lazy var centrerAlignment: \(style) = {
                 self.textAlignment = .center
@@ -28,7 +107,7 @@ extension XcodeTypographyExporter {
         """
     }
 
-    func lineBreaks(forStyle style: String) -> String {
+    private static func lineBreaks(forStyle style: String) -> String {
         """
             @objc lazy var lineBreakModeByWordWrapping: \(style) = {
                 self.lineBreakMode = .byWordWrapping
@@ -62,7 +141,7 @@ extension XcodeTypographyExporter {
         """
     }
 
-    func strikethroughTypes(forStyle style: String) -> String {
+    private static func strikethroughTypes(forStyle style: String) -> String {
         """
             @objc lazy var strikethroughStyleSingle: \(style) = {
                 self.strikethroughStyle = .single
@@ -106,7 +185,7 @@ extension XcodeTypographyExporter {
         """
     }
 
-    func underlineTypes(forStyle style: String) -> String {
+    private static func underlineTypes(forStyle style: String) -> String {
         """
             @objc lazy var underlineStyleSingle: \(style) = {
                 self.underlineStyle = .single
@@ -150,4 +229,20 @@ extension XcodeTypographyExporter {
         """
     }
 
+    static func convertStyle(fromTextStyle textStyle: TextStyle, type: String) -> String {
+        var params: [String] = [
+            "self.font = self.customFont(\"\(textStyle.fontName)\", size: \(textStyle.fontSize))",
+            "self.letterSpacing = \(textStyle.letterSpacing)"
+        ]
+        if let lineHeight = textStyle.lineHeight {
+            params.append("self.lineHeight = \(lineHeight)")
+        }
+        return """
+            @objc lazy var \(textStyle.name): \(type) = {
+                \(params.joined(separator: "\n        "))
+                return self
+            }()
+        """
+    }
 }
+
