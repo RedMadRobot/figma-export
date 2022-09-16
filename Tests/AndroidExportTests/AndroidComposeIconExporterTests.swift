@@ -46,7 +46,7 @@ final class AndroidComposeIconExporterTests: XCTestCase {
         
         @Composable
         fun Icons.TestIcon1(
-            contentDescription: String?,
+            contentDescription: String? = null,
             modifier: Modifier = Modifier,
             tint: Color = Color.Unspecified
         ) {
@@ -60,7 +60,7 @@ final class AndroidComposeIconExporterTests: XCTestCase {
         
         @Composable
         fun Icons.TestIcon2(
-            contentDescription: String?,
+            contentDescription: String? = null,
             modifier: Modifier = Modifier,
             tint: Color = Color.Unspecified
         ) {
