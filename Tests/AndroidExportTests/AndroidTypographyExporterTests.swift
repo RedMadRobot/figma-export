@@ -56,6 +56,7 @@ final class AndroidTypographyExporterTests: XCTestCase {
                 <item name="android:letterSpacing">0.00</item>
             </style>
         </resources>
+        
         """
         XCTAssertNoDifference(generatedCode, referenceCode)
         

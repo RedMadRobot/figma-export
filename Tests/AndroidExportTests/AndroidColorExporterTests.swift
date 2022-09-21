@@ -61,6 +61,7 @@ final class AndroidColorExporterTests: XCTestCase {
             <color name="color_pair_1">#807703FF</color>
             <color name="color_pair_2">#FFFFFF</color>
         </resources>
+
         """
         
         let referenceCodeDark = """
@@ -77,6 +78,7 @@ final class AndroidColorExporterTests: XCTestCase {
             <color name="color_pair_1">#807703FF</color>
             <color name="color_pair_2">#000000</color>
         </resources>
+
         """
 
         XCTAssertNoDifference(generatedCodeLight, referenceCodeLight)
