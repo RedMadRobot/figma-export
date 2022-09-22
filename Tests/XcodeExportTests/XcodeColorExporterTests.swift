@@ -345,6 +345,41 @@ final class XcodeColorExporterTests: XCTestCase {
 
         """)
     }
+
+    func testExport_without_assets_swiftui() throws {
+        let output = XcodeColorsOutput(
+            assetsColorsURL: nil,
+            assetsInMainBundle: true,
+            colorSwiftURL: nil,
+            swiftuiColorSwiftURL: colorsFile
+        )
+        
+        let exporter = XcodeColorExporter(output: output)
+
+        let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
+        XCTAssertEqual(result.count, 1)
+
+        XCTAssertTrue(result[0].destination.url.absoluteString.hasSuffix("Colors.swift"))
+
+        let content = result[0].data
+        XCTAssertNotNil(content)
+
+        try assertCodeEquals(content, """
+        \(header)
+
+        import SwiftUI
+
+        private class BundleProvider {
+            static let bundle = Bundle(for: BundleProvider.self)
+        }
+
+        public extension ShapeStyle where Self == Color {
+            static var colorPair1: Color { Color(red: 1.000, green: 1.000, blue: 1.000, opacity: 1.000) }
+            static var colorPair2: Color { Color(red: 0.467, green: 0.012, blue: 1.000, opacity: 0.500) }
+        }
+
+        """)
+    }
 }
 
 fileprivate func assertCodeEquals(_ data: Data?, _ referenceCode: String) throws {
