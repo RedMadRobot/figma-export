@@ -13,6 +13,9 @@ final public class XcodeTypographyExporter {
         case 1:
             return try Version1.configureStyles(textStyles, folderURL: folderURL)
 
+        case 2:
+            return try Version2.configureStyles(textStyles, folderURL: folderURL)
+
         default:
             return try DefaultVersion.configureStyles(textStyles, folderURL: folderURL)
         }
@@ -24,6 +27,9 @@ final public class XcodeTypographyExporter {
         switch version {
         case 1:
             return try Version1.configureComponents(textStyles, folderURL: componentsDirectory)
+
+        case 2:
+            return []
 
         default:
             return try DefaultVersion.configureComponents(textStyles, folderURL: componentsDirectory)

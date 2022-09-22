@@ -19,7 +19,6 @@ let package = Package(
         .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.7.1"),
     ],
     targets: [
-        
         // Main target
         .target(
             name: "FigmaExport",
@@ -61,21 +60,6 @@ let package = Package(
             name: "AndroidExport",
             dependencies: ["FigmaExportCore"],
             path: "./Sources/AndroidExport"
-        ),
-        
-        // MARK: - Tests
-//
-//        .testTarget(
-//            name: "FigmaExportTests",
-//            dependencies: ["FigmaExport"]
-//        ),
-//        .testTarget(
-//            name: "FigmaExportCoreTests",
-//            dependencies: ["FigmaExportCore"]
-//        ),
-//        .testTarget(
-//            name: "XcodeExportTests",
-//            dependencies: ["XcodeExport"]
-//        )
+        )
     ]
 )
