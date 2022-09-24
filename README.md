@@ -99,6 +99,9 @@ For SwiftUI the following Swift file will be created to use colors from the code
 ```
 
 If you set option `useColorAssets: False` in the configuration file, then will be generated code like this:
+
+UIKit:
+
 ```swift
 import UIKit
 
@@ -119,6 +122,16 @@ extension UIColor {
     static var backgroundVideo: UIColor {
         return UIColor(red: 0.467, green: 0.012, blue: 1.000, alpha: 0.500)
     }
+}
+```
+
+SwiftUI:
+
+```swift
+import SwiftUI
+
+public extension ShapeStyle where Self == Color {
+    static var primaryText: Color { Color(red: 1.000, green: 1.000, blue: 1.000, opacity: 1.000) }
 }
 ```
 

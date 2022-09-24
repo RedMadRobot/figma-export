@@ -90,7 +90,7 @@ ios:
   
   # [optional] Parameters for exporting colors
   colors:
-    # How to export colors? Use .xcassets and UIColor extension (useColorAssets = true) or extension only (useColorAssets = false)
+    # How to export colors? Use .xcassets and UIColor/Color extension (useColorAssets = true) or UIColor/Color extension only (useColorAssets = false)
     useColorAssets: true
     # [required if useColorAssets: True] Name of the folder inside Assets.xcassets where to place colors (.colorset directories)
     assetsFolder: Colors
