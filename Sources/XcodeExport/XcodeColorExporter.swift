@@ -46,16 +46,32 @@ final public class XcodeColorExporter: XcodeExporterBase {
     }
 
     private func makeColorExtensionContents(_ colorPairs: [AssetPair<Color>]) throws -> String {
+        let useAssets = output.assetsColorsURL != nil
+
         let colors: [[String: Any]] = colorPairs.map { colorPair in
-            [
-                "name": normalizeName(colorPair.light.name),
-                "originalName": colorPair.light.originalName
-            ]
+            var obj: [String: Any] = [:]
+
+            let name = normalizeName(colorPair.light.name)
+            obj["name"] = name
+            obj["originalName"] = colorPair.light.originalName
+
+            if !useAssets {
+                let lightComponents = colorPair.light.toRgbComponents()
+
+                obj["hasDarkVariant"] = false
+                obj["red"] = lightComponents.red
+                obj["green"] = lightComponents.green
+                obj["blue"] = lightComponents.blue
+                obj["alpha"] = lightComponents.alpha
+            }
+
+            return obj
         }
 
         let context: [String: Any] = [
             "assetsInSwiftPackage": output.assetsInSwiftPackage,
             "resourceBundleNames": output.resourceBundleNames ?? [],
+            "colorFromAssetCatalog": useAssets,
             "assetsInMainBundle": output.assetsInMainBundle,
             "useNamespace": output.groupUsingNamespace,
             "colors": colors,

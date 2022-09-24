@@ -13,7 +13,8 @@ private class BundleProvider {
     static let bundle = Bundle(for: BundleProvider.self)
 }
 {% endif %}
-public extension ShapeStyle where Self == Color {{ "{" }}{% for color in colors %}
-    static var {{ color.name }}: Color { Color({% if useNamespace %}"{{ color.originalName }}"{% else %}#function{% endif %}{% if not assetsInMainBundle %}, bundle: BundleProvider.bundle{% endif %}) }{% endfor %}
+public extension ShapeStyle where Self == Color {{ "{" }}{% for color in colors %}{% if colorFromAssetCatalog %}
+    static var {{ color.name }}: Color { Color({% if useNamespace %}"{{ color.originalName }}"{% else %}#function{% endif %}{% if not assetsInMainBundle %}, bundle: BundleProvider.bundle{% endif %}) }{% else %}
+    static var {{ color.name }}: Color { Color(red: {{ color.red }}, green: {{ color.green }}, blue: {{ color.blue }}, opacity: {{ color.alpha }}) }{% endif %}{% endfor %}
 }
 {% include "Bundle+extension.swift.stencil.include" %}
