@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+{% include "header.stencil" %}
+-->
 <resources>{% for textStyle in textStyles %}
     <style name="{{ textStyle.name }}">
         <item name="android:fontFamily">{{ textStyle.fontFamily }}</item>

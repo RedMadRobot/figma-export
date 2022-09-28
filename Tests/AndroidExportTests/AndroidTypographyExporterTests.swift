@@ -36,6 +36,9 @@ final class AndroidTypographyExporterTests: XCTestCase {
         let generatedCode = String(data: fileContent, encoding: .utf8)
         let referenceCode = """
         <?xml version="1.0" encoding="utf-8"?>
+        <!--
+        \(header)
+        -->
         <resources>
             <style name="title">
                 <item name="android:fontFamily">@font/test_font</item>
@@ -48,6 +51,7 @@ final class AndroidTypographyExporterTests: XCTestCase {
                 <item name="android:letterSpacing">0.00</item>
             </style>
         </resources>
+
         """
         XCTAssertNoDifference(generatedCode, referenceCode)
         
@@ -55,6 +59,9 @@ final class AndroidTypographyExporterTests: XCTestCase {
         XCTAssertEqual(result[1].destination.file.absoluteString, "Typography.kt")
         let generatedComposedCode = String(data: try XCTUnwrap(result[1].data), encoding: .utf8)
         let referenceComposeCode = """
+        /*
+        \(header)
+        */
         package \(AndroidTypographyExporterTests.packageName)
         
         import androidx.compose.ui.text.TextStyle

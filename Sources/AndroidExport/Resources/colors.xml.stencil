@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+{% include "header.stencil" %}
+-->
 <resources>{% for color in colors %}
     <color name="{{color.name}}">{{color.hex}}</color>{% endfor %}
 </resources>

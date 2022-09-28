@@ -1,3 +1,6 @@
+/*
+{% include "header.stencil" %}
+*/
 package {{package}}
 
 import androidx.compose.ui.text.TextStyle

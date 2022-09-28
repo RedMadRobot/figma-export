@@ -31,6 +31,9 @@ final class AndroidComposeIconExporterTests: XCTestCase {
         XCTAssertEqual(result.destination.file.absoluteString, "Icons.kt")
         let generatedComposedCode = String(data: try XCTUnwrap(result.data), encoding: .utf8)
         let referenceComposeCode = """
+        /*
+        \(header)
+        */
         package \(AndroidComposeIconExporterTests.packageName)
         
         import androidx.compose.material.Icon

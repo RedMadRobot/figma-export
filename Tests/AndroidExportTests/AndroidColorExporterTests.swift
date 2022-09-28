@@ -49,18 +49,26 @@ final class AndroidColorExporterTests: XCTestCase {
         
         let referenceCodeLight = """
         <?xml version="1.0" encoding="utf-8"?>
+        <!--
+        \(header)
+        -->
         <resources>
             <color name="color_pair_1">#807703FF</color>
             <color name="color_pair_2">#FFFFFF</color>
         </resources>
+
         """
         
         let referenceCodeDark = """
         <?xml version="1.0" encoding="utf-8"?>
+        <!--
+        \(header)
+        -->
         <resources>
             <color name="color_pair_1">#807703FF</color>
             <color name="color_pair_2">#000000</color>
         </resources>
+
         """
 
         XCTAssertNoDifference(generatedCodeLight, referenceCodeLight)
@@ -70,6 +78,9 @@ final class AndroidColorExporterTests: XCTestCase {
         XCTAssertEqual(result[2].destination.file.absoluteString, "Colors.kt")
         let generatedComposedCode = String(data: try XCTUnwrap(result[2].data), encoding: .utf8)
         let referenceComposeCode = """
+        /*
+        \(header)
+        */
         package \(AndroidColorExporterTests.packageName)
         
         import androidx.compose.runtime.Composable
