@@ -1,0 +1,14 @@
+package {{package}}
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.Dp
+import {{xmlResourcePackage}}.R
+
+object Spacings
+{% for spacing in spacings %}
+@Composable
+@ReadOnlyComposable
+fun Spacings.{{ spacing.functionName }}(): Dp = dimensionResource(id = R.dimen.{{ spacing.name }})
+{% endfor %}

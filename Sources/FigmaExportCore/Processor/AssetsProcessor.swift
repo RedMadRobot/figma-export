@@ -72,6 +72,22 @@ public struct TypographyProcessor: AssetsProcessable {
     }
 }
 
+public struct SpacingsProcessor: AssetsProcessable {
+    public typealias AssetType = Spacing
+
+    public let platform: Platform
+    public let nameValidateRegexp: String?
+    public let nameReplaceRegexp: String?
+    public let nameStyle: NameStyle?
+
+    public init(platform: Platform, nameValidateRegexp: String?, nameReplaceRegexp: String?, nameStyle: NameStyle?) {
+        self.platform = platform
+        self.nameValidateRegexp = nameValidateRegexp
+        self.nameReplaceRegexp = nameReplaceRegexp
+        self.nameStyle = nameStyle
+    }
+}
+
 public struct ImagesProcessor: AssetsProcessable {
     public typealias AssetType = ImagePack
 

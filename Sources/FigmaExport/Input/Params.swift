@@ -14,6 +14,7 @@ struct Params: Decodable {
     }
 
     struct Common: Decodable {
+
         struct Colors: Decodable {
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
@@ -44,10 +45,19 @@ struct Params: Decodable {
             let nameReplaceRegexp: String?
         }
 
+        struct Spacings: Decodable {
+            let figmaFrameName: String?
+            let figmaVerticalStateName: String?
+            let figmaHorizontalStateName: String?
+            let nameValidateRegexp: String?
+            let nameReplaceRegexp: String?
+        }
+
         let colors: Colors?
         let icons: Icons?
         let images: Images?
         let typography: Typography?
+        let spacings: Spacings?
     }
 
     enum VectorFormat: String, Decodable {
@@ -100,6 +110,11 @@ struct Params: Decodable {
             let nameStyle: NameStyle
         }
 
+        struct Spacings: Decodable {
+            let spacingsSwift: URL?
+            let nameStyle: NameStyle
+        }
+
         let xcodeprojPath: String
         let target: String
         let xcassetsPath: URL
@@ -113,22 +128,28 @@ struct Params: Decodable {
         let icons: Icons?
         let images: Images?
         let typography: Typography?
+        let spacings: Spacings?
     }
 
     struct Android: Decodable {
+
         struct Icons: Decodable {
             let output: String
             let composePackageName: String?
         }
+
         struct Colors: Decodable {
             let composePackageName: String?
         }
+
         struct Images: Decodable {
+
             enum Format: String, Decodable {
                 case svg
                 case png
                 case webp
             }
+
             struct FormatOptions: Decodable {
                 enum Encoding: String, Decodable {
                     case lossy
@@ -137,15 +158,23 @@ struct Params: Decodable {
                 let encoding: Encoding
                 let quality: Int?
             }
+
             let scales: [Double]?
             let output: String
             let format: Format
             let webpOptions: FormatOptions?
         }
+
         struct Typography: Decodable {
             let nameStyle: NameStyle
             let composePackageName: String?
         }
+
+        struct Spacings: Decodable {
+            let nameStyle: NameStyle
+            let composePackageName: String?
+        }
+
         let mainRes: URL
         let resourcePackage: String?
         let mainSrc: URL?
@@ -153,6 +182,7 @@ struct Params: Decodable {
         let icons: Icons?
         let images: Images?
         let typography: Typography?
+        let spacings: Spacings?
         let templatesPath: URL?
     }
 
