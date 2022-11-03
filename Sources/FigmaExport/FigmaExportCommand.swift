@@ -29,6 +29,7 @@ enum FigmaExportError: LocalizedError {
     }
 }
 
+@main
 struct FigmaExportCommand: ParsableCommand {
     
     static let version = "0.36.0"
@@ -52,7 +53,4 @@ struct FigmaExportCommand: ParsableCommand {
         ],
         defaultSubcommand: ExportColors.self
     )
-    
 }
-
-FigmaExportCommand.main()
