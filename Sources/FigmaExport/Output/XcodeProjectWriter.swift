@@ -47,7 +47,7 @@ final class XcodeProjectWriter {
             let group = currentGroup?.children.first(where: { group -> Bool in
                 group.path == groups.first
             })
-            if let group = group {
+            if let group {
                 prevGroup = currentGroup
                 currentGroup = group as? PBXGroup
                 groups = Array(groups.dropFirst())

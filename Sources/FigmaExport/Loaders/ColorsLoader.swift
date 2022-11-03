@@ -68,7 +68,7 @@ final class ColorsLoader {
     private func loadColors(fileId: String, filter: String?) throws -> [Color] {
         var styles = try loadStyles(fileId: fileId)
         
-        if let filter = filter {
+        if let filter {
             let assetsFilter = AssetsFilter(filter: filter)
             styles = styles.filter { style -> Bool in
                 assetsFilter.match(name: style.name)

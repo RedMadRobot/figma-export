@@ -18,7 +18,7 @@ public struct AndroidOutput {
         self.xmlResourcePackage = xmlResourcePackage
         self.packageName = packageName
         self.templatesPath = templatesPath
-        if let srcDirectory = srcDirectory, let packageName = packageName {
+        if let srcDirectory, let packageName {
             composeOutputDirectory = srcDirectory.appendingPathComponent(packageName.replacingOccurrences(of: ".", with: "/"))
         } else {
             composeOutputDirectory = nil

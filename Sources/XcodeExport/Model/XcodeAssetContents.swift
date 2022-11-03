@@ -79,7 +79,7 @@ struct XcodeAssetContents: Encodable {
         init?(preserveVectorData: Bool?, renderMode: XcodeRenderMode?) {
             preservesVectorRepresentation = preserveVectorData == true ? true : nil
             
-            if let renderMode = renderMode, (renderMode == .original || renderMode == .template) {
+            if let renderMode, (renderMode == .original || renderMode == .template) {
                 templateRenderingIntent = renderMode.rawValue
             } else {
                 templateRenderingIntent = nil

@@ -19,7 +19,7 @@ public class FormatParams: Encodable {
             URLQueryItem(name: "format", value: format),
             URLQueryItem(name: "use_absolute_bounds", value: String(useAbsoluteBounds)),
         ]
-        if let scale = scale {
+        if let scale {
             items.append(URLQueryItem(name: "scale", value: String(scale)))
         }
         return items
