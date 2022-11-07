@@ -2,6 +2,7 @@ import FigmaExportCore
 import Foundation
 import Stencil
 import PathKit
+import StencilSwiftKit
 
 public class XcodeExporterBase {
     
@@ -34,7 +35,9 @@ public class XcodeExporterBase {
                 Path(Bundle.module.resourcePath!)
             ])
         }
-        return Environment(loader: loader)
+        let ext = Extension()
+        ext.registerStencilSwiftExtensions()
+        return Environment(loader: loader, extensions: [ext])
     }
     
     func makeFileContents(for string: String, url: URL) throws -> FileContents {
