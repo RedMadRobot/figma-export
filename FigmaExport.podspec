@@ -7,4 +7,5 @@ Pod::Spec.new do |spec|
     spec.author         = { "Daniil Subbotin" => "mail@subdan.ru" }
     spec.source         = { http: "#{spec.homepage}/releases/download/#{spec.version}/figma-export.zip" }
     spec.preserve_paths = '*'
+    spec.platform       = :ios
 end
