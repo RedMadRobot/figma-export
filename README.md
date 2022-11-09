@@ -415,6 +415,8 @@ It will generate config file in the current directory.
 
 #### Custom templates
 
+FigmaExport uses [Stencil](https://stencil.fuller.li/en/latest/) and [StencilSwiftKit](https://github.com/SwiftGen/StencilSwiftKit) to generate code.
+
 ##### iOS
 If you want to modify structure of the generated `*.swift` files you should specify a directory (`ios.templatesPath`) where Stencil templates are located. If `ios.templatesPath` not specified default templates will be used.
 
