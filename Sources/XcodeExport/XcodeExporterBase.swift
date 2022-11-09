@@ -18,7 +18,7 @@ public class XcodeExporterBase {
         let keyword = (declarationKeywords + statementKeywords + expressionsKeywords + otherKeywords).first { keyword in
             name == keyword
         }
-        if let keyword = keyword {
+        if let keyword {
             return "`\(keyword)`"
         } else {
             return name

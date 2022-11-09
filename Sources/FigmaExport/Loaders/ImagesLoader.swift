@@ -73,13 +73,13 @@ final class ImagesLoader {
         let templateSuffix = renderMode != .template ? params.ios?.icons?.renderModeTemplateSuffix : nil
         var suffix: String?
 
-        if let defaultSuffix = defaultSuffix, icon.name.hasSuffix(defaultSuffix) {
+        if let defaultSuffix, icon.name.hasSuffix(defaultSuffix) {
             renderMode = .default
             suffix = defaultSuffix
-        } else if let originalSuffix = originalSuffix, icon.name.hasSuffix(originalSuffix) {
+        } else if let originalSuffix, icon.name.hasSuffix(originalSuffix) {
             renderMode = .original
             suffix = originalSuffix
-        } else if let templateSuffix = templateSuffix, icon.name.hasSuffix(templateSuffix) {
+        } else if let templateSuffix, icon.name.hasSuffix(templateSuffix) {
             renderMode = .template
             suffix = templateSuffix
         }
@@ -207,7 +207,7 @@ final class ImagesLoader {
                 $0.containingFrame.name == frameName && $0.useForPlatform(platform)
             }
 
-        if let filter = filter {
+        if let filter {
             let assetsFilter = AssetsFilter(filter: filter)
             components = components.filter { component -> Bool in
                 assetsFilter.match(name: component.name)
@@ -338,7 +338,7 @@ final class ImagesLoader {
             .map { try client.request($0) }
             .flatMap { dict in
                 dict.compactMap { nodeId, imagePath in
-                    if let imagePath = imagePath {
+                    if let imagePath {
                         return (nodeId, imagePath)
                     } else {
                         let componentName = imagesDict[nodeId]?.name ?? ""

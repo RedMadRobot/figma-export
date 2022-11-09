@@ -173,7 +173,7 @@ extension Image {
     private func makeFileURL(scale: Scale, appearance: Appearance? = nil) -> URL {
         var urlString = name
 
-        if let idiom = idiom, !idiom.isEmpty {
+        if let idiom, !idiom.isEmpty {
             urlString.append("~\(idiom)")
         }
 

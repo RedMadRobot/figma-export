@@ -75,11 +75,11 @@ public struct FileContents: Equatable {
 
         let newDestination = Destination(directory: destination.directory, file: newFileURL)
         
-        if let sourceURL = sourceURL { // Remote file
+        if let sourceURL { // Remote file
             return FileContents(destination: newDestination, sourceURL: sourceURL, scale: scale, dark: dark)
-        } else if let dataFile = dataFile { // On-disk file
+        } else if let dataFile { // On-disk file
             return FileContents(destination: newDestination, dataFile: dataFile, scale: scale, dark: dark)
-        } else if let data = data { // In-memory file
+        } else if let data { // In-memory file
             return FileContents(destination: newDestination, data: data, scale: scale, dark: dark)
         } else {
             fatalError("Unable to change file extension.")
