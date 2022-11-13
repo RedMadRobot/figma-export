@@ -32,4 +32,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build and test
-        run: swift test --disable-automatic-resolution
+        run: swift test --disable-automatic-resolution --skip XcodeExportTests
