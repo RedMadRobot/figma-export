@@ -60,13 +60,7 @@ jobs:
           cp -r ./.build/release/figma-export_AndroidExport.resources ./Release/figma-export_AndroidExport.resources
           zip -r figma-export.zip Release LICENSE
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: figma-export-linux.zip
-          path: figma-export-linux.zip
-
-#      - name: "Upload assets to a release"
-#        run: gh release upload ${{ github.event.release.tag_name }} figma-export-linux.zip
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Upload assets to a release"
+        run: gh release upload ${{ github.event.release.tag_name }} figma-export-linux.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
