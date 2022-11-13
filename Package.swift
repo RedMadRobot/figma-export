@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "figma-export",
     platforms: [
-        .macOS(.v10_13),
+        .macOS(.v10_13)
     ],
     products: [
         .executable(name: "figma-export", targets: ["FigmaExport"])

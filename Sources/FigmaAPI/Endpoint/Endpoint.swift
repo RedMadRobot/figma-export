@@ -1,4 +1,7 @@
 import Foundation
+#if os(Linux)
+import FoundationNetworking
+#endif
 
 /// The endpoint to work with a remote content.
 public protocol Endpoint {

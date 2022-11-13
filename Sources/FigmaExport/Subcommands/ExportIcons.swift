@@ -4,6 +4,9 @@ import FigmaAPI
 import XcodeExport
 import FigmaExportCore
 import AndroidExport
+#if os(Linux)
+import FoundationXML
+#endif
 
 extension FigmaExportCommand {
     

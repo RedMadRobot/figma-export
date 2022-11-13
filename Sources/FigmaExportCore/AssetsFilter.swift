@@ -29,7 +29,11 @@ public struct AssetsFilter {
     }
     
     private func wildcard(_ string: String, pattern: String) -> Bool {
+        #if os(Linux)
+        return false
+        #else
         let pred = NSPredicate(format: "self LIKE %@", pattern)
         return !NSArray(object: string).filtered(using: pred).isEmpty
+        #endif
     }
 }
