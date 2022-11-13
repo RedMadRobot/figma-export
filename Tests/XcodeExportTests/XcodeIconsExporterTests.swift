@@ -667,17 +667,17 @@ final class XcodeIconsExporterTests: XCTestCase {
         {
           "images" : [
             {
-              "filename" : "ic24TabBarHome.pdf",
-              "idiom" : "universal"
+              "idiom" : "universal",
+              "filename" : "ic24TabBarHome.pdf"
             }
           ],
           "info" : {
-            "author" : "xcode",
-            "version" : 1
+            "version" : 1,
+            "author" : "xcode"
           },
           "properties" : {
-            "preserves-vector-representation" : true,
-            "template-rendering-intent" : "template"
+            "template-rendering-intent" : "template",
+            "preserves-vector-representation" : true
           }
         }
         """
@@ -711,17 +711,17 @@ final class XcodeIconsExporterTests: XCTestCase {
         {
           "images" : [
             {
-              "filename" : "ic24TabBarHome.pdf",
-              "idiom" : "universal"
+              "idiom" : "universal",
+              "filename" : "ic24TabBarHome.pdf"
             }
           ],
           "info" : {
-            "author" : "xcode",
-            "version" : 1
+            "version" : 1,
+            "author" : "xcode"
           },
           "properties" : {
-            "preserves-vector-representation" : true,
-            "template-rendering-intent" : "template"
+            "template-rendering-intent" : "template",
+            "preserves-vector-representation" : true
           }
         }
         """
