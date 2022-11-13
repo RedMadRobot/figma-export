@@ -46,7 +46,6 @@ jobs:
       - name: Build
         run: |
           swift build -c release
-          mkdir Release
           cp ./.build/release/figma-export ./Release/figma-export --verbose
           cp -r ./.build/release/figma-export_AndroidExport.resources ./Release/figma-export_AndroidExport.resources --verbose
           zip -r figma-export.zip Release LICENSE --verbose
