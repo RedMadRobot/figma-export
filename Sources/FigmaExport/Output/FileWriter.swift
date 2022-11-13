@@ -1,5 +1,8 @@
 import Foundation
 import FigmaExportCore
+#if os(Linux)
+import FoundationXML
+#endif
 
 final class FileWriter {
     
