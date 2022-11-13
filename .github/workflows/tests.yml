@@ -46,12 +46,13 @@ jobs:
       - name: Build
         run: |
           swift build -c release
-          cp ./.build/release/figma-export ./Release/figma-export
-          cp -r ./.build/release/figma-export_AndroidExport.resources ./Release/figma-export_AndroidExport.resources
-          zip -r figma-export.zip Release LICENSE
+          mkdir Release
+          cp ./.build/release/figma-export ./Release/figma-export --verbose
+          cp -r ./.build/release/figma-export_AndroidExport.resources ./Release/figma-export_AndroidExport.resources --verbose
+          zip -r figma-export.zip Release LICENSE --verbose
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: figma-export-linux.zip
-          path: figma-export-linux.zip
+          name: figma-export.zip
+          path: figma-export.zip
