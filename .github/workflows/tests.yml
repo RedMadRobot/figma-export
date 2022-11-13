@@ -37,17 +37,16 @@ jobs:
   test-release-linux:
     name: FOR TESTING PURPOSE ONLY
     runs-on: ubuntu-22.04
-    container:
-      image: swift:5.7.1-jammy
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Build
         run: |
+          swift --version
           swift build -c release
-          cp ./.build/release/figma-export ./Release/figma-export --verbose
-          cp -r ./.build/release/figma-export_AndroidExport.resources ./Release/figma-export_AndroidExport.resources --verbose
+          cp ./.build/release/figma-export ./Release/figma-export
+          cp -r ./.build/release/figma-export_AndroidExport.resources ./Release/figma-export_AndroidExport.resources
           zip -r figma-export.zip Release LICENSE --verbose
 
       - name: Upload artifact
