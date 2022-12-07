@@ -70,7 +70,9 @@ extension FigmaExportCommand {
                 resourceBundleNames: ios.resourceBundleNames,
                 addObjcAttribute: ios.addObjcAttribute,
                 uiKitImageExtensionURL: imagesParams.imageSwift,
-                swiftUIImageExtensionURL: imagesParams.swiftUIImageSwift)
+                swiftUIImageExtensionURL: imagesParams.swiftUIImageSwift,
+                templatesPath: ios.templatesPath
+            )
             
             let exporter = XcodeImagesExporter(output: output)
             let localAndRemoteFiles = try exporter.export(assets: images.get(), append: filter != nil)
