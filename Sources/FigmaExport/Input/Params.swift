@@ -98,6 +98,11 @@ struct Params: Decodable {
         struct Icons: Decodable {
             let output: String
         }
+
+        struct Typography: Decodable {
+            let output: String
+        }
+
         struct Images: Decodable {
             enum Format: String, Decodable {
                 case svg
@@ -116,9 +121,16 @@ struct Params: Decodable {
             let format: Format
             let webpOptions: FormatOptions?
         }
+
+        struct Colors: Decodable {
+            let output: String
+        }
+
         let mainRes: URL
         let icons: Icons?
         let images: Images?
+        let typography: Typography?
+        let colors: Colors?
     }
 
     let figma: Figma

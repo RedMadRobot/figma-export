@@ -41,8 +41,31 @@ extension FigmaExportCommand {
                 try exportXcodeTextStyles(textStyles: textStyles, iosParams: ios, logger: logger)
                 logger.info("Done!")
             }
+
+            if let android = params.android {//
+                logger.info("Processing colors...")
+                let loader = ColorsLoader(figmaClient: client, params: params.figma)
+                let colors = try loader.load()
+
+                let processor = ColorsProcessor(
+                    platform: .android,
+                    nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
+                    nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
+                    nameStyle: .snakeCase
+                )
+                let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
+
+                logger.info("Saving text styles...")
+
+                try exportAndroidTextStyles(
+                    textStyles: textStyles,
+                    colorPairs: colorPairs,
+                    androidParams: android
+                )
+                logger.info("Done!")
+            }
         }
-        
+
         private func exportXcodeTextStyles(textStyles: [TextStyle], iosParams: Params.iOS, logger: Logger) throws {
             let exporter = XcodeTypographyExporter()
             
@@ -87,6 +110,20 @@ extension FigmaExportCommand {
             } catch (let error) {
                 print(error)
             }
+        }
+
+        private func exportAndroidTextStyles(
+            textStyles: [TextStyle],
+            colorPairs: [AssetPair<Color>],
+            androidParams: Params.Android)
+        throws {
+            let outputPatch = URL(fileURLWithPath: androidParams.mainRes
+                .appendingPathComponent(androidParams.typography?.output ?? "").path)
+
+            let exporter = AndroidTypographyExporter(outputDirectory: outputPatch)
+            let files = exporter.makeTypographyFile(textStyles, colorPairs: colorPairs, dark: false)
+
+            try fileWritter.write(files: [files])
         }
     }
 }

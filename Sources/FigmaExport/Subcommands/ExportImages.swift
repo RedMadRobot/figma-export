@@ -188,8 +188,8 @@ extension FigmaExportCommand {
             
             if filter == nil {
                 // Clear output directory
-                try? FileManager.default.removeItem(atPath: lightDirectory.path)
-                try? FileManager.default.removeItem(atPath: darkDirectory.path)
+//                try? FileManager.default.removeItem(atPath: lightDirectory.path)
+//                try? FileManager.default.removeItem(atPath: darkDirectory.path)
             }
             
             // Move XML files to main/res/drawable/
@@ -262,8 +262,8 @@ extension FigmaExportCommand {
             
             if filter == nil {
                 // Clear output directory
-                let outputDirectory = URL(fileURLWithPath: android.mainRes.appendingPathComponent(androidImages.output).path)
-                try? FileManager.default.removeItem(atPath: outputDirectory.path)
+//                let outputDirectory = URL(fileURLWithPath: android.mainRes.appendingPathComponent(androidImages.output).path)
+//                try? FileManager.default.removeItem(atPath: outputDirectory.path)
             }
 
             logger.info("Writting files to Android Studio project...")
