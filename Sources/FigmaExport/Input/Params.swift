@@ -57,11 +57,11 @@ struct Params: Decodable {
 
             let preservesVectorRepresentation: Bool
             let preservesVectorRepresentationIcons: [String]?
-            
+
             let renderIntent: RenderIntent?
             let renderAsOriginalIcons: [String]?
             let renderAsTemplateIcons: [String]?
-            
+
             let imageSwift: URL?
             let swiftUIImageSwift: URL?
         }
@@ -100,7 +100,9 @@ struct Params: Decodable {
         }
 
         struct Typography: Decodable {
+
             let output: String
+            let attributes: [TypographyAttributes]?
         }
 
         struct Images: Decodable {

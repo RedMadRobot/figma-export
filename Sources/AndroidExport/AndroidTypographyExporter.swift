@@ -11,9 +11,14 @@ import FigmaExportCore
 final public class AndroidTypographyExporter {
 
     private let outputDirectory: URL
+    private let attributes: [TypographyAttributes]?
 
-    public init(outputDirectory: URL) {
+    public init(
+        outputDirectory: URL,
+        attributes: [TypographyAttributes]?) {
+
         self.outputDirectory = outputDirectory
+        self.attributes = attributes
     }
 
     public func makeTypographyFile(
@@ -86,6 +91,17 @@ final public class AndroidTypographyExporter {
             styleFont.addChild(itemTextSize)
             styleFont.addChild(itemLineHeight)
             styleFont.addChild(itemLetterSpacing)
+
+            if let attributes = self.attributes {
+                attributes.forEach { attribute in
+                    if attribute.fonts.first(where: { $0.lowercased() == textStyle.name.lowercased() }) != nil {
+                        let itemAttribute = XMLElement(name: "item", stringValue: attribute.value)
+                        itemAttribute.addAttribute(XMLNode.attribute(withName: "name", stringValue: attribute.name) as! XMLNode)
+
+                        styleFont.addChild(itemAttribute)
+                    }
+                }
+            }
 
             resources.addChild(styleFont)
 

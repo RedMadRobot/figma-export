@@ -120,7 +120,11 @@ extension FigmaExportCommand {
             let outputPatch = URL(fileURLWithPath: androidParams.mainRes
                 .appendingPathComponent(androidParams.typography?.output ?? "").path)
 
-            let exporter = AndroidTypographyExporter(outputDirectory: outputPatch)
+            let exporter = AndroidTypographyExporter(
+                outputDirectory: outputPatch,
+                attributes:  androidParams.typography?.attributes
+            )
+
             let files = exporter.makeTypographyFile(textStyles, colorPairs: colorPairs, dark: false)
 
             try fileWritter.write(files: [files])
