@@ -62,11 +62,13 @@ private extension Color {
         let rr = doubleToHex(red)
         let gg = doubleToHex(green)
         let bb = doubleToHex(blue)
-        var result = "#\(rr)\(gg)\(bb)"
+        var result = "#"
         if alpha != 1.0 {
             let aa = doubleToHex(alpha)
             result.append(aa)
         }
+
+        result += "\(rr)\(gg)\(bb)"
         return result
     }
 }
