@@ -316,7 +316,7 @@ public extension AssetsProcessable {
             case (true, _):
                 break // ok
             case (false, let oldMember): // already exists
-                errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
+                // errors.all.append(AssetsValidatorError.foundDuplicate(assetName: oldMember.name))
             }
         }
         return assetSet
