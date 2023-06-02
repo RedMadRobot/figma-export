@@ -85,7 +85,7 @@ final public class AndroidTypographyExporter {
                 name: "item", stringValue: "\(textStyle.lineHeight ?? textStyle.fontSize)sp")
             itemLineHeight.addAttribute(XMLNode.attribute(withName: "name", stringValue: "lineHeight") as! XMLNode)
 
-            let itemLetterSpacing = XMLElement(name: "item", stringValue: "\(textStyle.letterSpacing)")
+            let itemLetterSpacing = XMLElement(name: "item", stringValue: "\(textStyle.letterSpacing/textStyle.fontSize)")
             itemLetterSpacing.addAttribute(XMLNode.attribute(withName: "name", stringValue: "android:letterSpacing") as! XMLNode)
 
             styleFont.addChild(itemTextSize)
