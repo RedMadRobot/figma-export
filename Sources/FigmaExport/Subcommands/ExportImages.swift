@@ -64,6 +64,7 @@ extension FigmaExportCommand {
                 platform: .ios,
                 nameValidateRegexp: params.common?.images?.nameValidateRegexp,
                 nameReplaceRegexp: params.common?.images?.nameReplaceRegexp,
+                ignoreBadNames: params.common?.images?.ignoreBadNames,
                 nameStyle: params.ios?.images.nameStyle
             )
             let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()
@@ -120,6 +121,7 @@ extension FigmaExportCommand {
                 platform: .android,
                 nameValidateRegexp: params.common?.images?.nameValidateRegexp,
                 nameReplaceRegexp: params.common?.images?.nameReplaceRegexp,
+                ignoreBadNames: params.common?.images?.ignoreBadNames,
                 nameStyle: .snakeCase
             )
             let images = try processor.process(light: imagesTuple.light, dark: imagesTuple.dark).get()

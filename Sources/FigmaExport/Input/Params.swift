@@ -14,18 +14,21 @@ struct Params: Decodable {
         struct Colors: Decodable {
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
+            let ignoreBadNames: Bool?
         }
         
         struct Icons: Decodable {
             let nameValidateRegexp: String?
             let figmaFrameName: String?
             let nameReplaceRegexp: String?
+            let ignoreBadNames: Bool?
         }
         
         struct Images: Decodable {
             let nameValidateRegexp: String?
             let figmaFrameName: String?
             let nameReplaceRegexp: String?
+            let ignoreBadNames: Bool?
         }
         
         let colors: Colors?

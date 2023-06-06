@@ -51,6 +51,7 @@ extension FigmaExportCommand {
                     platform: .android,
                     nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
                     nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
+                    ignoreBadNames: params.common?.colors?.ignoreBadNames,
                     nameStyle: .snakeCase
                 )
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()

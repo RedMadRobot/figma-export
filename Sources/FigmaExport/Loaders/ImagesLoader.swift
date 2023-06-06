@@ -70,7 +70,7 @@ final class ImagesLoader {
 
     func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
         switch (platform, params.android?.images?.format) {
-        case (.android, .png), (.android, .webp), (.ios, .none):
+        case (.android, .png), (.android, .webp), (.ios, .png), (.ios, .webp):
             let lightImages = try loadPNGImages(
                 fileId: params.figma.lightFileId,
                 frameName: imagesFrameName,
@@ -170,7 +170,8 @@ final class ImagesLoader {
             images[4.0] = try loadImages(fileId: fileId, nodeIds: imagesIds, params: PNGParams(scale: 4.0))
         }
         return imagesIds.map { imageId -> ImagePack in
-            let name = imagesDict[imageId]!.name
+            var name = imagesDict[imageId]!.name
+            name = name.components(separatedBy: .init(charactersIn: "-_=")).joined(separator: " ")
 
             var scaledImages: [Double: Image] = [:]
                 
