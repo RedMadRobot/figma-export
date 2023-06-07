@@ -50,6 +50,6 @@ public struct ContainingFrame: Codable {
 }
 
 public struct ContainingStateGroup: Codable {
-    public let nodeID: String?
+    public let nodeId: String?
     public let name: String?
 }

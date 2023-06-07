@@ -55,6 +55,8 @@ final public class AndroidTypographyExporter {
 
         let resources = XMLElement(name: "resources")
         let xml = XMLDocument(rootElement: resources)
+        xml.version = "1.0"
+        xml.characterEncoding = "utf-8"
         var useFontNames = [""]
 
         let colors: [AssetPair<Color>]

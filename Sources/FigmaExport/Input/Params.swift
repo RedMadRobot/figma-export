@@ -30,10 +30,16 @@ struct Params: Decodable {
             let nameReplaceRegexp: String?
             let ignoreBadNames: Bool?
         }
+
+        struct Dimensions: Decodable {
+            let figmaFrameName: String?
+            let componentNames: [String]?
+        }
         
         let colors: Colors?
         let icons: Icons?
         let images: Images?
+        let dimensions: Dimensions?
     }
     
     enum VectorFormat: String, Decodable {
@@ -93,6 +99,11 @@ struct Params: Decodable {
             let componentsDirectory: URL?
             
         }
+
+        struct Dimensions: Decodable {
+            let dimensionsDirectory: URL
+            let dimensionsFileName: String?
+        }
         
         let xcodeprojPath: String
         let xcodeprojMainGroupName: String?
@@ -104,6 +115,7 @@ struct Params: Decodable {
         let icons: Icons
         let images: Images
         let typography: Typography
+        let dimensions: Dimensions
     }
 
     struct Android: Decodable {
@@ -142,11 +154,16 @@ struct Params: Decodable {
             let output: String
         }
 
+        struct Dimensions: Decodable {
+            let output: String
+        }
+
         let mainRes: URL
         let icons: Icons?
         let images: Images?
         let typography: Typography?
         let colors: Colors?
+        let dimensions: Dimensions?
     }
 
     let figma: Figma
