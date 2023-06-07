@@ -78,11 +78,20 @@ struct Params: Decodable {
         }
         
         struct Typography: Decodable {
+
+            enum Format: String, Decodable {
+                case swift
+                case json
+            }
+
             let typographyVersion: Int?
             let stylesDirectory: URL?
+            let stylesFileName: String?
+            let format: Format?
             let swiftUIFontSwift: URL?
             let generateComponents: Bool
             let componentsDirectory: URL?
+            
         }
         
         let xcodeprojPath: String
@@ -105,6 +114,8 @@ struct Params: Decodable {
         struct Typography: Decodable {
 
             let output: String
+            let colorsMatchRegexp: String?
+            let strongMatchWithColors: Bool?
             let attributes: [TypographyAttributes]?
         }
 
