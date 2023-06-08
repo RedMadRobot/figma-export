@@ -23,54 +23,49 @@ final class ImagesLoader {
     }
 
     func loadIcons(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
-        switch (platform, params.ios?.icons.format) {
-        case (.android, _),
-             (.ios, .svg):
-            let lightImages = try _loadImages(
-                fileId: params.figma.lightFileId,
-                frameName: iconsFrameName,
-                params: SVGParams(),
-                filter: filter
-            )
-            let darkImages = try params.figma.darkFileId.map {
-                try _loadImages(
-                   fileId: $0,
-                   frameName: iconsFrameName,
-                   params: SVGParams(),
-                   filter: filter
-               )
+        let formatParams: FormatParams
+
+        switch platform {
+        case .ios:
+            switch params.ios?.icons.format {
+            case .svg:
+                formatParams = SVGParams()
+
+            case .pdf:
+                formatParams = PDFParams()
+
+            case .none:
+                formatParams = PDFParams()
             }
-            let result = (
-                lightImages.map { ImagePack.singleScale($0) },
-                darkImages?.map { ImagePack.singleScale($0) }
-            )
-            return result
-        case (.ios, _):
-            let lightImages = try _loadImages(
-                fileId: params.figma.lightFileId,
-                frameName: iconsFrameName,
-                params: PDFParams(),
-                filter: filter
-            )
-            let darkImages = try params.figma.darkFileId.map {
-                try _loadImages(
-                   fileId: $0,
-                   frameName: iconsFrameName,
-                   params: PDFParams(),
-                   filter: filter
-               )
-            }
-            let result = (
-                lightImages.map { ImagePack.singleScale($0) },
-                darkImages?.map { ImagePack.singleScale($0) }
-            )
-            return result
+
+        case .android:
+            formatParams = SVGParams()
         }
+
+        let lightImages = try _loadImages(
+            fileId: params.figma.lightFileId,
+            frameName: iconsFrameName,
+            params: formatParams,
+            filter: filter
+        )
+        let darkImages = try params.figma.darkFileId.map {
+            try _loadImages(
+               fileId: $0,
+               frameName: iconsFrameName,
+               params: formatParams,
+               filter: filter
+           )
+        }
+        let result = (
+            lightImages.map { ImagePack.singleScale($0) },
+            darkImages?.map { ImagePack.singleScale($0) }
+        )
+        return result
     }
 
     func loadImages(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
-        switch (platform, params.android?.images?.format) {
-        case (.android, .png), (.android, .webp), (.ios, .png), (.ios, .webp):
+        switch platform {
+        case .ios:
             let lightImages = try loadPNGImages(
                 fileId: params.figma.lightFileId,
                 frameName: imagesFrameName,
@@ -87,24 +82,44 @@ final class ImagesLoader {
                 lightImages,
                 darkImages
             )
-        default:
-            let light = try _loadImages(
-                fileId: params.figma.lightFileId,
-                frameName: imagesFrameName,
-                params: SVGParams(),
-                filter: filter)
-            
-            let dark = try params.figma.darkFileId.map {
-                try _loadImages(
-                    fileId: $0,
+        case .android:
+            switch params.android?.images?.format {
+            case .png, .webp:
+                let lightImages = try loadPNGImages(
+                    fileId: params.figma.lightFileId,
+                    frameName: imagesFrameName,
+                    filter: filter,
+                    platform: platform)
+                let darkImages = try params.figma.darkFileId.map {
+                    try loadPNGImages(
+                        fileId: $0,
+                        frameName: imagesFrameName,
+                        filter: filter,
+                        platform: platform)
+                }
+                return (
+                    lightImages,
+                    darkImages
+                )
+            case .svg, .none:
+                let light = try _loadImages(
+                    fileId: params.figma.lightFileId,
                     frameName: imagesFrameName,
                     params: SVGParams(),
                     filter: filter)
+
+                let dark = try params.figma.darkFileId.map {
+                    try _loadImages(
+                        fileId: $0,
+                        frameName: imagesFrameName,
+                        params: SVGParams(),
+                        filter: filter)
+                }
+                return (
+                    light.map { ImagePack.singleScale($0) },
+                    dark?.map { ImagePack.singleScale($0) }
+                )
             }
-            return (
-                light.map { ImagePack.singleScale($0) },
-                dark?.map { ImagePack.singleScale($0) }
-            )
         }
     }
 
