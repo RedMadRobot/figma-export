@@ -155,7 +155,7 @@ struct Params: Decodable {
         }
 
         struct Dimensions: Decodable {
-            let output: String
+            let output: String?
         }
 
         let mainRes: URL
