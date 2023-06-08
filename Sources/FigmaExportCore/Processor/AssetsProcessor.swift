@@ -4,6 +4,7 @@ public protocol AssetNameProcessable {
     var nameReplaceRegexp: String? { get }
     var nameValidateRegexp: String? { get }
     var nameStyle: NameStyle? { get }
+    var ignoreBadNames: Bool { get }
     
     func isNameValid(_ name: String) -> Bool
     func normalizeName(_ name: String, style: NameStyle) -> String
@@ -47,12 +48,20 @@ public struct ColorsProcessor: AssetsProcessable {
     public let nameValidateRegexp: String?
     public let nameReplaceRegexp: String?
     public let nameStyle: NameStyle?
+    public let ignoreBadNames: Bool
     
-    public init(platform: Platform, nameValidateRegexp: String?, nameReplaceRegexp: String?, nameStyle: NameStyle?) {
+    public init(
+        platform: Platform,
+        nameValidateRegexp: String?,
+        nameReplaceRegexp: String?,
+        ignoreBadNames: Bool?,
+        nameStyle: NameStyle?
+    ) {
         self.platform = platform
         self.nameValidateRegexp = nameValidateRegexp
         self.nameReplaceRegexp = nameReplaceRegexp
         self.nameStyle = nameStyle
+        self.ignoreBadNames = ignoreBadNames ?? false
     }
 }
 
@@ -63,12 +72,20 @@ public struct ImagesProcessor: AssetsProcessable {
     public let nameValidateRegexp: String?
     public let nameReplaceRegexp: String?
     public let nameStyle: NameStyle?
+    public let ignoreBadNames: Bool
     
-    public init(platform: Platform, nameValidateRegexp: String? = nil, nameReplaceRegexp: String? = nil, nameStyle: NameStyle?) {
+    public init(
+        platform: Platform,
+        nameValidateRegexp: String? = nil,
+        nameReplaceRegexp: String? = nil,
+        ignoreBadNames: Bool?,
+        nameStyle: NameStyle?
+    ) {
         self.platform = platform
         self.nameValidateRegexp = nameValidateRegexp
         self.nameReplaceRegexp = nameReplaceRegexp
         self.nameStyle = nameStyle
+        self.ignoreBadNames = ignoreBadNames ?? false
     }
 }
 
@@ -100,7 +117,7 @@ public extension AssetsProcessable {
         assets.forEach { asset in
 
             // badName
-            if !isNameValid(asset.name) {
+            if !isNameValid(asset.name) && !self.ignoreBadNames {
                 errors.all.append(AssetsValidatorError.badName(name: asset.name))
             }
 
@@ -119,6 +136,7 @@ public extension AssetsProcessable {
         let assets = set
             .sorted { $0.name < $1.name }
             .filter { $0.platform == nil || $0.platform == platform }
+            .filter { isNameValid($0.name) }
             .map { asset -> AssetType in
                 var newAsset = asset
                 if let replaceRegExp = nameReplaceRegexp, let regexp = nameValidateRegexp {
@@ -152,7 +170,7 @@ public extension AssetsProcessable {
         light.forEach { asset in
 
             // badName
-            if !isNameValid(asset.name) {
+            if !isNameValid(asset.name) && !self.ignoreBadNames{
                 errors.all.append(AssetsValidatorError.badName(name: asset.name))
             }
 
@@ -185,7 +203,7 @@ public extension AssetsProcessable {
         light.forEach { asset in
 
             // badName
-            if !isNameValid(asset.name) {
+            if !isNameValid(asset.name) && !self.ignoreBadNames {
                 errors.all.append(AssetsValidatorError.badName(name: asset.name))
             }
 
@@ -242,6 +260,7 @@ public extension AssetsProcessable {
         return lightSet
             .sorted { $0.name < $1.name }
             .filter { $0.platform == nil || $0.platform == platform }
+            .filter { isNameValid($0.name) }
             .map { lightAsset -> AssetPair<AssetType> in
 
                 var newLightAsset = lightAsset

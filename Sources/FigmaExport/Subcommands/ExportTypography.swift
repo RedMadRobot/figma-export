@@ -51,6 +51,7 @@ extension FigmaExportCommand {
                     platform: .android,
                     nameValidateRegexp: params.common?.colors?.nameValidateRegexp,
                     nameReplaceRegexp: params.common?.colors?.nameReplaceRegexp,
+                    ignoreBadNames: params.common?.colors?.ignoreBadNames,
                     nameStyle: .snakeCase
                 )
                 let colorPairs = try processor.process(light: colors.light, dark: colors.dark).get()
@@ -77,7 +78,9 @@ extension FigmaExportCommand {
                     contentsOf: try exporter.exportStyles(
                         textStyles,
                         folderURL: stylesDirectoryURL,
-                        version: iosParams.typography.typographyVersion
+                        fileName: iosParams.typography.stylesFileName,
+                        version: iosParams.typography.typographyVersion,
+                        format: .init(rawValue: iosParams.typography.format?.rawValue ?? "")
                     )
                 )
             }
@@ -122,6 +125,8 @@ extension FigmaExportCommand {
 
             let exporter = AndroidTypographyExporter(
                 outputDirectory: outputPatch,
+                colorsMatchRegexp: androidParams.typography?.colorsMatchRegexp,
+                strongMatchWithColors: androidParams.typography?.strongMatchWithColors,
                 attributes:  androidParams.typography?.attributes
             )
 

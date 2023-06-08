@@ -4,17 +4,32 @@ import Stencil
 
 final public class XcodeTypographyExporter {
 
+    public enum Format: String {
+        case swift
+        case json
+    }
+
     public init() {}
     
     public func exportStyles(
-        _ textStyles: [TextStyle], folderURL: URL, version: Int?) throws -> [FileContents] {
+        _ textStyles: [TextStyle],
+        folderURL: URL,
+        fileName: String?,
+        version: Int?,
+        format: Format?
+    ) throws -> [FileContents] {
 
         switch version {
         case 1:
             return try Version1.configureStyles(textStyles, folderURL: folderURL)
 
         case 2:
-            return try Version2.configureStyles(textStyles, folderURL: folderURL)
+            return try Version2.configureStyles(
+                textStyles,
+                folderURL: folderURL,
+                fileName: fileName,
+                format: format
+            )
 
         default:
             return try DefaultVersion.configureStyles(textStyles, folderURL: folderURL)

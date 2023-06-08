@@ -14,23 +14,32 @@ struct Params: Decodable {
         struct Colors: Decodable {
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
+            let ignoreBadNames: Bool?
         }
         
         struct Icons: Decodable {
             let nameValidateRegexp: String?
             let figmaFrameName: String?
             let nameReplaceRegexp: String?
+            let ignoreBadNames: Bool?
         }
         
         struct Images: Decodable {
             let nameValidateRegexp: String?
             let figmaFrameName: String?
             let nameReplaceRegexp: String?
+            let ignoreBadNames: Bool?
+        }
+
+        struct Dimensions: Decodable {
+            let figmaFrameName: String?
+            let componentNames: [String]?
         }
         
         let colors: Colors?
         let icons: Icons?
         let images: Images?
+        let dimensions: Dimensions?
     }
     
     enum VectorFormat: String, Decodable {
@@ -75,11 +84,25 @@ struct Params: Decodable {
         }
         
         struct Typography: Decodable {
+
+            enum Format: String, Decodable {
+                case swift
+                case json
+            }
+
             let typographyVersion: Int?
             let stylesDirectory: URL?
+            let stylesFileName: String?
+            let format: Format?
             let swiftUIFontSwift: URL?
             let generateComponents: Bool
             let componentsDirectory: URL?
+            
+        }
+
+        struct Dimensions: Decodable {
+            let dimensionsDirectory: URL
+            let dimensionsFileName: String?
         }
         
         let xcodeprojPath: String
@@ -92,6 +115,7 @@ struct Params: Decodable {
         let icons: Icons
         let images: Images
         let typography: Typography
+        let dimensions: Dimensions
     }
 
     struct Android: Decodable {
@@ -102,6 +126,8 @@ struct Params: Decodable {
         struct Typography: Decodable {
 
             let output: String
+            let colorsMatchRegexp: String?
+            let strongMatchWithColors: Bool?
             let attributes: [TypographyAttributes]?
         }
 
@@ -128,11 +154,16 @@ struct Params: Decodable {
             let output: String
         }
 
+        struct Dimensions: Decodable {
+            let output: String?
+        }
+
         let mainRes: URL
         let icons: Icons?
         let images: Images?
         let typography: Typography?
         let colors: Colors?
+        let dimensions: Dimensions?
     }
 
     let figma: Figma

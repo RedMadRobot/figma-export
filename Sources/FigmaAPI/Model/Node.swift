@@ -36,6 +36,7 @@ public struct Document: Decodable {
     public var name: String
     public let fills: [Paint]
     public let style: TypeStyle?
+    public let cornerRadius: Double?
 }
 
 public struct Paint: Decodable {

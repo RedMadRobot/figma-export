@@ -12,9 +12,19 @@ extension XcodeTypographyExporter {
 
     struct Version2 {
 
-        static func configureStyles(_ textStyles: [TextStyle], folderURL: URL) throws -> [FileContents] {
+        static func configureStyles(
+            _ textStyles: [TextStyle],
+            folderURL: URL,
+            fileName: String?,
+            format: Format?
+        ) throws -> [FileContents] {
             return [
-                try Version2SQFontStyle.configure(textStyles: textStyles, folderURL: folderURL)
+                try Version2SQFontStyle.configure(
+                    textStyles: textStyles,
+                    folderURL: folderURL,
+                    fileName: fileName,
+                    format: .init(rawValue: format?.rawValue ?? "")
+                )
             ]
         }
     }
