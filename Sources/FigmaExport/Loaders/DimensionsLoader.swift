@@ -7,10 +7,6 @@ final class DimensionsLoader {
     let figmaClient: FigmaClient
     let params: Params
 
-    private var componentsFrameName: String {
-        params.common?.dimensions?.figmaFrameName ?? "Components"
-    }
-
     init(figmaClient: FigmaClient, params: Params) {
         self.figmaClient = figmaClient
         self.params = params
@@ -31,10 +27,8 @@ final class DimensionsLoader {
 
     private func loadComponentNodeIds() throws -> [String] {
         let endpoint = ComponentsEndpoint(fileId: self.params.figma.lightFileId)
-        let whiteList = (self.params.common?.dimensions?.componentNames ?? [])
-            .map { $0.snakeCased() }
+        let whiteList = self.params.common?.dimensions?.componentNames ?? []
         return try figmaClient.request(endpoint)
-            .filter { $0.containingFrame.name == self.componentsFrameName }
             .filter {
                 let componentName = ($0.containingFrame.containingStateGroup?.name ?? $0.name).snakeCased()
                 return whiteList.contains(componentName)
