@@ -105,8 +105,14 @@ extension FigmaExportCommand {
                     target: iosParams.target
                 )
                 try files.forEach { file in
-                    if file.destination.file.pathExtension == "swift" {
+                    if file.destination.file.pathExtension == "swift"  {
                         try xcodeProject.addFileReferenceToXcodeProj(file.destination.url)
+                    }
+                    if file.destination.file.pathExtension == "json" {
+                        try xcodeProject.addFileReferenceToXcodeProj(
+                            file.destination.url,
+                            buildPhase: .resources
+                        )
                     }
                 }
                 try xcodeProject.save()

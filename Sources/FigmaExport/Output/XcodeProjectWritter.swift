@@ -39,7 +39,7 @@ final class XcodeProjectWritter {
         project = pbxproj.projects.first!
     }
     
-    func addFileReferenceToXcodeProj(_ url: URL) throws {
+    func addFileReferenceToXcodeProj(_ url: URL, buildPhase: BuildPhase = .sources) throws {
         var groups = url.pathComponents
             .filter { $0 != "." }
             .dropLast() as Array
@@ -76,7 +76,7 @@ final class XcodeProjectWritter {
         newFile?.fileEncoding = 4 // UTF-8
         newFile?.name = url.lastPathComponent
         
-        if let file = newFile, let buildPhase = myTarget.buildPhases.first(where: { $0.buildPhase == .sources }) {
+        if let file = newFile, let buildPhase = myTarget.buildPhases.first(where: { $0.buildPhase == buildPhase }) {
             _ = try buildPhase.add(file: file)
         }
         

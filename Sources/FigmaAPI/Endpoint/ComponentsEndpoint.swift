@@ -43,7 +43,7 @@ public struct Component: Codable {
 
 // MARK: - ContainingFrame
 public struct ContainingFrame: Codable {
-    public let nodeID: String?
+    public let nodeId: String?
     public let name: String?
     public let pageName: String
     public let containingStateGroup: ContainingStateGroup?

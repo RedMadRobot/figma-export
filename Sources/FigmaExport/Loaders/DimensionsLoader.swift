@@ -16,10 +16,22 @@ final class DimensionsLoader {
         let nodeIds = try self.loadComponentNodeIds()
         if nodeIds.isEmpty { return [] }
 
-        return try self.loadNodes(nodeIds: nodeIds).map { nodeId, node in
-            UIComponent(
+        let nodes = try self.loadNodes(nodeIds: nodeIds)
+        return nodes.map { nodeId, node in
+
+            var cornerRadius: Double?
+            if node.document.type == .sectionNodeType,
+               let firstChildrenNode = node.document.children?.first(
+                where: { $0.type == .componentNodeType }
+               ) {
+                cornerRadius = firstChildrenNode.cornerRadius
+            } else if node.document.type == .componentNodeType {
+                cornerRadius = node.document.cornerRadius
+            }
+
+            return UIComponent(
                 name: node.document.name,
-                cornerRadius: node.document.cornerRadius
+                cornerRadius: cornerRadius
             )
         }
 
@@ -28,19 +40,30 @@ final class DimensionsLoader {
     private func loadComponentNodeIds() throws -> [String] {
         let endpoint = ComponentsEndpoint(fileId: self.params.figma.lightFileId)
         let whiteList = self.params.common?.dimensions?.componentNames ?? []
-        return try figmaClient.request(endpoint)
-            .filter {
-                let componentName = ($0.containingFrame.containingStateGroup?.name ?? $0.name).snakeCased()
-                return whiteList.contains(componentName)
+        let result = try figmaClient.request(endpoint)
+        let nodeIds = result.compactMap {
+            if whiteList.contains($0.name.snakeCased()) {
+                return $0.nodeId
             }
-            .map {
-                $0.containingFrame.containingStateGroup?.nodeId ?? $0.nodeId
+
+            if let frameName = $0.containingFrame.name,
+               whiteList.contains(frameName.snakeCased()) {
+                return $0.containingFrame.nodeId
             }
-            .uniqued()
+
+            return nil
+        }
+        return nodeIds.uniqued()
     }
 
     private func loadNodes(nodeIds: [String]) throws -> [NodeId: Node] {
         let endpoint = NodesEndpoint(fileId: self.params.figma.lightFileId, nodeIds: nodeIds)
         return try figmaClient.request(endpoint)
     }
+}
+
+private extension String {
+
+    static let sectionNodeType = "SECTION"
+    static let componentNodeType = "COMPONENT"
 }
