@@ -31,12 +31,19 @@ struct Params: Decodable {
             let ignoreBadNames: Bool?
         }
 
+        struct Typography: Decodable {
+            let nameValidateRegexp: String?
+            let nameReplaceRegexp: String?
+            let weightToFontNameMappings: [String: [String: String]]?
+        }
+
         struct Dimensions: Decodable {
             let figmaFrameName: String?
             let componentNames: [String]?
         }
         
         let colors: Colors?
+        let typography: Typography?
         let icons: Icons?
         let images: Images?
         let dimensions: Dimensions?
