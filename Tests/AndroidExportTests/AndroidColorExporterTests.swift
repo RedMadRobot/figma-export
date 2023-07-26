@@ -30,7 +30,7 @@ final class AndroidColorExporterTests: XCTestCase {
     // MARK: - Setup
     
     func testExport() throws {
-        let exporter = AndroidColorExporter(output: output)
+        let exporter = AndroidColorExporter(output: output, xmlOutputFileName: nil)
 
         let result = try exporter.export(colorPairs: [colorPair1, colorPair2])
         XCTAssertEqual(result.count, 3)

@@ -64,6 +64,8 @@ android:
   colors:
     # [optional] The package to export the Jetpack Compose color code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
     composePackageName: "com.example"
+    # [optional] File name for XML file with exported colors (default is "colors.xml")
+    xmlOutputFileName: "colors.xml"
   # Parameters for exporting icons
   icons:
     # Where to place icons relative to `mainRes`? FigmaExport clears this directory every time your execute `figma-export icons` command
