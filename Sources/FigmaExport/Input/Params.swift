@@ -121,6 +121,7 @@ struct Params: Decodable {
             let composePackageName: String?
         }
         struct Colors: Decodable {
+            let xmlOutputFileName: String?
             let composePackageName: String?
         }
         struct Images: Decodable {

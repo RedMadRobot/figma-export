@@ -6,9 +6,11 @@ import PathKit
 final public class AndroidColorExporter: AndroidExporter {
 
     private let output: AndroidOutput
+    private let xmlOutputFileName: String
 
-    public init(output: AndroidOutput) {
+    public init(output: AndroidOutput, xmlOutputFileName: String?) {
         self.output = output
+        self.xmlOutputFileName = xmlOutputFileName ?? "colors.xml"
         super.init(templatesPath: output.templatesPath)
     }
     
@@ -45,7 +47,7 @@ final public class AndroidColorExporter: AndroidExporter {
         let contents = try makeColorsContents(colorPairs, dark: dark)
         
         let directoryURL = output.xmlOutputDirectory.appendingPathComponent(dark ? "values-night" : "values")
-        let fileURL = URL(string: "colors.xml")!
+        let fileURL = URL(string: xmlOutputFileName)!
         
         return try makeFileContents(for: contents, directory: directoryURL, file: fileURL)
     }
