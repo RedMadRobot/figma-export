@@ -218,7 +218,7 @@ extension FigmaExportCommand {
             }.map { fileContents -> String in
                 fileContents.destination.file.deletingPathExtension().lastPathComponent
             })
-            let composeFile = try composeExporter.exportIcons(iconNames: Array(composeIconNames))
+            let composeFile = try composeExporter.exportIcons(iconNames: Array(composeIconNames).sorted())
             composeFile.map { localFiles.append($0) }
 
             logger.info("Writing files to Android Studio project...")
