@@ -1,0 +1,36 @@
+workflows:
+  pr-check:
+    name: PR Check
+    triggering:
+      events:
+        - pull_request
+      cancel_previous_builds: true
+    when:
+      condition: not event.pull_request.draft
+    max_build_duration: 45
+    environment:
+      xcode: 15
+    scripts:
+      - name: Test
+        script: swift test
+
+  release:
+    name: Release from the fueled branch
+    max_build_duration: 45
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: fueled
+      cancel_previous_builds: true
+    environment:
+      xcode: 15
+      groups:
+        - project-secrets
+    scripts:
+      - name: Project Setup
+        script: |
+          gem install bundler
+          bundle install
+      - name: Run Fastlane
+        script: bundle exec fastlane mac release --env release

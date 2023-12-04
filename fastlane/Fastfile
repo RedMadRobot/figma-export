@@ -1,0 +1,79 @@
+fastlane_version '2.206.0'
+opt_out_usage
+
+platform :mac do
+  lane :release do
+    asset_path = File.join(Dir.pwd, "figma-export.zip")
+    sh("swift build --configuration release")
+    sh("zip #{asset_path} ../.build/arm64-apple-macosx/release/figma-export")
+
+    current_short_version = short_version_from_tag
+    puts "current_short_version: #{current_short_version}"
+
+    new_short_version = bump_semver(semver: current_short_version, bump_type: ENV["VERSION_BUMP_TYPE"])
+    puts "new_short_version: #{new_short_version}"
+
+    use_git_credential_store
+
+    tag_name = "v#{new_short_version}"
+    UI.message("Tagging #{tag_name}...")
+    sh("git tag -f \"#{tag_name}\" && git push origin \"refs/tags/#{tag_name}\" --force")
+
+    last_commit_message = sh("git log -1 --pretty=%B").strip
+
+    set_github_release(
+      repository_name: ENV["REPOSITORY_NAME"],
+      api_bearer: ENV["GIT_TOKEN"],
+      name: tag_name,
+      tag_name: tag_name,
+      description: last_commit_message,
+      upload_assets: [
+        asset_path
+      ]
+    )
+  end
+
+  # Returns the current short version, only by reading the last tag.
+  private_lane :short_version_from_tag do
+    UI.important("Setting short_version from most recent tag")
+    last_tag = fetch_last_tag
+    last_tag = (last_tag.nil? || last_tag.empty?) ?  "v0.0.0" : last_tag
+    last_tag[1..-1]
+  end
+
+  # Returns the last tag in the repo
+  private_lane :fetch_last_tag do |options|
+    tag = nil
+    git_cmd = "git tag -l --sort=-v:refname | grep -iF '' -m 1"
+    begin
+      tag = sh(git_cmd)
+    rescue FastlaneCore::Interface::FastlaneShellError
+    end
+    tag
+  end
+
+  # Bump a given semver version, by incrementing the appropriate
+  # component, as per the bump_type (patch, minor, major, or none).
+  private_lane :bump_semver do |options|
+    semver = options[:semver]
+    bump_type = options[:bump_type]
+
+    splitted_version = {
+        major: semver.split('.').map(&:to_i)[0] || 0,
+        minor: semver.split('.').map(&:to_i)[1] || 0,
+        patch: semver.split('.').map(&:to_i)[2] || 0
+      }
+    case bump_type
+    when "patch"
+      splitted_version[:patch] = splitted_version[:patch] + 1
+    when "minor"
+      splitted_version[:minor] = splitted_version[:minor] + 1
+      splitted_version[:patch] = 0
+    when "major"
+      splitted_version[:major] = splitted_version[:major] + 1
+      splitted_version[:minor] = 0
+      splitted_version[:patch] = 0
+    end
+    [splitted_version[:major], splitted_version[:minor], splitted_version[:patch]].map(&:to_s).join('.')
+  end
+end

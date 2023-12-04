@@ -1,0 +1,1 @@
+gem 'fastlane-plugin-fueled', git: "https://github.com/Fueled/fastlane-plugin-fueled", tag: '0.3.0'
