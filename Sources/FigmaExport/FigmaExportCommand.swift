@@ -6,6 +6,7 @@ enum FigmaExportError: LocalizedError {
     
     case invalidFileName(String)
     case stylesNotFound
+    case stylesNotFoundLocally
     case componentsNotFound
     case accessTokenNotFound
     case colorsAssetsFolderNotSpecified
@@ -13,6 +14,8 @@ enum FigmaExportError: LocalizedError {
     
     var errorDescription: String? {
         switch self {
+        case .stylesNotFoundLocally:
+            return "Color styles not found locally. Did you specify the correct path, or have the correct file structure?"
         case .invalidFileName(let name):
             return "File name is invalid: \(name)"
         case .stylesNotFound:
