@@ -7,39 +7,48 @@ extension Color {
     ///   - name:
     ///   - value:
     public init?(name: String, value: String) {
-        if value.hasPrefix("#") {
-            self.init(name: name, hex: value)
-        } else if value.hasPrefix("rgba") {
-            self.init(name: name, rgbaString: value)
-        } else {
+        guard let color = ColorDecoder.paintColor(fromString: value) else {
             return nil
         }
+        
+        self.init(name: name,
+                  red: color.r,
+                  green: color.g,
+                  blue: color.b,
+                  alpha: color.a)
     }
+}
 
-    private init?(name: String, hex: String) {
-        let r, g, b: Double
+struct ColorDecoder {
+    
+    static func paintColor(fromString string: String) -> PaintColor? {
+        if string.hasPrefix("#") {
+            return paintColor(fromHex: string)
+        } else if string.hasPrefix("rgba") {
+            return paintColor(fromRgba: string)
+        }
+        return nil
+    }
+    
+    private static func paintColor(fromHex hex: String) -> PaintColor? {
         let start = hex.index(hex.startIndex, offsetBy: hex.hasPrefix("#") ? 1 : 0)
         let hexColor = String(hex[start...])
 
-        if hexColor.count == 6 {
-            let scanner = Scanner(string: hexColor)
-            var hexNumber: UInt64 = 0
-
-            if scanner.scanHexInt64(&hexNumber) {
-                r = Double((hexNumber & 0xff0000) >> 16) / 255
-                g = Double((hexNumber & 0x00ff00) >> 8) / 255
-                b = Double(hexNumber & 0x0000ff) / 255
-
-                self.init(name: name, red: r, green: g, blue: b, alpha: 1)
-                return
-            }
+        let scanner = Scanner(string: hexColor)
+        var hexNumber: UInt64 = 0
+        
+        guard hexColor.count == 6, scanner.scanHexInt64(&hexNumber) else {
+            return nil
         }
-
-        return nil
+        
+        return PaintColor(r: Double((hexNumber & 0xff0000) >> 16) / 255,
+                          g: Double((hexNumber & 0x00ff00) >> 8) / 255,
+                          b: Double(hexNumber & 0x0000ff) / 255,
+                          a: 1)
     }
-
-    private init?(name: String, rgbaString: String) {
-        let components = rgbaString
+    
+    private static func paintColor(fromRgba rgba: String) -> PaintColor? {
+        let components = rgba
             .replacingOccurrences(of: "rgba(", with: "")
             .replacingOccurrences(of: ")", with: "")
             .split(separator: ",")
@@ -47,6 +56,13 @@ extension Color {
 
         guard components.count == 4 else { return nil }
 
-        self.init(name: name, red: components[0] / 255, green: components[1] / 255, blue: components[2] / 255, alpha: components[3])
+        return PaintColor(r: components[0] / 255,
+                          g: components[1] / 255,
+                          b: components[2] / 255,
+                          a: components[3])
+    }
+    
+    public struct PaintColor: Decodable {
+        public let r, g, b, a: Double
     }
 }
