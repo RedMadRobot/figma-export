@@ -24,8 +24,7 @@ final class JSONColorsLoader {
     
     static func processSchemeColors(in node: Any, path: [String] = []) -> [Color] {
         // Check if the node contains a color value
-        if let color = node as? [String: String], let value = color["value"] {
-            let name = path.joined(separator: "_")
+        if let color = node as? [String: String], let value = color["value"], let name = path.last {
             if let def = Color(name: name, value: value) {
                 return [def]
             } else {
