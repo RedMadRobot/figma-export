@@ -66,7 +66,7 @@ final class TextStylesLoader {
         guard let familyMapping = mappings[fontFamily] ?? mappings["default"],
               let fontWeightName = familyMapping[fontWeight] else { return fontFamily }
 
-        return "\(fontFamily)-\(fontWeightName)"
+        return "\(fontFamily.replacingOccurrences(of: " ", with: ""))-\(fontWeightName)"
 
     }
 }
