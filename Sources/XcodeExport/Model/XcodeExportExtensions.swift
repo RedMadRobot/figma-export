@@ -49,7 +49,7 @@ extension XcodeAssetContents {
 
     func makeFileContents(to directory: URL) throws -> FileContents {
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 
         let data = try encoder.encode(self)
         let fileURL = URL(string: "Contents.json")!
