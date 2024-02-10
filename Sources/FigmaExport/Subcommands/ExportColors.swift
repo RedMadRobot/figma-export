@@ -25,14 +25,8 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
-            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
-
-            logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
-
-            logger.info("Fetching colors. Please wait...")
-            let loader = ColorsLoader(client: client, figmaParams: options.params.figma, colorParams: options.params.common?.colors)
-            let colors = try loader.load(filter: filter)
-
+            let colors = try getColors()
+            
             if let ios = options.params.ios {
                 logger.info("Processing colors...")
                 let processor = ColorsProcessor(
@@ -77,6 +71,42 @@ extension FigmaExportCommand {
                 
                 logger.info("Done!")
             }
+        }
+        
+        private func getColors() throws -> ColorsLoader.Output {
+            logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
+
+            if options.params.common?.colors?.useVariablesFromFileInstead ?? false {
+                return try loadFromJsonFile()
+            } else {
+                return try loadFromFigma()
+            }
+        }
+        
+        private func loadFromFigma() throws -> ColorsLoader.Output {
+            logger.info("Fetching colors. Please wait...")
+            
+            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
+            let loader = ColorsLoader(
+                client: client,
+                figmaParams: options.params.figma,
+                colorParams: options.params.common?.colors)
+            
+            return try loader.load(filter: filter)
+        }
+        
+        private func loadFromJsonFile() throws -> JSONColorsLoader.Output {
+            let colorParams = options.params.common?.colors
+            guard
+                let fileName = colorParams?.variableFilePath,
+                let groupName = colorParams?.variableGroupName
+            else {
+                throw FigmaExportError.componentsNotFound
+            }
+            
+            let dataReader = JSONReader(inputPath: fileName)
+            let styles = try dataReader.read()
+            return try JSONColorsLoader.processColors(in: styles, groupName: groupName)
         }
 
         private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS) throws {

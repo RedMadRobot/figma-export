@@ -38,6 +38,12 @@ common:
     lightHCModeSuffix: '_lightHC'
     # [optional] If useSingleFile is true, customize the suffix to denote a dark high contrast color. Defaults to '_darkHC'
     darkHCModeSuffix: '_darkHC'
+    # [optional] Set this to true and instead of loading Styles from Figma you can specify a variable json path `variableFilePath` to read from instead
+    useVariablesFromFileInstead: false
+    # [optional] The local path to read the variables from if `useVariablesFromFileInstead` is `true`
+    variableFilePath: 'variables.json'
+    # [optional] If `useVariablesFromFileInstead` is `true`, this should be set to specify the root group of JSON variables to decode 
+    variableGroupName: 'colors'
   # [optional]
   icons:
     # [optional] Name of the Figma's frame where icons components are located
