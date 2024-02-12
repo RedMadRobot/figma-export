@@ -45,9 +45,16 @@ extension FigmaExportCommand {
                 return
             }
 
-            if let ios = params.ios {
+            if let ios = params.ios,
+               let dimensions = ios.dimensions {
+
                 logger.info("Exporting dimensions to Xcode project...")
-                try exportXcodeDimensions(components: components, iosParams: ios, logger: logger)
+                try exportXcodeDimensions(
+                    components: components,
+                    iosParams: ios,
+                    dimensions: dimensions,
+                    logger: logger
+                )
                 logger.info("Done!")
             }
             if let android = params.android {
@@ -58,13 +65,18 @@ extension FigmaExportCommand {
             }
         }
 
-        private func exportXcodeDimensions(components: [UIComponent], iosParams: Params.iOS, logger: Logger) throws {
+        private func exportXcodeDimensions(
+            components: [UIComponent],
+            iosParams: Params.iOS,
+            dimensions: Params.iOS.Dimensions,
+            logger: Logger
+        ) throws {
 
             let exporter = XcodeDimensionsExporter()
             let file = try exporter.export(
                 components,
-                folderURL: iosParams.dimensions.dimensionsDirectory,
-                fileName: iosParams.dimensions.dimensionsFileName
+                folderURL: dimensions.dimensionsDirectory,
+                fileName: dimensions.dimensionsFileName
             )
 
             try fileWritter.write(files: [file])

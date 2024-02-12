@@ -122,7 +122,7 @@ struct Params: Decodable {
         let icons: Icons
         let images: Images
         let typography: Typography
-        let dimensions: Dimensions
+        let dimensions: Dimensions?
     }
 
     struct Android: Decodable {
