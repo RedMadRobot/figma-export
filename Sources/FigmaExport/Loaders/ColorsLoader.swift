@@ -37,29 +37,39 @@ final class ColorsLoader {
                                                                       lightHC: [Color]?,
                                                                       darkHC: [Color]?) {
         let colors = try loadColors(fileId: figmaParams.lightFileId, filter: filter)
-        
-        let darkSuffix = colorParams?.darkModeSuffix ?? "_dark"
+
+        let lightPrefix = colorParams?.lightModePrefix
+        let darkPrefix = colorParams?.darkModePrefix
+        let lightSuffix = colorParams?.lightModeSuffix
+        let darkSuffix = colorParams?.darkModeSuffix
+        let lightHCPrefix = colorParams?.lightHCModePrefix ?? "lightHC_"
+        let darkHCPrefix = colorParams?.darkHCModePrefix ?? "darkHC_"
         let lightHCSuffix = colorParams?.lightHCModeSuffix ?? "_lightHC"
         let darkHCSuffix = colorParams?.darkHCModeSuffix ?? "_darkHC"
 
-        let lightColors = colors
-            .filter {
-                !$0.name.hasSuffix(darkSuffix) &&
-                !$0.name.hasSuffix(lightHCSuffix) &&
-                !$0.name.hasSuffix(darkHCSuffix)
-            }
-        let darkColors = filteredColors(colors, suffix: darkSuffix)
-        let lightHCColors = filteredColors(colors, suffix: lightHCSuffix)
-        let darkHCColors = filteredColors(colors, suffix: darkHCSuffix)
+        let lightColors = filteredColors(colors, prefix: lightPrefix, suffix: lightSuffix)
+        let darkColors = filteredColors(colors, prefix: darkPrefix, suffix: darkSuffix)
+        let lightHCColors = filteredColors(colors, prefix: lightHCPrefix, suffix: lightHCSuffix)
+        let darkHCColors = filteredColors(colors, prefix: darkHCPrefix, suffix: darkHCSuffix)
         return (lightColors, darkColors, lightHCColors, darkHCColors)
     }
 
-    private func filteredColors(_ colors: [Color], suffix: String) -> [Color] {
+    private func filteredColors(_ colors: [Color], prefix: String?, suffix: String?) -> [Color] {
         let filteredColors = colors
-            .filter { $0.name.hasSuffix(suffix) }
+            .filter {
+                if let prefix, let suffix {
+                    return $0.name.hasPrefix(prefix) && $0.name.hasSuffix(suffix)
+                } else if let prefix {
+                    return $0.name.hasPrefix(prefix)
+                } else if let suffix {
+                    return $0.name.hasSuffix(suffix)
+                } else {
+                    return true
+                }
+            }
             .map { color -> Color in
                 var newColor = color
-                newColor.name = String(color.name.dropLast(suffix.count))
+                newColor.name = String(color.name.dropFirst(prefix?.count ?? 0).dropLast(suffix?.count ?? 0))
                 return newColor
             }
         return filteredColors

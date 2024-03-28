@@ -18,7 +18,12 @@ struct Params: Decodable {
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
             let useSingleFile: Bool?
+            let lightModePrefix: String?
+            let darkModePrefix: String?
+            let lightModeSuffix: String?
             let darkModeSuffix: String?
+            let lightHCModePrefix: String?
+            let darkHCModePrefix: String?
             let lightHCModeSuffix: String?
             let darkHCModeSuffix: String?
         }
