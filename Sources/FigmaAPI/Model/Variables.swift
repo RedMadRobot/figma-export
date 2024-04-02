@@ -4,14 +4,14 @@ public struct Mode: Decodable {
 }
 
 public struct VariableCollectionId: Decodable {
-    public var name: String
-    public var key: String
-    public var remote: Bool
     public var defaultModeId: String
-    public var modes: [Mode]
     public var id: String
-    public var variableIds: [String]
+    public var name: String
+    public var remote: Bool
+    public var modes: [Mode]
+    public var key: String
     public var hiddenFromPublishing: Bool
+    public var variableIds: [String]
 }
 
 public enum ResolvedType: String, Decodable {

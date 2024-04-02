@@ -11,7 +11,7 @@ Specification of `figma-export.yaml` file with all the available options:
 ```yaml
 ---
 figma:
-  # Identifier of the file containing light color palette, icons and light images. To obtain a file id, open the file in the browser. The file id will be present in the URL after the word file and before the file name.
+  # [required] Identifier of the file containing light color palette, icons and light images. To obtain a file id, open the file in the browser. The file id will be present in the URL after the word file and before the file name.
   lightFileId: shPilWnVdJfo10YF12345
   # [optional] Identifier of the file containing dark color palette and dark images.
   darkFileId: KfF6DnJTWHGZzC912345
@@ -38,6 +38,26 @@ common:
     lightHCModeSuffix: '_lightHC'
     # [optional] If useSingleFile is true, customize the suffix to denote a dark high contrast color. Defaults to '_darkHC'
     darkHCModeSuffix: '_darkHC'
+  # [optional]
+  variablesColors:
+    # [optional] Identifier of the file containing primitives color components
+    primitivesFileId: KfF6DnJTWHGZzC912345
+    # [optional] Name of the column containing color variables in the primitive table. If a value is not specified, the default values ​​will be taken
+    primitivesCollectionName: Collection_1
+    # [required] Identifier of the file containing tokens color components
+    tokensFileId: shPilWnVdJfo10YF12345
+    # [required] Name of the column containing light color variables in the tokens table
+    tokensLightCollectionName: Light
+    # [optional] Name of the column containing dark color variables in the tokens table
+    tokensDarkCollectionName: Dark
+    # [optional] Name of the column containing light high contrast color variables in the tokens table
+    tokensLightHCCollectionName: Contast Light
+    # [optional] Name of the column containing dark high contrast color variables in the tokens table
+    tokensDarkHCCollectionName: Contast Dark
+    # [optional] RegExp pattern for color name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
+    nameValidateRegexp: '^([a-zA-Z_]+)$'
+    # [optional] RegExp pattern for replacing. Supports only $n
+    nameReplaceRegexp: 'color_$1'
   # [optional]
   icons:
     # [optional] Name of the Figma's frame where icons components are located

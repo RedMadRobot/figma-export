@@ -25,20 +25,46 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
-            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
-
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
-
             logger.info("Fetching colors. Please wait...")
-            let loader = ColorsLoader(client: client, figmaParams: options.params.figma, colorParams: options.params.common?.colors)
-            let colors = try loader.load(filter: filter)
+
+            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
+            let commonParams = options.params.common
+
+            if commonParams?.colors != nil, commonParams?.variablesColors != nil {
+                throw FigmaExportError.custom(errorString: "In the configuration file, you can use either the common/colors or common/variablesColors parameter")
+            }
+
+            let figmaParams = options.params.figma
+            var colors: ColorsLoaderOutput?
+            var loader: ColorsLoaderProtocol
+            var nameValidateRegexp: String?
+            var nameReplaceRegexp: String?
+
+            if let colorParams = commonParams?.colors {
+                loader = ColorsLoader(client: client, figmaParams: figmaParams, colorParams: colorParams)
+                colors = try loader.load(filter: filter)
+                
+                nameValidateRegexp = options.params.common?.colors?.nameValidateRegexp
+                nameReplaceRegexp = options.params.common?.colors?.nameReplaceRegexp
+            } else if let variableParams = commonParams?.variablesColors {
+                loader = ColorsVariablesLoader(client: client, figmaParams: figmaParams, variableParams: variableParams)
+                colors = try loader.load(filter: filter)
+
+                nameValidateRegexp = options.params.common?.variablesColors?.nameValidateRegexp
+                nameReplaceRegexp = options.params.common?.variablesColors?.nameReplaceRegexp
+            }
+
+            guard let colors else {
+                throw FigmaExportError.custom(errorString: "Failed to load colors from Figma")
+            }
 
             if let ios = options.params.ios {
                 logger.info("Processing colors...")
                 let processor = ColorsProcessor(
                     platform: .ios,
-                    nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
-                    nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
+                    nameValidateRegexp: nameValidateRegexp,
+                    nameReplaceRegexp: nameReplaceRegexp,
                     nameStyle: options.params.ios?.colors?.nameStyle
                 )
                 let colorPairs = processor.process(light: colors.light,
@@ -61,8 +87,8 @@ extension FigmaExportCommand {
                 logger.info("Processing colors...")
                 let processor = ColorsProcessor(
                     platform: .android,
-                    nameValidateRegexp: options.params.common?.colors?.nameValidateRegexp,
-                    nameReplaceRegexp: options.params.common?.colors?.nameReplaceRegexp,
+                    nameValidateRegexp: nameValidateRegexp,
+                    nameReplaceRegexp: nameReplaceRegexp,
                     nameStyle: .snakeCase
                 )
                 let colorPairs = processor.process(light: colors.light, dark: colors.dark)

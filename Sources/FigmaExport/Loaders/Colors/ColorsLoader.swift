@@ -2,8 +2,8 @@ import FigmaAPI
 import FigmaExportCore
 
 /// Loads colors from Figma
-final class ColorsLoader {
-    
+final class ColorsLoader: ColorsLoaderProtocol {
+
     private let client: Client
     private let figmaParams: Params.Figma
     private let colorParams: Params.Common.Colors?
@@ -14,17 +14,14 @@ final class ColorsLoader {
         self.colorParams = colorParams
     }
 
-    func load(filter: String?) throws -> (light: [Color], dark: [Color]?, lightHC: [Color]?, darkHC: [Color]?) {
+    func load(filter: String?) throws -> ColorsLoaderOutput {
         guard let useSingleFile = colorParams?.useSingleFile, useSingleFile else {
             return try loadColorsFromLightAndDarkFile(filter: filter)
         }
         return try loadColorsFromSingleFile(filter: filter)
     }
 
-    private func loadColorsFromLightAndDarkFile(filter: String?) throws -> (light: [Color],
-                                                                            dark: [Color]?,
-                                                                            lightHC: [Color]?,
-                                                                            darkHC: [Color]?) {
+    private func loadColorsFromLightAndDarkFile(filter: String?) throws -> ColorsLoaderOutput {
         let lightColors = try loadColors(fileId: figmaParams.lightFileId, filter: filter)
         let darkColors = try figmaParams.darkFileId.map { try loadColors(fileId: $0, filter: filter) }
         let lightHighContrastColors = try figmaParams.lightHighContrastFileId.map { try loadColors(fileId: $0, filter: filter) }
@@ -32,10 +29,7 @@ final class ColorsLoader {
         return (lightColors, darkColors, lightHighContrastColors, darkHighContrastColors)
     }
 
-    private func loadColorsFromSingleFile(filter: String?) throws -> (light: [Color],
-                                                                      dark: [Color]?,
-                                                                      lightHC: [Color]?,
-                                                                      darkHC: [Color]?) {
+    private func loadColorsFromSingleFile(filter: String?) throws -> ColorsLoaderOutput {
         let colors = try loadColors(fileId: figmaParams.lightFileId, filter: filter)
         
         let darkSuffix = colorParams?.darkModeSuffix ?? "_dark"

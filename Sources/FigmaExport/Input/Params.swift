@@ -25,14 +25,15 @@ struct Params: Decodable {
         }
 
         struct VariablesColors: Decodable {
-            let colorPrimitivesFileId: String?
-            let colorPrimitivesColumnName: String?
+            let tokensFileId: String
+            let tokensCollectionName: String
 
-            let colorTokensFileId: String
-            let colorTokensLightColumnName: String
-            let colorTokensDarkColumnName: String?
-            let colorTokensLightHCColumnName: String?
-            let colorTokensDarkHCColumnName: String?
+            let lightModeName: String
+            let darkModeName: String?
+            let lightHCModeName: String?
+            let darkHCModeName: String?
+
+            let primitivesModeName: String?
 
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
