@@ -14,6 +14,7 @@ struct Params: Decodable {
     }
 
     struct Common: Decodable {
+
         struct Colors: Decodable {
             let nameValidateRegexp: String?
             let nameReplaceRegexp: String?
@@ -21,6 +22,20 @@ struct Params: Decodable {
             let darkModeSuffix: String?
             let lightHCModeSuffix: String?
             let darkHCModeSuffix: String?
+        }
+
+        struct VariablesColors: Decodable {
+            let colorPrimitivesFileId: String?
+            let colorPrimitivesColumnName: String?
+
+            let colorTokensFileId: String
+            let colorTokensLightColumnName: String
+            let colorTokensDarkColumnName: String?
+            let colorTokensLightHCColumnName: String?
+            let colorTokensDarkHCColumnName: String?
+
+            let nameValidateRegexp: String?
+            let nameReplaceRegexp: String?
         }
 
         struct Icons: Decodable {
@@ -45,6 +60,7 @@ struct Params: Decodable {
         }
 
         let colors: Colors?
+        let variablesColors: VariablesColors?
         let icons: Icons?
         let images: Images?
         let typography: Typography?
