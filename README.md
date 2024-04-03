@@ -504,26 +504,26 @@ For `figma-export colors`
 
 **Important, in [CONFIG.md](CONFIG.md) use either colors or variablesColors.**
 
-With the introduction of color variables in Figma, you can use color variables instead of color styles. To do this in Figma, you need to create color variables and use them in color styles. Color variables can be used in figma-export, for this in [CONFIG.md](CONFIG.md) you need to use the `variablesColors` variable instead of `colors`.
+With the introduction of color variables in Figma, you can use color variables instead of color styles. Color variables can be used in figma-export, for this in [CONFIG.md](CONFIG.md) you need to use the `variablesColors` variable instead of `colors`.
 
-The value of variables can be either the final color value or another variable. For example, the `Primary` variable can contain the value `#FFFFFF`, and the `Secondary` variable can contain the value `Pand/90`.
-
-A collection of variables can contain color variables located in one file, as well as color variables located in different files through links. This is done to limit visibility and show only color tokens when designers are working together.
+The value of variables can be either the final color value or another variable. For example, the `Primary` variable can contain the value `#FFFFFF`, and the `Secondary` variable can contain the value `Pand/90`. Figma-export can work with any depth of variable nesting. You can specify the `primitivesModeName` parameter to indicate the mode for the final table with your primitives, if the parameter is not specified, the default value will be used.
 
 Example:
 
 <img src="images/figma_colors_tokens.png" width="1024" />
 
-1. tokensLightCollectionName - the name of the color variable collection for the light theme
-2. tokensDarkCollectionName - the name of the color variable collection for the dark theme
-3. tokensLightHCCollectionName - the name of the color variable collection for the light theme with high contrast
-4. tokensDarkHCCollectionName - the name of the color variable collection for the dark theme with high contrast
-5. A variable that refers to another variable in a different file
+1. tokensCollectionName - the name of the variable collection
+2. lightModeName - the name of the color variable column for the light theme
+3. darkModeName - the name of the color variable column for the dark theme
+4. lightHCModeName - the name of the color variable column for the light theme with high contrast
+5. darkHCModeName - the name of the color variable column for the dark theme with high contrast
 6. A variable that has a local value
+7. A variable that refers to another variable in a different file
 
 <img src="images/figma_colors_primitives.png" width="352" />
 
-1. primitivesCollectionName - the name of the variable collection, if the value in [CONFIG.md](CONFIG.md) is not specified, the default value will be used
+1. primitivesModeName - the name of the variable column, if the value in [CONFIG.md](CONFIG.md) is not specified, the default value will be used
+2. A variable that has a local value
 
 See [CONFIG.md](CONFIG.md) for more information in the variablesColors section.
 

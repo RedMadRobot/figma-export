@@ -40,20 +40,20 @@ common:
     darkHCModeSuffix: '_darkHC'
   # [optional]
   variablesColors:
-    # [optional] Identifier of the file containing primitives color components
-    primitivesFileId: KfF6DnJTWHGZzC912345
-    # [optional] Name of the column containing color variables in the primitive table. If a value is not specified, the default values ​​will be taken
-    primitivesCollectionName: Collection_1
-    # [required] Identifier of the file containing tokens color components
+    # [required] Identifier of the file containing variables
     tokensFileId: shPilWnVdJfo10YF12345
+    # [required] Variables collection name
+    tokensCollectionName: Base collection
     # [required] Name of the column containing light color variables in the tokens table
-    tokensLightCollectionName: Light
+    lightModeName: Light
     # [optional] Name of the column containing dark color variables in the tokens table
-    tokensDarkCollectionName: Dark
+    darkModeName: Dark
     # [optional] Name of the column containing light high contrast color variables in the tokens table
-    tokensLightHCCollectionName: Contast Light
+    lightHCModeName: Contast Light
     # [optional] Name of the column containing dark high contrast color variables in the tokens table
-    tokensDarkHCCollectionName: Contast Dark
+    darkHCModeName: Contast Dark
+    # [optional] Name of the column containing color variables in the primitive table. If a value is not specified, the default values ​​will be taken
+    primitivesModeName: Collection_1
     # [optional] RegExp pattern for color name validation before exporting. If a name contains "/" symbol it will be replaced by "_" before executing the RegExp
     nameValidateRegexp: '^([a-zA-Z_]+)$'
     # [optional] RegExp pattern for replacing. Supports only $n
