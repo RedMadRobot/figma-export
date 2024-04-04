@@ -59,7 +59,10 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
 
         var colors = Colors()
         func handleColorMode(variable: Variable, mode: ValuesByMode?, colorsArray: inout [Color]) {
-            if case let .variableAlias(variableAlias) = mode {
+            if case let .color(color) = mode {
+               guard doesColorMatchFilter(from: variable, filter: filter) else { return }
+               colorsArray.append(createColor(from: variable, color: color))
+           } else if case let .variableAlias(variableAlias) = mode {
                 guard
                     let variableMeta = meta.variables[variableAlias.id],
                     let variableCollectionId = meta.variableCollections[variableMeta.variableCollectionId]
@@ -67,15 +70,7 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
                 let modeId = variableCollectionId.modes
                     .filter { $0.name == primitivesModeName }
                     .first?.modeId ?? variableCollectionId.defaultModeId
-                if case let .color(color) = variableMeta.valuesByMode[modeId] {
-                    guard doesColorMatchFilter(from: variable, filter: filter) else { return }
-                    colorsArray.append(createColor(from: variable, color: color))
-                } else {
-                    handleColorMode(variable: variable, mode: mode, colorsArray: &colorsArray)
-                }
-            } else if case let .color(color) = mode {
-                guard doesColorMatchFilter(from: variable, filter: filter) else { return }
-                colorsArray.append(createColor(from: variable, color: color))
+               handleColorMode(variable: variable, mode: variableMeta.valuesByMode[modeId], colorsArray: &colorsArray)
             }
         }
         variables.forEach { value in
