@@ -1,85 +1,40 @@
 import FigmaAPI
 import FigmaExportCore
 
-/// Loads variables colors from Figma
+/// Loads color variables from Figma
 final class ColorsVariablesLoader: ColorsLoaderProtocol {
     private let client: Client
     private let variableParams: Params.Common.VariablesColors?
+    private let filter: String?
 
-    init(client: Client, figmaParams: Params.Figma, variableParams: Params.Common.VariablesColors?) {
+    init(
+        client: Client,
+        figmaParams: Params.Figma,
+        variableParams: Params.Common.VariablesColors?,
+        filter: String?
+    ) {
         self.client = client
         self.variableParams = variableParams
+        self.filter = filter
     }
 
-    func load(filter: String?) throws -> ColorsLoaderOutput {
+    func load() throws -> ColorsLoaderOutput {
         guard
             let tokensFileId = variableParams?.tokensFileId,
             let tokensCollectionName = variableParams?.tokensCollectionName
-        else { throw FigmaExportError.custom(errorString: "tokensFileId or tokensLightCollectionName is nil") }
+        else { throw FigmaExportError.custom(errorString: "tokensFileId is nil") }
 
-        return try loadProcess(
-            colorTokensFileId: tokensFileId,
-            tokensCollectionName: tokensCollectionName,
-            filter: filter
-        )
-    }
+        let meta = try loadVariables(fileId: tokensFileId)
 
-    private func loadProcess(
-        colorTokensFileId: String,
-        tokensCollectionName: String,
-        filter: String?
-    ) throws -> ColorsLoaderOutput {
-        // Load variables
-        let meta = try loadVariables(fileId: colorTokensFileId)
+        guard let tokenCollection = meta.variableCollections.first(where: { $0.value.name == tokensCollectionName })
+        else { throw FigmaExportError.custom(errorString: "tokensCollectionName not found" ) }
 
-        guard let tokenCollection = meta.variableCollections.filter({ $0.value.name == tokensCollectionName }).first
-        else { throw FigmaExportError.custom(errorString: "tokensCollectionName is nil") }
-
-        let tokensId = tokenCollection.value.variableIds
-        let modeIds = extractModeIds(from: tokenCollection.value)
-        let primitivesModeName = variableParams?.primitivesModeName
-
-        let variables: [Variable] = tokensId.compactMap { tokenId in
-            guard let variableMeta = meta.variables[tokenId]
-            else { return nil }
-
-            let values = Values(
-                light: variableMeta.valuesByMode[modeIds.lightModeId],
-                dark: variableMeta.valuesByMode[modeIds.darkModeId],
-                lightHC: variableMeta.valuesByMode[modeIds.lightHCModeId],
-                darkHC: variableMeta.valuesByMode[modeIds.darkHCModeId]
-            )
-
-            return Variable(
-                name: variableMeta.name,
-                description: variableMeta.description,
-                valuesByMode: values
-            )
+        let variables: [Variable] = tokenCollection.value.variableIds.compactMap { tokenId in
+            guard let variableMeta = meta.variables[tokenId] else { return nil }
+            return mapVariableMetaToVariable(variableMeta: variableMeta, modeIds: extractModeIds(from: tokenCollection.value))
         }
 
-        var colors = Colors()
-        func handleColorMode(variable: Variable, mode: ValuesByMode?, colorsArray: inout [Color]) {
-            if case let .color(color) = mode {
-               guard doesColorMatchFilter(from: variable, filter: filter) else { return }
-               colorsArray.append(createColor(from: variable, color: color))
-           } else if case let .variableAlias(variableAlias) = mode {
-                guard
-                    let variableMeta = meta.variables[variableAlias.id],
-                    let variableCollectionId = meta.variableCollections[variableMeta.variableCollectionId]
-                else { return }
-                let modeId = variableCollectionId.modes
-                    .filter { $0.name == primitivesModeName }
-                    .first?.modeId ?? variableCollectionId.defaultModeId
-               handleColorMode(variable: variable, mode: variableMeta.valuesByMode[modeId], colorsArray: &colorsArray)
-            }
-        }
-        variables.forEach { value in
-            handleColorMode(variable: value, mode: value.valuesByMode.light, colorsArray: &colors.lightColors)
-            handleColorMode(variable: value, mode: value.valuesByMode.dark, colorsArray: &colors.darkColors)
-            handleColorMode(variable: value, mode: value.valuesByMode.lightHC, colorsArray: &colors.lightHCColors)
-            handleColorMode(variable: value, mode: value.valuesByMode.darkHC, colorsArray: &colors.darkHCColors)
-        }
-        return (colors.lightColors, colors.darkColors, colors.lightHCColors, colors.darkHCColors)
+        return mapVariablesToColorOutput(variables: variables, meta: meta)
     }
 
     private func loadVariables(fileId: String) throws -> VariablesEndpoint.Content {
@@ -89,24 +44,98 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
 
     private func extractModeIds(from collections: Dictionary<String, VariableCollectionId>.Values.Element) -> ModeIds {
         var modeIds = ModeIds()
-        collections.modes.forEach {
-            switch $0.name {
+        collections.modes.forEach { mode in
+            switch mode.name {
             case variableParams?.lightModeName:
-                modeIds.lightModeId = $0.modeId
+                modeIds.lightModeId = mode.modeId
             case variableParams?.darkModeName:
-                modeIds.darkModeId = $0.modeId
+                modeIds.darkModeId = mode.modeId
             case variableParams?.lightHCModeName:
-                modeIds.lightHCModeId = $0.modeId
+                modeIds.lightHCModeId = mode.modeId
             case variableParams?.darkHCModeName:
-                modeIds.darkHCModeId = $0.modeId
+                modeIds.darkHCModeId = mode.modeId
             default:
-                modeIds.lightModeId = $0.modeId
+                modeIds.lightModeId = mode.modeId
             }
         }
         return modeIds
     }
 
-    private func doesColorMatchFilter(from variable: Variable, filter: String?) -> Bool {
+    private func mapVariableMetaToVariable(variableMeta: VariableID, modeIds: ModeIds) -> Variable {
+        let values = Values(
+            light: variableMeta.valuesByMode[modeIds.lightModeId],
+            dark: variableMeta.valuesByMode[modeIds.darkModeId],
+            lightHC: variableMeta.valuesByMode[modeIds.lightHCModeId],
+            darkHC: variableMeta.valuesByMode[modeIds.darkHCModeId]
+        )
+
+        return Variable(name: variableMeta.name, description: variableMeta.description, valuesByMode: values)
+    }
+
+    private func mapVariablesToColorOutput(
+        variables: [Variable],
+        meta: VariablesEndpoint.Content
+    ) -> ColorsLoaderOutput {
+        var colorOutput = Colors()
+        variables.forEach { variable in
+            handleColorMode(
+                variable: variable,
+                mode: variable.valuesByMode.light,
+                colorsArray: &colorOutput.lightColors,
+                filter: filter,
+                meta: meta
+            )
+            handleColorMode(
+                variable: variable,
+                mode: variable.valuesByMode.dark,
+                colorsArray: &colorOutput.darkColors,
+                filter: filter,
+                meta: meta
+            )
+            handleColorMode(
+                variable: variable,
+                mode: variable.valuesByMode.lightHC,
+                colorsArray: &colorOutput.lightHCColors,
+                filter: filter,
+                meta: meta
+            )
+            handleColorMode(
+                variable: variable,
+                mode: variable.valuesByMode.darkHC,
+                colorsArray: &colorOutput.darkHCColors,
+                filter: filter,
+                meta: meta
+            )
+        }
+        return (colorOutput.lightColors, colorOutput.darkColors, colorOutput.lightHCColors, colorOutput.darkHCColors)
+    }
+
+    private func handleColorMode(
+        variable: Variable,
+        mode: ValuesByMode?,
+        colorsArray: inout [Color],
+        filter: String?,
+        meta: VariablesEndpoint.Content)
+    {
+        if case let .color(color) = mode, doesColorMatchFilter(from: variable) {
+            colorsArray.append(createColor(from: variable, color: color))
+        } else if case let .variableAlias(variableAlias) = mode,
+                  let variableMeta = meta.variables[variableAlias.id],
+                  let variableCollectionId = meta.variableCollections[variableMeta.variableCollectionId] {
+            let modeId = variableCollectionId.modes.first(where: {
+                $0.name == variableParams?.primitivesModeName
+            })?.modeId ?? variableCollectionId.defaultModeId
+            handleColorMode(
+                variable: variable,
+                mode: variableMeta.valuesByMode[modeId],
+                colorsArray: &colorsArray,
+                filter: filter,
+                meta: meta
+            )
+        }
+    }
+
+    private func doesColorMatchFilter(from variable: Variable) -> Bool {
         guard let filter = filter else { return true }
         let assetsFilter = AssetsFilter(filter: filter)
         return assetsFilter.match(name: variable.name)

@@ -42,14 +42,24 @@ extension FigmaExportCommand {
             var nameReplaceRegexp: String?
 
             if let colorParams = commonParams?.colors {
-                loader = ColorsLoader(client: client, figmaParams: figmaParams, colorParams: colorParams)
-                colors = try loader.load(filter: filter)
+                loader = ColorsLoader(
+                    client: client,
+                    figmaParams: figmaParams,
+                    colorParams: colorParams,
+                    filter: filter
+                )
+                colors = try loader.load()
                 
                 nameValidateRegexp = options.params.common?.colors?.nameValidateRegexp
                 nameReplaceRegexp = options.params.common?.colors?.nameReplaceRegexp
             } else if let variableParams = commonParams?.variablesColors {
-                loader = ColorsVariablesLoader(client: client, figmaParams: figmaParams, variableParams: variableParams)
-                colors = try loader.load(filter: filter)
+                loader = ColorsVariablesLoader(
+                    client: client,
+                    figmaParams: figmaParams,
+                    variableParams: variableParams,
+                    filter: filter
+                )
+                colors = try loader.load()
 
                 nameValidateRegexp = options.params.common?.variablesColors?.nameValidateRegexp
                 nameReplaceRegexp = options.params.common?.variablesColors?.nameReplaceRegexp
