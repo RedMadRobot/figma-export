@@ -12,15 +12,23 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
     }
 
     func load(filter: String?) throws -> ColorsLoaderOutput {
-        guard 
+        guard
             let tokensFileId = variableParams?.tokensFileId,
             let tokensCollectionName = variableParams?.tokensCollectionName
         else { throw FigmaExportError.custom(errorString: "tokensFileId or tokensLightCollectionName is nil") }
 
-        return try loadProcess(colorTokensFileId: tokensFileId, tokensCollectionName: tokensCollectionName)
+        return try loadProcess(
+            colorTokensFileId: tokensFileId,
+            tokensCollectionName: tokensCollectionName,
+            filter: filter
+        )
     }
 
-    private func loadProcess(colorTokensFileId: String, tokensCollectionName: String) throws -> ColorsLoaderOutput {
+    private func loadProcess(
+        colorTokensFileId: String,
+        tokensCollectionName: String,
+        filter: String?
+    ) throws -> ColorsLoaderOutput {
         // Load variables
         let meta = try loadVariables(fileId: colorTokensFileId)
 
@@ -32,7 +40,7 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
         let primitivesModeName = variableParams?.primitivesModeName
 
         let variables: [Variable] = tokensId.compactMap { tokenId in
-            guard let variableMeta = meta.variables[tokenId] 
+            guard let variableMeta = meta.variables[tokenId]
             else { return nil }
 
             let values = Values(
@@ -60,11 +68,13 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
                     .filter { $0.name == primitivesModeName }
                     .first?.modeId ?? variableCollectionId.defaultModeId
                 if case let .color(color) = variableMeta.valuesByMode[modeId] {
+                    guard doesColorMatchFilter(from: variable, filter: filter) else { return }
                     colorsArray.append(createColor(from: variable, color: color))
                 } else {
                     handleColorMode(variable: variable, mode: mode, colorsArray: &colorsArray)
                 }
             } else if case let .color(color) = mode {
+                guard doesColorMatchFilter(from: variable, filter: filter) else { return }
                 colorsArray.append(createColor(from: variable, color: color))
             }
         }
@@ -99,6 +109,12 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
             }
         }
         return modeIds
+    }
+
+    private func doesColorMatchFilter(from variable: Variable, filter: String?) -> Bool {
+        guard let filter = filter else { return true }
+        let assetsFilter = AssetsFilter(filter: filter)
+        return assetsFilter.match(name: variable.name)
     }
 
     private func createColor(from variable: Variable, color: PaintColor) -> Color {
