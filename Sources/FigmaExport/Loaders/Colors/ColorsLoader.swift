@@ -1,8 +1,10 @@
 import FigmaAPI
 import FigmaExportCore
 
+typealias ColorsLoaderOutput = (light: [Color], dark: [Color]?, lightHC: [Color]?, darkHC: [Color]?)
+
 /// Loads colors from Figma
-final class ColorsLoader: ColorsLoaderProtocol {
+final class ColorsLoader {
 
     private let client: Client
     private let figmaParams: Params.Figma

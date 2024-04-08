@@ -3,22 +3,12 @@ public struct Mode: Decodable {
     public var name: String
 }
 
-public struct VariableCollectionId: Decodable {
+public struct VariableCollectionValue: Decodable {
     public var defaultModeId: String
     public var id: String
     public var name: String
-    public var remote: Bool
     public var modes: [Mode]
-    public var key: String
-    public var hiddenFromPublishing: Bool
     public var variableIds: [String]
-}
-
-public enum ResolvedType: String, Decodable {
-    case boolean = "BOOLEAN"
-    case float = "FLOAT"
-    case string = "STRING"
-    case color = "COLOR"
 }
 
 public struct VariableAlias: Codable {
@@ -58,25 +48,22 @@ public enum ValuesByMode: Decodable {
     }
 }
 
-public struct VariableID: Decodable {
+public struct VariableValue: Decodable {
     public var id: String
     public var name: String
-    public var key: String
     public var variableCollectionId: String
-    public var resolvedType: ResolvedType
     public var valuesByMode: [String: ValuesByMode]
-    public var remote: Bool
     public var description: String
-    public var hiddenFromPublishing: Bool
 }
 
+public typealias VariableId = String
+public typealias VariableCollectionId = String
+
 public struct VariablesMeta: Decodable {
-    public var variableCollections: [String: VariableCollectionId]
-    public var variables: [String: VariableID]
+    public var variableCollections: [VariableCollectionId: VariableCollectionValue]
+    public var variables: [VariableId: VariableValue]
 }
 
 public struct VariablesResponse: Decodable {
-    public let error: Bool
-    public let status: Int
     public let meta: VariablesMeta
 }

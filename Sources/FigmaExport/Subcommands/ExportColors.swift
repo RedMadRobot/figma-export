@@ -37,12 +37,11 @@ extension FigmaExportCommand {
 
             let figmaParams = options.params.figma
             var colors: ColorsLoaderOutput?
-            var loader: ColorsLoaderProtocol
             var nameValidateRegexp: String?
             var nameReplaceRegexp: String?
 
             if let colorParams = commonParams?.colors {
-                loader = ColorsLoader(
+                let loader = ColorsLoader(
                     client: client,
                     figmaParams: figmaParams,
                     colorParams: colorParams,
@@ -50,10 +49,10 @@ extension FigmaExportCommand {
                 )
                 colors = try loader.load()
                 
-                nameValidateRegexp = options.params.common?.colors?.nameValidateRegexp
-                nameReplaceRegexp = options.params.common?.colors?.nameReplaceRegexp
+                nameValidateRegexp = colorParams.nameValidateRegexp
+                nameReplaceRegexp = colorParams.nameReplaceRegexp
             } else if let variableParams = commonParams?.variablesColors {
-                loader = ColorsVariablesLoader(
+                let loader = ColorsVariablesLoader(
                     client: client,
                     figmaParams: figmaParams,
                     variableParams: variableParams,
@@ -61,8 +60,8 @@ extension FigmaExportCommand {
                 )
                 colors = try loader.load()
 
-                nameValidateRegexp = options.params.common?.variablesColors?.nameValidateRegexp
-                nameReplaceRegexp = options.params.common?.variablesColors?.nameReplaceRegexp
+                nameValidateRegexp = variableParams.nameValidateRegexp
+                nameReplaceRegexp = variableParams.nameReplaceRegexp
             }
 
             guard let colors else {

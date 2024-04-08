@@ -502,9 +502,9 @@ For `figma-export colors`
 
 **Important, the [API](https://www.figma.com/developers/api#variables) for working with color variables in Figma is still in `Beta` stage, so something may break at any time.**
 
-**Important, in [CONFIG.md](CONFIG.md) use either colors or variablesColors.**
+**Important, in [figma-export.yaml](CONFIG.md) use either `colors` or `variablesColors`.**
 
-With the introduction of color variables in Figma, you can use color variables instead of color styles. Color variables can be used in figma-export, for this in [CONFIG.md](CONFIG.md) you need to use the `variablesColors` variable instead of `colors`.
+With the introduction of color variables in Figma, you can use it instead of color styles. Color variables can be used in figma-export, for this in [figma-export.yaml](CONFIG.md) you need to use the `variablesColors` option instead of `colors`.
 
 The value of variables can be either the final color value or another variable. For example, the `Primary` variable can contain the value `#FFFFFF`, and the `Secondary` variable can contain the value `Pand/90`. Figma-export can work with any depth of variable nesting. You can specify the `primitivesModeName` parameter to indicate the mode for the final table with your primitives, if the parameter is not specified, the default value will be used.
 
@@ -522,10 +522,10 @@ Example:
 
 <img src="images/figma_colors_primitives.png" width="352" />
 
-1. primitivesModeName - the name of the variable column, if the value in [CONFIG.md](CONFIG.md) is not specified, the default value will be used
+1. primitivesModeName - the name of the variable column, if the value in [figma-export.yaml](CONFIG.md) is not specified, the default value will be used
 2. A variable that has a local value
 
-See [CONFIG.md](CONFIG.md) for more information in the variablesColors section.
+See [CONFIG.md](CONFIG.md) for more information in the `variablesColors` section.
 
 ### For icons
 

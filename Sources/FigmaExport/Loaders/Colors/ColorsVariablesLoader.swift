@@ -2,7 +2,7 @@ import FigmaAPI
 import FigmaExportCore
 
 /// Loads color variables from Figma
-final class ColorsVariablesLoader: ColorsLoaderProtocol {
+final class ColorsVariablesLoader {
     private let client: Client
     private let variableParams: Params.Common.VariablesColors?
     private let filter: String?
@@ -42,7 +42,7 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
         return try client.request(endpoint)
     }
 
-    private func extractModeIds(from collections: Dictionary<String, VariableCollectionId>.Values.Element) -> ModeIds {
+    private func extractModeIds(from collections: Dictionary<String, VariableCollectionValue>.Values.Element) -> ModeIds {
         var modeIds = ModeIds()
         collections.modes.forEach { mode in
             switch mode.name {
@@ -61,7 +61,7 @@ final class ColorsVariablesLoader: ColorsLoaderProtocol {
         return modeIds
     }
 
-    private func mapVariableMetaToVariable(variableMeta: VariableID, modeIds: ModeIds) -> Variable {
+    private func mapVariableMetaToVariable(variableMeta: VariableValue, modeIds: ModeIds) -> Variable {
         let values = Values(
             light: variableMeta.valuesByMode[modeIds.lightModeId],
             dark: variableMeta.valuesByMode[modeIds.darkModeId],
