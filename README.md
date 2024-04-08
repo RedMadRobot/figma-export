@@ -38,6 +38,10 @@ Table of Contents:
   - [Configuration](#configuration)
   - [Exporting Typography](#exporting-typography)
 - [Design requirements](#design-requirements)
+  - [Colors](#for-colors)
+  - [Icons](#for-icons)
+  - [Images](#for-images)
+  - [Typography](#for-typography)
 - [Example project](#example-project)
 - [Contributing](#contributing)
 - [License](#license)
@@ -473,6 +477,8 @@ If an icon supports RTL, it should contains "rtl" word in the description field 
 
 **Styles and Components must be published to a Team Library.**
 
+### For colors
+
 For `figma-export colors`
 
 By default, if you support dark mode your Figma project must contains two files. One should contains a dark color palette, and the another light color palette. If you would like to specify light and dark colors in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode colors by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the colors section.
@@ -490,10 +496,45 @@ Example
 | <img src="images/dark.png" width="352" />  | <img src="images/dark_c.png" width="200" />  |
 | <img src="images/light.png" width="352" /> | <img src="images/light_c.png" width="200" /> |
 
+### For variables
+
+For `figma-export colors`
+
+**Important, the [API](https://www.figma.com/developers/api#variables) for working with color variables in Figma is still in `Beta` stage, so something may break at any time.**
+
+**Important, in [figma-export.yaml](CONFIG.md) use either `colors` or `variablesColors`.**
+
+With the introduction of color variables in Figma, you can use it instead of color styles. Color variables can be used in figma-export, for this in [figma-export.yaml](CONFIG.md) you need to use the `variablesColors` option instead of `colors`.
+
+The value of variables can be either the final color value or another variable. For example, the `Primary` variable can contain the value `#FFFFFF`, and the `Secondary` variable can contain the value `Pand/90`. Figma-export can work with any depth of variable nesting. You can specify the `primitivesModeName` parameter to indicate the mode for the final table with your primitives, if the parameter is not specified, the default value will be used.
+
+Example:
+
+<img src="images/figma_colors_tokens.png" width="1024" />
+
+1. tokensCollectionName - the name of the variable collection
+2. lightModeName - the name of the color variable column for the light theme
+3. darkModeName - the name of the color variable column for the dark theme
+4. lightHCModeName - the name of the color variable column for the light theme with high contrast
+5. darkHCModeName - the name of the color variable column for the dark theme with high contrast
+6. A variable that has a local value
+7. A variable that refers to another variable in a different file
+
+<img src="images/figma_colors_primitives.png" width="352" />
+
+1. primitivesModeName - the name of the variable column, if the value in [figma-export.yaml](CONFIG.md) is not specified, the default value will be used
+2. A variable that has a local value
+
+See [CONFIG.md](CONFIG.md) for more information in the `variablesColors` section.
+
+### For icons
+
 For `figma-export icons`
 
 By default, your Figma file should contains a frame with `Icons` name which contains components for each icon. You may change a frame name in a [CONFIG.md](CONFIG.md) file by setting `common.icons.figmaFrameName` property.
 If you support dark mode and want separate icons for dark mode, Figma project must contains two files. One should contains a dark icons, and another light icons. If you would like to have light and dark icons in the same file, you can do so with the `useSingleFile` configuration option. You can then denote dark mode icons by adding a suffix like `_dark`. The suffix is also configurable. See [CONFIG.md](CONFIG.md) for more information in the icons section.
+
+### For images
 
 For `figma-export images`
 
@@ -504,6 +545,8 @@ If you support dark mode you must have two Figma files. The rules for these two 
 If you want to specify image variants for different devices (iPhone, iPad, Mac etc.), add an extra `~` mark with idiom name. For example add `~ipad` postfix:
 
 <img src="images/ios_image_idiom_figma.png"/>
+
+### For typography
 
 For `figma-export typography`.
 
