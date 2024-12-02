@@ -38,6 +38,7 @@ final class ImagesLoader {
         let formatParams: FormatParams
         switch (platform, params.ios?.icons?.format) {
         case (.android, _),
+             (.flutter, _),
              (.ios, .svg):
             formatParams = SVGParams()
         case (.ios, _):
@@ -93,6 +94,7 @@ final class ImagesLoader {
         let formatParams: FormatParams
         switch (platform, params.ios?.icons?.format) {
         case (.android, _),
+             (.flutter, _),
              (.ios, .svg):
             formatParams = SVGParams()
         case (.ios, _):
@@ -357,7 +359,7 @@ private extension String {
 
     func parseNameAndIdiom(platform: Platform) -> (name: String, idiom: String) {
         switch platform {
-        case .android:
+        case .android, .flutter:
             return (self, "")
         case .ios:
             guard let regex = try? NSRegularExpression(pattern: "(.*)~(.*)$") else {

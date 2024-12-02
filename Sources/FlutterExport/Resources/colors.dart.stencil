@@ -1,0 +1,21 @@
+{% include "header.stencil" %}
+import 'package:flutter/material.dart';
+
+class {{ colorsClassName }} {{"{"}}{% if generateVariationsAsProperties %}{% for variation in variations %}
+  final Color {{ variation }};{% endfor %}
+
+  const {{ colorsClassName }}({{"{"}}{% for variation in variations %}
+    required this.{{ variation }},{% endfor %}
+  {{"}"}});
+{% for color in colors %}
+  static const {{ color.name }} = {{ colorsClassName }}({% for variation in variations %}
+    {{ variation }}: Color.fromARGB({{ color.variations[variation].a }}, {{ color.variations[variation].r }}, {{ color.variations[variation].g }}, {{ color.variations[variation].b }}),{% endfor %}
+  );{% endfor %}{% else %}
+  final Color value;
+
+  const UiColors(this.value);
+{% for color in colors %}
+  static const {{ color.name }} = {{ colorsClassName }}(
+    Color.fromARGB({{ color.a }}, {{ color.r }}, {{ color.g }}, {{ color.b }}),
+  );{% endfor %}{% endif %}
+{{"}"}}

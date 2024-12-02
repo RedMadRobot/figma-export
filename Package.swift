@@ -30,6 +30,7 @@ let package = Package(
                 "FigmaExportCore",
                 "XcodeExport",
                 "AndroidExport",
+                "FlutterExport",
                 .product(name: "XcodeProj", package: "XcodeProj"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Yams", package: "Yams"),
@@ -63,7 +64,16 @@ let package = Package(
                 .copy("Resources/")
             ]
         ),
-        
+
+        // Exports resources to Flutter project
+        .target(
+            name: "FlutterExport",
+            dependencies: ["FigmaExportCore", "Stencil", "StencilSwiftKit"],
+            resources: [
+                .copy("Resources/")
+            ]
+        ),
+
         // MARK: - Tests
         
         .testTarget(

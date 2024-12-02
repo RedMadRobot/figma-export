@@ -174,8 +174,19 @@ struct Params: Decodable {
         let templatesPath: URL?
     }
 
+    struct Flutter: Decodable {
+        struct Colors: Decodable {
+            let outputFile: URL?
+            let outputClassName: String?
+            let generateVariationsAsProperties: Bool?
+        }
+
+        let colors: Colors?
+    }
+
     let figma: Figma
     let common: Common?
     let ios: iOS?
     let android: Android?
+    let flutter: Flutter?
 }
