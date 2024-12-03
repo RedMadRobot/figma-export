@@ -157,7 +157,7 @@ extension FigmaExportCommand {
                 outputURL: outputFile,
                 templatesURL: nil
             )
-            let exporter = FlutterColorExporter(output: output)
+            let exporter = FlutterColorExporter(output: output, logger: logger)
             let files = try exporter.export(colorPairs: colorPairs)
             try? FileManager.default.removeItem(atPath: outputFile.path)
             try fileWriter.write(files: files)

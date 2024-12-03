@@ -11,7 +11,7 @@ public class FlutterExporterBase {
         public var errorDescription: String? {
             switch self {
             case let .nameMatchesKeyword(keyword):
-                "Can't make a color with the name \"\(keyword)\", because it matches a Dart keyword."
+                "Can't make a color with the name \"\(keyword)\", because it matches a Dart keyword. Skipping this color."
             }
         }
     }

@@ -2,6 +2,7 @@ import Foundation
 import FigmaExportCore
 import Stencil
 import PathKit
+import Logging
 
 public class FlutterColorExporter: FlutterExporterBase {
     enum Error: Swift.Error, LocalizedError {
@@ -19,9 +20,11 @@ public class FlutterColorExporter: FlutterExporterBase {
     }
 
     private let output: FlutterColorsOutput
+    private let logger: Logger
 
-    public init(output: FlutterColorsOutput) {
+    public init(output: FlutterColorsOutput, logger: Logger) {
         self.output = output
+        self.logger = logger
     }
 
     public func export(colorPairs: [AssetPair<Color>]) throws -> [FileContents] {
@@ -65,6 +68,12 @@ public class FlutterColorExporter: FlutterExporterBase {
         var colors: [Any] = []
 
         for colorPair in colorPairs {
+            do {
+                try validateName(colorPair.light.name)
+            } catch {
+                logger.warning("\(error.localizedDescription)")
+                continue
+            }
             var colorVariations: [String: ColorWithVariations.Variation] = [:]
             var simpleColors: [SimpleColor] = []
             for variation in variations {
