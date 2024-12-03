@@ -94,6 +94,14 @@ let package = Package(
         .testTarget(
             name: "AndroidExportTests",
             dependencies: ["AndroidExport", .product(name: "CustomDump", package: "swift-custom-dump")]
+        ),
+        .testTarget(
+            name: "FlutterExportTests",
+            dependencies: [
+                "FlutterExport",
+                .product(name: "CustomDump", package: "swift-custom-dump"),
+                .product(name: "Logging", package: "swift-log")
+            ]
         )
     ]
 )
