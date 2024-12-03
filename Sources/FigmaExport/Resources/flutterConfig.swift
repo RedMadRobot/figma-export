@@ -59,7 +59,7 @@ flutter:
     outputFile: ~/work/myFlutterProject/modules/ui_kit/ui_colors.dart
     # [optional] Name for the generated class. Defaults to `Colors`.
     outputClassName: UiColors
-    # [optional] If true, it will generate variations as a properties of your `Colors` class, for example:
+    # [optional] If `true`, it will generate variations as a properties of your `Colors` class, for example:
     # ```dart
     # class Colors {
     #   final Color light;
@@ -69,7 +69,7 @@ flutter:
     #   ...etc...
     # ```
     # Note: for this case (`generateVariationsAsProperties: true`), all the colors in your Figma must have the same variations (for example, if one color has only light variation and another color has light and dark variations, this will result in error).
-    # If false, it will generate all the colors and variations as separate `static const`s, appending the variation name to the const. For example:
+    # If `false`, it will generate all the colors and variations as separate `static const`s, appending the variation name to the const. For example:
     # ```dart
     # class Colors {
     #   final Color value;
@@ -78,6 +78,7 @@ flutter:
     #   static const backgroundAccentLight = Colors(Color.fromARGB(...));
     #   ...etc...
     # ```
+    # Defaults to `true`.
     generateVariationsAsProperties: Bool?
 
   # [optional] Parameters for exporting icons
