@@ -55,10 +55,12 @@ common:
 flutter:
   # [optional] Parameters for exporting colors
   colors:
+    # [optional] Template for codegen. Default is nil (uses internal templates).
+    # templatesPath: ~/myTemplates/
     # [optional] Output file for the colors. Defaults to %current_directory%/colors.dart
-    outputFile: ~/work/myFlutterProject/modules/ui_kit/ui_colors.dart
+    # outputFile: ~/work/myFlutterProject/modules/ui_kit/ui_colors.dart
     # [optional] Name for the generated class. Defaults to `Colors`.
-    outputClassName: UiColors
+    # outputClassName: UiColors
     # [optional] If `true`, it will generate variations as a properties of your `Colors` class, for example:
     # ```dart
     # class Colors {
@@ -79,7 +81,7 @@ flutter:
     #   ...etc...
     # ```
     # Defaults to `true`.
-    generateVariationsAsProperties: Bool?
+    # generateVariationsAsProperties: true
 
   # [optional] Parameters for exporting icons
   icons:

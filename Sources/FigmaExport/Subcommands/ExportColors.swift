@@ -155,7 +155,7 @@ extension FigmaExportCommand {
                 generateVariationsAsProperties: flutterParams.colors?.generateVariationsAsProperties,
                 colorsClassName: flutterParams.colors?.outputClassName,
                 outputURL: outputFile,
-                templatesURL: nil
+                templatesURL: flutterParams.colors?.templatesPath
             )
             let exporter = FlutterColorExporter(output: output, logger: logger)
             let files = try exporter.export(colorPairs: colorPairs)

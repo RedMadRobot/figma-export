@@ -176,6 +176,7 @@ struct Params: Decodable {
 
     struct Flutter: Decodable {
         struct Colors: Decodable {
+            let templatesPath: URL?
             let outputFile: URL?
             let outputClassName: String?
             let generateVariationsAsProperties: Bool?
