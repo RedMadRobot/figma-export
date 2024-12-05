@@ -80,12 +80,12 @@ final class FlutterColorExporterTests: XCTestCase {
           });
 
           static const colorPair1 = Colors(
-            light: Color.fromARGB(255, 255, 255, 255),
-            dark: Color.fromARGB(255, 0, 0, 0),
+            light: Color(0xFFFFFFFF),
+            dark: Color(0xFF000000),
           );
           static const colorPair2 = Colors(
-            light: Color.fromARGB(255, 153, 20, 19),
-            dark: Color.fromARGB(255, 123, 11, 5),
+            light: Color(0xFF991413),
+            dark: Color(0xFF7B0B05),
           );
         }
 
@@ -122,16 +122,16 @@ final class FlutterColorExporterTests: XCTestCase {
           const UiColors(this.value);
 
           static const colorPair1Light = Colors(
-            Color.fromARGB(255, 255, 255, 255),
+            Color(0xFFFFFFFF),
           );
           static const colorPair1Dark = Colors(
-            Color.fromARGB(255, 0, 0, 0),
+            Color(0xFF000000),
           );
           static const colorPair2Light = Colors(
-            Color.fromARGB(255, 153, 20, 19),
+            Color(0xFF991413),
           );
           static const colorPair2Dark = Colors(
-            Color.fromARGB(255, 123, 11, 5),
+            Color(0xFF7B0B05),
           );
         }
 
@@ -185,7 +185,7 @@ final class FlutterColorExporterTests: XCTestCase {
           });
 
           static const backgroundPrimary = Colors(
-            light: Color.fromARGB(127, 119, 3, 255),
+            light: Color(0x7F7703FF),
           );
         }
 

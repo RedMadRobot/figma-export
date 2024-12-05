@@ -9,13 +9,13 @@ class {{ colorsClassName }} {{"{"}}{% if generateVariationsAsProperties %}{% for
   {{"}"}});
 {% for color in colors %}
   static const {{ color.name }} = {{ colorsClassName }}({% for variation in variations %}
-    {{ variation }}: Color.fromARGB({{ color.variations[variation].a }}, {{ color.variations[variation].r }}, {{ color.variations[variation].g }}, {{ color.variations[variation].b }}),{% endfor %}
+    {{ variation }}: Color({{ color.variations[variation].hex }}),{% endfor %}
   );{% endfor %}{% else %}
   final Color value;
 
   const UiColors(this.value);
 {% for color in colors %}
   static const {{ color.name }} = {{ colorsClassName }}(
-    Color.fromARGB({{ color.a }}, {{ color.r }}, {{ color.g }}, {{ color.b }}),
+    Color({{ color.hex }}),
   );{% endfor %}{% endif %}
 {{"}"}}
