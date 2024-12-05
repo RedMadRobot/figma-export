@@ -4,6 +4,7 @@ import FigmaAPI
 import XcodeExport
 import AndroidExport
 import FigmaExportCore
+import FlutterExport
 
 extension FigmaExportCommand {
     
@@ -109,9 +110,57 @@ extension FigmaExportCommand {
                 try exportAndroidColors(colorPairs: colorPairs.get(), androidParams: android)
 
                 checkForUpdate(logger: logger)
-                
+
                 logger.info("Done!")
             }
+
+            if let flutter = options.params.flutter {
+                logger.info("Processing colors...")
+                let processor = ColorsProcessor(
+                    platform: .flutter,
+                    nameValidateRegexp: nameValidateRegexp,
+                    nameReplaceRegexp: nameReplaceRegexp,
+                    nameStyle: .camelCase
+                )
+                let colorPairs = processor.process(
+                    light: colors.light,
+                    dark: colors.dark,
+                    lightHC: colors.lightHC,
+                    darkHC: colors.darkHC
+                )
+                if let warning = colorPairs.warning?.errorDescription {
+                    logger.warning("\(warning)")
+                }
+
+                logger.info("Exporting colors to Flutter dart file...")
+
+                do {
+                    try exportFlutterColors(colorPairs: colorPairs.get(), flutterParams: flutter)
+                } catch {
+                    logger.error("\(error.localizedDescription)")
+                }
+
+                checkForUpdate(logger: logger)
+
+                logger.info("Done!")
+            }
+        }
+
+        private func exportFlutterColors(
+            colorPairs: [AssetPair<Color>],
+            flutterParams: Params.Flutter
+        ) throws {
+            let outputFile = flutterParams.colors?.outputFile ?? URL(fileURLWithPath: FileManager.default.currentDirectoryPath + "/colors.dart")
+            let output = FlutterColorsOutput(
+                generateVariationsAsProperties: flutterParams.colors?.generateVariationsAsProperties,
+                colorsClassName: flutterParams.colors?.outputClassName,
+                outputURL: outputFile,
+                templatesURL: flutterParams.colors?.templatesPath
+            )
+            let exporter = FlutterColorExporter(output: output, logger: logger)
+            let files = try exporter.export(colorPairs: colorPairs)
+            try? FileManager.default.removeItem(atPath: outputFile.path)
+            try fileWriter.write(files: files)
         }
 
         private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS) throws {
