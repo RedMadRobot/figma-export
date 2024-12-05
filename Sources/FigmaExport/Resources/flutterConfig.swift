@@ -67,7 +67,7 @@ flutter:
     #   final Color light;
     #   final Color dark;
     #   ...etc..
-    #   static const background = Colors(light: ..., dark: ..., ...);
+    #   static const background = Colors(light: Color(0xFFFFFFFF), dark: Color(0xFF000000), ...);
     #   ...etc...
     # ```
     # Note: for this case (`generateVariationsAsProperties: true`), all the colors in your Figma must have the same variations (for example, if one color has only light variation and another color has light and dark variations, this will result in error).
@@ -75,9 +75,9 @@ flutter:
     # ```dart
     # class Colors {
     #   final Color value;
-    #   static const backgroundLight = Colors(Color.fromARGB(...));
-    #   static const backgroundDark = Colors(Color.fromARGB(...));
-    #   static const backgroundAccentLight = Colors(Color.fromARGB(...));
+    #   static const backgroundLight = Colors(Color(0xFFFFFFFF));
+    #   static const backgroundDark = Colors(Color(0xFF000000));
+    #   static const backgroundAccentLight = Colors(Color(0xFFCCCCCC));
     #   ...etc...
     # ```
     # Defaults to `true`.
