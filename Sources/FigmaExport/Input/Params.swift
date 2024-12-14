@@ -182,7 +182,16 @@ struct Params: Decodable {
             let generateVariationsAsProperties: Bool?
         }
 
+        struct Icons: Decodable {
+            let iconsAssetsFolder: URL?
+            let classFile: URL?
+            let iconsClassName: String?
+            let relativeIconsPath: URL
+            let templatesURL: URL?
+        }
+
         let colors: Colors?
+        let icons: Icons?
     }
 
     let figma: Figma

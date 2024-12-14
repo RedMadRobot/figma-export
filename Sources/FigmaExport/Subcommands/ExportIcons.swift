@@ -4,6 +4,7 @@ import FigmaAPI
 import XcodeExport
 import FigmaExportCore
 import AndroidExport
+import FlutterExport
 #if os(Linux)
 import FoundationXML
 #endif
@@ -39,8 +40,61 @@ extension FigmaExportCommand {
                 logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Android Studio project.")
                 try exportAndroidIcons(client: client, params: options.params)
             }
+
+            if options.params.flutter != nil {
+                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Flutter project.")
+                try exportFlutterIcons(client: client, params: options.params)
+            }
         }
-        
+
+        private func exportFlutterIcons(client: Client, params: Params) throws {
+            guard let flutter = params.flutter,
+                  let iconsParams = flutter.icons else {
+                logger.info("Nothing to do. You haven’t specified flutter.icons parameters in the config file.")
+                return
+            }
+
+            logger.info("Fetching icons info from Figma. Please wait...")
+            let loader = ImagesLoader(client: client, params: params, platform: .flutter, logger: logger)
+            let imagesTuple = try loader.loadIcons(filter: filter)
+
+            logger.info("Processing icons...")
+            let processor = ImagesProcessor(
+                platform: .flutter,
+                nameValidateRegexp: params.common?.icons?.nameValidateRegexp,
+                nameReplaceRegexp: params.common?.icons?.nameReplaceRegexp,
+                nameStyle: .camelCase
+            )
+
+            let icons = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
+            if let warning = icons.warning?.errorDescription {
+                logger.warning("\(warning)")
+            }
+            let exporter = FlutterIconsExporter(
+                output: FlutterIconsOutput(
+                    iconsAssetsFolder: iconsParams.iconsAssetsFolder,
+                    classFile: iconsParams.classFile,
+                    iconsClassName: iconsParams.iconsClassName,
+                    relativeIconsPath: iconsParams.relativeIconsPath,
+                    templatesURL: iconsParams.templatesURL
+                )
+            )
+
+            let (files, warnings) = try exporter.export(icons: try icons.get())
+
+            if !warnings.all.isEmpty {
+                logger.warning("\(warnings.localizedDescription)")
+            }
+
+            logger.info("Downloading remote files...")
+            let loadedFiles = try FileDownloader().fetch(files: files)
+
+            logger.info("Writting files...")
+            try FileWriter().write(files: loadedFiles)
+
+            logger.info("Done!")
+        }
+
         private func exportiOSIcons(client: Client, params: Params) throws {
             guard let ios = params.ios,
                   let iconsParams = ios.icons else {
