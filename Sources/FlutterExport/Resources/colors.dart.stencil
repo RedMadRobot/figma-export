@@ -1,5 +1,5 @@
 {% include "header.stencil" %}
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
 class {{ colorsClassName }} {{"{"}}{% if generateVariationsAsProperties %}{% for variation in variations %}
   final Color {{ variation }};{% endfor %}
