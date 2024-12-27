@@ -109,7 +109,7 @@ public final class FlutterIconsExporter: FlutterExporterBase {
     ) -> FileContents? {
         guard let imagePack, let icon = imagePack.images.first else { return nil }
 
-        let fileName = imagePack.name + "_\(variation.rawValue).svg\(output.useSvgVec ? ".vec" : "")"
+        let fileName = imagePack.name + "_\(variation.rawValue).svg"
         let destination = Destination(
             directory: output.iconsAssetsFolder,
             file: URL(string: fileName)!

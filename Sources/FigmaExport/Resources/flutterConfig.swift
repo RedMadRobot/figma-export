@@ -95,8 +95,6 @@ flutter:
     baseAssetClass: IconAsset
     # [optional] Folder to download all the icons to. Defaults to `%current_directory%/icons/`.
     iconsAssetsFolder: ./assets/icons/color_icons
-    # [optional] Do you want to use svg.vec instead of svg? Defaults to `false`.
-    useSvgVec: true
     # [reqiured] Path to the downloaded icons for codegen, it will be used in the constants like this:
     # ```dart
     # static const icUserPhoto = IconAssets(

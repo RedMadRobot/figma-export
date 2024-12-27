@@ -77,7 +77,6 @@ extension FigmaExportCommand {
                     iconsClassName: iconsParams.iconsClassName,
                     baseAssetClass: iconsParams.baseAssetClass,
                     baseAssetClassFilePath: iconsParams.baseAssetClassFilePath,
-                    useSvgVec: iconsParams.useSvgVec,
                     relativeIconsPath: iconsParams.relativeIconsPath,
                     templatesURL: iconsParams.templatesURL
                 )

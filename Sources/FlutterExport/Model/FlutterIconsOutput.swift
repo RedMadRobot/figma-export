@@ -6,7 +6,6 @@ public struct FlutterIconsOutput {
     let iconsClassName: String
     let baseAssetClass: String
     let baseAssetClassFilePath: String
-    let useSvgVec: Bool
     let relativeIconsPath: URL
     let templatesURL: URL?
 
@@ -16,7 +15,6 @@ public struct FlutterIconsOutput {
         iconsClassName: String? = nil,
         baseAssetClass: String? = nil,
         baseAssetClassFilePath: String? = nil,
-        useSvgVec: Bool? = nil,
         relativeIconsPath: URL,
         templatesURL: URL? = nil
     ) {
@@ -26,7 +24,6 @@ public struct FlutterIconsOutput {
         self.iconsClassName = iconsClassName ?? "Icons"
         self.baseAssetClass = baseAssetClass ?? "IconAsset"
         self.baseAssetClassFilePath = baseAssetClassFilePath ?? "icon_asset.dart"
-        self.useSvgVec = useSvgVec ?? false
         self.relativeIconsPath = relativeIconsPath
         self.templatesURL = templatesURL
     }
