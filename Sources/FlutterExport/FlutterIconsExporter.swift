@@ -91,6 +91,8 @@ public final class FlutterIconsExporter: FlutterExporterBase {
 
         let context: [String: Any] = [
             "iconsClassName": output.iconsClassName,
+            "baseAssetClass": output.baseAssetClass,
+            "baseAssetClassFilePath": output.baseAssetClassFilePath,
             "variations": variations.map { $0.rawValue },
             "icons": iconsData
         ]
@@ -107,7 +109,7 @@ public final class FlutterIconsExporter: FlutterExporterBase {
     ) -> FileContents? {
         guard let imagePack, let icon = imagePack.images.first else { return nil }
 
-        let fileName = imagePack.name + "_\(variation.rawValue).svg"
+        let fileName = imagePack.name + "_\(variation.rawValue).svg\(output.useSvgVec ? ".vec" : "")"
         let destination = Destination(
             directory: output.iconsAssetsFolder,
             file: URL(string: fileName)!
@@ -129,8 +131,8 @@ public final class FlutterIconsExporter: FlutterExporterBase {
         let sourceCode = try env.renderTemplate(name: "icons.dart.stencil", context: context)
         let data = sourceCode.data(using: .utf8)!
         let destination = Destination(
-            directory: output.classFile.deletingLastPathComponent(),
-            file: URL(string: output.classFile.lastPathComponent)!
+            directory: output.outputFile.deletingLastPathComponent(),
+            file: URL(string: output.outputFile.lastPathComponent)!
         )
         return FileContents(destination: destination, data: data)
     }

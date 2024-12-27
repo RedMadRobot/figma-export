@@ -86,13 +86,17 @@ flutter:
   # [optional] Parameters for exporting icons
   icons:
     # [optional] Template for codegen. Default is nil (uses internal templates).
-    # templatesPath: ~/myTemplates/
-    # [optional] Output file for the colors. Defaults to %current_directory%/icons.dart
-    # outputFile: ~/work/myFlutterProject/assets/icon_assets.dart
+    # templatesURL: ~/myTemplates/
+    # [optional] Output file for the generated code. Defaults to %current_directory%/icons.dart
+    outputFile: ./lib/foundation/icons/color_icons.dart
     # [optional] Name for the generated class. Defaults to `Icons`.
-    # outputClassName: IconAssets
+    iconsClassName: ColorIcons
+    # [optional] Name for the base class with asset properties (light and dark Strings). Defaults to `IconAsset`.
+    baseAssetClass: IconAsset
     # [optional] Folder to download all the icons to. Defaults to `%current_directory%/icons/`.
-    # iconsAssetsFolder: ~/work/myFlutterProject/assets/icons/
+    iconsAssetsFolder: ./assets/icons/color_icons
+    # [optional] Do you want to use svg.vec instead of svg? Defaults to `false`.
+    useSvgVec: true
     # [reqiured] Path to the downloaded icons for codegen, it will be used in the constants like this:
     # ```dart
     # static const icUserPhoto = IconAssets(
@@ -100,7 +104,7 @@ flutter:
     #   dark: '%relativeIconsPath%/ic_user_photo_dark.svg',
     # );
     # ```
-    relativeIconsPath: icons/
+    relativeIconsPath: icons/color_icons/
 
   # [optional] Parameters for exporting images
   images:

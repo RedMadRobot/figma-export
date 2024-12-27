@@ -73,8 +73,11 @@ extension FigmaExportCommand {
             let exporter = FlutterIconsExporter(
                 output: FlutterIconsOutput(
                     iconsAssetsFolder: iconsParams.iconsAssetsFolder,
-                    classFile: iconsParams.classFile,
+                    outputFile: iconsParams.outputFile,
                     iconsClassName: iconsParams.iconsClassName,
+                    baseAssetClass: iconsParams.baseAssetClass,
+                    baseAssetClassFilePath: iconsParams.baseAssetClassFilePath,
+                    useSvgVec: iconsParams.useSvgVec,
                     relativeIconsPath: iconsParams.relativeIconsPath,
                     templatesURL: iconsParams.templatesURL
                 )

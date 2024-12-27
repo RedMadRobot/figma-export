@@ -1,12 +1,10 @@
 {% include "header.stencil" %}
-class {{ iconsClassName }} {{"{"}}{% for variation in variations %}
-  final String {{ variation }};{% endfor %}
+import '{{ baseAssetClassFilePath }}';
 
-  const {{ iconsClassName }}({{"{"}}{% for variation in variations %}
-    required this.{{ variation }},{% endfor %}
-  {{"}"}});
+class {{ iconsClassName }} {{"{"}}
+  const {{ iconsClassName }}();
 {% for icon in icons %}
-  static const {{ icon.name }} = {{ iconsClassName }}({% for variation in variations %}
+  final {{ icon.name }} = const {{ baseAssetClass }}({% for variation in variations %}
     {{ variation }}: '{{ icon.variations[variation] }}',{% endfor %}
   );{% endfor %}
 {{"}"}}
