@@ -122,7 +122,11 @@ public final class FlutterIconsExporter: FlutterExporterBase {
             dark: false,
             isRTL: icon.isRTL
         )
-        variationsData[variation.rawValue] = output.relativeIconsPath.appendingPathComponent(fileName, isDirectory: false)
+        let codegenFileName = fileName + (output.useSvgVec ? ".vec" : "")
+        variationsData[variation.rawValue] = output.relativeIconsPath.appendingPathComponent(
+            codegenFileName,
+            isDirectory: false
+        )
         return fileContents
     }
 

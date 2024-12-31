@@ -189,6 +189,7 @@ struct Params: Decodable {
             let baseAssetClass: String?
             let baseAssetClassFilePath: String?
             let relativeIconsPath: URL
+            let useSvgVec: Bool?
             let templatesURL: URL?
         }
 
