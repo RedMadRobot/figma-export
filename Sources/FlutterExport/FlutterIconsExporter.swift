@@ -109,7 +109,7 @@ public final class FlutterIconsExporter: FlutterExporterBase {
     ) -> FileContents? {
         guard let imagePack, let icon = imagePack.images.first else { return nil }
 
-        let fileName = imagePack.name + "_\(variation.rawValue).svg"
+        let fileName = imagePack.name.snakeCased() + "_\(variation.rawValue).svg"
         let destination = Destination(
             directory: output.iconsAssetsFolder,
             file: URL(string: fileName)!
@@ -122,7 +122,11 @@ public final class FlutterIconsExporter: FlutterExporterBase {
             dark: false,
             isRTL: icon.isRTL
         )
-        variationsData[variation.rawValue] = output.relativeIconsPath.appendingPathComponent(fileName, isDirectory: false)
+        let codegenFileName = fileName + (output.useSvgVec ? ".vec" : "")
+        variationsData[variation.rawValue] = output.relativeIconsPath.appendingPathComponent(
+            codegenFileName,
+            isDirectory: false
+        )
         return fileContents
     }
 
