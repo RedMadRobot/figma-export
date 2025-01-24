@@ -10,8 +10,8 @@ public enum DynamicTypeStyle: String, RawRepresentable {
     case footnote = "Footnote"
     case caption1 = "Caption 1"
     case caption2 = "Caption 2"
-    
-    public var textStyleName: String {
+
+    public var uiKitStyleName: String {
         switch self {
         case .largeTitle:
             return "largeTitle"
@@ -37,16 +37,43 @@ public enum DynamicTypeStyle: String, RawRepresentable {
             return "caption2"
         }
     }
+
+    public var swiftUIStyleName: String {
+        switch self {
+        case .largeTitle:
+            return "largeTitle"
+        case .title1:
+            return "title"
+        case .title2:
+            return "title2"
+        case .title3:
+            return "title3"
+        case .headline:
+            return "headline"
+        case .body:
+            return "body"
+        case .callout:
+            return "callout"
+        case .subheadline:
+            return "subheadline"
+        case .footnote:
+            return "footnote"
+        case .caption1:
+            return "caption"
+        case .caption2:
+            return "caption2"
+        }
+    }
 }
 
 public struct TextStyle: Asset {
-    
+
     public enum TextCase: String {
         case original
         case uppercased
         case lowercased
     }
-    
+
     public var name: String
     public var platform: Platform?
     public let fontName: String
@@ -64,8 +91,8 @@ public struct TextStyle: Asset {
         fontStyle: DynamicTypeStyle?,
         lineHeight: Double? = nil,
         letterSpacing: Double,
-        textCase: TextCase = .original) {
-        
+        textCase: TextCase = .original
+    ) {
         self.name = name
         self.fontName = fontName
         self.fontSize = fontSize
