@@ -53,7 +53,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
                 "fontName": $0.fontName,
                 "fontSize": $0.fontSize,
                 "supportsDynamicType": $0.fontStyle != nil,
-                "type": $0.fontStyle?.textStyleName ?? ""
+                "type": $0.fontStyle?.uiKitStyleName ?? ""
             ]
         }
         let env = makeEnvironment(templatesPath: output.templatesPath)
@@ -71,7 +71,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
                 "fontName": $0.fontName,
                 "fontSize": $0.fontSize,
                 "supportsDynamicType": $0.fontStyle != nil,
-                "type": $0.fontStyle?.textStyleName ?? ""
+                "type": $0.fontStyle?.swiftUIStyleName ?? ""
             ]
         }
         let env = makeEnvironment(templatesPath: output.templatesPath)
@@ -83,7 +83,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
     
     private func makeLabelStyleExtensionFileContents(textStyles: [TextStyle], labelStyleExtensionURL: URL) throws -> FileContents {
         let dict = textStyles.map { style -> [String: Any] in
-            let type: String = style.fontStyle?.textStyleName ?? ""
+            let type: String = style.fontStyle?.uiKitStyleName ?? ""
             return [
                 "className": style.name.first!.uppercased() + style.name.dropFirst(),
                 "varName": style.name,
@@ -103,7 +103,7 @@ final public class XcodeTypographyExporter: XcodeExporterBase {
     
     private func makeLabel(textStyles: [TextStyle], labelsDirectory: URL, separateStyles: Bool) throws -> FileContents {
         let dict = textStyles.map { style -> [String: Any] in
-            let type: String = style.fontStyle?.textStyleName ?? ""
+            let type: String = style.fontStyle?.uiKitStyleName ?? ""
             return [
                 "className": style.name.first!.uppercased() + style.name.dropFirst(),
                 "varName": style.name,
