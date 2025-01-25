@@ -16,7 +16,6 @@ jobs:
       - name: Select Xcode version
         run: |
           sudo xcode-select --switch /Applications/Xcode_16.2.app
-          xcodebuild -runFirstLaunch
 
       - name: Build
         run: |
@@ -37,7 +36,7 @@ jobs:
       - name: Deploy to Cocoapods
         run: |
           set -eo pipefail
-          pod trunk push FigmaExport.podspec --verbose
+          pod trunk push FigmaExport.podspec
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
