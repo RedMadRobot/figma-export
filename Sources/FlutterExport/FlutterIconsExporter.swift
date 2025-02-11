@@ -20,16 +20,16 @@ public final class FlutterIconsExporter: FlutterExporterBase {
     }
 
     public func export(icons: [AssetPair<ImagePack>]) throws -> (files: [FileContents], warnings: ErrorGroup) {
-        var variations: [IconVariation] = [.light]
-        if icons.first?.dark?.images.first != nil {
-            variations.append(.dark)
+        var usedVariations: Set<ImageVariation> = [.light]
+        for icon in icons {
+            if usedVariations.count == ImageVariation.allCases.count {
+                break
+            }
+            if icon.dark != nil { usedVariations.insert(.dark) }
+            if icon.lightHC != nil { usedVariations.insert(.lightHighContrast) }
+            if icon.darkHC != nil { usedVariations.insert(.darkHighContrast) }
         }
-        if icons.first?.lightHC?.images.first != nil {
-            variations.append(.lightHighContrast)
-        }
-        if icons.first?.darkHC?.images.first != nil {
-            variations.append(.darkHighContrast)
-        }
+        let variations = Array(usedVariations).sorted()
         var iconsData: [IconData] = []
         var warnings: [Swift.Error] = []
         let iconFiles = icons.flatMap { icon -> [FileContents] in
@@ -54,35 +54,29 @@ public final class FlutterIconsExporter: FlutterExporterBase {
                     }
                     files.append(file)
                 case .dark:
-                    guard let file = makeAndRegisterFileContents(
+                    if let file = makeAndRegisterFileContents(
                         variationsData: &variationsData,
                         imagePack: icon.dark,
                         variation: .dark
-                    ) else {
-                        warnings.append(Error.unspecifiedVariation(variation.rawValue, icon.light.name))
-                        return []
+                    ) {
+                        files.append(file)
                     }
-                    files.append(file)
                 case .lightHighContrast:
-                    guard let file = makeAndRegisterFileContents(
+                    if let file = makeAndRegisterFileContents(
                         variationsData: &variationsData,
                         imagePack: icon.lightHC,
                         variation: .lightHighContrast
-                    ) else {
-                        warnings.append(Error.unspecifiedVariation(variation.rawValue, icon.light.name))
-                        return []
+                    ) {
+                        files.append(file)
                     }
-                    files.append(file)
                 case .darkHighContrast:
-                    guard let file = makeAndRegisterFileContents(
+                    if let file = makeAndRegisterFileContents(
                         variationsData: &variationsData,
                         imagePack: icon.darkHC,
                         variation: .darkHighContrast
-                    ) else {
-                        warnings.append(Error.unspecifiedVariation(variation.rawValue, icon.light.name))
-                        return []
+                    ) {
+                        files.append(file)
                     }
-                    files.append(file)
                 }
             }
             iconsData.append(IconData(name: icon.light.name, variations: variationsData))

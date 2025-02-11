@@ -193,8 +193,35 @@ struct Params: Decodable {
             let templatesURL: URL?
         }
 
+        struct Images: Decodable {
+            enum Format: String, Decodable {
+                case svg
+                case png
+                case webp
+            }
+            struct FormatOptions: Decodable {
+                enum Encoding: String, Decodable {
+                    case lossy
+                    case lossless
+                }
+                let encoding: Encoding
+                let quality: Int?
+            }
+            let imagesAssetsFolder: URL?
+            let outputFile: URL?
+            let imagesClassName: String?
+            let baseAssetClass: String?
+            let baseAssetClassFilePath: String?
+            let relativeImagesPath: URL
+            let templatesURL: URL?
+            let format: Format
+            let scales: Set<Double>
+            let webpOptions: FormatOptions?
+        }
+
         let colors: Colors?
         let icons: Icons?
+        let images: Images?
     }
 
     let figma: Figma

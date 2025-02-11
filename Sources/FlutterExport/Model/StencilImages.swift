@@ -1,6 +1,6 @@
 import Foundation
 
-enum IconVariation: String, CaseIterable, Comparable {
+enum ImageVariation: String, CaseIterable, Comparable {
     case light, dark, lightHighContrast, darkHighContrast
 
     var capitalized: String {
@@ -17,8 +17,8 @@ enum IconVariation: String, CaseIterable, Comparable {
     }
 
     static func < (lhs: Self, rhs: Self) -> Bool {
-        if let lhsIndex = IconVariation.allCases.firstIndex(of: lhs),
-           let rhsIndex = IconVariation.allCases.firstIndex(of: rhs) {
+        if let lhsIndex = ImageVariation.allCases.firstIndex(of: lhs),
+           let rhsIndex = ImageVariation.allCases.firstIndex(of: rhs) {
             lhsIndex < rhsIndex
         } else {
             false
@@ -26,8 +26,8 @@ enum IconVariation: String, CaseIterable, Comparable {
     }
 }
 
-struct IconData {
+struct ImageData {
     let name: String
-    /// [Variation: Path], ex. ["light": "icons/ic_arrow_light.svg"]
+    /// [Variation: Path], ex. ["light": "images/arrow_light.webp"]
     let variations: [String: URL]
 }
