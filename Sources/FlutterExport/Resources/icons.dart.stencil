@@ -5,6 +5,6 @@ class {{ iconsClassName }} {{"{"}}
   const {{ iconsClassName }}();
 {% for icon in icons %}
   final {{ icon.name }} = const {{ baseAssetClass }}({% for variation in variations %}
-    {{ variation }}: '{{ icon.variations[variation] }}',{% endfor %}
+    {{ variation }}: {% if icon.variations[variation] %}'{{ icon.variations[variation] }}'{% else %}null{% endif %},{% endfor %}
   );{% endfor %}
 {{"}"}}

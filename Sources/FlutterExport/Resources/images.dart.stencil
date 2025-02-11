@@ -5,6 +5,6 @@ class {{ imagesClassName }} {{"{"}}
   const {{ imagesClassName }}();
 {% for image in images %}
   final {{ image.name }} = const {{ baseAssetClass }}({% for variation in variations %}
-    {{ variation }}: '{{ image.variations[variation] }}',{% endfor %}
+    {{ variation }}: {% if image.variations[variation] %}'{{ image.variations[variation] }}'{% else %}null{% endif %},{% endfor %}
   );{% endfor %}
 {{"}"}}

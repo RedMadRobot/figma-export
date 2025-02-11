@@ -20,16 +20,16 @@ public final class FlutterImagesExporter: FlutterExporterBase {
     }
 
     public func export(images: [AssetPair<ImagePack>]) throws -> (files: [FileContents], warnings: ErrorGroup) {
-        var variations: [ImageVariation] = [.light]
-        if images.first?.dark?.images.first != nil {
-            variations.append(.dark)
+        var usedVariations: Set<ImageVariation> = [.light]
+        for image in images {
+            if usedVariations.count == ImageVariation.allCases.count {
+                break
+            }
+            if image.dark != nil { usedVariations.insert(.dark) }
+            if image.lightHC != nil { usedVariations.insert(.lightHighContrast) }
+            if image.darkHC != nil { usedVariations.insert(.darkHighContrast) }
         }
-        if images.first?.lightHC?.images.first != nil {
-            variations.append(.lightHighContrast)
-        }
-        if images.first?.darkHC?.images.first != nil {
-            variations.append(.darkHighContrast)
-        }
+        let variations = Array(usedVariations).sorted()
         var imagesData: [ImageData] = []
         var warnings: [Swift.Error] = []
         let imageFiles = images.flatMap { image -> [FileContents] in
@@ -54,35 +54,29 @@ public final class FlutterImagesExporter: FlutterExporterBase {
                     }
                     files.append(contentsOf: imageFiles)
                 case .dark:
-                    guard let imageFiles = makeAndRegisterFileContents(
+                    if let imageFiles = makeAndRegisterFileContents(
                         variationsData: &variationsData,
                         imagePack: image.dark,
                         variation: .dark
-                    ) else {
-                        warnings.append(Error.unspecifiedVariation(variation.rawValue, image.light.name))
-                        return []
+                    ) {
+                        files.append(contentsOf: imageFiles)
                     }
-                    files.append(contentsOf: imageFiles)
                 case .lightHighContrast:
-                    guard let imageFiles = makeAndRegisterFileContents(
+                    if let imageFiles = makeAndRegisterFileContents(
                         variationsData: &variationsData,
                         imagePack: image.lightHC,
                         variation: .lightHighContrast
-                    ) else {
-                        warnings.append(Error.unspecifiedVariation(variation.rawValue, image.light.name))
-                        return []
+                    ) {
+                        files.append(contentsOf: imageFiles)
                     }
-                    files.append(contentsOf: imageFiles)
                 case .darkHighContrast:
-                    guard let imageFiles = makeAndRegisterFileContents(
+                    if let imageFiles = makeAndRegisterFileContents(
                         variationsData: &variationsData,
                         imagePack: image.darkHC,
                         variation: .darkHighContrast
-                    ) else {
-                        warnings.append(Error.unspecifiedVariation(variation.rawValue, image.light.name))
-                        return []
+                    ) {
+                        files.append(contentsOf: imageFiles)
                     }
-                    files.append(contentsOf: imageFiles)
                 }
             }
             imagesData.append(ImageData(name: image.light.name.lowerCamelCased(), variations: variationsData))

@@ -1,6 +1,6 @@
 import Foundation
 
-enum ImageVariation: String {
+enum ImageVariation: String, CaseIterable, Comparable {
     case light, dark, lightHighContrast, darkHighContrast
 
     var capitalized: String {
@@ -13,6 +13,15 @@ enum ImageVariation: String {
             "LightHighContrast"
         case .darkHighContrast:
             "DarkHighContrast"
+        }
+    }
+
+    static func < (lhs: Self, rhs: Self) -> Bool {
+        if let lhsIndex = ImageVariation.allCases.firstIndex(of: lhs),
+           let rhsIndex = ImageVariation.allCases.firstIndex(of: rhs) {
+            lhsIndex < rhsIndex
+        } else {
+            false
         }
     }
 }

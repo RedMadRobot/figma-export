@@ -130,8 +130,8 @@ final class FlutterIconsExporterTests: XCTestCase {
         try assertCodeEquals(sourceFile.data, expectedSource)
     }
 
-    func test_exportIcons_warningForMissingVariation() throws {
-        // Given:
+    func test_exportIcons_incompleteVariations() throws {
+        // Given
         let output = FlutterIconsOutput(
             iconsAssetsFolder: URL(string: "assets/icons/my_icons")!,
             outputFile: iconsOutputFile,
@@ -139,18 +139,16 @@ final class FlutterIconsExporterTests: XCTestCase {
             baseAssetClass: "IconAsset",
             baseAssetClassFilePath: "icon_asset.dart",
             relativeIconsPath: URL(string: "icons/")!,
-            useSvgVec: false,
             templatesURL: nil
         )
         let exporter = FlutterIconsExporter(output: output)
+        let completeAssetPair = iconPair1
+        let incompleteAssetPair = iconPairMissingDark
 
-        // When: Exporting both asset pairs.
-        let result = try exporter.export(icons: [iconPair1, iconPairMissingDark])
+        // When
+        let result = try exporter.export(icons: [completeAssetPair, incompleteAssetPair])
 
-        // Then:
-        XCTAssertEqual(result.files.count, 3)
-        XCTAssertEqual(result.warnings.all.count, 1)
-
+        // Then
         let expectedSource = """
         \(header)
         import 'icon_asset.dart';
@@ -161,6 +159,10 @@ final class FlutterIconsExporterTests: XCTestCase {
           final iconPair1 = const IconAsset(
             light: 'icons/icon_pair_1_light.svg',
             dark: 'icons/icon_pair_1_dark.svg',
+          );
+          final iconPair1 = const IconAsset(
+            light: 'icons/icon_pair_1_light.svg',
+            dark: null,
           );
         }
 

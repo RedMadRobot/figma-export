@@ -132,8 +132,8 @@ final class FlutterImagesExporterTests: XCTestCase {
         try assertCodeEquals(sourceFile.data, expectedSource)
     }
 
-    func test_exportImages_warningForMissingVariation() throws {
-        // Given: A valid asset pair with both variants and an asset pair missing the dark variant.
+    func test_exportImages_incompleteVariations() throws {
+        // Given
         let output = FlutterImagesOutput(
             imagesAssetsFolder: URL(string: "assets/images/my_images")!,
             outputFile: imagesOutputFile,
@@ -146,14 +146,13 @@ final class FlutterImagesExporterTests: XCTestCase {
             templatesURL: nil
         )
         let exporter = FlutterImagesExporter(output: output)
+        let completeAssetPair = imagePair1
+        let incompleteAssetPair = imagePairMissingDark
 
-        // When: Exporting both asset pairs.
-        let result = try exporter.export(images: [imagePair1, imagePairMissingDark])
+        // When
+        let result = try exporter.export(images: [completeAssetPair, incompleteAssetPair])
 
-        // Then:
-        XCTAssertEqual(result.files.count, 3)
-        XCTAssertEqual(result.warnings.all.count, 1)
-
+        // Then
         let expectedSource = """
         \(header)
         import 'image_asset.dart';
@@ -164,6 +163,10 @@ final class FlutterImagesExporterTests: XCTestCase {
           final imagePair1 = const ImageAsset(
             light: 'images/image_pair_1_light.png',
             dark: 'images/image_pair_1_dark.png',
+          );
+          final imagePair1 = const ImageAsset(
+            light: 'images/image_pair_1_light.png',
+            dark: null,
           );
         }
 
