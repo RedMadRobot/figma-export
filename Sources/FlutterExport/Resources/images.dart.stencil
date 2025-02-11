@@ -1,0 +1,10 @@
+{% include "header.stencil" %}
+import '{{ baseAssetClassFilePath }}';
+
+class {{ imagesClassName }} {{"{"}}
+  const {{ imagesClassName }}();
+{% for image in images %}
+  final {{ image.name }} = const {{ baseAssetClass }}({% for variation in variations %}
+    {{ variation }}: '{{ image.variations[variation] }}',{% endfor %}
+  );{% endfor %}
+{{"}"}}

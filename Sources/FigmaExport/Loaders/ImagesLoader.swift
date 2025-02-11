@@ -128,8 +128,13 @@ final class ImagesLoader {
 
     private func loadImagesFromSingleFile(filter: String? = nil) throws -> (light: [ImagePack], dark: [ImagePack]?) {
         let darkSuffix = params.common?.images?.darkModeSuffix ?? "_dark"
-        switch (platform, params.android?.images?.format) {
-        case (.android, .png), (.android, .webp), (.ios, _):
+
+        let androidFormat = params.android?.images?.format
+        let flutterFormat = params.flutter?.images?.format
+        let isSVG = (platform == .android || platform == .flutter)
+        && (androidFormat == .svg || flutterFormat == .svg)
+
+        if !isSVG {
             let images = try loadPNGImages(
                 fileId: params.figma.lightFileId,
                 frameName: imagesFrameName,
@@ -145,7 +150,7 @@ final class ImagesLoader {
                     return newImage
                 }
             return (lightImages, darkImages)
-        default:
+        } else {
             let pack = try _loadImages(
                 fileId: params.figma.lightFileId,
                 frameName: imagesFrameName,

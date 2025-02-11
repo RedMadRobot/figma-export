@@ -4,6 +4,7 @@ import FigmaAPI
 import XcodeExport
 import FigmaExportCore
 import AndroidExport
+import FlutterExport
 
 extension FigmaExportCommand {
 
@@ -36,6 +37,35 @@ extension FigmaExportCommand {
                 logger.info("Using FigmaExport \(FigmaExportCommand.version) to export images to Android Studio project.")
                 try exportAndroidImages(client: client, params: options.params)
             }
+
+            if let _ = options.params.flutter {
+                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export images to Flutter project.")
+                try exportFlutterImages(client: client, params: options.params)
+            }
+        }
+
+        private func exportFlutterImages(client: Client, params: Params) throws {
+            logger.info("Fetching images info from Figma. Please wait...")
+            let loader = ImagesLoader(client: client, params: params, platform: .flutter, logger: logger)
+            let imagesTuple = try loader.loadImages(filter: filter)
+
+            logger.info("Processing images...")
+            let processor = ImagesProcessor(
+                platform: .flutter,
+                nameValidateRegexp: params.common?.images?.nameValidateRegexp,
+                nameReplaceRegexp: params.common?.images?.nameReplaceRegexp,
+                nameStyle: .snakeCase
+            )
+            let images = processor.process(light: imagesTuple.light, dark: imagesTuple.dark)
+            if let warning = images.warning?.errorDescription {
+                logger.warning("\(warning)")
+            }
+
+            try exportFlutterRasterImages(images: images.get(), params: params)
+
+            checkForUpdate(logger: logger)
+
+            logger.info("Done!")
         }
 
         private func exportiOSImages(client: Client, params: Params) throws {
@@ -221,7 +251,70 @@ extension FigmaExportCommand {
             try? FileManager.default.removeItem(at: tempDirectoryLightURL)
             try? FileManager.default.removeItem(at: tempDirectoryDarkURL)
         }
-        
+
+        private func exportFlutterRasterImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params) throws {
+            guard let flutter = params.flutter, let flutterImages = flutter.images else {
+                logger.info("Nothing to do. You haven’t specified flutter.images parameter in the config file.")
+                return
+            }
+
+            let outputConfig = FlutterImagesOutput(
+                imagesAssetsFolder: flutterImages.imagesAssetsFolder,
+                outputFile: flutterImages.outputFile,
+                imagesClassName: flutterImages.imagesClassName,
+                baseAssetClass: flutterImages.baseAssetClass,
+                baseAssetClassFilePath: flutterImages.baseAssetClassFilePath,
+                relativeImagesPath: flutterImages.relativeImagesPath,
+                format: flutterImages.format.rawValue,
+                scales: flutterImages.scales,
+                templatesURL: flutterImages.templatesURL
+            )
+            let exporter = FlutterImagesExporter(output: outputConfig)
+
+            try? FileManager.default.removeItem(atPath: outputConfig.imagesAssetsFolder.path)
+
+            let (allFiles, warnings) = try exporter.export(images: images)
+
+            if !warnings.all.isEmpty {
+                logger.warning("\(warnings.localizedDescription)")
+            }
+
+            // Download files to user's temp directory
+            logger.info("Downloading remote files...")
+
+            let localFiles = try fileDownloader.fetch(files: allFiles)
+
+            // Move downloaded files to new empty temp directory
+            try fileWriter.write(files: localFiles)
+
+            var filesToDelete: [FileContents] = []
+
+            // Convert to WebP
+            if flutterImages.format == .webp, let options = flutterImages.webpOptions {
+                logger.info("Converting PNG files to WebP...")
+                let converter: WebpConverter
+                switch (options.encoding, options.quality) {
+                case (.lossless, _):
+                    converter = WebpConverter(encoding: .lossless)
+                case (.lossy, let quality?):
+                    converter = WebpConverter(encoding: .lossy(quality: quality))
+                case (.lossy, .none):
+                    fatalError("Encoding quality not specified. Set android.images.webpOptions.quality in YAML file.")
+                }
+                try localFiles.forEach { file in
+                    guard file.destination.file.pathExtension == "png" else {
+                        return
+                    }
+                    filesToDelete.append(file)
+                    try converter.convert(file: file.destination.url)
+                }
+            }
+
+            filesToDelete.forEach {
+                try? FileManager.default.removeItem(atPath: $0.destination.url.path)
+            }
+        }
+
         private func exportAndroidRasterImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params) throws {
             guard let android = params.android, let androidImages = android.images else {
                 logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
@@ -230,7 +323,7 @@ extension FigmaExportCommand {
 
             // Create empty temp directory
             let tempDirectoryURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-            
+
             // Download files to user's temp directory
             logger.info("Downloading remote files...")
             let remoteFiles = try images.flatMap { asset -> [FileContents] in
@@ -244,12 +337,12 @@ extension FigmaExportCommand {
                 } ?? []
                 return lightFiles + darkFiles
             }
-            
+
             var localFiles = try fileDownloader.fetch(files: remoteFiles)
 
             // Move downloaded files to new empty temp directory
             try fileWriter.write(files: localFiles)
-            
+
             // Convert to WebP
             if androidImages.format == .webp, let options = androidImages.webpOptions {
                 logger.info("Converting PNG files to WebP...")
@@ -267,7 +360,7 @@ extension FigmaExportCommand {
                     return file.changingExtension(newExtension: "webp")
                 }
             }
-            
+
             if filter == nil {
                 // Clear output directory
                 let outputDirectory = URL(fileURLWithPath: android.mainRes.appendingPathComponent(androidImages.output).path)
@@ -275,7 +368,7 @@ extension FigmaExportCommand {
             }
 
             logger.info("Writting files to Android Studio project...")
-            
+
             // Move PNG/WebP files to main/res/figma-export-images/drawable-XXXdpi/
             let isSingleScale = params.android?.images?.scales?.count == 1
             localFiles = localFiles.map { fileContents -> FileContents in
@@ -292,10 +385,10 @@ extension FigmaExportCommand {
                 )
             }
             try fileWriter.write(files: localFiles)
-            
+
             try? FileManager.default.removeItem(at: tempDirectoryURL)
         }
-        
+
         /// Make array of remote FileContents for downloading images
         /// - Parameters:
         ///   - images: Dictionary of images. Key = scale, value = image info
