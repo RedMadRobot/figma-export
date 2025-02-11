@@ -28,7 +28,7 @@ common:
     nameValidateRegexp: '^(ic)_(\d\d)_([a-z0-9_]+)$' # RegExp pattern for: ic_24_icon_name, ic_24_icon
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'icon_$2_$1'
-    # [optional] Extract light and dark mode colors from the `lightFileId` specified in the `figma` parameters section. Defaults to false
+    # [optional] Extract light and dark mode icons from the `lightFileId` specified in the `figma` parameters section. Defaults to false
     useSingleFile: false
     # [optional] If useSingleFile is true, customize the suffix used to denote dark mode icons. Defaults to '_dark'
     darkModeSuffix: '_dark'
@@ -40,7 +40,7 @@ common:
     nameValidateRegexp: '^(img)_([a-z0-9_]+)$' # RegExp pattern for: img_image_name
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'image_$2'
-    # [optional] Extract light and dark mode colors from the `lightFileId` specified in the `figma` parameters section. Defaults to false
+    # [optional] Extract light and dark mode images from the `lightFileId` specified in the `figma` parameters section. Defaults to false
     useSingleFile: false
     # [optional] If useSingleFile is true, customize the suffix used to denote dark mode icons. Defaults to '_dark'
     darkModeSuffix: '_dark'
