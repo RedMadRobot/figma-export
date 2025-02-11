@@ -131,8 +131,8 @@ final class ImagesLoader {
 
         let androidFormat = params.android?.images?.format
         let flutterFormat = params.flutter?.images?.format
-        let isSVG = (platform == .android || platform == .flutter)
-        && (androidFormat == .svg || flutterFormat == .svg)
+        let isSVG = (platform == .android && androidFormat == .svg)
+        || (platform == .flutter && flutterFormat == .svg)
 
         if !isSVG {
             let images = try loadPNGImages(
