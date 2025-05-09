@@ -495,7 +495,7 @@ Example of `figma-export.yaml` file for iOS project — [Examples/Example/figma-
 
 Example of `figma-export.yaml` file for Android project — [Examples/AndroidExample/figma-export.yaml](./Examples/AndroidExample/figma-export.yaml)
 
-Example of `figma-export.yaml` file for Flutter project — [Examples/FlutterExample/figma-export.yaml](./Examples/FlutterExample/figma-export.yaml)
+Example of `figma-export.yaml` file for Flutter project — [Examples/FlutterExample/figma-export.yaml](./Sources/FigmaExport/Resources/flutterConfig.swift)
 
 Generate `figma-export.yaml` config file using one of the following command:
 ```
