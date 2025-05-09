@@ -8,13 +8,14 @@ on:
 jobs:
   release:
     name: Publish GitHub and Cocoapods release
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Select Xcode version
-        run: sudo xcode-select --switch /Applications/Xcode_14.1.app
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.2.app
 
       - name: Build
         run: |

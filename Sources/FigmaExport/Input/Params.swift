@@ -1,8 +1,6 @@
 import Foundation
 import FigmaExportCore
 
-extension NameStyle: Decodable {}
-
 struct Params: Decodable {
 
     struct Figma: Decodable {
