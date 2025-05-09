@@ -1,6 +1,6 @@
 # FigmaExport configuration file
 
-Argument `-i` or `-input` specifies path to `figma-export.yaml` file where all the properties stores: figma, ios, android.
+Argument `-i` or `-input` specifies path to `figma-export.yaml` file where all the properties stores: figma, ios, android, flutter.
 
 If `figma-export.yaml` file is next to the `figma-export` executable file you can omit `-i` option.
 
@@ -221,4 +221,97 @@ android:
     nameStyle: camelCase
     # [optional] The package to export the Jetpack Compose typography code to. Note: To export Jetpack Compose code, also `mainSrc` and `resourcePackage` above must be set 
     composePackageName: "com.example"
+
+# Flutter export parameters
+flutter:
+  # [optional] Parameters for exporting colors
+  colors:
+    # [optional] Template for code generation. Default is nil (internal templates are used).
+    templatesPath: ~/myTemplates/
+    # [optional] Output file for the colors. Defaults to %current_directory%/colors.dart
+    outputFile: ~/work/myFlutterProject/modules/ui_kit/ui_colors.dart
+    # [optional] Name for the generated class. Defaults to `Colors`.
+    outputClassName: UiColors
+    # [optional] If true, variations will be generated as properties of your `Colors` class. For example:
+    # ```dart
+    # class Colors {
+    #   final Color light;
+    #   final Color dark;
+    #   ...etc..
+    #   static const background = Colors(light: Color(0xFFFFFFFF), dark: Color(0xFF000000), ...);
+    #   ...etc...
+    # ```
+    # Note: When `generateVariationsAsProperties` is true, all colors in your Figma file must have the same variations. For example, if one color has only a light variation and another has both light and dark variations, an error will occur.
+    # If false, all colors and variations will be generated as separate `static const` declarations, with the variation name appended to the constant. For example:
+    # ```dart
+    # class Colors {
+    #   final Color value;
+    #   static const backgroundLight = Colors(Color(0xFFFFFFFF));
+    #   static const backgroundDark = Colors(Color(0xFF000000));
+    #   static const backgroundAccentLight = Colors(Color(0xFFCCCCCC));
+    #   ...etc...
+    # ```
+    # Defaults to `true`.
+    generateVariationsAsProperties: true
+
+  # [optional] Parameters for exporting icons
+  icons:
+    # [optional] Template for code generation. Default is nil (internal templates are used).
+    templatesURL: ~/myTemplates/
+    # [optional] Output file for the generated code. Defaults to %current_directory%/icons.dart
+    outputFile: ./lib/foundation/icons/my_icons.dart
+    # [optional] Name for the generated class. Defaults to `Icons`.
+    iconsClassName: MyIcons
+    # [optional] Name for the base class with asset properties (light and dark Strings). Defaults to `IconAsset`.
+    baseAssetClass: IconAsset
+    # [optional] Folder to download all the icons to. Defaults to `%current_directory%/icons/`.
+    iconsAssetsFolder: ./assets/icons/my_icons
+    # [optional] Use svg.vec instead of svg? Defaults to false. Note: it will only change the extension of files, not actually convert them. To convert, you need to do an additional step after running figma-export:
+    # ```bash
+    # vector_graphics_compiler -i <file>
+    # ```
+    useSvgVec: true
+    # [required] Path to the downloaded icons for code generation. It will be used in constants like this:
+    # ```dart
+    # static const icUserPhoto = IconAsset(
+    #   light: '%relativeIconsPath%/ic_user_photo_light.svg',
+    #   dark: '%relativeIconsPath%/ic_user_photo_dark.svg',
+    # );
+    # ```
+    # Note: trailing slash ("/") is mandatory here.
+    relativeIconsPath: icons/color_icons/
+
+  # [optional] Parameters for exporting images
+  images:
+    # [optional] Template for code generation. Default is nil (internal templates are used).
+    # templatesURL: ~/myTemplates/
+    # [optional] Output file for the generated code. Defaults to %current_directory%/images.dart
+    outputFile: ./lib/foundation/images/my_images.dart
+    # [optional] Name for the generated class. Defaults to `Images`.
+    imagesClassName: MyImages
+    # [optional] Name for the base class with asset properties (light and dark strings). Defaults to `ImageAsset`.
+    baseAssetClass: ImageAsset
+    # [optional] Path to the base asset class file to use in import statement. Defaults to `image_asset.dart`.
+    baseAssetClassFilePath: image_asset.dart
+    # [optional] Folder to download all the images to. Defaults to `%current_directory%/images/`.
+    imagesAssetsFolder: ./assets/images/my_images
+    # [required] Path to the downloaded images for code generation. It will be used in constants like this:
+    # ```dart
+    # static const userPhoto = ImageAsset(
+    #   light: '%relativeIconsPath%/user_photo_light.webp',
+    #   dark: '%relativeIconsPath%/user_photo_dark.webp',
+    # );
+    # ```
+    # Note: trailing slash ("/") is mandatory here.
+    relativeImagesPath: assets/images/my_images/
+    # [optional] An array of asset scales to download. Valid values are 1, 2, and 3. The default is [1, 2, 3].
+    scales: [1, 2, 3]
+    # [required] Image format: svg, png, or webp
+    format: webp
+    # [optional] Only applicable if the chosen format is webp
+    webpOptions:
+      # Encoding type: lossy or lossless
+      encoding: lossy
+      # Encoding quality in percent (only for lossy encoding).
+      quality: 50
 ```

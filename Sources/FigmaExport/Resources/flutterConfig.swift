@@ -140,7 +140,4 @@ flutter:
       encoding: lossy
       # Encoding quality in percent (only for lossy encoding).
       quality: 50
-
-  # [optional] Parameters for exporting typography
-  typography:
 """#
