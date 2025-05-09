@@ -284,7 +284,7 @@ flutter:
   # [optional] Parameters for exporting images
   images:
     # [optional] Template for code generation. Default is nil (internal templates are used).
-    # templatesURL: ~/myTemplates/
+    templatesURL: ~/myTemplates/
     # [optional] Output file for the generated code. Defaults to %current_directory%/images.dart
     outputFile: ./lib/foundation/images/my_images.dart
     # [optional] Name for the generated class. Defaults to `Images`.
