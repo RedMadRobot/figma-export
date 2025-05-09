@@ -276,6 +276,89 @@ object Typography {
 }
 ```
 
+### Flutter
+
+Colors will be exported to the file with specified path. Example code:
+```dart
+import 'package:flutter/widgets.dart';
+
+class Colors {
+  final Color light;
+  final Color dark;
+  final Color lightHighContrast;
+  final Color darkHighContrast;
+
+  const Colors({
+    required this.light,
+    required this.dark,
+    required this.lightHighContrast,
+    required this.darkHighContrast,
+  });
+
+  // From Colors
+  static const backgroundAccent = Colors(
+    light: Color(0xFFFFFFFF),
+    dark: Color(0xFFFFFFFF),
+    lightHighContrast: Color(0xFFFFFFFF),
+    darkHighContrast: Color(0xFFFFFFFF),
+  );
+  static const backgroundPrimary = Colors(
+    light: Color(0xFFFFFFFF),
+    dark: Color(0xFFFFFFFF),
+    lightHighContrast: Color(0xFFFFFFFF),
+    darkHighContrast: Color(0xFFFFFFFF),
+  );
+  static const backgroundSecondary = Colors(
+    light: Color(0xFFFFFFFF),
+    dark: Color(0xFFFFFFFF),
+    lightHighContrast: Color(0xFFFFFFFF),
+    darkHighContrast: Color(0xFFFFFFFF),
+  );
+}
+```
+
+Icons will be downloaded to the specified asset directory, and also the code will be generated:
+```dart
+import 'icon_asset.dart';
+
+class Icons {
+  const Icons();
+
+  final add = const IconAsset(
+    light: 'assets/icons/add_light.svg.vec',
+  );
+  final arrowLeftRight = const IconAsset(
+    light: 'assets/icons/arrow_left_right_light.svg.vec',
+  );
+  final arrowUpDown = const IconAsset(
+    light: 'assets/icons/arrow_up_down_light.svg.vec',
+  );
+  final attach = const IconAsset(
+    light: 'assets/icons/attach_light.svg.vec',
+  );
+}
+```
+
+Images will be downloaded to the specified asset directory, and the code will be generated:
+```dart
+import 'image_asset.dart';
+
+class Images {
+  const Images();
+
+  final mountains = const ImageAsset(
+    light: 'assets/images/mountains_light.webp',
+    dark: 'assets/images/mountains_dark.webp',
+  );
+  final lake = const ImageAsset(
+    light: 'assets/images/lake_light.webp',
+    dark: 'assets/images/lake_dark.webp',
+  );
+}
+```
+
+Fonts export for Flutter: currently not supported.
+
 ## Installation
 
  Before installation you must provide Figma personal access token via environment variables.
@@ -412,10 +495,13 @@ Example of `figma-export.yaml` file for iOS project — [Examples/Example/figma-
 
 Example of `figma-export.yaml` file for Android project — [Examples/AndroidExample/figma-export.yaml](./Examples/AndroidExample/figma-export.yaml)
 
+Example of `figma-export.yaml` file for Flutter project — [Examples/FlutterExample/figma-export.yaml](./Examples/FlutterExample/figma-export.yaml)
+
 Generate `figma-export.yaml` config file using one of the following command:
 ```
 figma-export init --platform android
 figma-export init --platform ios
+figma-export init --platform flutter
 ```
 It will generate config file in the current directory.
 
@@ -451,6 +537,16 @@ Custom Stencil templates must have the following names:
 - Icons.kt.stencil
 - typography.xml.stencil
 - Typography.kt.stencil
+
+##### Flutter
+
+If you want to modify structure of the generated `*.dart` files you should specify a directory (`flutter.icons[or images/colors].templatesURL`) where Stencil templates are located. If `templatesURL` is not specified default templates will be used.
+
+Defaul Stencil templates for Flutter are located here: `./Sources/FlutterExport/Resources`
+Custom Stencil templates must have the following names:
+- colors.dart.stencil
+- icons.dart.stencil
+- images.dart.stencil
 
 ### Exporting Typography
 
