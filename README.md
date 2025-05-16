@@ -85,7 +85,6 @@ Additionally, the following Swift file will be created to use colors from the co
     static var backgroundVideo: UIColor { return UIColor(named: #function)! }
     ...
  }
-
 ```
 
 For SwiftUI the following Swift file will be created to use colors from the code.
@@ -99,7 +98,6 @@ For SwiftUI the following Swift file will be created to use colors from the code
     static var backgroundVideo: Color { return Color(#function) }
     ...
  }
-
 ```
 
 If you set option `useColorAssets: False` in the configuration file, then will be generated code like this:
@@ -221,6 +219,7 @@ Example of these files:
 
 Colors will be exported to `values/colors.xml` and `values-night/colors.xml` files.
 For Jetpack Compose, following code will be generated, if configured:
+
 ```kotlin
 package com.redmadrobot.androidcomposeexample.ui.figmaexport
 
@@ -234,6 +233,7 @@ fun Colors.backgroundPrimary(): Color = colorResource(id = R.color.background_pr
 ```
 
 Icons will be exported to `drawable` directory as vector xml files. For Jetpack Compose, following code will be generated, if configured:
+
 ```kotlin
 package com.redmadrobot.androidcomposeexample.ui.figmaexport
 
@@ -260,6 +260,7 @@ Vector images will be exported to `drawable` and `drawable-night` directories as
 Raster images will be exported to `drawable-???dpi` and `drawable-night-???dpi` directories as `png` or `webp` files.
 
 Typography will be exported to `values/typography.xml`. For Jetpack Compose, following code will be generated, if configured:
+
 ```kotlin
 package com.redmadrobot.androidcomposeexample.ui.figmaexport
 
@@ -290,16 +291,20 @@ object Typography {
 [Download](https://github.com/RedMadRobot/figma-export/releases) the latest release and read [Usage](#usage)
 
 ### Homebrew
-```
+
+```bash
 brew install RedMadRobot/formulae/figma-export
 ```
+
 If you want to export raster images in WebP format install [cwebp](https://developers.google.com/speed/webp/docs/using) command line utility.
-```
+
+```bash
 brew install webp
 ```
 
 ### CocoaPods + Fastlane
 Add the following line to your Podfile:
+
 ```ruby
 pod 'FigmaExport'
 ```
@@ -308,6 +313,7 @@ This will download the FigmaExport binaries and dependencies in `Pods/` during y
 `pod install` execution and will allow you to invoke it via `Pods/FigmaExport/Release/figma-export` in your Fastfile.
 
 Add the following line to your Fastfile:
+
 ```ruby
 lane :sync_colors do
   Dir.chdir("../") do
@@ -321,6 +327,7 @@ Don't forget to place figma-export.yaml file at the root of the project director
 Run `fastlane sync_colors` to run FigmaExport.
 
 ## Usage
+
 1. Open `Terminal.app`
 2. Go (cd) to the folder with `figma-export` binary file
 3. Run `figma-export`
@@ -413,7 +420,8 @@ Example of `figma-export.yaml` file for iOS project — [Examples/Example/figma-
 Example of `figma-export.yaml` file for Android project — [Examples/AndroidExample/figma-export.yaml](./Examples/AndroidExample/figma-export.yaml)
 
 Generate `figma-export.yaml` config file using one of the following command:
-```
+
+```bash
 figma-export init --platform android
 figma-export init --platform ios
 ```
