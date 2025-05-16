@@ -12,7 +12,7 @@ The UI-Kit of the example project in Figma:
 
 ### Example iOS project
 
-There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories which demostrates how to use figma-export with UIKit and SwiftUI.
+There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories which demonstrates how to use figma-export with UIKit and SwiftUI.
 
 <img src="../images/figma.png" />
 
@@ -20,8 +20,8 @@ There are 2 example iOS projects in `Example` and `ExampleSwiftUI` directories w
 1. Open `Example/fastlane/.env` file.
 2. Change FIGMA_PERSONAL_TOKEN to your personal Figma token.
 3. Go to `Example` folder.
-4. Run the following command in Termanal to install cocoapods and fastlane: `bundle install`
-5. Run the following command in Termanal to install figma-export: `bundle exec pod install`
+4. Run the following command in Terminal to install CocoaPods and Fastlane: `bundle install`
+5. Run the following command in Terminal to install figma-export: `bundle exec pod install`
 
 **How to export resources from figma**
 * To export colors run: `bundle exec fastlane export_colors`
@@ -39,7 +39,7 @@ There is an example Android Studio project in `AndroidExample` directory which d
 
 ### Example Android Jetpack Compose project
 
-There is an example Android Studio project in `AndroidComposeExample` directory which demostrates how to use `figma-export` configured for Jetpack Compose.
+There is an example Android Studio project in `AndroidComposeExample` directory which demonstrates how to use `figma-export` configured for Jetpack Compose.
 
 You can find the generated code for compose in the package `com.redmadrobot.androidcomposeexample.ui.figmaexport`
 
