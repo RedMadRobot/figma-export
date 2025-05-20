@@ -172,8 +172,59 @@ struct Params: Decodable {
         let templatesPath: URL?
     }
 
+    struct Flutter: Decodable {
+        struct Colors: Decodable {
+            let templatesPath: URL?
+            let outputFile: URL?
+            let outputClassName: String?
+            let generateVariationsAsProperties: Bool?
+        }
+
+        struct Icons: Decodable {
+            let iconsAssetsFolder: URL?
+            let outputFile: URL?
+            let iconsClassName: String?
+            let baseAssetClass: String?
+            let baseAssetClassFilePath: String?
+            let relativeIconsPath: URL
+            let useSvgVec: Bool?
+            let templatesURL: URL?
+        }
+
+        struct Images: Decodable {
+            enum Format: String, Decodable {
+                case svg
+                case png
+                case webp
+            }
+            struct FormatOptions: Decodable {
+                enum Encoding: String, Decodable {
+                    case lossy
+                    case lossless
+                }
+                let encoding: Encoding
+                let quality: Int?
+            }
+            let imagesAssetsFolder: URL?
+            let outputFile: URL?
+            let imagesClassName: String?
+            let baseAssetClass: String?
+            let baseAssetClassFilePath: String?
+            let relativeImagesPath: URL
+            let templatesURL: URL?
+            let format: Format
+            let scales: Set<Double>
+            let webpOptions: FormatOptions?
+        }
+
+        let colors: Colors?
+        let icons: Icons?
+        let images: Images?
+    }
+
     let figma: Figma
     let common: Common?
     let ios: iOS?
     let android: Android?
+    let flutter: Flutter?
 }

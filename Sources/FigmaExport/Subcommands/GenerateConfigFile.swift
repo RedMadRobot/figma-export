@@ -23,6 +23,8 @@ extension FigmaExportCommand {
                 fileContents = androidConfigFileContents
             case .ios:
                 fileContents = iosConfigFileContents
+            case .flutter:
+                fileContents = flutterConfigFileContents
             }
             let fileData = fileContents.data(using: .utf8)
             

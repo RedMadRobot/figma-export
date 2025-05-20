@@ -14,10 +14,10 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.0"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.0"),
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.4.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.6.2"),
         .package(url: "https://github.com/stencilproject/Stencil.git", from: "0.15.1"),
         .package(url: "https://github.com/SwiftGen/StencilSwiftKit", from: "2.10.1"),
-        .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.8.0"),
+        .package(url: "https://github.com/tuist/XcodeProj.git", from: "8.24.11"),
         .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "0.6.0")
     ],
     targets: [
@@ -30,6 +30,7 @@ let package = Package(
                 "FigmaExportCore",
                 "XcodeExport",
                 "AndroidExport",
+                "FlutterExport",
                 .product(name: "XcodeProj", package: "XcodeProj"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Yams", package: "Yams"),
@@ -63,7 +64,16 @@ let package = Package(
                 .copy("Resources/")
             ]
         ),
-        
+
+        // Exports resources to Flutter project
+        .target(
+            name: "FlutterExport",
+            dependencies: ["FigmaExportCore", "Stencil", "StencilSwiftKit"],
+            resources: [
+                .copy("Resources/")
+            ]
+        ),
+
         // MARK: - Tests
         
         .testTarget(
@@ -84,6 +94,14 @@ let package = Package(
         .testTarget(
             name: "AndroidExportTests",
             dependencies: ["AndroidExport", .product(name: "CustomDump", package: "swift-custom-dump")]
+        ),
+        .testTarget(
+            name: "FlutterExportTests",
+            dependencies: [
+                "FlutterExport",
+                .product(name: "CustomDump", package: "swift-custom-dump"),
+                .product(name: "Logging", package: "swift-log")
+            ]
         )
     ]
 )
