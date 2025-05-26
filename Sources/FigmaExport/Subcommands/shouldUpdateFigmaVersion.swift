@@ -23,8 +23,8 @@ extension ParsableCommand {
         }
         
         let lastVersionDate = lastVersion.createdAt ?? Date()
-        let localVersionDate = versionManager.getVersionDate(for: assetKey) ?? Date(timeIntervalSince1970: 0)
-        if lastVersionDate > localVersionDate {
+        let localVersionDate = versionManager.getVersionDate(for: assetKey)
+        if let localVersionDate, lastVersionDate > localVersionDate {
             versionManager.setVersionDate(lastVersionDate, for: assetKey)
             logger.info("""
 
