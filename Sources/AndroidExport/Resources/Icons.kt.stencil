@@ -16,8 +16,8 @@ object Icons
 {% for icon in icons %}
 @Composable
 fun Icons.{{ icon.functionName }}(
-    contentDescription: String? = null,
     modifier: Modifier = Modifier,
+    contentDescription: String? = null,
     tint: Color = Color.Unspecified
 ) {
     Icon(
