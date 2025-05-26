@@ -50,8 +50,7 @@ extension FigmaExportCommand {
         private func exportiOSIcons(client: Client, params: Params) throws {
             guard let ios = params.ios,
                   let iconsParams = ios.icons else {
-                logger.info("Nothing to do. You haven’t specified ios.icons parameters in the config file.")
-                return
+                throw FigmaExportError.custom(errorString: "Nothing to do. You haven’t specified ios.icons parameter in the config file.")
             }
 
             logger.info("Fetching icons info from Figma. Please wait...")
@@ -121,8 +120,7 @@ extension FigmaExportCommand {
         
         private func exportAndroidIcons(client: Client, params: Params) throws {
             guard let android = params.android, let androidIcons = android.icons else {
-                logger.info("Nothing to do. You haven’t specified android.icons parameter in the config file.")
-                return
+                throw FigmaExportError.custom(errorString: "Nothing to do. You haven’t specified android.icons parameter in the config file.")
             }
             
             // 1. Get Icons info

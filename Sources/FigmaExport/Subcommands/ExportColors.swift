@@ -122,8 +122,7 @@ extension FigmaExportCommand {
 
         private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS) throws {
             guard let colorParams = iosParams.colors else {
-                logger.error("Nothing to do. Add ios.colors parameters to the config file.")
-                return
+                throw FigmaExportError.custom(errorString: "Nothing to do. Add ios.colors parameters to the config file.")
             }
             
             var colorsURL: URL?
