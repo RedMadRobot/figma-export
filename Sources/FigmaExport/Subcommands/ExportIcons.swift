@@ -28,6 +28,10 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
+            let versionManager = VersionManager(versionFilePath: "figma-versions.json")
+            let lastAvailableDate = shouldUpdateFigmaVersion(for: .icons, options: options, logger: logger, versionManager: versionManager)
+            guard let lastAvailableDate else { return }
+            
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
             
             if options.params.ios != nil {
@@ -39,6 +43,8 @@ extension FigmaExportCommand {
                 logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Android Studio project.")
                 try exportAndroidIcons(client: client, params: options.params)
             }
+            
+            versionManager.setVersionDate(lastAvailableDate, for: .icons)
         }
         
         private func exportiOSIcons(client: Client, params: Params) throws {

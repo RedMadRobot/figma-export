@@ -18,6 +18,10 @@ extension FigmaExportCommand {
         var options: FigmaExportOptions
         
         func run() throws {
+            let versionManager = VersionManager(versionFilePath: "figma-versions.json")
+            let lastAvailableDate = shouldUpdateFigmaVersion(for: .typography, options: options, logger: logger, versionManager: versionManager)
+            guard let lastAvailableDate else { return }
+            
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
 
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export typography.")
@@ -55,6 +59,8 @@ extension FigmaExportCommand {
                 try exportAndroidTextStyles(textStyles: processedTextStyles, androidParams: android)
                 logger.info("Done!")
             }
+            
+            versionManager.setVersionDate(lastAvailableDate, for: .typography)
         }
         
         private func createXcodeOutput(from iosParams: Params.iOS) -> XcodeTypographyOutput {
