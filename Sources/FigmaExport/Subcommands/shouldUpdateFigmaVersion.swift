@@ -24,22 +24,22 @@ extension ParsableCommand {
         
         let lastVersionDate = lastVersion.createdAt ?? Date()
         let localVersionDate = versionManager.getVersionDate(for: assetKey)
-        if let localVersionDate, lastVersionDate > localVersionDate {
+        if let localVersionDate, lastVersionDate >= localVersionDate {
             versionManager.setVersionDate(lastVersionDate, for: assetKey)
             logger.info("""
 
-            ----------------------------------------------------------------------------------
-            New version available for file: \(fileId)... downloading updates now...
-            ----------------------------------------------------------------------------------
+            ----------------------------------------------------------------------------
+            You are on the latest file version, nothing to download.
+            ----------------------------------------------------------------------------
             """)
             return nil
         }
         
         logger.info("""
 
-        ----------------------------------------------------------------------------
-        You are on the latest file version, nothing to download.
-        ----------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------
+        New version available for file: \(fileId)... downloading updates now...
+        -------------------------------------------------------------------------------------
         """)
         return lastVersionDate
     }
