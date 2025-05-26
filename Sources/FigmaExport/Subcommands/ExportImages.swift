@@ -47,8 +47,7 @@ extension FigmaExportCommand {
         private func exportiOSImages(client: Client, params: Params) throws {
             guard let ios = params.ios,
                   let imagesParams = ios.images else {
-                logger.info("Nothing to do. You haven’t specified ios.images parameters in the config file.")
-                return
+                throw FigmaExportError.custom(errorString: "Nothing to do. You haven’t specified ios.images parameters in the config file.")
             }
 
             logger.info("Fetching images info from Figma. Please wait...")
@@ -116,8 +115,7 @@ extension FigmaExportCommand {
         
         private func exportAndroidImages(client: Client, params: Params) throws {
             guard let androidImages = params.android?.images else {
-                logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
-                return
+                throw FigmaExportError.custom(errorString: "Nothing to do. You haven’t specified android.images parameters in the config file.")
             }
 
             logger.info("Fetching images info from Figma. Please wait...")
@@ -150,8 +148,7 @@ extension FigmaExportCommand {
         
         private func exportAndroidSVGImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params) throws {
             guard let android = params.android, let androidImages = android.images else {
-                logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
-                return
+                throw FigmaExportError.custom(errorString: "Nothing to do. You haven’t specified android.images parameters in the config file.")
             }
 
             // Create empty temp directory
@@ -230,8 +227,7 @@ extension FigmaExportCommand {
         
         private func exportAndroidRasterImages(images: [AssetPair<ImagesProcessor.AssetType>], params: Params) throws {
             guard let android = params.android, let androidImages = android.images else {
-                logger.info("Nothing to do. You haven’t specified android.images parameter in the config file.")
-                return
+                throw FigmaExportError.custom(errorString: "Nothing to do. You haven’t specified android.images parameters in the config file.")
             }
 
             // Create empty temp directory
