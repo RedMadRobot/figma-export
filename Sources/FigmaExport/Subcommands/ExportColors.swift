@@ -25,6 +25,10 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
+            let versionManager = VersionManager(versionFilePath: "figma-versions.json")
+            let lastAvailableDate = shouldUpdateFigmaVersion(for: .colors, options: options, logger: logger, versionManager: versionManager)
+            guard let lastAvailableDate else { return }
+            
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
             logger.info("Fetching colors. Please wait...")
 
@@ -112,12 +116,13 @@ extension FigmaExportCommand {
                 
                 logger.info("Done!")
             }
+            
+            versionManager.setVersionDate(lastAvailableDate, for: .colors)
         }
 
         private func exportXcodeColors(colorPairs: [AssetPair<Color>], iosParams: Params.iOS) throws {
             guard let colorParams = iosParams.colors else {
-                logger.error("Nothing to do. Add ios.colors parameters to the config file.")
-                return
+                throw FigmaExportError.custom(errorString: "Nothing to do. Add ios.colors parameters to the config file.")
             }
             
             var colorsURL: URL?

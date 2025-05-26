@@ -18,43 +18,63 @@ extension FigmaExportCommand {
         var options: FigmaExportOptions
         
         func run() throws {
+            let versionManager = VersionManager(versionFilePath: "figma-versions.json")
+            let lastAvailableDate = shouldUpdateFigmaVersion(for: .typography, options: options, logger: logger, versionManager: versionManager)
+            guard let lastAvailableDate else { return }
+            
             let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout)
-
-            logger.info("Using FigmaExport \(FigmaExportCommand.version) to export typography.")
 
             logger.info("Fetching text styles. Please wait...")
             let loader = TextStylesLoader(client: client, params: options.params.figma)
             let textStyles = try loader.load()
             
-            if let ios = options.params.ios,
-               let typographyParams = ios.typography {
-                
-                logger.info("Processing typography...")
-                let processor = TypographyProcessor(
-                    platform: .ios,
-                    nameValidateRegexp: options.params.common?.typography?.nameValidateRegexp,
-                    nameReplaceRegexp: options.params.common?.typography?.nameReplaceRegexp,
-                    nameStyle: typographyParams.nameStyle
-                )
-                let processedTextStyles = try processor.process(assets: textStyles).get()
-                logger.info("Saving text styles...")
-                try exportXcodeTextStyles(textStyles: processedTextStyles, iosParams: ios)
-                logger.info("Done!")
+            if let _ = options.params.ios {
+                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export typography to Xcode project.")
+                try exportiOSIcons(params: options.params, textStyles: textStyles)
             }
-
-            if let android = options.params.android {
-                logger.info("Processing typography...")
-                let processor = TypographyProcessor(
-                    platform: .android,
-                    nameValidateRegexp: options.params.common?.typography?.nameValidateRegexp,
-                    nameReplaceRegexp: options.params.common?.typography?.nameReplaceRegexp,
-                    nameStyle: options.params.android?.typography?.nameStyle
-                )
-                let processedTextStyles = try processor.process(assets: textStyles).get()
-                logger.info("Saving text styles...")
-                try exportAndroidTextStyles(textStyles: processedTextStyles, androidParams: android)
-                logger.info("Done!")
+            
+            if let _ = options.params.android {
+                logger.info("Using FigmaExport \(FigmaExportCommand.version) to export typography to Android Studio project.")
+                try exportAndroidIcons(params: options.params, textStyles: textStyles)
             }
+            
+            versionManager.setVersionDate(lastAvailableDate, for: .typography)
+        }
+        
+        private func exportiOSIcons(params: Params, textStyles: [TextStyle]) throws {
+            guard let ios = options.params.ios, let typographyParams = ios.typography else {
+                throw FigmaExportError.custom(errorString: "Nothing to do. Add ios.typography parameters to the config file.")
+            }
+            
+            logger.info("Processing typography...")
+            let iOSProcessor = TypographyProcessor(
+                platform: .ios,
+                nameValidateRegexp: params.common?.typography?.nameValidateRegexp,
+                nameReplaceRegexp: params.common?.typography?.nameReplaceRegexp,
+                nameStyle: typographyParams.nameStyle
+            )
+            let iOSProcessedTextStyles = try iOSProcessor.process(assets: textStyles).get()
+            logger.info("Saving text styles...")
+            try exportXcodeTextStyles(textStyles: iOSProcessedTextStyles, iosParams: ios)
+            logger.info("Done!")
+        }
+        
+        private func exportAndroidIcons(params: Params, textStyles: [TextStyle]) throws {
+            guard let android = options.params.android else {
+                throw FigmaExportError.custom(errorString: "Nothing to do. Add android.typography parameters to the config file.")
+            }
+            
+            logger.info("Processing typography...")
+            let androidProcessor = TypographyProcessor(
+                platform: .android,
+                nameValidateRegexp: params.common?.typography?.nameValidateRegexp,
+                nameReplaceRegexp: params.common?.typography?.nameReplaceRegexp,
+                nameStyle: params.android?.typography?.nameStyle
+            )
+            let androidProcessedTextStyles = try androidProcessor.process(assets: textStyles).get()
+            logger.info("Saving text styles...")
+            try exportAndroidTextStyles(textStyles: androidProcessedTextStyles, androidParams: android)
+            logger.info("Done!")
         }
         
         private func createXcodeOutput(from iosParams: Params.iOS) -> XcodeTypographyOutput {
