@@ -41,7 +41,7 @@ GEM
     aws-sigv4 (1.11.0)
       aws-eventstream (~> 1, >= 1.0.2)
     babosa (1.0.4)
-    base64 (0.2.0)
+    base64 (0.3.0)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
     claide (1.1.0)
@@ -220,7 +220,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jmespath (1.6.2)
     json (2.9.1)
-    jwt (2.10.1)
+    jwt (2.10.3)
       base64
     logger (1.6.5)
     mini_magick (4.13.2)
