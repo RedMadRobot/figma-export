@@ -3,14 +3,14 @@ import Foundation
 import Logging
 
 enum FigmaExportError: LocalizedError {
-    
+
     case invalidFileName(String)
     case stylesNotFound
     case componentsNotFound
     case accessTokenNotFound
     case colorsAssetsFolderNotSpecified
     case custom(errorString: String)
-    
+
     var errorDescription: String? {
         switch self {
         case .invalidFileName(let name):
@@ -31,14 +31,14 @@ enum FigmaExportError: LocalizedError {
 
 @main
 struct FigmaExportCommand: ParsableCommand {
-    
-    static let version = "0.38.4"
-    
+
+    static let version = "0.39.0"
+
     static let svgFileConverter = VectorDrawableConverter()
     static let fileWriter = FileWriter()
     static let fileDownloader = FileDownloader()
     static let logger = Logger(label: "com.redmadrobot.figma-export")
-    
+
     static var configuration = CommandConfiguration(
         commandName: "figma-export",
         abstract: "Exports resources from Figma",

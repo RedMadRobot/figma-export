@@ -34,7 +34,7 @@ public class SVGParams: FormatParams {
     public var svgIncludeId = false
 
     /// Whether to simplify inside/outside strokes and use stroke attribute if possible instead of <mask>. Default: true.
-    public var svgSimplifyStroke = false
+    public var svgSimplifyStroke = true
 
     public init() {
         super.init(format: "svg")
