@@ -26,7 +26,7 @@ final class ColorsVariablesLoader {
 
         let meta = try loadVariables(fileId: tokensFileId)
 
-        guard let tokenCollection = meta.variableCollections.first(where: { $0.value.name == tokensCollectionName })
+        guard let tokenCollection = meta.variableCollections.first(where: { $0.value.name == tokensCollectionName && $0.value.remote != true })
         else { throw FigmaExportError.custom(errorString: "tokensCollectionName not found" ) }
 
         let variables: [Variable] = tokenCollection.value.variableIds.compactMap { tokenId in

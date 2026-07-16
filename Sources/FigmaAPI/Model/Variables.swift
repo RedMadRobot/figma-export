@@ -7,6 +7,7 @@ public struct VariableCollectionValue: Decodable {
     public var defaultModeId: String
     public var id: String
     public var name: String
+    public var remote: Bool?
     public var modes: [Mode]
     public var variableIds: [String]
 }
