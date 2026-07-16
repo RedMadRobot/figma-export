@@ -18,7 +18,7 @@ extension FigmaExportCommand {
         var options: FigmaExportOptions
         
         func run() throws {
-            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout, requestDelay: options.params.figma.requestDelay)
+            let client = FigmaClient(auth: options.auth, timeout: options.params.figma.timeout, requestDelay: options.params.figma.requestDelay)
 
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export typography.")
 

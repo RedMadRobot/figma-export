@@ -6,13 +6,18 @@ import Foundation
 import FoundationNetworking
 #endif
 
+public enum FigmaAuth {
+    case personalToken(String)
+    case oauth(String)
+}
+
 final public class FigmaClient: BaseClient {
 
     private let baseURL = URL(string: "https://api.figma.com/v1/")!
     private let retryConfiguration: RetryConfiguration
 
     public init(
-        accessToken: String,
+        auth: FigmaAuth,
         timeout: TimeInterval?,
         retryConfiguration: RetryConfiguration = .default,
         requestDelay: TimeInterval? = nil
@@ -30,7 +35,12 @@ final public class FigmaClient: BaseClient {
             self.retryConfiguration = retryConfiguration
         }
         let config = URLSessionConfiguration.ephemeral
-        config.httpAdditionalHeaders = ["X-Figma-Token": accessToken]
+        switch auth {
+        case .personalToken(let token):
+            config.httpAdditionalHeaders = ["X-Figma-Token": token]
+        case .oauth(let token):
+            config.httpAdditionalHeaders = ["Authorization": "Bearer \(token)"]
+        }
         config.timeoutIntervalForRequest = timeout ?? 30
         super.init(baseURL: baseURL, config: config)
     }

@@ -28,7 +28,7 @@ extension FigmaExportCommand {
             logger.info("Using FigmaExport \(FigmaExportCommand.version) to export colors.")
             logger.info("Fetching colors. Please wait...")
 
-            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout, requestDelay: options.params.figma.requestDelay)
+            let client = FigmaClient(auth: options.auth, timeout: options.params.figma.timeout, requestDelay: options.params.figma.requestDelay)
             let commonParams = options.params.common
 
             if commonParams?.colors != nil, commonParams?.variablesColors != nil {

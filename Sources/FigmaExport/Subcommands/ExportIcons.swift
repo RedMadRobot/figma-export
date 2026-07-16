@@ -28,7 +28,7 @@ extension FigmaExportCommand {
         var filter: String?
         
         func run() throws {
-            let client = FigmaClient(accessToken: options.accessToken, timeout: options.params.figma.timeout, requestDelay: options.params.figma.requestDelay)
+            let client = FigmaClient(auth: options.auth, timeout: options.params.figma.timeout, requestDelay: options.params.figma.requestDelay)
             
             if options.params.ios != nil {
                 logger.info("Using FigmaExport \(FigmaExportCommand.version) to export icons to Xcode project.")
