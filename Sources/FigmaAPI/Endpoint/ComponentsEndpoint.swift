@@ -42,6 +42,14 @@ public struct Component: Codable {
     public let name: String
     public let description: String?
     public let containingFrame: ContainingFrame
+
+    public init(key: String, nodeId: String, name: String, description: String?, containingFrame: ContainingFrame) {
+        self.key = key
+        self.nodeId = nodeId
+        self.name = name
+        self.description = description
+        self.containingFrame = containingFrame
+    }
 }
 
 // MARK: - ContainingFrame

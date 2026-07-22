@@ -202,19 +202,62 @@ final class ImagesLoader {
     // MARK: - Helpers
 
     private func fetchImageComponents(fileId: String, frameName: String, filter: String? = nil) throws -> [NodeId: Component] {
-        var components = try loadComponents(fileId: fileId)
-            .filter {
-                $0.containingFrame.name == frameName && $0.useForPlatform(platform)
-            }
+        let allComponents = try loadComponents(fileId: fileId)
+        
+        // 1. Initial filter based on your Frame Regex and Page name
+        let filtered = allComponents.filter { component in
+            guard let name = component.containingFrame.name else { return false }
+            let isFrameMatch = name.range(of: frameName, options: [.regularExpression, .caseInsensitive]) != nil
+            let isPageMatch = component.containingFrame.pageName.contains("Icons")
+            return isFrameMatch && isPageMatch
+        }
 
-        if let filter {
-            let assetsFilter = AssetsFilter(filter: filter)
-            components = components.filter { component -> Bool in
-                assetsFilter.match(name: component.name)
+        // 2. Prepare for deduplication using the final name as the key
+        var finalComponentsByName: [String: Component] = [:]
+        
+        for component in filtered {
+            guard let frameName = component.containingFrame.name, frameName.contains(" / ") else { continue }
+            
+            let frameBaseName = frameName.components(separatedBy: " / ").last?
+                .trimmingCharacters(in: .whitespaces) ?? ""
+            
+            let variantValue = component.name.components(separatedBy: "=").last?
+                .trimmingCharacters(in: .whitespaces) ?? ""
+            
+            let finalName = (frameBaseName + variantValue.capitalized)
+                .replacingOccurrences(of: " ", with: "")
+            
+            let newComponent = Component(
+                key: component.key,
+                nodeId: component.nodeId,
+                name: finalName,
+                description: component.description,
+                containingFrame: component.containingFrame
+            )
+            
+            // 3. Deduplication: Only store one version for each finalName
+            if let existing = finalComponentsByName[finalName] {
+                // Priority: Keep the iOS version if we find multiple
+                if component.name.lowercased().contains("platform=ios") {
+                    finalComponentsByName[finalName] = newComponent
+                }
+            } else {
+                finalComponentsByName[finalName] = newComponent
             }
         }
 
-        return Dictionary(uniqueKeysWithValues: components.map { ($0.nodeId, $0) })
+        guard !finalComponentsByName.isEmpty else {
+            throw FigmaExportError.componentsNotFound
+        }
+
+        // 4. IMPORTANT: Map back using the ORIGINAL nodeId as the key
+        // This ensures the API call 'GET /v1/images/' uses valid IDs
+        var result: [NodeId: Component] = [:]
+        for (_, component) in finalComponentsByName {
+            result[component.nodeId] = component
+        }
+
+        return result
     }
 
     private func _loadImages(
@@ -266,7 +309,11 @@ final class ImagesLoader {
                 let isRTL = component.useRTL()
                 return Image(name: name, scale: .all, idiom: idiom, url: url, format: params.format, isRTL: isRTL)
             }
-            return ImagePack(name: packName, images: packImages, platform: platform)
+            var imagePack = ImagePack(name: packName, images: packImages, platform: platform)
+            if let containingFrameName = components.first?.value.containingFrame.name, containingFrameName.hasPrefix("ic / img_") {
+                imagePack.renderMode = .original
+            }
+            return imagePack
         }
         return imagePacks
     }
