@@ -16,6 +16,8 @@ common:
     nameValidateRegexp: '^([a-zA-Z_]+)$' # RegExp pattern for: background, background_primary, widget_primary_background
     # [optional] RegExp pattern for replacing. Supports only $n
     nameReplaceRegexp: 'color_$1'
+    # [optional] List of color names to exclude from export. Supports wildcard patterns, for example: ["background", "background/*"]
+    exclude: []
     # [optional] Extract light and dark mode colors from the lightFileId specified in the figma params. Defaults to false
     useSingleFile: false
     # [optional] If useSingleFile is true, customize the suffix to denote a dark mode color. Defaults to '_dark'

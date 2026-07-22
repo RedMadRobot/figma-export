@@ -10,6 +10,7 @@ final class ColorsLoader {
     private let figmaParams: Params.Figma
     private let colorParams: Params.Common.Colors?
     private let filter: String?
+    private let excludeFilter: AssetsFilter?
 
     init(
         client: Client,
@@ -21,6 +22,11 @@ final class ColorsLoader {
         self.figmaParams = figmaParams
         self.colorParams = colorParams
         self.filter = filter
+        if let excludes = colorParams?.exclude, !excludes.isEmpty {
+            excludeFilter = AssetsFilter(filters: excludes)
+        } else {
+            excludeFilter = nil
+        }
     }
 
     func load() throws -> ColorsLoaderOutput {
@@ -77,7 +83,13 @@ final class ColorsLoader {
                 assetsFilter.match(name: style.name)
             }
         }
-        
+
+        if let excludeFilter {
+            styles = styles.filter { style -> Bool in
+                !excludeFilter.match(name: style.name)
+            }
+        }
+
         guard !styles.isEmpty else {
             throw FigmaExportError.stylesNotFound
         }

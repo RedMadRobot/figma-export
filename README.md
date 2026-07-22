@@ -407,6 +407,8 @@ If you want to export specific colors/icons/images you can list their names in t
 
 `./figma-export colors` — Exports all the colors.
 
+If you need to export all colors except a few, use `common.colors.exclude` or `common.variablesColors.exclude` in `figma-export.yaml`.
+
 ⚠️ Wildcard doesn't work on Linux.
 
 Argument `-i` or `-input` specifies path to FigmaExport configuration file `figma-export.yaml`.

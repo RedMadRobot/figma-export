@@ -6,6 +6,7 @@ final class ColorsVariablesLoader {
     private let client: Client
     private let variableParams: Params.Common.VariablesColors?
     private let filter: String?
+    private let excludeFilter: AssetsFilter?
 
     init(
         client: Client,
@@ -16,6 +17,11 @@ final class ColorsVariablesLoader {
         self.client = client
         self.variableParams = variableParams
         self.filter = filter
+        if let excludes = variableParams?.exclude, !excludes.isEmpty {
+            excludeFilter = AssetsFilter(filters: excludes)
+        } else {
+            excludeFilter = nil
+        }
     }
 
     func load() throws -> ColorsLoaderOutput {
@@ -136,9 +142,18 @@ final class ColorsVariablesLoader {
     }
 
     private func doesColorMatchFilter(from variable: Variable) -> Bool {
-        guard let filter = filter else { return true }
-        let assetsFilter = AssetsFilter(filter: filter)
-        return assetsFilter.match(name: variable.name)
+        if let filter {
+            let assetsFilter = AssetsFilter(filter: filter)
+            guard assetsFilter.match(name: variable.name) else {
+                return false
+            }
+        }
+
+        if let excludeFilter, excludeFilter.match(name: variable.name) {
+            return false
+        }
+
+        return true
     }
 
     private func createColor(from variable: Variable, color: PaintColor) -> Color {
