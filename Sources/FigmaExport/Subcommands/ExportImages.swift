@@ -175,7 +175,7 @@ extension FigmaExportCommand {
             // Convert all SVG to XML files
             logger.info("Converting SVGs to XMLs...")
             try svgFileConverter.convert(inputDirectoryUrl: tempDirectoryLightURL)
-            if images.first?.dark != nil {
+            if images.contains(where: { $0.dark != nil }) {
                 logger.info("Converting dark SVGs to XMLs...")
                 try svgFileConverter.convert(inputDirectoryUrl: tempDirectoryDarkURL)
             }
